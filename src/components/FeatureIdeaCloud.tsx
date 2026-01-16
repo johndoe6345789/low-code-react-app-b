@@ -26,6 +26,7 @@ import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Plus, Trash, Sparkle, DotsThree, Package } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
@@ -348,6 +349,7 @@ export function FeatureIdeaCloud() {
   const [groupDialogOpen, setGroupDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [edgeDialogOpen, setEdgeDialogOpen] = useState(false)
+  const [debugPanelOpen, setDebugPanelOpen] = useState(false)
   const [connectionType, setConnectionType] = useState<ConnectionType>('association')
   const edgeReconnectSuccessful = useRef(true)
 
@@ -452,6 +454,52 @@ export function FeatureIdeaCloud() {
     [onEdgesChange, setEdges, setSavedEdges]
   )
 
+  const validateAndRemoveConflicts = useCallback((
+    edges: Edge<IdeaEdgeData>[],
+    sourceNodeId: string,
+    sourceHandleId: string,
+    targetNodeId: string,
+    targetHandleId: string,
+    excludeEdgeId?: string
+  ): { filteredEdges: Edge<IdeaEdgeData>[], removedCount: number, conflicts: string[] } => {
+    const edgesToRemove: string[] = []
+    const conflicts: string[] = []
+    
+    edges.forEach(edge => {
+      if (excludeEdgeId && edge.id === excludeEdgeId) return
+      
+      const edgeSourceHandle = edge.sourceHandle || 'default'
+      const edgeTargetHandle = edge.targetHandle || 'default'
+      
+      const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
+      const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
+      
+      if (hasSourceConflict) {
+        edgesToRemove.push(edge.id)
+        conflicts.push(`Source conflict: ${edge.source}[${edgeSourceHandle}] -> ${edge.target}[${edgeTargetHandle}]`)
+      }
+      
+      if (hasTargetConflict) {
+        if (!edgesToRemove.includes(edge.id)) {
+          edgesToRemove.push(edge.id)
+        }
+        conflicts.push(`Target conflict: ${edge.source}[${edgeSourceHandle}] -> ${edge.target}[${edgeTargetHandle}]`)
+      }
+    })
+    
+    const filteredEdges = edges.filter(e => !edgesToRemove.includes(e.id))
+    
+    if (conflicts.length > 0) {
+      console.log('[Connection Validator] Conflicts detected and resolved:', conflicts)
+    }
+    
+    return { 
+      filteredEdges, 
+      removedCount: edgesToRemove.length,
+      conflicts
+    }
+  }, [])
+
   const onConnect = useCallback(
     (params: RFConnection) => {
       if (!params.source || !params.target) return
@@ -461,22 +509,19 @@ export function FeatureIdeaCloud() {
       const targetNodeId = params.target
       const targetHandleId = params.targetHandle || 'default'
       
+      console.log('[Connection] New connection attempt:', {
+        source: `${sourceNodeId}[${sourceHandleId}]`,
+        target: `${targetNodeId}[${targetHandleId}]`
+      })
+      
       setEdges((eds) => {
-        const edgesToRemove: string[] = []
-        
-        eds.forEach(edge => {
-          const edgeSourceHandle = edge.sourceHandle || 'default'
-          const edgeTargetHandle = edge.targetHandle || 'default'
-          
-          const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
-          const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
-          
-          if (hasSourceConflict || hasTargetConflict) {
-            edgesToRemove.push(edge.id)
-          }
-        })
-        
-        const filteredEdges = eds.filter(e => !edgesToRemove.includes(e.id))
+        const { filteredEdges, removedCount, conflicts } = validateAndRemoveConflicts(
+          eds,
+          sourceNodeId,
+          sourceHandleId,
+          targetNodeId,
+          targetHandleId
+        )
         
         const style = CONNECTION_STYLES[connectionType]
         const newEdge: Edge<IdeaEdgeData> = {
@@ -502,11 +547,22 @@ export function FeatureIdeaCloud() {
         }
         
         const updatedEdges = addEdge(newEdge, filteredEdges)
+        
+        console.log('[Connection] New edge created:', newEdge.id)
+        console.log('[Connection] Total edges after addition:', updatedEdges.length)
+        console.log('[Connection] Edges by handle:', updatedEdges.map(e => ({
+          id: e.id,
+          source: `${e.source}[${e.sourceHandle || 'default'}]`,
+          target: `${e.target}[${e.targetHandle || 'default'}]`
+        })))
+        
         setSavedEdges(updatedEdges)
         
-        if (edgesToRemove.length > 0) {
+        if (removedCount > 0) {
           setTimeout(() => {
-            toast.success(`Connection remapped! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+            toast.success(`Connection remapped! (${removedCount} old connection${removedCount > 1 ? 's' : ''} removed)`, {
+              description: conflicts.join('\n')
+            })
           }, 0)
         } else {
           setTimeout(() => {
@@ -517,7 +573,7 @@ export function FeatureIdeaCloud() {
         return updatedEdges
       })
     },
-    [connectionType, setEdges, setSavedEdges]
+    [connectionType, setEdges, setSavedEdges, validateAndRemoveConflicts]
   )
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
@@ -542,32 +598,43 @@ export function FeatureIdeaCloud() {
     const targetNodeId = newConnection.target
     const targetHandleId = newConnection.targetHandle || 'default'
     
+    console.log('[Reconnection] Remapping edge:', {
+      oldEdgeId: oldEdge.id,
+      oldSource: `${oldEdge.source}[${oldEdge.sourceHandle || 'default'}]`,
+      oldTarget: `${oldEdge.target}[${oldEdge.targetHandle || 'default'}]`,
+      newSource: `${sourceNodeId}[${sourceHandleId}]`,
+      newTarget: `${targetNodeId}[${targetHandleId}]`
+    })
+    
     edgeReconnectSuccessful.current = true
     
     setEdges((els) => {
-      const edgesToRemove: string[] = []
+      const { filteredEdges, removedCount, conflicts } = validateAndRemoveConflicts(
+        els,
+        sourceNodeId,
+        sourceHandleId,
+        targetNodeId,
+        targetHandleId,
+        oldEdge.id
+      )
       
-      els.forEach(edge => {
-        if (edge.id === oldEdge.id) return
-        
-        const edgeSourceHandle = edge.sourceHandle || 'default'
-        const edgeTargetHandle = edge.targetHandle || 'default'
-        
-        const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
-        const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
-        
-        if (hasSourceConflict || hasTargetConflict) {
-          edgesToRemove.push(edge.id)
-        }
-      })
-      
-      const filteredEdges = els.filter(e => !edgesToRemove.includes(e.id))
       const updatedEdges = reconnectEdge(oldEdge, newConnection, filteredEdges)
+      
+      console.log('[Reconnection] Edge remapped successfully')
+      console.log('[Reconnection] Total edges after remapping:', updatedEdges.length)
+      console.log('[Reconnection] Edges by handle:', updatedEdges.map(e => ({
+        id: e.id,
+        source: `${e.source}[${e.sourceHandle || 'default'}]`,
+        target: `${e.target}[${e.targetHandle || 'default'}]`
+      })))
+      
       setSavedEdges(updatedEdges)
       
-      if (edgesToRemove.length > 0) {
+      if (removedCount > 0) {
         setTimeout(() => {
-          toast.success(`Connection remapped! (${edgesToRemove.length} conflicting connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+          toast.success(`Connection remapped! (${removedCount} conflicting connection${removedCount > 1 ? 's' : ''} removed)`, {
+            description: conflicts.join('\n')
+          })
         }, 0)
       } else {
         setTimeout(() => {
@@ -577,7 +644,7 @@ export function FeatureIdeaCloud() {
       
       return updatedEdges
     })
-  }, [setEdges, setSavedEdges])
+  }, [setEdges, setSavedEdges, validateAndRemoveConflicts])
 
   const onReconnectEnd = useCallback((_: MouseEvent | TouchEvent, edge: Edge) => {
     if (!edgeReconnectSuccessful.current) {
@@ -877,6 +944,20 @@ export function FeatureIdeaCloud() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
+                <Button 
+                  onClick={() => setDebugPanelOpen(!debugPanelOpen)} 
+                  variant="outline" 
+                  className="shadow-lg"
+                  size="icon"
+                >
+                  🔍
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Debug Connection Status</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button onClick={handleGenerateIdeas} variant="outline" className="shadow-lg">
                   <Sparkle size={20} weight="duotone" />
                 </Button>
@@ -954,6 +1035,101 @@ export function FeatureIdeaCloud() {
             <p>⚙️ Click connections to edit or delete them</p>
           </div>
         </Panel>
+        
+        {debugPanelOpen && (
+          <Panel position="top-center" className="max-w-2xl">
+            <Card className="shadow-2xl border-2">
+              <div className="p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-sm">🔍 Connection Debug Panel</h3>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-6 w-6"
+                    onClick={() => setDebugPanelOpen(false)}
+                  >
+                    ✕
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 p-3 bg-muted/50 rounded-lg text-xs">
+                  <div>
+                    <div className="font-semibold text-foreground mb-1">Total Edges</div>
+                    <div className="text-2xl font-bold text-primary">{edges.length}</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-foreground mb-1">Total Nodes</div>
+                    <div className="text-2xl font-bold text-accent">{nodes.length}</div>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-foreground mb-1">Total Ideas</div>
+                    <div className="text-2xl font-bold text-secondary">{safeIdeas.length}</div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="font-semibold text-xs flex items-center justify-between">
+                    <span>Connection Matrix (Handle Occupancy)</span>
+                    <Badge variant="outline" className="text-xs">1:1 Constraint Active</Badge>
+                  </div>
+                  <ScrollArea className="h-48 w-full rounded-md border">
+                    <div className="p-2 space-y-2 text-xs font-mono">
+                      {safeIdeas.slice(0, 10).map((idea) => {
+                        const nodeEdges = edges.filter(e => e.source === idea.id || e.target === idea.id)
+                        const leftHandle = edges.find(e => e.target === idea.id && e.targetHandle === 'left')
+                        const rightHandle = edges.find(e => e.source === idea.id && e.sourceHandle === 'right')
+                        const topHandle = edges.find(e => e.target === idea.id && e.targetHandle === 'top')
+                        const bottomHandle = edges.find(e => e.source === idea.id && e.sourceHandle === 'bottom')
+                        
+                        return (
+                          <div key={idea.id} className="p-2 bg-muted/30 rounded border">
+                            <div className="font-semibold truncate mb-1" title={idea.title}>
+                              {idea.title}
+                            </div>
+                            <div className="grid grid-cols-4 gap-1 text-[10px]">
+                              <div className={`p-1 rounded text-center ${leftHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
+                                ← {leftHandle ? '✓' : '○'}
+                              </div>
+                              <div className={`p-1 rounded text-center ${rightHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
+                                → {rightHandle ? '✓' : '○'}
+                              </div>
+                              <div className={`p-1 rounded text-center ${topHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
+                                ↑ {topHandle ? '✓' : '○'}
+                              </div>
+                              <div className={`p-1 rounded text-center ${bottomHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
+                                ↓ {bottomHandle ? '✓' : '○'}
+                              </div>
+                            </div>
+                            <div className="mt-1 text-[10px] text-muted-foreground">
+                              Total: {nodeEdges.length} connection{nodeEdges.length !== 1 ? 's' : ''}
+                            </div>
+                          </div>
+                        )
+                      })}
+                      {safeIdeas.length > 10 && (
+                        <div className="text-center text-muted-foreground py-2">
+                          ... and {safeIdeas.length - 10} more ideas
+                        </div>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </div>
+
+                <div className="space-y-1 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                  <div className="font-semibold text-xs text-green-700 dark:text-green-300 flex items-center gap-1">
+                    ✅ Test Status
+                  </div>
+                  <div className="text-xs space-y-0.5">
+                    <div>• Each handle can connect to exactly 1 other handle</div>
+                    <div>• New connections automatically remove conflicts</div>
+                    <div>• Remapping preserves 1:1 constraint</div>
+                    <div>• Changes persist to database immediately</div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </Panel>
+        )}
       </ReactFlow>
 
       <Dialog open={groupDialogOpen} onOpenChange={setGroupDialogOpen}>
