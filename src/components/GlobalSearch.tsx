@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { useKV } from '@github/spark/hooks'
 import {
   CommandDialog,
   CommandEmpty,
@@ -28,9 +29,12 @@ import {
   File,
   Folder,
   MagnifyingGlass,
+  ClockCounterClockwise,
+  X,
 } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, Workflow, Lambda, PlaywrightTest, StorybookStory, UnitTest } from '@/types/project'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 interface SearchResult {
   id: string
@@ -40,6 +44,15 @@ interface SearchResult {
   icon: React.ReactNode
   action: () => void
   tags?: string[]
+}
+
+interface SearchHistoryItem {
+  id: string
+  query: string
+  timestamp: number
+  resultId?: string
+  resultTitle?: string
+  resultCategory?: string
 }
 
 interface GlobalSearchProps {
@@ -74,12 +87,43 @@ export function GlobalSearch({
   onFileSelect,
 }: GlobalSearchProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchHistory, setSearchHistory] = useKV<SearchHistoryItem[]>('search-history', [])
 
   useEffect(() => {
     if (!open) {
       setSearchQuery('')
     }
   }, [open])
+
+  const addToHistory = (query: string, result?: SearchResult) => {
+    if (!query.trim()) return
+
+    const historyItem: SearchHistoryItem = {
+      id: `history-${Date.now()}`,
+      query: query.trim(),
+      timestamp: Date.now(),
+      resultId: result?.id,
+      resultTitle: result?.title,
+      resultCategory: result?.category,
+    }
+
+    setSearchHistory((currentHistory) => {
+      const filtered = (currentHistory || []).filter(
+        (item) => item.query.toLowerCase() !== query.toLowerCase()
+      )
+      return [historyItem, ...filtered].slice(0, 20)
+    })
+  }
+
+  const clearHistory = () => {
+    setSearchHistory([])
+  }
+
+  const removeHistoryItem = (id: string) => {
+    setSearchHistory((currentHistory) => 
+      (currentHistory || []).filter((item) => item.id !== id)
+    )
+  }
 
   const allResults = useMemo<SearchResult[]>(() => {
     const results: SearchResult[] = []
@@ -402,7 +446,7 @@ export function GlobalSearch({
 
   const filteredResults = useMemo(() => {
     if (!searchQuery.trim()) {
-      return allResults.slice(0, 50)
+      return []
     }
 
     const query = searchQuery.toLowerCase().trim()
@@ -442,6 +486,19 @@ export function GlobalSearch({
       .map(({ result }) => result)
   }, [allResults, searchQuery])
 
+  const recentSearches = useMemo(() => {
+    const safeHistory = searchHistory || []
+    return safeHistory
+      .slice(0, 10)
+      .map((item) => {
+        const result = allResults.find((r) => r.id === item.resultId)
+        return {
+          historyItem: item,
+          result,
+        }
+      })
+  }, [searchHistory, allResults])
+
   const groupedResults = useMemo(() => {
     const groups: Record<string, SearchResult[]> = {}
     filteredResults.forEach((result) => {
@@ -454,8 +511,18 @@ export function GlobalSearch({
   }, [filteredResults])
 
   const handleSelect = (result: SearchResult) => {
+    addToHistory(searchQuery, result)
     result.action()
     onOpenChange(false)
+  }
+
+  const handleHistorySelect = (historyItem: SearchHistoryItem, result?: SearchResult) => {
+    if (result) {
+      result.action()
+      onOpenChange(false)
+    } else {
+      setSearchQuery(historyItem.query)
+    }
   }
 
   return (
@@ -472,6 +539,74 @@ export function GlobalSearch({
             <p className="text-sm text-muted-foreground">No results found</p>
           </div>
         </CommandEmpty>
+
+        {!searchQuery.trim() && recentSearches.length > 0 && (
+          <>
+            <CommandGroup 
+              heading={
+                <div className="flex items-center justify-between w-full pr-2">
+                  <span>Recent Searches</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearHistory}
+                    className="h-6 px-2 text-xs"
+                  >
+                    Clear All
+                  </Button>
+                </div>
+              }
+            >
+              {recentSearches.map(({ historyItem, result }) => (
+                <CommandItem
+                  key={historyItem.id}
+                  value={historyItem.id}
+                  onSelect={() => handleHistorySelect(historyItem, result)}
+                  className="flex items-center gap-3 px-4 py-3 cursor-pointer group"
+                >
+                  <div className="flex-shrink-0 text-muted-foreground">
+                    <ClockCounterClockwise size={18} weight="duotone" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    {result ? (
+                      <>
+                        <div className="font-medium truncate">{result.title}</div>
+                        <div className="text-xs text-muted-foreground truncate">
+                          Searched: {historyItem.query}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-medium truncate">{historyItem.query}</div>
+                        <div className="text-xs text-muted-foreground">
+                          Search again
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {result && (
+                    <Badge variant="outline" className="flex-shrink-0 text-xs">
+                      {result.category}
+                    </Badge>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 opacity-0 group-hover:opacity-100 flex-shrink-0"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      removeHistoryItem(historyItem.id)
+                    }}
+                  >
+                    <X size={14} />
+                  </Button>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+            <CommandSeparator />
+          </>
+        )}
+
         {Object.entries(groupedResults).map(([category, results], index) => (
           <div key={category}>
             {index > 0 && <CommandSeparator />}
