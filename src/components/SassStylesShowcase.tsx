@@ -16,7 +16,7 @@ export function SassStylesShowcase() {
       </div>
 
       <Tabs defaultValue="buttons" className="flex-1">
-        <TabsList>
+        <TabsList className="h-auto flex-wrap">
           <TabsTrigger value="buttons">Buttons</TabsTrigger>
           <TabsTrigger value="inputs">Inputs</TabsTrigger>
           <TabsTrigger value="cards">Cards</TabsTrigger>
