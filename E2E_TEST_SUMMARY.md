@@ -91,15 +91,24 @@ Comprehensive Playwright test suite created to ensure CodeForge functions correc
 - ✅ No console errors
 
 ### 3. **Smoke Test Suite** (`e2e/smoke.spec.ts`)
-Quick validation tests for CI/CD:
-- App loads
-- Tab navigation
-- Code export
-- Monaco editor
-- Model designer
-- Style designer
-- Feature toggles
-- No critical errors
+Quick validation tests for CI/CD (17 critical tests):
+- ✅ App loads successfully with correct branding
+- ✅ All major tabs navigation (Dashboard, Code Editor, Models, Components, Component Trees, Workflows, Lambdas, Styling, Flask API, Settings, PWA, Features)
+- ✅ Project export and code generation dialog
+- ✅ Monaco editor loads in code editor
+- ✅ Model designer functionality
+- ✅ Component tree manager loads
+- ✅ Workflow designer loads
+- ✅ Lambda designer with Monaco editor
+- ✅ Style designer with color pickers
+- ✅ Flask API designer
+- ✅ PWA settings
+- ✅ Feature toggles functionality
+- ✅ Project save/load manager
+- ✅ Dashboard metrics display
+- ✅ Keyboard shortcuts dialog
+- ✅ No critical console errors
+- ✅ Responsive mobile viewport
 
 ### 4. **NPM Scripts** (package.json)
 ```bash

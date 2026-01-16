@@ -45,8 +45,22 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 - **Unit Test Designer** - Comprehensive test suite builder for components, functions, and hooks
 - **Error Detection** - Automated scanning for syntax, type, and lint errors
 - **Auto Repair System** - AI-powered context-aware error fixing
+- **Smoke Tests** - 17 critical tests validating all major features (~30-60s execution)
+- **E2E Test Suite** - 50+ comprehensive tests across all functionality (~3-5min execution)
 
 ## 🚀 Getting Started
+
+### Installation
+```bash
+# Install dependencies
+npm install
+
+# Install Playwright browsers (for testing)
+npx playwright install
+
+# Start development server
+npm run dev
+```
 
 ### Quick Start
 1. **Save Your Work** - Use **Save Project** button to persist your work to the database
@@ -55,6 +69,26 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 4. Use **AI Generate** to scaffold a complete application from a description
 5. Navigate between tabs to design models, components, themes, and backend APIs
 6. Click **Export Project** to download your complete Next.js application
+
+### Running Tests
+```bash
+# Run smoke tests (quick validation - ~30-60 seconds)
+npm run test:e2e:smoke
+
+# Run all E2E tests (comprehensive - ~3-5 minutes)
+npm run test:e2e
+
+# Run tests in interactive UI mode (recommended for debugging)
+npm run test:e2e:ui
+
+# Run tests with browser visible
+npm run test:e2e:headed
+
+# View test report
+npm run test:e2e:report
+```
+
+**See [RUN_TESTS.md](./RUN_TESTS.md) for detailed test execution guide.**
 
 ### Project Management
 - **Save Project** - Save current work with name and description to database
@@ -198,6 +232,10 @@ The Spark Template files and resources from GitHub are licensed under the terms 
 - [Full Documentation](./PRD.md) - Complete product requirements and design decisions
 - [Error Repair Guide](./ERROR_REPAIR_GUIDE.md) - Error detection and repair system documentation
 - [CI/CD Guide](./CI_CD_GUIDE.md) - Complete CI/CD setup and configuration guide
+- [E2E Test Documentation](./e2e/README.md) - Comprehensive Playwright test suite guide
+- [E2E Test Summary](./E2E_TEST_SUMMARY.md) - Test coverage and validation details
+- [Run Tests Guide](./RUN_TESTS.md) - How to execute smoke tests and full test suite
+- [PWA Guide](./PWA_GUIDE.md) - Progressive Web App features and setup
 
 ---
 
