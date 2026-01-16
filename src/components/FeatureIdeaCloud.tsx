@@ -468,11 +468,10 @@ export function FeatureIdeaCloud() {
           const edgeSourceHandle = edge.sourceHandle || 'default'
           const edgeTargetHandle = edge.targetHandle || 'default'
           
-          if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
-            edgesToRemove.push(edge.id)
-          }
+          const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
+          const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
           
-          if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
+          if (hasSourceConflict || hasTargetConflict) {
             edgesToRemove.push(edge.id)
           }
         })
@@ -554,11 +553,10 @@ export function FeatureIdeaCloud() {
         const edgeSourceHandle = edge.sourceHandle || 'default'
         const edgeTargetHandle = edge.targetHandle || 'default'
         
-        if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
-          edgesToRemove.push(edge.id)
-        }
+        const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
+        const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
         
-        if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
+        if (hasSourceConflict || hasTargetConflict) {
           edgesToRemove.push(edge.id)
         }
       })
