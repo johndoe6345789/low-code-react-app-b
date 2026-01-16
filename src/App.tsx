@@ -1,38 +1,39 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
-import { ProjectDashboard } from '@/components/ProjectDashboard'
-import { CodeEditor } from '@/components/CodeEditor'
-import { ModelDesigner } from '@/components/ModelDesigner'
-import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
-import { ComponentTreeManager } from '@/components/ComponentTreeManager'
-import { WorkflowDesigner } from '@/components/WorkflowDesigner'
-import { LambdaDesigner } from '@/components/LambdaDesigner'
-import { StyleDesigner } from '@/components/StyleDesigner'
-import { FileExplorer } from '@/components/FileExplorer'
-import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
-import { StorybookDesigner } from '@/components/StorybookDesigner'
-import { UnitTestDesigner } from '@/components/UnitTestDesigner'
-import { FlaskDesigner } from '@/components/FlaskDesigner'
-import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
-import { ErrorPanel } from '@/components/ErrorPanel'
-import { DocumentationView } from '@/components/DocumentationView'
-import { SassStylesShowcase } from '@/components/SassStylesShowcase'
-import { FeatureToggleSettings } from '@/components/FeatureToggleSettings'
-import { PWAInstallPrompt } from '@/components/PWAInstallPrompt'
-import { PWAUpdatePrompt } from '@/components/PWAUpdatePrompt'
-import { PWAStatusBar } from '@/components/PWAStatusBar'
-import { PWASettings } from '@/components/PWASettings'
-import { FaviconDesigner } from '@/components/FaviconDesigner'
-import { FeatureIdeaCloud } from '@/components/FeatureIdeaCloud'
-import { GlobalSearch } from '@/components/GlobalSearch'
-import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog'
+import { LoadingFallback } from '@/components/molecules'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { useProjectState } from '@/hooks/use-project-state'
 import { useFileOperations } from '@/hooks/use-file-operations'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
-import { useAutoRepair } from '@/hooks/use-auto-repair'
 import { toast } from 'sonner'
+
+const ProjectDashboard = lazy(() => import('@/components/ProjectDashboard').then(m => ({ default: m.ProjectDashboard })))
+const CodeEditor = lazy(() => import('@/components/CodeEditor').then(m => ({ default: m.CodeEditor })))
+const FileExplorer = lazy(() => import('@/components/FileExplorer').then(m => ({ default: m.FileExplorer })))
+const ModelDesigner = lazy(() => import('@/components/ModelDesigner').then(m => ({ default: m.ModelDesigner })))
+const ComponentTreeBuilder = lazy(() => import('@/components/ComponentTreeBuilder').then(m => ({ default: m.ComponentTreeBuilder })))
+const ComponentTreeManager = lazy(() => import('@/components/ComponentTreeManager').then(m => ({ default: m.ComponentTreeManager })))
+const WorkflowDesigner = lazy(() => import('@/components/WorkflowDesigner').then(m => ({ default: m.WorkflowDesigner })))
+const LambdaDesigner = lazy(() => import('@/components/LambdaDesigner').then(m => ({ default: m.LambdaDesigner })))
+const StyleDesigner = lazy(() => import('@/components/StyleDesigner').then(m => ({ default: m.StyleDesigner })))
+const PlaywrightDesigner = lazy(() => import('@/components/PlaywrightDesigner').then(m => ({ default: m.PlaywrightDesigner })))
+const StorybookDesigner = lazy(() => import('@/components/StorybookDesigner').then(m => ({ default: m.StorybookDesigner })))
+const UnitTestDesigner = lazy(() => import('@/components/UnitTestDesigner').then(m => ({ default: m.UnitTestDesigner })))
+const FlaskDesigner = lazy(() => import('@/components/FlaskDesigner').then(m => ({ default: m.FlaskDesigner })))
+const ProjectSettingsDesigner = lazy(() => import('@/components/ProjectSettingsDesigner').then(m => ({ default: m.ProjectSettingsDesigner })))
+const ErrorPanel = lazy(() => import('@/components/ErrorPanel').then(m => ({ default: m.ErrorPanel })))
+const DocumentationView = lazy(() => import('@/components/DocumentationView').then(m => ({ default: m.DocumentationView })))
+const SassStylesShowcase = lazy(() => import('@/components/SassStylesShowcase').then(m => ({ default: m.SassStylesShowcase })))
+const FeatureToggleSettings = lazy(() => import('@/components/FeatureToggleSettings').then(m => ({ default: m.FeatureToggleSettings })))
+const PWASettings = lazy(() => import('@/components/PWASettings').then(m => ({ default: m.PWASettings })))
+const FaviconDesigner = lazy(() => import('@/components/FaviconDesigner').then(m => ({ default: m.FaviconDesigner })))
+const FeatureIdeaCloud = lazy(() => import('@/components/FeatureIdeaCloud').then(m => ({ default: m.FeatureIdeaCloud })))
+const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })))
+const KeyboardShortcutsDialog = lazy(() => import('@/components/KeyboardShortcutsDialog').then(m => ({ default: m.KeyboardShortcutsDialog })))
+const PWAInstallPrompt = lazy(() => import('@/components/PWAInstallPrompt').then(m => ({ default: m.PWAInstallPrompt })))
+const PWAUpdatePrompt = lazy(() => import('@/components/PWAUpdatePrompt').then(m => ({ default: m.PWAUpdatePrompt })))
+const PWAStatusBar = lazy(() => import('@/components/PWAStatusBar').then(m => ({ default: m.PWAStatusBar })))
 
 function App() {
   const projectState = useProjectState()
@@ -73,10 +74,8 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchOpen, setSearchOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
-  const [lastSaved] = useState(Date.now())
-
-  const { errors = [] } = useAutoRepair(files, false)
-  const errorCount = errors.length
+  const [lastSaved] = useState<number | null>(Date.now())
+  const [errorCount] = useState(0)
 
   useKeyboardShortcuts([
     { key: '1', ctrl: true, description: 'Dashboard', action: () => setActiveTab('dashboard') },
@@ -123,8 +122,12 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col bg-background">
-      <PWAStatusBar />
-      <PWAUpdatePrompt />
+      <Suspense fallback={<div className="h-1 bg-primary animate-pulse" />}>
+        <PWAStatusBar />
+      </Suspense>
+      <Suspense fallback={null}>
+        <PWAUpdatePrompt />
+      </Suspense>
       <AppHeader
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -143,170 +146,216 @@ function App() {
         <PageHeader activeTab={activeTab} />
         <div className="flex-1 overflow-hidden">
           <TabsContent value="dashboard" className="h-full m-0">
-            <ProjectDashboard
-              files={files}
-              models={models}
-              components={components}
-              theme={theme}
-              playwrightTests={playwrightTests}
-              storybookStories={storybookStories}
-              unitTests={unitTests}
-              flaskConfig={flaskConfig}
-            />
+            <Suspense fallback={<LoadingFallback message="Loading dashboard..." />}>
+              <ProjectDashboard
+                files={files}
+                models={models}
+                components={components}
+                theme={theme}
+                playwrightTests={playwrightTests}
+                storybookStories={storybookStories}
+                unitTests={unitTests}
+                flaskConfig={flaskConfig}
+              />
+            </Suspense>
           </TabsContent>
 
           {featureToggles.codeEditor && (
             <TabsContent value="code" className="h-full m-0">
-              <ResizablePanelGroup direction="horizontal">
-                <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-                  <FileExplorer
-                    files={files}
-                    activeFileId={activeFileId}
-                    onFileSelect={setActiveFileId}
-                    onFileAdd={handleFileAdd}
-                  />
-                </ResizablePanel>
-                <ResizableHandle />
-                <ResizablePanel defaultSize={80}>
-                  <CodeEditor
-                    files={files}
-                    activeFileId={activeFileId}
-                    onFileChange={handleFileChange}
-                    onFileSelect={setActiveFileId}
-                    onFileClose={handleFileClose}
-                  />
-                </ResizablePanel>
-              </ResizablePanelGroup>
+              <Suspense fallback={<LoadingFallback message="Loading editor..." />}>
+                <ResizablePanelGroup direction="horizontal">
+                  <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                    <FileExplorer
+                      files={files}
+                      activeFileId={activeFileId}
+                      onFileSelect={setActiveFileId}
+                      onFileAdd={handleFileAdd}
+                    />
+                  </ResizablePanel>
+                  <ResizableHandle />
+                  <ResizablePanel defaultSize={80}>
+                    <CodeEditor
+                      files={files}
+                      activeFileId={activeFileId}
+                      onFileChange={handleFileChange}
+                      onFileSelect={setActiveFileId}
+                      onFileClose={handleFileClose}
+                    />
+                  </ResizablePanel>
+                </ResizablePanelGroup>
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.models && (
             <TabsContent value="models" className="h-full m-0">
-              <ModelDesigner models={models} onModelsChange={setModels} />
+              <Suspense fallback={<LoadingFallback message="Loading models..." />}>
+                <ModelDesigner models={models} onModelsChange={setModels} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.components && (
             <TabsContent value="components" className="h-full m-0">
-              <ComponentTreeBuilder components={components} onComponentsChange={setComponents} />
+              <Suspense fallback={<LoadingFallback message="Loading components..." />}>
+                <ComponentTreeBuilder components={components} onComponentsChange={setComponents} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.componentTrees && (
             <TabsContent value="component-trees" className="h-full m-0">
-              <ComponentTreeManager trees={componentTrees} onTreesChange={setComponentTrees} />
+              <Suspense fallback={<LoadingFallback message="Loading component trees..." />}>
+                <ComponentTreeManager trees={componentTrees} onTreesChange={setComponentTrees} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.workflows && (
             <TabsContent value="workflows" className="h-full m-0">
-              <WorkflowDesigner workflows={workflows} onWorkflowsChange={setWorkflows} />
+              <Suspense fallback={<LoadingFallback message="Loading workflows..." />}>
+                <WorkflowDesigner workflows={workflows} onWorkflowsChange={setWorkflows} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.lambdas && (
             <TabsContent value="lambdas" className="h-full m-0">
-              <LambdaDesigner lambdas={lambdas} onLambdasChange={setLambdas} />
+              <Suspense fallback={<LoadingFallback message="Loading lambdas..." />}>
+                <LambdaDesigner lambdas={lambdas} onLambdasChange={setLambdas} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.styling && (
             <TabsContent value="styling" className="h-full m-0">
-              <StyleDesigner theme={theme} onThemeChange={setTheme} />
+              <Suspense fallback={<LoadingFallback message="Loading style designer..." />}>
+                <StyleDesigner theme={theme} onThemeChange={setTheme} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.flaskApi && (
             <TabsContent value="flask" className="h-full m-0">
-              <FlaskDesigner config={flaskConfig} onConfigChange={setFlaskConfig} />
+              <Suspense fallback={<LoadingFallback message="Loading Flask designer..." />}>
+                <FlaskDesigner config={flaskConfig} onConfigChange={setFlaskConfig} />
+              </Suspense>
             </TabsContent>
           )}
 
           <TabsContent value="settings" className="h-full m-0">
-            <ProjectSettingsDesigner
-              nextjsConfig={nextjsConfig}
-              npmSettings={npmSettings}
-              onNextjsConfigChange={setNextjsConfig}
-              onNpmSettingsChange={setNpmSettings}
-            />
+            <Suspense fallback={<LoadingFallback message="Loading settings..." />}>
+              <ProjectSettingsDesigner
+                nextjsConfig={nextjsConfig}
+                npmSettings={npmSettings}
+                onNextjsConfigChange={setNextjsConfig}
+                onNpmSettingsChange={setNpmSettings}
+              />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="pwa" className="h-full m-0">
-            <PWASettings />
+            <Suspense fallback={<LoadingFallback message="Loading PWA settings..." />}>
+              <PWASettings />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="features" className="h-full m-0">
-            <FeatureToggleSettings features={featureToggles} onFeaturesChange={setFeatureToggles} />
+            <Suspense fallback={<LoadingFallback message="Loading feature toggles..." />}>
+              <FeatureToggleSettings features={featureToggles} onFeaturesChange={setFeatureToggles} />
+            </Suspense>
           </TabsContent>
 
           {featureToggles.playwright && (
             <TabsContent value="playwright" className="h-full m-0">
-              <PlaywrightDesigner tests={playwrightTests} onTestsChange={setPlaywrightTests} />
+              <Suspense fallback={<LoadingFallback message="Loading Playwright designer..." />}>
+                <PlaywrightDesigner tests={playwrightTests} onTestsChange={setPlaywrightTests} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.storybook && (
             <TabsContent value="storybook" className="h-full m-0">
-              <StorybookDesigner stories={storybookStories} onStoriesChange={setStorybookStories} />
+              <Suspense fallback={<LoadingFallback message="Loading Storybook designer..." />}>
+                <StorybookDesigner stories={storybookStories} onStoriesChange={setStorybookStories} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.unitTests && (
             <TabsContent value="unit-tests" className="h-full m-0">
-              <UnitTestDesigner tests={unitTests} onTestsChange={setUnitTests} />
+              <Suspense fallback={<LoadingFallback message="Loading unit test designer..." />}>
+                <UnitTestDesigner tests={unitTests} onTestsChange={setUnitTests} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.errorRepair && (
             <TabsContent value="errors" className="h-full m-0">
-              <ErrorPanel files={files} onFileChange={handleFileChange} onFileSelect={setActiveFileId} />
+              <Suspense fallback={<LoadingFallback message="Loading error panel..." />}>
+                <ErrorPanel files={files} onFileChange={handleFileChange} onFileSelect={setActiveFileId} />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.documentation && (
             <TabsContent value="docs" className="h-full m-0">
-              <DocumentationView />
+              <Suspense fallback={<LoadingFallback message="Loading documentation..." />}>
+                <DocumentationView />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.sassStyles && (
             <TabsContent value="sass" className="h-full m-0">
-              <SassStylesShowcase />
+              <Suspense fallback={<LoadingFallback message="Loading Sass showcase..." />}>
+                <SassStylesShowcase />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.faviconDesigner && (
             <TabsContent value="favicon" className="h-full m-0">
-              <FaviconDesigner />
+              <Suspense fallback={<LoadingFallback message="Loading favicon designer..." />}>
+                <FaviconDesigner />
+              </Suspense>
             </TabsContent>
           )}
 
           {featureToggles.ideaCloud && (
             <TabsContent value="ideas" className="h-full m-0">
-              <FeatureIdeaCloud />
+              <Suspense fallback={<LoadingFallback message="Loading feature ideas..." />}>
+                <FeatureIdeaCloud />
+              </Suspense>
             </TabsContent>
           )}
         </div>
       </Tabs>
 
-      <GlobalSearch
-        open={searchOpen}
-        onOpenChange={setSearchOpen}
-        files={files}
-        models={models}
-        components={components}
-        componentTrees={componentTrees}
-        workflows={workflows}
-        lambdas={lambdas}
-        playwrightTests={playwrightTests}
-        storybookStories={storybookStories}
-        unitTests={unitTests}
-        onNavigate={setActiveTab}
-        onFileSelect={setActiveFileId}
-      />
+      <Suspense fallback={null}>
+        <GlobalSearch
+          open={searchOpen}
+          onOpenChange={setSearchOpen}
+          files={files}
+          models={models}
+          components={components}
+          componentTrees={componentTrees}
+          workflows={workflows}
+          lambdas={lambdas}
+          playwrightTests={playwrightTests}
+          storybookStories={storybookStories}
+          unitTests={unitTests}
+          onNavigate={setActiveTab}
+          onFileSelect={setActiveFileId}
+        />
+      </Suspense>
 
-      <KeyboardShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
-      <PWAInstallPrompt />
+      <Suspense fallback={null}>
+        <KeyboardShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <PWAInstallPrompt />
+      </Suspense>
     </div>
   )
 }
