@@ -186,11 +186,87 @@ export interface NpmSettings {
   packageManager: 'npm' | 'yarn' | 'pnpm'
 }
 
+export interface ComponentTree {
+  id: string
+  name: string
+  description: string
+  rootNodes: ComponentNode[]
+  createdAt: number
+  updatedAt: number
+}
+
+export interface WorkflowNode {
+  id: string
+  type: 'trigger' | 'action' | 'condition' | 'transform' | 'lambda' | 'api' | 'database'
+  name: string
+  position: { x: number; y: number }
+  data: Record<string, any>
+  config?: WorkflowNodeConfig
+}
+
+export interface WorkflowNodeConfig {
+  lambdaCode?: string
+  apiEndpoint?: string
+  httpMethod?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+  headers?: Record<string, string>
+  queryParams?: Record<string, string>
+  condition?: string
+  transformScript?: string
+  databaseQuery?: string
+  triggerType?: 'manual' | 'schedule' | 'webhook' | 'event'
+  scheduleExpression?: string
+}
+
+export interface WorkflowConnection {
+  id: string
+  source: string
+  target: string
+  sourceHandle?: string
+  targetHandle?: string
+  label?: string
+}
+
+export interface Workflow {
+  id: string
+  name: string
+  description: string
+  nodes: WorkflowNode[]
+  connections: WorkflowConnection[]
+  isActive: boolean
+  createdAt: number
+  updatedAt: number
+}
+
+export interface Lambda {
+  id: string
+  name: string
+  description: string
+  code: string
+  language: 'javascript' | 'typescript' | 'python'
+  runtime: string
+  handler: string
+  timeout: number
+  memory: number
+  environment: Record<string, string>
+  triggers: LambdaTrigger[]
+  createdAt: number
+  updatedAt: number
+}
+
+export interface LambdaTrigger {
+  id: string
+  type: 'http' | 'schedule' | 'event' | 'queue'
+  config: Record<string, any>
+}
+
 export interface Project {
   name: string
   files: ProjectFile[]
   models: PrismaModel[]
   components: ComponentNode[]
+  componentTrees: ComponentTree[]
+  workflows: Workflow[]
+  lambdas: Lambda[]
   theme: ThemeConfig
   playwrightTests?: PlaywrightTest[]
   storybookStories?: StorybookStory[]

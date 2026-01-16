@@ -6,11 +6,14 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard } from '@phosphor-icons/react'
-import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings } from '@/types/project'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow } from '@phosphor-icons/react'
+import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
+import { ComponentTreeManager } from '@/components/ComponentTreeManager'
+import { WorkflowDesigner } from '@/components/WorkflowDesigner'
+import { LambdaDesigner } from '@/components/LambdaDesigner'
 import { StyleDesigner } from '@/components/StyleDesigner'
 import { FileExplorer } from '@/components/FileExplorer'
 import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
@@ -140,6 +143,18 @@ function App() {
   const [files, setFiles] = useKV<ProjectFile[]>('project-files', DEFAULT_FILES)
   const [models, setModels] = useKV<PrismaModel[]>('project-models', [])
   const [components, setComponents] = useKV<ComponentNode[]>('project-components', [])
+  const [componentTrees, setComponentTrees] = useKV<ComponentTree[]>('project-component-trees', [
+    {
+      id: 'default-tree',
+      name: 'Main App',
+      description: 'Default component tree',
+      rootNodes: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    },
+  ])
+  const [workflows, setWorkflows] = useKV<Workflow[]>('project-workflows', [])
+  const [lambdas, setLambdas] = useKV<Lambda[]>('project-lambdas', [])
   const [theme, setTheme] = useKV<ThemeConfig>('project-theme', DEFAULT_THEME)
   const [playwrightTests, setPlaywrightTests] = useKV<PlaywrightTest[]>('project-playwright-tests', [])
   const [storybookStories, setStorybookStories] = useKV<StorybookStory[]>('project-storybook-stories', [])
@@ -156,6 +171,9 @@ function App() {
   const safeFiles = files || []
   const safeModels = models || []
   const safeComponents = components || []
+  const safeComponentTrees = componentTrees || []
+  const safeWorkflows = workflows || []
+  const safeLambdas = lambdas || []
   const safeTheme = (theme && theme.variants && theme.variants.length > 0) ? theme : DEFAULT_THEME
   const safePlaywrightTests = playwrightTests || []
   const safeStorybookStories = storybookStories || []
@@ -199,6 +217,24 @@ function App() {
     },
     {
       key: '5',
+      ctrl: true,
+      description: 'Go to Component Trees',
+      action: () => setActiveTab('component-trees'),
+    },
+    {
+      key: '6',
+      ctrl: true,
+      description: 'Go to Workflows',
+      action: () => setActiveTab('workflows'),
+    },
+    {
+      key: '7',
+      ctrl: true,
+      description: 'Go to Lambdas',
+      action: () => setActiveTab('lambdas'),
+    },
+    {
+      key: '8',
       ctrl: true,
       description: 'Go to Styling',
       action: () => setActiveTab('styling'),
@@ -457,6 +493,18 @@ Navigate to the backend directory and follow the setup instructions.
               <Tree size={18} />
               Components
             </TabsTrigger>
+            <TabsTrigger value="component-trees" className="gap-2">
+              <Tree size={18} />
+              Component Trees
+            </TabsTrigger>
+            <TabsTrigger value="workflows" className="gap-2">
+              <FlowArrow size={18} />
+              Workflows
+            </TabsTrigger>
+            <TabsTrigger value="lambdas" className="gap-2">
+              <Code size={18} />
+              Lambdas
+            </TabsTrigger>
             <TabsTrigger value="styling" className="gap-2">
               <PaintBrush size={18} />
               Styling
@@ -546,6 +594,27 @@ Navigate to the backend directory and follow the setup instructions.
             <ComponentTreeBuilder
               components={safeComponents}
               onComponentsChange={setComponents}
+            />
+          </TabsContent>
+
+          <TabsContent value="component-trees" className="h-full m-0">
+            <ComponentTreeManager
+              trees={safeComponentTrees}
+              onTreesChange={setComponentTrees}
+            />
+          </TabsContent>
+
+          <TabsContent value="workflows" className="h-full m-0">
+            <WorkflowDesigner
+              workflows={safeWorkflows}
+              onWorkflowsChange={setWorkflows}
+            />
+          </TabsContent>
+
+          <TabsContent value="lambdas" className="h-full m-0">
+            <LambdaDesigner
+              lambdas={safeLambdas}
+              onLambdasChange={setLambdas}
             />
           </TabsContent>
 

@@ -40,6 +40,27 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Progression**: Select component type or describe to AI → Add to tree → Configure props → Nest children → View generated JSX → Export component
 - **Success criteria**: Can add/remove/reorder components; AI-generated components are well-structured; props are editable; generates valid React code
 
+### Component Tree Manager
+- **Functionality**: Manage multiple named component trees, each with its own hierarchy and component structure
+- **Purpose**: Organize different parts of the application (Main App, Dashboard, Admin Panel) into separate, manageable trees
+- **Trigger**: Opening the Component Trees tab
+- **Progression**: Create tree → Name and describe purpose → Build component hierarchy → Switch between trees → Duplicate or delete trees → Export all trees
+- **Success criteria**: Can create unlimited trees; each tree maintains independent state; trees can be duplicated; generates organized component structure per tree
+
+### n8n-Style Workflow Designer
+- **Functionality**: Visual workflow builder with draggable nodes (triggers, actions, conditions, transforms, lambdas, APIs, database queries) connected by visual connections
+- **Purpose**: Design automation workflows and business logic visually without coding complex orchestration
+- **Trigger**: Opening the Workflows tab
+- **Progression**: Create workflow → Add nodes (drag/position on canvas) → Connect nodes → Configure each node (API endpoints, conditions, lambda code) → Activate workflow → Export workflow definition
+- **Success criteria**: Nodes can be positioned freely; connections show data flow; Monaco editor for lambda/transform nodes; supports HTTP methods, database queries, conditional branching; workflows persist and can be activated/deactivated
+
+### Lambda Function Designer
+- **Functionality**: Full-featured serverless function editor with Monaco code editor, multiple runtime support (Node.js, Python), environment variables, and trigger configuration
+- **Purpose**: Create and manage serverless functions with professional IDE features
+- **Trigger**: Opening the Lambdas tab
+- **Progression**: Create lambda → Select language (TypeScript/JavaScript/Python) → Write code in Monaco editor → Configure runtime, timeout, memory → Add triggers (HTTP, schedule, event, queue) → Set environment variables → Export lambda definitions
+- **Success criteria**: Monaco editor with syntax highlighting; supports multiple languages; configuration matches AWS Lambda standards; triggers are configurable; environment variables are managed securely; generates deployment-ready functions
+
 ### Style Designer
 - **Functionality**: Visual interface for Material UI theming with support for multiple theme variants (light/dark/custom), custom color management, and AI theme generation from descriptions
 - **Purpose**: Configure colors, typography, spacing with support for unlimited theme variants and custom color palettes beyond standard specifications, with AI design assistance
