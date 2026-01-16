@@ -459,15 +459,65 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                     const targetNode = selectedWorkflow.nodes.find((n) => n.id === conn.target)
                     if (!sourceNode || !targetNode) return null
 
-                    const x1 = sourceNode.position.x + 120
-                    const y1 = sourceNode.position.y + 40
-                    const x2 = targetNode.position.x
-                    const y2 = targetNode.position.y + 40
+                    const nodeWidth = 240
+                    const nodeHeight = 80
+                    
+                    const sourceCenterX = sourceNode.position.x + nodeWidth / 2
+                    const sourceCenterY = sourceNode.position.y + nodeHeight / 2
+                    const targetCenterX = targetNode.position.x + nodeWidth / 2
+                    const targetCenterY = targetNode.position.y + nodeHeight / 2
+                    
+                    const dx = targetCenterX - sourceCenterX
+                    const dy = targetCenterY - sourceCenterY
+                    
+                    let x1, y1, x2, y2, controlOffset1X, controlOffset1Y, controlOffset2X, controlOffset2Y
+                    
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                      if (dx > 0) {
+                        x1 = sourceNode.position.x + nodeWidth
+                        y1 = sourceCenterY
+                        x2 = targetNode.position.x
+                        y2 = targetCenterY
+                        controlOffset1X = 50
+                        controlOffset1Y = 0
+                        controlOffset2X = -50
+                        controlOffset2Y = 0
+                      } else {
+                        x1 = sourceNode.position.x
+                        y1 = sourceCenterY
+                        x2 = targetNode.position.x + nodeWidth
+                        y2 = targetCenterY
+                        controlOffset1X = -50
+                        controlOffset1Y = 0
+                        controlOffset2X = 50
+                        controlOffset2Y = 0
+                      }
+                    } else {
+                      if (dy > 0) {
+                        x1 = sourceCenterX
+                        y1 = sourceNode.position.y + nodeHeight
+                        x2 = targetCenterX
+                        y2 = targetNode.position.y
+                        controlOffset1X = 0
+                        controlOffset1Y = 50
+                        controlOffset2X = 0
+                        controlOffset2Y = -50
+                      } else {
+                        x1 = sourceCenterX
+                        y1 = sourceNode.position.y
+                        x2 = targetCenterX
+                        y2 = targetNode.position.y + nodeHeight
+                        controlOffset1X = 0
+                        controlOffset1Y = -50
+                        controlOffset2X = 0
+                        controlOffset2Y = 50
+                      }
+                    }
 
                     return (
                       <g key={conn.id}>
                         <path
-                          d={`M ${x1} ${y1} C ${x1 + 50} ${y1}, ${x2 - 50} ${y2}, ${x2} ${y2}`}
+                          d={`M ${x1} ${y1} C ${x1 + controlOffset1X} ${y1 + controlOffset1Y}, ${x2 + controlOffset2X} ${y2 + controlOffset2Y}, ${x2} ${y2}`}
                           stroke="hsl(var(--primary))"
                           strokeWidth="2"
                           fill="none"
