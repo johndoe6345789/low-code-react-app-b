@@ -3,7 +3,8 @@ import { ProjectFile } from '@/types/project'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { FileCode, FolderOpen, Plus, Folder } from '@phosphor-icons/react'
+import { Textarea } from '@/components/ui/textarea'
+import { FileCode, FolderOpen, Plus, Folder, Sparkle } from '@phosphor-icons/react'
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { AIService } from '@/lib/ai-service'
+import { toast } from 'sonner'
 
 interface FileExplorerProps {
   files: ProjectFile[]
@@ -36,6 +40,9 @@ export function FileExplorer({
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [newFileName, setNewFileName] = useState('')
   const [newFileLanguage, setNewFileLanguage] = useState('typescript')
+  const [aiDescription, setAiDescription] = useState('')
+  const [aiFileType, setAiFileType] = useState<'component' | 'page' | 'api' | 'utility'>('component')
+  const [isGenerating, setIsGenerating] = useState(false)
 
   const handleAddFile = () => {
     if (!newFileName.trim()) return
@@ -51,6 +58,43 @@ export function FileExplorer({
     onFileAdd(newFile)
     setNewFileName('')
     setIsAddDialogOpen(false)
+  }
+
+  const handleGenerateFileWithAI = async () => {
+    if (!aiDescription.trim() || !newFileName.trim()) {
+      toast.error('Please provide both a filename and description')
+      return
+    }
+
+    try {
+      setIsGenerating(true)
+      toast.info('Generating code with AI...')
+      
+      const code = await AIService.generateCodeFromDescription(aiDescription, aiFileType)
+      
+      if (code) {
+        const newFile: ProjectFile = {
+          id: `file-${Date.now()}`,
+          name: newFileName,
+          path: `/src/${newFileName}`,
+          content: code,
+          language: newFileLanguage,
+        }
+
+        onFileAdd(newFile)
+        setNewFileName('')
+        setAiDescription('')
+        setIsAddDialogOpen(false)
+        toast.success('File generated successfully!')
+      } else {
+        toast.error('AI generation failed. Please try again.')
+      }
+    } catch (error) {
+      toast.error('Failed to generate file')
+      console.error(error)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const groupedFiles = files.reduce((acc, file) => {
@@ -77,40 +121,114 @@ export function FileExplorer({
             <DialogHeader>
               <DialogTitle>Add New File</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>File Name</Label>
-                <Input
-                  value={newFileName}
-                  onChange={(e) => setNewFileName(e.target.value)}
-                  placeholder="example.tsx"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleAddFile()
-                  }}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Language</Label>
-                <Select
-                  value={newFileLanguage}
-                  onValueChange={setNewFileLanguage}
+            <Tabs defaultValue="manual">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="manual">Manual</TabsTrigger>
+                <TabsTrigger value="ai">
+                  <Sparkle size={14} className="mr-2" weight="duotone" />
+                  AI Generate
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="manual" className="space-y-4">
+                <div className="space-y-2">
+                  <Label>File Name</Label>
+                  <Input
+                    value={newFileName}
+                    onChange={(e) => setNewFileName(e.target.value)}
+                    placeholder="example.tsx"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleAddFile()
+                    }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Language</Label>
+                  <Select
+                    value={newFileLanguage}
+                    onValueChange={setNewFileLanguage}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="typescript">TypeScript</SelectItem>
+                      <SelectItem value="javascript">JavaScript</SelectItem>
+                      <SelectItem value="css">CSS</SelectItem>
+                      <SelectItem value="json">JSON</SelectItem>
+                      <SelectItem value="prisma">Prisma</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button onClick={handleAddFile} className="w-full">
+                  Add File
+                </Button>
+              </TabsContent>
+              <TabsContent value="ai" className="space-y-4">
+                <div className="space-y-2">
+                  <Label>File Name</Label>
+                  <Input
+                    value={newFileName}
+                    onChange={(e) => setNewFileName(e.target.value)}
+                    placeholder="UserCard.tsx"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>File Type</Label>
+                  <Select
+                    value={aiFileType}
+                    onValueChange={(value: any) => setAiFileType(value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="component">Component</SelectItem>
+                      <SelectItem value="page">Page</SelectItem>
+                      <SelectItem value="api">API Route</SelectItem>
+                      <SelectItem value="utility">Utility</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Description</Label>
+                  <Textarea
+                    value={aiDescription}
+                    onChange={(e) => setAiDescription(e.target.value)}
+                    placeholder="Describe what this file should do..."
+                    rows={4}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Language</Label>
+                  <Select
+                    value={newFileLanguage}
+                    onValueChange={setNewFileLanguage}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="typescript">TypeScript</SelectItem>
+                      <SelectItem value="javascript">JavaScript</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button 
+                  onClick={handleGenerateFileWithAI} 
+                  className="w-full"
+                  disabled={isGenerating}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="typescript">TypeScript</SelectItem>
-                    <SelectItem value="javascript">JavaScript</SelectItem>
-                    <SelectItem value="css">CSS</SelectItem>
-                    <SelectItem value="json">JSON</SelectItem>
-                    <SelectItem value="prisma">Prisma</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button onClick={handleAddFile} className="w-full">
-                Add File
-              </Button>
-            </div>
+                  {isGenerating ? (
+                    <>Generating...</>
+                  ) : (
+                    <>
+                      <Sparkle size={16} className="mr-2" weight="duotone" />
+                      Generate with AI
+                    </>
+                  )}
+                </Button>
+              </TabsContent>
+            </Tabs>
           </DialogContent>
         </Dialog>
       </div>

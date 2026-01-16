@@ -3,7 +3,10 @@ import { Card } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
-import { PaintBrush } from '@phosphor-icons/react'
+import { Button } from '@/components/ui/button'
+import { PaintBrush, Sparkle } from '@phosphor-icons/react'
+import { AIService } from '@/lib/ai-service'
+import { toast } from 'sonner'
 
 interface StyleDesignerProps {
   theme: ThemeConfig
@@ -15,14 +18,40 @@ export function StyleDesigner({ theme, onThemeChange }: StyleDesignerProps) {
     onThemeChange({ ...theme, ...updates })
   }
 
+  const generateThemeWithAI = async () => {
+    const description = prompt('Describe the visual style you want (e.g., "modern and professional", "vibrant and playful"):')
+    if (!description) return
+
+    try {
+      toast.info('Generating theme with AI...')
+      const generatedTheme = await AIService.generateThemeFromDescription(description)
+      
+      if (generatedTheme) {
+        onThemeChange({ ...theme, ...generatedTheme })
+        toast.success('Theme generated successfully!')
+      } else {
+        toast.error('AI generation failed. Please try again.')
+      }
+    } catch (error) {
+      toast.error('Failed to generate theme')
+      console.error(error)
+    }
+  }
+
   return (
     <div className="h-full overflow-auto p-6">
       <div className="max-w-4xl mx-auto space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Material UI Theme Designer</h2>
-          <p className="text-muted-foreground">
-            Customize your application's visual theme
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold mb-2">Material UI Theme Designer</h2>
+            <p className="text-muted-foreground">
+              Customize your application's visual theme
+            </p>
+          </div>
+          <Button onClick={generateThemeWithAI} variant="outline">
+            <Sparkle size={16} className="mr-2" weight="duotone" />
+            Generate with AI
+          </Button>
         </div>
 
         <Card className="p-6">

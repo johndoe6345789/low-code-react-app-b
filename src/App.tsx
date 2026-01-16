@@ -12,6 +12,7 @@ import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
 import { StyleDesigner } from '@/components/StyleDesigner'
 import { FileExplorer } from '@/components/FileExplorer'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme } from '@/lib/generators'
+import { AIService } from '@/lib/ai-service'
 import { toast } from 'sonner'
 import {
   Dialog,
@@ -108,10 +109,31 @@ function App() {
   }
 
   const handleGenerateWithAI = async () => {
+    const description = prompt('Describe the application you want to generate:')
+    if (!description) return
+
     try {
-      toast.info('AI generation coming soon!')
+      toast.info('Generating application with AI...')
+      
+      const result = await AIService.generateCompleteApp(description)
+      
+      if (result) {
+        if (result.files && result.files.length > 0) {
+          setFiles((currentFiles) => [...(currentFiles || []), ...result.files])
+        }
+        if (result.models && result.models.length > 0) {
+          setModels((currentModels) => [...(currentModels || []), ...result.models])
+        }
+        if (result.theme) {
+          setTheme((currentTheme) => ({ ...(currentTheme || DEFAULT_THEME), ...result.theme }))
+        }
+        toast.success('Application generated successfully!')
+      } else {
+        toast.error('AI generation failed. Please try again.')
+      }
     } catch (error) {
       toast.error('AI generation failed')
+      console.error(error)
     }
   }
 

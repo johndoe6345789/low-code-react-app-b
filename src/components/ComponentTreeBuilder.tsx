@@ -6,8 +6,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Trash, Tree, CaretRight, CaretDown } from '@phosphor-icons/react'
+import { Plus, Trash, Tree, CaretRight, CaretDown, Sparkle } from '@phosphor-icons/react'
 import { Textarea } from '@/components/ui/textarea'
+import { AIService } from '@/lib/ai-service'
+import { toast } from 'sonner'
 
 interface ComponentTreeBuilderProps {
   components: ComponentNode[]
@@ -129,6 +131,28 @@ export function ComponentTreeBuilder({
     setExpandedNodes(newExpanded)
   }
 
+  const generateComponentWithAI = async () => {
+    const description = prompt('Describe the component you want to create:')
+    if (!description) return
+
+    try {
+      toast.info('Generating component with AI...')
+      const component = await AIService.generateComponent(description)
+      
+      if (component) {
+        onComponentsChange([...components, component])
+        setSelectedNodeId(component.id)
+        setExpandedNodes(new Set([...Array.from(expandedNodes), component.id]))
+        toast.success(`Component "${component.name}" created successfully!`)
+      } else {
+        toast.error('AI generation failed. Please try again.')
+      }
+    } catch (error) {
+      toast.error('Failed to generate component')
+      console.error(error)
+    }
+  }
+
   const renderTreeNode = (node: ComponentNode, level: number = 0) => {
     const isExpanded = expandedNodes.has(node.id)
     const isSelected = selectedNodeId === node.id
@@ -174,9 +198,20 @@ export function ComponentTreeBuilder({
           <h3 className="font-semibold text-sm uppercase tracking-wide">
             Component Tree
           </h3>
-          <Button size="sm" onClick={addRootComponent} className="h-8 w-8 p-0">
-            <Plus size={16} />
-          </Button>
+          <div className="flex gap-1">
+            <Button 
+              size="sm" 
+              variant="outline"
+              onClick={generateComponentWithAI} 
+              className="h-8 w-8 p-0"
+              title="Generate component with AI"
+            >
+              <Sparkle size={16} weight="duotone" />
+            </Button>
+            <Button size="sm" onClick={addRootComponent} className="h-8 w-8 p-0">
+              <Plus size={16} />
+            </Button>
+          </div>
         </div>
         <ScrollArea className="flex-1 border rounded-lg">
           <div className="p-2 space-y-1">

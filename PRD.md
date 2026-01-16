@@ -13,32 +13,39 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 ## Essential Features
 
 ### Monaco Code Editor Integration
-- **Functionality**: Full-featured code editor with syntax highlighting, autocomplete, and multi-file editing
-- **Purpose**: Allows direct code manipulation for users who want precise control
+- **Functionality**: Full-featured code editor with syntax highlighting, autocomplete, multi-file editing, and AI-powered code improvement and explanation
+- **Purpose**: Allows direct code manipulation for users who want precise control, with AI assistance for learning and optimization
 - **Trigger**: Clicking on files in the file tree or switching to code view
-- **Progression**: Select file → Editor opens with syntax highlighting → Edit code → Changes auto-saved to state → Preview updates
-- **Success criteria**: Code edits persist, syntax highlighting works for JS/TS/CSS, multiple files can be open in tabs
+- **Progression**: Select file → Editor opens with syntax highlighting → Edit code → Use AI to improve or explain code → Changes auto-saved to state → Preview updates
+- **Success criteria**: Code edits persist, syntax highlighting works for JS/TS/CSS, multiple files can be open in tabs, AI explanations are helpful, AI improvements are relevant
+
+### AI-Powered Code Generation
+- **Functionality**: Generate complete files, components, models, and themes using natural language descriptions via OpenAI integration
+- **Purpose**: Accelerates development by automating boilerplate and scaffolding based on user intent
+- **Trigger**: Clicking AI/Sparkle icons in various sections or the main "AI Generate" button
+- **Progression**: User describes intent → AI processes request → Generated code appears → User can refine or accept
+- **Success criteria**: Generated code is syntactically valid, follows conventions, matches user intent, integrates with existing project structure
 
 ### Prisma Schema Designer
-- **Functionality**: Visual model designer for database schemas with drag-and-drop field creation
-- **Purpose**: Simplifies database modeling without requiring Prisma syntax knowledge
+- **Functionality**: Visual model designer for database schemas with drag-and-drop field creation and AI-powered model generation and field suggestions
+- **Purpose**: Simplifies database modeling without requiring Prisma syntax knowledge, with intelligent AI assistance
 - **Trigger**: Opening the Models tab
-- **Progression**: Create model → Add fields with types → Define relations → Visual graph updates → Generate Prisma schema code
-- **Success criteria**: Can create models, fields, relations; generates valid Prisma syntax; visual representation is clear
+- **Progression**: Create model manually or with AI → Add fields with types or get AI suggestions → Define relations → Visual graph updates → Generate Prisma schema code
+- **Success criteria**: Can create models, fields, relations; AI suggestions are contextually relevant; generates valid Prisma syntax; visual representation is clear
 
 ### Component Tree Builder
-- **Functionality**: Hierarchical tree view for building React component structure
-- **Purpose**: Visual composition of component hierarchy without writing JSX
+- **Functionality**: Hierarchical tree view for building React component structure with AI-powered component generation
+- **Purpose**: Visual composition of component hierarchy without writing JSX, enhanced by AI scaffolding
 - **Trigger**: Opening the Components tab
-- **Progression**: Select component type → Add to tree → Configure props → Nest children → View generated JSX → Export component
-- **Success criteria**: Can add/remove/reorder components; props are editable; generates valid React code
+- **Progression**: Select component type or describe to AI → Add to tree → Configure props → Nest children → View generated JSX → Export component
+- **Success criteria**: Can add/remove/reorder components; AI-generated components are well-structured; props are editable; generates valid React code
 
 ### Style Designer
-- **Functionality**: Visual interface for Material UI theming and component styling
-- **Purpose**: Configure colors, typography, spacing without manual theme object creation
+- **Functionality**: Visual interface for Material UI theming and component styling with AI theme generation from descriptions
+- **Purpose**: Configure colors, typography, spacing without manual theme object creation, with AI design assistance
 - **Trigger**: Opening the Styling tab
-- **Progression**: Select theme property → Adjust values with controls → Preview updates live → Export theme configuration
-- **Success criteria**: Color pickers work; typography scales properly; generates valid MUI theme code
+- **Progression**: Select theme property → Adjust values with controls or describe style to AI → Preview updates live → Export theme configuration
+- **Success criteria**: Color pickers work; typography scales properly; AI themes match descriptions and have good contrast; generates valid MUI theme code
 
 ### Project Generator
 - **Functionality**: Exports complete Next.js project with all configurations
@@ -48,11 +55,14 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Success criteria**: Generated project structure is valid; includes package.json; code runs without errors
 
 ## Edge Case Handling
-- **Empty Projects**: Show welcome screen with quick-start templates when no project exists
+- **Empty Projects**: Show welcome screen with quick-start templates when no project exists; AI can generate entire projects from scratch
 - **Invalid Prisma Schemas**: Validate models and show inline errors before generating code
 - **Circular Component Dependencies**: Detect and warn when component tree has circular references
 - **Missing Required Props**: Highlight components with missing required Material UI props
 - **Large Files**: Implement virtual scrolling and lazy loading for large component trees and file lists
+- **AI Generation Failures**: Provide clear error messages and fallback to manual editing when AI requests fail
+- **Rate Limiting**: Handle OpenAI API rate limits gracefully with user-friendly messages
+- **Invalid AI Responses**: Validate and sanitize AI-generated code before insertion
 
 ## Design Direction
 The design should evoke a professional IDE environment while remaining approachable - think Visual Studio Code meets Figma. Clean panels, clear hierarchy, and purposeful use of space to avoid overwhelming users with options.
