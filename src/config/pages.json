@@ -1,0 +1,190 @@
+{
+  "pages": [
+    {
+      "id": "dashboard",
+      "title": "Dashboard",
+      "icon": "ChartBar",
+      "component": "ProjectDashboard",
+      "enabled": true,
+      "shortcut": "ctrl+1",
+      "order": 1
+    },
+    {
+      "id": "code",
+      "title": "Code Editor",
+      "icon": "Code",
+      "component": "CodeEditor",
+      "enabled": true,
+      "toggleKey": "codeEditor",
+      "shortcut": "ctrl+2",
+      "order": 2,
+      "requiresResizable": true
+    },
+    {
+      "id": "models",
+      "title": "Models",
+      "icon": "Database",
+      "component": "ModelDesigner",
+      "enabled": true,
+      "toggleKey": "models",
+      "shortcut": "ctrl+3",
+      "order": 3
+    },
+    {
+      "id": "components",
+      "title": "Components",
+      "icon": "Cube",
+      "component": "ComponentTreeBuilder",
+      "enabled": true,
+      "toggleKey": "components",
+      "shortcut": "ctrl+4",
+      "order": 4
+    },
+    {
+      "id": "component-trees",
+      "title": "Component Trees",
+      "icon": "Tree",
+      "component": "ComponentTreeManager",
+      "enabled": true,
+      "toggleKey": "componentTrees",
+      "shortcut": "ctrl+5",
+      "order": 5
+    },
+    {
+      "id": "workflows",
+      "title": "Workflows",
+      "icon": "GitBranch",
+      "component": "WorkflowDesigner",
+      "enabled": true,
+      "toggleKey": "workflows",
+      "shortcut": "ctrl+6",
+      "order": 6
+    },
+    {
+      "id": "lambdas",
+      "title": "Lambdas",
+      "icon": "Function",
+      "component": "LambdaDesigner",
+      "enabled": true,
+      "toggleKey": "lambdas",
+      "shortcut": "ctrl+7",
+      "order": 7
+    },
+    {
+      "id": "styling",
+      "title": "Styling",
+      "icon": "Palette",
+      "component": "StyleDesigner",
+      "enabled": true,
+      "toggleKey": "styling",
+      "shortcut": "ctrl+8",
+      "order": 8
+    },
+    {
+      "id": "favicon",
+      "title": "Favicon Designer",
+      "icon": "Image",
+      "component": "FaviconDesigner",
+      "enabled": true,
+      "toggleKey": "faviconDesigner",
+      "shortcut": "ctrl+9",
+      "order": 9
+    },
+    {
+      "id": "ideas",
+      "title": "Feature Ideas",
+      "icon": "Lightbulb",
+      "component": "FeatureIdeaCloud",
+      "enabled": true,
+      "toggleKey": "ideaCloud",
+      "order": 10
+    },
+    {
+      "id": "flask",
+      "title": "Flask API",
+      "icon": "Flask",
+      "component": "FlaskDesigner",
+      "enabled": true,
+      "toggleKey": "flaskApi",
+      "order": 11
+    },
+    {
+      "id": "playwright",
+      "title": "Playwright",
+      "icon": "TestTube",
+      "component": "PlaywrightDesigner",
+      "enabled": true,
+      "toggleKey": "playwright",
+      "order": 12
+    },
+    {
+      "id": "storybook",
+      "title": "Storybook",
+      "icon": "Book",
+      "component": "StorybookDesigner",
+      "enabled": true,
+      "toggleKey": "storybook",
+      "order": 13
+    },
+    {
+      "id": "unit-tests",
+      "title": "Unit Tests",
+      "icon": "Bug",
+      "component": "UnitTestDesigner",
+      "enabled": true,
+      "toggleKey": "unitTests",
+      "order": 14
+    },
+    {
+      "id": "errors",
+      "title": "Errors",
+      "icon": "Warning",
+      "component": "ErrorPanel",
+      "enabled": true,
+      "toggleKey": "errorRepair",
+      "order": 15
+    },
+    {
+      "id": "docs",
+      "title": "Documentation",
+      "icon": "BookOpen",
+      "component": "DocumentationView",
+      "enabled": true,
+      "toggleKey": "documentation",
+      "order": 16
+    },
+    {
+      "id": "sass",
+      "title": "SASS Styles",
+      "icon": "Palette",
+      "component": "SassStylesShowcase",
+      "enabled": true,
+      "toggleKey": "sassStyles",
+      "order": 17
+    },
+    {
+      "id": "settings",
+      "title": "Settings",
+      "icon": "Gear",
+      "component": "ProjectSettingsDesigner",
+      "enabled": true,
+      "order": 18
+    },
+    {
+      "id": "pwa",
+      "title": "PWA",
+      "icon": "DeviceMobile",
+      "component": "PWASettings",
+      "enabled": true,
+      "order": 19
+    },
+    {
+      "id": "features",
+      "title": "Features",
+      "icon": "ToggleRight",
+      "component": "FeatureToggleSettings",
+      "enabled": true,
+      "order": 20
+    }
+  ]
+}
