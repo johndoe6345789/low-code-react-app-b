@@ -32,6 +32,7 @@ const componentMap: Record<string, React.LazyExoticComponent<any>> = {
   PWASettings: lazy(() => import('@/components/PWASettings').then(m => ({ default: m.PWASettings }))),
   FaviconDesigner: lazy(() => import('@/components/FaviconDesigner').then(m => ({ default: m.FaviconDesigner }))),
   FeatureIdeaCloud: lazy(() => import('@/components/FeatureIdeaCloud').then(m => ({ default: m.FeatureIdeaCloud }))),
+  TemplateSelector: lazy(() => import('@/components/TemplateSelector').then(m => ({ default: m.TemplateSelector }))),
 }
 
 const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })))

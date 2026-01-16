@@ -254,12 +254,21 @@
       "props": {}
     },
     {
+      "id": "templates",
+      "title": "Templates",
+      "icon": "Package",
+      "component": "TemplateSelector",
+      "enabled": true,
+      "order": 20,
+      "props": {}
+    },
+    {
       "id": "features",
       "title": "Features",
       "icon": "ToggleRight",
       "component": "FeatureToggleSettings",
       "enabled": true,
-      "order": 20,
+      "order": 21,
       "props": {
         "state": ["features:featureToggles"],
         "actions": ["onFeaturesChange:setFeatureToggles"]
