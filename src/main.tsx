@@ -10,20 +10,48 @@ import "./main.css"
 import "./styles/theme.css"
 import "./index.css"
 
+const isResizeObserverError = (message: string | undefined): boolean => {
+  if (!message) return false
+  return (
+    message.includes('ResizeObserver loop') ||
+    (message.includes('ResizeObserver') && message.includes('notifications'))
+  )
+}
+
 const originalError = console.error
 console.error = (...args) => {
   if (
     typeof args[0] === 'string' &&
-    args[0].includes('ResizeObserver loop completed with undelivered notifications')
+    isResizeObserverError(args[0])
   ) {
     return
   }
   originalError.call(console, ...args)
 }
 
+const originalWarn = console.warn
+console.warn = (...args) => {
+  if (
+    typeof args[0] === 'string' &&
+    isResizeObserverError(args[0])
+  ) {
+    return
+  }
+  originalWarn.call(console, ...args)
+}
+
 window.addEventListener('error', (e) => {
-  if (e.message === 'ResizeObserver loop completed with undelivered notifications.') {
+  if (isResizeObserverError(e.message)) {
     e.stopImmediatePropagation()
+    e.preventDefault()
+    return false
+  }
+}, true)
+
+window.addEventListener('unhandledrejection', (e) => {
+  if (e.reason && e.reason.message && isResizeObserverError(e.reason.message)) {
+    e.preventDefault()
+    return false
   }
 })
 

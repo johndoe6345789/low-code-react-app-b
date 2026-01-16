@@ -848,6 +848,7 @@ export function FeatureIdeaCloud() {
         fitView
         minZoom={0.2}
         maxZoom={2}
+        proOptions={{ hideAttribution: true }}
         defaultEdgeOptions={{
           type: 'default',
           animated: false,

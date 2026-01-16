@@ -20,6 +20,16 @@
   }
 }
 
+@layer utilities {
+  .react-flow__renderer {
+    will-change: transform;
+  }
+  
+  .react-flow__node {
+    will-change: transform;
+  }
+}
+
 :root {
   --background: oklch(0.14 0.02 250);
   --foreground: oklch(0.93 0.005 250);
