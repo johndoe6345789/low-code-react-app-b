@@ -444,64 +444,42 @@ export function FeatureIdeaCloud() {
     (params: RFConnection) => {
       if (!params.source || !params.target) return
       
+      const sourceNodeId = params.source
       const sourceHandleId = params.sourceHandle || 'default'
+      const targetNodeId = params.target
       const targetHandleId = params.targetHandle || 'default'
       
-      const sourceHandleEdge = edges.find(edge => 
-        (edge.source === params.source && (edge.sourceHandle || 'default') === sourceHandleId) ||
-        (edge.target === params.source && (edge.targetHandle || 'default') === sourceHandleId)
-      )
+      const edgesToRemove: string[] = []
       
-      const targetHandleEdge = edges.find(edge => 
-        (edge.target === params.target && (edge.targetHandle || 'default') === targetHandleId) ||
-        (edge.source === params.target && (edge.sourceHandle || 'default') === targetHandleId)
-      )
-      
-      if (sourceHandleEdge || targetHandleEdge) {
-        const edgesToRemove: string[] = []
-        if (sourceHandleEdge) edgesToRemove.push(sourceHandleEdge.id)
-        if (targetHandleEdge && targetHandleEdge.id !== sourceHandleEdge?.id) {
-          edgesToRemove.push(targetHandleEdge.id)
+      edges.forEach(edge => {
+        const edgeSourceHandle = edge.sourceHandle || 'default'
+        const edgeTargetHandle = edge.targetHandle || 'default'
+        
+        if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
+          edgesToRemove.push(edge.id)
         }
         
-        setEdges((eds) => {
-          const filteredEdges = eds.filter(e => !edgesToRemove.includes(e.id))
-          
-          const style = CONNECTION_STYLES[connectionType]
-          const newEdge: Edge<IdeaEdgeData> = {
-            id: `edge-${Date.now()}`,
-            source: params.source!,
-            target: params.target!,
-            ...(params.sourceHandle && { sourceHandle: params.sourceHandle }),
-            ...(params.targetHandle && { targetHandle: params.targetHandle }),
-            type: 'default',
-            data: { type: connectionType, label: CONNECTION_LABELS[connectionType] },
-            markerEnd: { 
-              type: style.markerEnd, 
-              color: style.stroke,
-              width: 20,
-              height: 20
-            },
-            style: { 
-              stroke: style.stroke, 
-              strokeDasharray: style.strokeDasharray,
-              strokeWidth: style.strokeWidth
-            },
-            animated: connectionType === 'dependency',
-          }
-          
-          const updatedEdges = addEdge(newEdge, filteredEdges)
-          setSavedEdges(updatedEdges)
-          return updatedEdges
-        })
+        if (edge.target === sourceNodeId && edgeTargetHandle === sourceHandleId) {
+          edgesToRemove.push(edge.id)
+        }
         
-        toast.success(`Connection remapped! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
-      } else {
+        if (edge.source === targetNodeId && edgeSourceHandle === targetHandleId) {
+          edgesToRemove.push(edge.id)
+        }
+        
+        if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
+          edgesToRemove.push(edge.id)
+        }
+      })
+      
+      setEdges((eds) => {
+        const filteredEdges = eds.filter(e => !edgesToRemove.includes(e.id))
+        
         const style = CONNECTION_STYLES[connectionType]
         const newEdge: Edge<IdeaEdgeData> = {
           id: `edge-${Date.now()}`,
-          source: params.source!,
-          target: params.target!,
+          source: sourceNodeId,
+          target: targetNodeId,
           ...(params.sourceHandle && { sourceHandle: params.sourceHandle }),
           ...(params.targetHandle && { targetHandle: params.targetHandle }),
           type: 'default',
@@ -520,12 +498,14 @@ export function FeatureIdeaCloud() {
           animated: connectionType === 'dependency',
         }
         
-        setEdges((eds) => {
-          const updatedEdges = addEdge(newEdge, eds)
-          setSavedEdges(updatedEdges)
-          return updatedEdges
-        })
-        
+        const updatedEdges = addEdge(newEdge, filteredEdges)
+        setSavedEdges(updatedEdges)
+        return updatedEdges
+      })
+      
+      if (edgesToRemove.length > 0) {
+        toast.success(`Connection ${edgesToRemove.length > 0 ? 'remapped' : 'created'}! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+      } else {
         toast.success('Ideas connected!')
       }
     },
@@ -547,46 +527,50 @@ export function FeatureIdeaCloud() {
   }, [])
 
   const onReconnect = useCallback((oldEdge: Edge, newConnection: RFConnection) => {
-    const newSourceHandleId = newConnection.sourceHandle || 'default'
-    const newTargetHandleId = newConnection.targetHandle || 'default'
+    if (!newConnection.source || !newConnection.target) return
     
-    const sourceHandleEdge = edges.find(edge => 
-      edge.id !== oldEdge.id && (
-        (edge.source === newConnection.source && (edge.sourceHandle || 'default') === newSourceHandleId) ||
-        (edge.target === newConnection.source && (edge.targetHandle || 'default') === newSourceHandleId)
-      )
-    )
+    const sourceNodeId = newConnection.source
+    const sourceHandleId = newConnection.sourceHandle || 'default'
+    const targetNodeId = newConnection.target
+    const targetHandleId = newConnection.targetHandle || 'default'
     
-    const targetHandleEdge = edges.find(edge => 
-      edge.id !== oldEdge.id && (
-        (edge.target === newConnection.target && (edge.targetHandle || 'default') === newTargetHandleId) ||
-        (edge.source === newConnection.target && (edge.sourceHandle || 'default') === newTargetHandleId)
-      )
-    )
+    const edgesToRemove: string[] = []
+    
+    edges.forEach(edge => {
+      if (edge.id === oldEdge.id) return
+      
+      const edgeSourceHandle = edge.sourceHandle || 'default'
+      const edgeTargetHandle = edge.targetHandle || 'default'
+      
+      if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
+        edgesToRemove.push(edge.id)
+      }
+      
+      if (edge.target === sourceNodeId && edgeTargetHandle === sourceHandleId) {
+        edgesToRemove.push(edge.id)
+      }
+      
+      if (edge.source === targetNodeId && edgeSourceHandle === targetHandleId) {
+        edgesToRemove.push(edge.id)
+      }
+      
+      if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
+        edgesToRemove.push(edge.id)
+      }
+    })
     
     edgeReconnectSuccessful.current = true
     
-    if (sourceHandleEdge || targetHandleEdge) {
-      const edgesToRemove: string[] = []
-      if (sourceHandleEdge) edgesToRemove.push(sourceHandleEdge.id)
-      if (targetHandleEdge && targetHandleEdge.id !== sourceHandleEdge?.id) {
-        edgesToRemove.push(targetHandleEdge.id)
-      }
-      
-      setEdges((els) => {
-        const filteredEdges = els.filter(e => !edgesToRemove.includes(e.id))
-        const updatedEdges = reconnectEdge(oldEdge, newConnection, filteredEdges)
-        setSavedEdges(updatedEdges)
-        return updatedEdges
-      })
-      
+    setEdges((els) => {
+      const filteredEdges = els.filter(e => !edgesToRemove.includes(e.id))
+      const updatedEdges = reconnectEdge(oldEdge, newConnection, filteredEdges)
+      setSavedEdges(updatedEdges)
+      return updatedEdges
+    })
+    
+    if (edgesToRemove.length > 0) {
       toast.success(`Connection remapped! (${edgesToRemove.length} conflicting connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
     } else {
-      setEdges((els) => {
-        const updatedEdges = reconnectEdge(oldEdge, newConnection, els)
-        setSavedEdges(updatedEdges)
-        return updatedEdges
-      })
       toast.success('Connection remapped!')
     }
   }, [edges, setEdges, setSavedEdges])
