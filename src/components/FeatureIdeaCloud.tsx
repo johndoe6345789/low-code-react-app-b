@@ -337,6 +337,7 @@ export function FeatureIdeaCloud() {
       style: { stroke: '#f87171', strokeWidth: 2.5 },
     },
   ])
+  const [savedNodePositions, setSavedNodePositions] = useKV<Record<string, { x: number; y: number }>>('feature-idea-node-positions', {})
   
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
@@ -353,6 +354,7 @@ export function FeatureIdeaCloud() {
   const safeIdeas = ideas || SEED_IDEAS
   const safeGroups = groups || []
   const safeEdges = savedEdges || []
+  const safeNodePositions = savedNodePositions || {}
 
   useEffect(() => {
     if (!ideas || ideas.length === 0) {
@@ -364,7 +366,7 @@ export function FeatureIdeaCloud() {
     const groupNodes: Node<IdeaGroup>[] = safeGroups.map((group) => ({
       id: group.id,
       type: 'groupNode',
-      position: { x: 0, y: 0 },
+      position: safeNodePositions[group.id] || { x: 0, y: 0 },
       data: group,
       style: {
         zIndex: -1,
@@ -374,7 +376,7 @@ export function FeatureIdeaCloud() {
     const ideaNodes: Node<FeatureIdea>[] = safeIdeas.map((idea, index) => ({
       id: idea.id,
       type: 'ideaNode',
-      position: { x: 100 + (index % 3) * 350, y: 100 + Math.floor(index / 3) * 250 },
+      position: safeNodePositions[idea.id] || { x: 100 + (index % 3) * 350, y: 100 + Math.floor(index / 3) * 250 },
       data: idea,
       parentNode: idea.parentGroup,
       extent: idea.parentGroup ? 'parent' : undefined,
@@ -384,7 +386,7 @@ export function FeatureIdeaCloud() {
     }))
 
     setNodes([...groupNodes, ...ideaNodes])
-  }, [safeIdeas, safeGroups, setNodes])
+  }, [safeIdeas, safeGroups, safeNodePositions, setNodes])
 
   useEffect(() => {
     setEdges(safeEdges)
@@ -417,6 +419,16 @@ export function FeatureIdeaCloud() {
       const moveChange = changes.find((c: any) => c.type === 'position' && c.dragging === false)
       if (moveChange) {
         setTimeout(() => {
+          setNodes((currentNodes) => {
+            const positions: Record<string, { x: number; y: number }> = {}
+            currentNodes.forEach(node => {
+              if (node.position) {
+                positions[node.id] = node.position
+              }
+            })
+            setSavedNodePositions(positions)
+            return currentNodes
+          })
           setEdges((currentEdges) => {
             setSavedEdges(currentEdges)
             return currentEdges
@@ -424,7 +436,7 @@ export function FeatureIdeaCloud() {
         }, 100)
       }
     },
-    [onNodesChange, setEdges, setSavedEdges]
+    [onNodesChange, setNodes, setEdges, setSavedNodePositions, setSavedEdges]
   )
 
   const onEdgesChangeWrapper = useCallback(
@@ -449,22 +461,22 @@ export function FeatureIdeaCloud() {
       const targetNodeId = params.target
       const targetHandleId = params.targetHandle || 'default'
       
-      const edgesToRemove: string[] = []
-      
-      edges.forEach(edge => {
-        const edgeSourceHandle = edge.sourceHandle || 'default'
-        const edgeTargetHandle = edge.targetHandle || 'default'
-        
-        if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
-          edgesToRemove.push(edge.id)
-        }
-        
-        if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
-          edgesToRemove.push(edge.id)
-        }
-      })
-      
       setEdges((eds) => {
+        const edgesToRemove: string[] = []
+        
+        eds.forEach(edge => {
+          const edgeSourceHandle = edge.sourceHandle || 'default'
+          const edgeTargetHandle = edge.targetHandle || 'default'
+          
+          if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
+            edgesToRemove.push(edge.id)
+          }
+          
+          if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
+            edgesToRemove.push(edge.id)
+          }
+        })
+        
         const filteredEdges = eds.filter(e => !edgesToRemove.includes(e.id))
         
         const style = CONNECTION_STYLES[connectionType]
@@ -492,16 +504,21 @@ export function FeatureIdeaCloud() {
         
         const updatedEdges = addEdge(newEdge, filteredEdges)
         setSavedEdges(updatedEdges)
+        
+        if (edgesToRemove.length > 0) {
+          setTimeout(() => {
+            toast.success(`Connection remapped! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+          }, 0)
+        } else {
+          setTimeout(() => {
+            toast.success('Ideas connected!')
+          }, 0)
+        }
+        
         return updatedEdges
       })
-      
-      if (edgesToRemove.length > 0) {
-        toast.success(`Connection remapped! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
-      } else {
-        toast.success('Ideas connected!')
-      }
     },
-    [connectionType, edges, setEdges, setSavedEdges]
+    [connectionType, setEdges, setSavedEdges]
   )
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
@@ -526,38 +543,43 @@ export function FeatureIdeaCloud() {
     const targetNodeId = newConnection.target
     const targetHandleId = newConnection.targetHandle || 'default'
     
-    const edgesToRemove: string[] = []
-    
-    edges.forEach(edge => {
-      if (edge.id === oldEdge.id) return
-      
-      const edgeSourceHandle = edge.sourceHandle || 'default'
-      const edgeTargetHandle = edge.targetHandle || 'default'
-      
-      if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
-        edgesToRemove.push(edge.id)
-      }
-      
-      if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
-        edgesToRemove.push(edge.id)
-      }
-    })
-    
     edgeReconnectSuccessful.current = true
     
     setEdges((els) => {
+      const edgesToRemove: string[] = []
+      
+      els.forEach(edge => {
+        if (edge.id === oldEdge.id) return
+        
+        const edgeSourceHandle = edge.sourceHandle || 'default'
+        const edgeTargetHandle = edge.targetHandle || 'default'
+        
+        if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
+          edgesToRemove.push(edge.id)
+        }
+        
+        if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
+          edgesToRemove.push(edge.id)
+        }
+      })
+      
       const filteredEdges = els.filter(e => !edgesToRemove.includes(e.id))
       const updatedEdges = reconnectEdge(oldEdge, newConnection, filteredEdges)
       setSavedEdges(updatedEdges)
+      
+      if (edgesToRemove.length > 0) {
+        setTimeout(() => {
+          toast.success(`Connection remapped! (${edgesToRemove.length} conflicting connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+        }, 0)
+      } else {
+        setTimeout(() => {
+          toast.success('Connection remapped!')
+        }, 0)
+      }
+      
       return updatedEdges
     })
-    
-    if (edgesToRemove.length > 0) {
-      toast.success(`Connection remapped! (${edgesToRemove.length} conflicting connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
-    } else {
-      toast.success('Connection remapped!')
-    }
-  }, [edges, setEdges, setSavedEdges])
+  }, [setEdges, setSavedEdges])
 
   const onReconnectEnd = useCallback((_: MouseEvent | TouchEvent, edge: Edge) => {
     if (!edgeReconnectSuccessful.current) {
@@ -611,13 +633,19 @@ export function FeatureIdeaCloud() {
     })
 
     if (!(ideas || []).find(i => i.id === selectedIdea.id)) {
+      const newPosition = { x: 400, y: 300 }
       const newNode: Node<FeatureIdea> = {
         id: selectedIdea.id,
         type: 'ideaNode',
-        position: { x: 400, y: 300 },
+        position: newPosition,
         data: selectedIdea,
       }
       setNodes((nds) => [...nds, newNode])
+      
+      setSavedNodePositions((currentPositions) => ({
+        ...(currentPositions || {}),
+        [selectedIdea.id]: newPosition,
+      }))
     }
 
     setEditDialogOpen(false)
@@ -628,6 +656,12 @@ export function FeatureIdeaCloud() {
   const handleDeleteIdea = (id: string) => {
     setIdeas((currentIdeas) => (currentIdeas || []).filter(i => i.id !== id))
     setNodes((nds) => nds.filter(n => n.id !== id))
+    
+    setSavedNodePositions((currentPositions) => {
+      const newPositions = { ...(currentPositions || {}) }
+      delete newPositions[id]
+      return newPositions
+    })
     
     const updatedEdges = edges.filter(e => e.source !== id && e.target !== id)
     setEdges(updatedEdges)
@@ -655,16 +689,22 @@ export function FeatureIdeaCloud() {
     })
 
     if (!(groups || []).find(g => g.id === selectedGroup.id)) {
+      const newPosition = { x: 200, y: 200 }
       const newNode: Node<IdeaGroup> = {
         id: selectedGroup.id,
         type: 'groupNode',
-        position: { x: 200, y: 200 },
+        position: newPosition,
         data: selectedGroup,
         style: {
           zIndex: -1,
         },
       }
       setNodes((nds) => [newNode, ...nds])
+      
+      setSavedNodePositions((currentPositions) => ({
+        ...(currentPositions || {}),
+        [selectedGroup.id]: newPosition,
+      }))
     }
 
     setGroupDialogOpen(false)
@@ -681,6 +721,12 @@ export function FeatureIdeaCloud() {
     
     setGroups((currentGroups) => (currentGroups || []).filter(g => g.id !== id))
     setNodes((nds) => nds.filter(n => n.id !== id))
+    
+    setSavedNodePositions((currentPositions) => {
+      const newPositions = { ...(currentPositions || {}) }
+      delete newPositions[id]
+      return newPositions
+    })
     
     setGroupDialogOpen(false)
     setSelectedGroup(null)
@@ -757,14 +803,24 @@ export function FeatureIdeaCloud() {
         
         setIdeas((currentIdeas) => [...(currentIdeas || []), ...newIdeas])
         
-        const newNodes: Node<FeatureIdea>[] = newIdeas.map((idea, index) => ({
-          id: idea.id,
-          type: 'ideaNode',
-          position: { x: 400 + (index * 250), y: 300 + (index * 150) },
-          data: idea,
-        }))
+        const newPositions: Record<string, { x: number; y: number }> = {}
+        const newNodes: Node<FeatureIdea>[] = newIdeas.map((idea, index) => {
+          const position = { x: 400 + (index * 250), y: 300 + (index * 150) }
+          newPositions[idea.id] = position
+          return {
+            id: idea.id,
+            type: 'ideaNode',
+            position,
+            data: idea,
+          }
+        })
         
         setNodes((nds) => [...nds, ...newNodes])
+        setSavedNodePositions((currentPositions) => ({
+          ...(currentPositions || {}),
+          ...newPositions,
+        }))
+        
         toast.success(`Generated ${newIdeas.length} new ideas!`)
       }
     } catch (error) {
