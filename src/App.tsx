@@ -38,6 +38,7 @@ import { FeatureIdeaCloud } from '@/components/FeatureIdeaCloud'
 import { GlobalSearch } from '@/components/GlobalSearch'
 import { NavigationMenu } from '@/components/NavigationMenu'
 import { PageHeader } from '@/components/PageHeader'
+import { SaveIndicator } from '@/components/SaveIndicator'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -200,6 +201,7 @@ function App() {
   const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false)
   const [searchDialogOpen, setSearchDialogOpen] = useState(false)
   const [generatedCode, setGeneratedCode] = useState<Record<string, string>>({})
+  const [lastSaved, setLastSaved] = useState<number | null>(Date.now())
 
   const safeFiles = files || []
   const safeModels = models || []
@@ -235,6 +237,25 @@ function App() {
       setFeatureToggles(DEFAULT_FEATURE_TOGGLES)
     }
   }, [featureToggles, setFeatureToggles])
+
+  useEffect(() => {
+    setLastSaved(Date.now())
+  }, [
+    files,
+    models,
+    components,
+    componentTrees,
+    workflows,
+    lambdas,
+    theme,
+    playwrightTests,
+    storybookStories,
+    unitTests,
+    flaskConfig,
+    nextjsConfig,
+    npmSettings,
+    featureToggles,
+  ])
 
   const { errors: autoDetectedErrors } = useAutoRepair(safeFiles, false)
 
@@ -549,6 +570,7 @@ Navigate to the backend directory and follow the setup instructions.
                 Low-Code Next.js App Builder
               </p>
             </div>
+            <SaveIndicator lastSaved={lastSaved} />
           </div>
           <div className="flex gap-1 sm:gap-2 shrink-0">
             <Tooltip>
