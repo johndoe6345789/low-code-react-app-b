@@ -11,18 +11,24 @@ interface KeyboardShortcut {
 
 export function useKeyboardShortcuts(shortcuts: KeyboardShortcut[]) {
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      for (const shortcut of shortcuts) {
-        const ctrlMatch = shortcut.ctrl ? (event.ctrlKey || event.metaKey) : !event.ctrlKey && !event.metaKey
-        const shiftMatch = shortcut.shift ? event.shiftKey : !event.shiftKey
-        const altMatch = shortcut.alt ? event.altKey : !event.altKey
-        const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase()
+    if (typeof window === 'undefined') return
 
-        if (ctrlMatch && shiftMatch && altMatch && keyMatch) {
-          event.preventDefault()
-          shortcut.action()
-          break
+    const handleKeyDown = (event: KeyboardEvent) => {
+      try {
+        for (const shortcut of shortcuts) {
+          const ctrlMatch = shortcut.ctrl ? (event.ctrlKey || event.metaKey) : !event.ctrlKey && !event.metaKey
+          const shiftMatch = shortcut.shift ? event.shiftKey : !event.shiftKey
+          const altMatch = shortcut.alt ? event.altKey : !event.altKey
+          const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase()
+
+          if (ctrlMatch && shiftMatch && altMatch && keyMatch) {
+            event.preventDefault()
+            shortcut.action()
+            break
+          }
         }
+      } catch (error) {
+        console.error('[Keyboard Shortcuts] Error handling keydown:', error)
       }
     }
 
@@ -35,7 +41,7 @@ export function getShortcutDisplay(shortcut: Omit<KeyboardShortcut, 'action'>): 
   const parts: string[] = []
   
   if (shortcut.ctrl) {
-    parts.push(navigator.platform.includes('Mac') ? '⌘' : 'Ctrl')
+    parts.push(typeof navigator !== 'undefined' && navigator.platform.includes('Mac') ? '⌘' : 'Ctrl')
   }
   if (shortcut.shift) {
     parts.push('Shift')

@@ -191,7 +191,7 @@ function App() {
   const [nextjsConfig, setNextjsConfig] = useKV<NextJsConfig>('project-nextjs-config', DEFAULT_NEXTJS_CONFIG)
   const [npmSettings, setNpmSettings] = useKV<NpmSettings>('project-npm-settings', DEFAULT_NPM_SETTINGS)
   const [featureToggles, setFeatureToggles] = useKV<FeatureToggles>('project-feature-toggles', DEFAULT_FEATURE_TOGGLES)
-  const [activeFileId, setActiveFileId] = useState<string | null>((files || [])[0]?.id || null)
+  const [activeFileId, setActiveFileId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState('dashboard')
   const [exportDialogOpen, setExportDialogOpen] = useState(false)
   const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false)
@@ -199,20 +199,26 @@ function App() {
   const [generatedCode, setGeneratedCode] = useState<Record<string, string>>({})
   const [lastSaved, setLastSaved] = useState<number | null>(Date.now())
 
-  const safeFiles = files || []
-  const safeModels = models || []
-  const safeComponents = components || []
-  const safeComponentTrees = componentTrees || []
-  const safeWorkflows = workflows || []
-  const safeLambdas = lambdas || []
-  const safeTheme = (theme && theme.variants && theme.variants.length > 0) ? theme : DEFAULT_THEME
-  const safePlaywrightTests = playwrightTests || []
-  const safeStorybookStories = storybookStories || []
-  const safeUnitTests = unitTests || []
+  const safeFiles = Array.isArray(files) ? files : []
+  const safeModels = Array.isArray(models) ? models : []
+  const safeComponents = Array.isArray(components) ? components : []
+  const safeComponentTrees = Array.isArray(componentTrees) ? componentTrees : []
+  const safeWorkflows = Array.isArray(workflows) ? workflows : []
+  const safeLambdas = Array.isArray(lambdas) ? lambdas : []
+  const safeTheme = (theme && theme.variants && Array.isArray(theme.variants) && theme.variants.length > 0) ? theme : DEFAULT_THEME
+  const safePlaywrightTests = Array.isArray(playwrightTests) ? playwrightTests : []
+  const safeStorybookStories = Array.isArray(storybookStories) ? storybookStories : []
+  const safeUnitTests = Array.isArray(unitTests) ? unitTests : []
   const safeFlaskConfig = flaskConfig || DEFAULT_FLASK_CONFIG
   const safeNextjsConfig = nextjsConfig || DEFAULT_NEXTJS_CONFIG
   const safeNpmSettings = npmSettings || DEFAULT_NPM_SETTINGS
   const safeFeatureToggles = featureToggles || DEFAULT_FEATURE_TOGGLES
+
+  useEffect(() => {
+    if (safeFiles.length > 0 && !activeFileId) {
+      setActiveFileId(safeFiles[0].id)
+    }
+  }, [safeFiles, activeFileId])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -253,7 +259,8 @@ function App() {
     featureToggles,
   ])
 
-  const { errors: autoDetectedErrors } = useAutoRepair(safeFiles, false)
+  const { errors: autoDetectedErrors = [] } = useAutoRepair(safeFiles, false)
+  const errorCount = Array.isArray(autoDetectedErrors) ? autoDetectedErrors.length : 0
 
   useKeyboardShortcuts([
     {
@@ -552,7 +559,7 @@ Navigate to the backend directory and follow the setup instructions.
         activeTab={activeTab}
         onTabChange={setActiveTab}
         featureToggles={safeFeatureToggles}
-        errorCount={autoDetectedErrors.length}
+        errorCount={errorCount}
         lastSaved={lastSaved}
         currentProject={getCurrentProject()}
         onProjectLoad={handleLoadProject}

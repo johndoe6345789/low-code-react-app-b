@@ -17,26 +17,36 @@ export function usePWA() {
   const [state, setState] = useState<PWAState>({
     isInstallable: false,
     isInstalled: false,
-    isOnline: navigator.onLine,
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     isUpdateAvailable: false,
     registration: null,
   })
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const checkInstalled = () => {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
-      const isIOSStandalone = (window.navigator as any).standalone === true
-      setState(prev => ({ ...prev, isInstalled: isStandalone || isIOSStandalone }))
+      try {
+        const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches
+        const isIOSStandalone = (window.navigator as any).standalone === true
+        setState(prev => ({ ...prev, isInstalled: isStandalone || isIOSStandalone }))
+      } catch (error) {
+        console.error('[PWA] Error checking install status:', error)
+      }
     }
 
     checkInstalled()
 
     const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault()
-      const installEvent = e as BeforeInstallPromptEvent
-      setDeferredPrompt(installEvent)
-      setState(prev => ({ ...prev, isInstallable: true }))
+      try {
+        e.preventDefault()
+        const installEvent = e as BeforeInstallPromptEvent
+        setDeferredPrompt(installEvent)
+        setState(prev => ({ ...prev, isInstallable: true }))
+      } catch (error) {
+        console.error('[PWA] Error handling beforeinstallprompt:', error)
+      }
     }
 
     const handleAppInstalled = () => {

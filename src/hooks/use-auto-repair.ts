@@ -11,20 +11,25 @@ export function useAutoRepair(
   const [isScanning, setIsScanning] = useState(false)
 
   const scanFiles = useCallback(async () => {
-    if (!enabled || files.length === 0) return
+    if (!enabled || !files || files.length === 0) return
 
     setIsScanning(true)
     try {
       const allErrors: CodeError[] = []
       
       for (const file of files) {
-        const fileErrors = await ErrorRepairService.detectErrors(file)
-        allErrors.push(...fileErrors)
+        if (file && file.content) {
+          const fileErrors = await ErrorRepairService.detectErrors(file)
+          if (Array.isArray(fileErrors)) {
+            allErrors.push(...fileErrors)
+          }
+        }
       }
       
       setErrors(allErrors)
     } catch (error) {
       console.error('Auto-scan failed:', error)
+      setErrors([])
     } finally {
       setIsScanning(false)
     }
@@ -41,7 +46,7 @@ export function useAutoRepair(
   }, [files, enabled, scanFiles])
 
   return {
-    errors,
+    errors: Array.isArray(errors) ? errors : [],
     isScanning,
     scanFiles,
   }

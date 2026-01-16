@@ -10,13 +10,13 @@ export function PWAStatusBar() {
   useEffect(() => {
     if (!isOnline) {
       setShowOffline(true)
-    } else {
+    } else if (showOffline) {
       const timer = setTimeout(() => {
         setShowOffline(false)
       }, 3000)
       return () => clearTimeout(timer)
     }
-  }, [isOnline])
+  }, [isOnline, showOffline])
 
   return (
     <AnimatePresence>
