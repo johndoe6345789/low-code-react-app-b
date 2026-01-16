@@ -13,6 +13,7 @@ import { ProjectService, SavedProject } from '@/lib/project-service'
 import { Project } from '@/types/project'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface ProjectManagerProps {
   currentProject: Project
@@ -183,46 +184,58 @@ export function ProjectManager({ currentProject, onProjectLoad }: ProjectManager
   return (
     <>
       <div className="flex gap-1 sm:gap-2">
-        <Button 
-          onClick={() => setSaveDialogOpen(true)} 
-          variant="outline"
-          size="icon"
-          className="sm:w-auto sm:px-4"
-          title="Save Project"
-        >
-          <FloppyDisk size={18} className="sm:mr-2" />
-          <span className="hidden sm:inline">Save Project</span>
-        </Button>
-        <Button 
-          onClick={() => setLoadDialogOpen(true)} 
-          variant="outline"
-          size="icon"
-          className="sm:w-auto sm:px-4"
-          title="Load Project"
-        >
-          <FolderOpen size={18} className="sm:mr-2" />
-          <span className="hidden sm:inline">Load Project</span>
-        </Button>
-        <Button 
-          onClick={() => setNewProjectDialogOpen(true)} 
-          variant="outline"
-          size="icon"
-          className="sm:w-auto sm:px-4 hidden md:flex"
-          title="New Project"
-        >
-          <FolderPlus size={18} className="sm:mr-2" />
-          <span className="hidden sm:inline">New Project</span>
-        </Button>
-        <Button 
-          onClick={() => setImportDialogOpen(true)} 
-          variant="outline"
-          size="icon"
-          className="sm:w-auto sm:px-4 hidden md:flex"
-          title="Import"
-        >
-          <UploadSimple size={18} className="sm:mr-2" />
-          <span className="hidden sm:inline">Import</span>
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              onClick={() => setSaveDialogOpen(true)} 
+              variant="outline"
+              size="icon"
+              className="shrink-0"
+            >
+              <FloppyDisk size={18} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Save Project</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              onClick={() => setLoadDialogOpen(true)} 
+              variant="outline"
+              size="icon"
+              className="shrink-0"
+            >
+              <FolderOpen size={18} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Load Project</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              onClick={() => setNewProjectDialogOpen(true)} 
+              variant="outline"
+              size="icon"
+              className="shrink-0 hidden md:flex"
+            >
+              <FolderPlus size={18} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>New Project</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button 
+              onClick={() => setImportDialogOpen(true)} 
+              variant="outline"
+              size="icon"
+              className="shrink-0 hidden md:flex"
+            >
+              <UploadSimple size={18} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Import</TooltipContent>
+        </Tooltip>
       </div>
 
       <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
