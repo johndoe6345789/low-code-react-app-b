@@ -188,24 +188,30 @@ Typography should balance code readability with UI clarity, using a monospace fo
 ## Animations
 Animations should feel responsive and purposeful - quick panel transitions (200ms) for switching views, smooth accordion expansions (250ms) for tree nodes, and subtle hover states (100ms) on interactive elements. Use elastic easing for drawer slides to add personality without slowing workflow.
 
-## Component Selection
-- **Components**: 
-  - Tabs for main navigation between Code/Models/Components/Styling views
-  - ResizablePanels for adjustable file tree, editor, and preview panes
-  - Accordion for collapsible sections in designers
-  - ScrollArea for file lists and component trees
-  - Select dropdowns for component type and field type pickers
-  - Input fields for text properties with real-time validation
-  - Button with variants (primary for generate/export, secondary for add/create)
-  - Card for model and component visual representations
-  - Dialog for configuration modals and confirmations
-  - Badge for type indicators and status labels
+## Component Architecture
+
+The application follows **Atomic Design** methodology for maximum reusability and maintainability. For complete details, see:
+- **[ATOMIC_README.md](./ATOMIC_README.md)** - Quick start guide
+- **[ATOMIC_COMPONENTS.md](./ATOMIC_COMPONENTS.md)** - Complete architecture documentation
+- **[COMPONENT_MAP.md](./COMPONENT_MAP.md)** - Visual component dependency maps
+- **[ATOMIC_USAGE_EXAMPLES.md](./ATOMIC_USAGE_EXAMPLES.md)** - Practical code examples
+
+### Component Hierarchy
+- **Atoms** (`/components/atoms`): Basic building blocks (AppLogo, StatusIcon, ErrorBadge, TabIcon, IconWrapper, LoadingSpinner, EmptyStateIcon)
+- **Molecules** (`/components/molecules`): Simple combinations (SaveIndicator, AppBranding, ToolbarButton, NavigationItem, EmptyState, LoadingState, StatCard, LabelWithBadge, PageHeaderContent, NavigationGroupHeader)
+- **Organisms** (`/components/organisms`): Complex components (NavigationMenu, PageHeader, AppHeader, ToolbarActions)
+- **Features** (`/components/[Feature].tsx`): Complete feature implementations (CodeEditor, ModelDesigner, ProjectDashboard, WorkflowDesigner, etc.)
+
+### shadcn Components
+- **Base UI**: Tabs, ResizablePanels, Accordion, ScrollArea, Select, Input, Button, Card, Dialog, Badge, Sheet, Collapsible, Tooltip
+- **Variants**: Primary buttons for generate/export, secondary for add/create, outline for toolbar actions
   
-- **Customizations**: 
-  - Custom MonacoEditor wrapper component with theme integration
-  - Custom SchemaNode component for visual Prisma model representation
-  - Custom ComponentTreeItem with drag handles and inline editing
-  - Custom ColorPicker using native color input wrapped in Popover
+### Custom Feature Components
+- MonacoEditor wrapper with theme integration and syntax highlighting
+- SchemaNode for visual Prisma model representation
+- ComponentTreeItem with drag handles and inline editing
+- ColorPicker using native color input wrapped in Popover
+- Canvas-based FaviconDesigner with drawing tools
   
 - **States**: 
   - Buttons: Subtle glow on hover, pressed state with scale, disabled with reduced opacity

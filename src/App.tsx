@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile, Image, MagnifyingGlass, CloudArrowUp } from '@phosphor-icons/react'
+import { Download } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles, Project } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -28,7 +27,6 @@ import { SassStylesShowcase } from '@/components/SassStylesShowcase'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
 import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog'
 import { FeatureToggleSettings } from '@/components/FeatureToggleSettings'
-import { ProjectManager } from '@/components/ProjectManager'
 import { PWAInstallPrompt } from '@/components/PWAInstallPrompt'
 import { PWAUpdatePrompt } from '@/components/PWAUpdatePrompt'
 import { PWAStatusBar } from '@/components/PWAStatusBar'
@@ -36,9 +34,7 @@ import { PWASettings } from '@/components/PWASettings'
 import { FaviconDesigner } from '@/components/FaviconDesigner'
 import { FeatureIdeaCloud } from '@/components/FeatureIdeaCloud'
 import { GlobalSearch } from '@/components/GlobalSearch'
-import { NavigationMenu } from '@/components/NavigationMenu'
-import { PageHeader } from '@/components/PageHeader'
-import { SaveIndicator } from '@/components/SaveIndicator'
+import { AppHeader, PageHeader } from '@/components/organisms'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -552,108 +548,20 @@ Navigate to the backend directory and follow the setup instructions.
       <PWAStatusBar />
       <PWAUpdatePrompt />
       
-      <header className="border-b border-border bg-card px-4 sm:px-6 py-3 sm:py-4">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-            <NavigationMenu
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              featureToggles={safeFeatureToggles}
-              errorCount={autoDetectedErrors.length}
-            />
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
-              <Code size={20} weight="duotone" className="text-white sm:w-6 sm:h-6" />
-            </div>
-            <div className="flex flex-col min-w-[100px]">
-              <h1 className="text-base sm:text-xl font-bold whitespace-nowrap">CodeForge</h1>
-              <p className="text-xs text-muted-foreground hidden sm:block whitespace-nowrap">
-                Low-Code Next.js App Builder
-              </p>
-            </div>
-            <SaveIndicator lastSaved={lastSaved} />
-          </div>
-          <div className="flex gap-1 sm:gap-2 shrink-0">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  onClick={() => setSearchDialogOpen(true)}
-                  className="shrink-0"
-                >
-                  <MagnifyingGlass size={18} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Search (Ctrl+K)</TooltipContent>
-            </Tooltip>
-            <ProjectManager
-              currentProject={getCurrentProject()}
-              onProjectLoad={handleLoadProject}
-            />
-            {safeFeatureToggles.errorRepair && autoDetectedErrors.length > 0 && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={() => setActiveTab('errors')}
-                    className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground shrink-0 relative"
-                  >
-                    <Wrench size={18} />
-                    <Badge 
-                      variant="destructive" 
-                      className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]"
-                    >
-                      {autoDetectedErrors.length}
-                    </Badge>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {autoDetectedErrors.length} {autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}
-                </TooltipContent>
-              </Tooltip>
-            )}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  onClick={() => setShortcutsDialogOpen(true)}
-                  className="hidden sm:flex shrink-0"
-                >
-                  <Keyboard size={18} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Keyboard Shortcuts (Ctrl+/)</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="outline"
-                  size="icon"
-                  onClick={handleGenerateWithAI}
-                  className="shrink-0"
-                >
-                  <Sparkle size={18} weight="duotone" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>AI Generate (Ctrl+Shift+G)</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  size="icon"
-                  onClick={handleExportProject}
-                  className="shrink-0"
-                >
-                  <Download size={18} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Export Project (Ctrl+E)</TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-      </header>
+      <AppHeader
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        featureToggles={safeFeatureToggles}
+        errorCount={autoDetectedErrors.length}
+        lastSaved={lastSaved}
+        currentProject={getCurrentProject()}
+        onProjectLoad={handleLoadProject}
+        onSearch={() => setSearchDialogOpen(true)}
+        onShowShortcuts={() => setShortcutsDialogOpen(true)}
+        onGenerateAI={handleGenerateWithAI}
+        onExport={handleExportProject}
+        onShowErrors={() => setActiveTab('errors')}
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <PageHeader activeTab={activeTab} />

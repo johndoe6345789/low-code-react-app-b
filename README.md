@@ -11,6 +11,11 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 
 ## ✨ Features
 
+### 🏗️ Architecture
+- **Atomic Component Library** - Organized component structure (atoms → molecules → organisms → features)
+- **Type-Safe Components** - Full TypeScript support with strict prop interfaces
+- **Centralized Configuration** - Navigation and routing configuration in one place
+
 ### 🎯 Core Capabilities
 - **Progressive Web App** - Install on desktop/mobile, work offline, automatic updates, and push notifications
 - **Project Management** - Save, load, duplicate, export, and import complete projects with full state persistence
@@ -118,6 +123,22 @@ npm run test:e2e:report
 - **Hamburger Menu** - Click the menu icon (☰) in the top-left to browse all available tabs
 - **Feature Toggles** - Go to **Features** tab to enable/disable specific designers
 - **Need Help?** - See [FAVICON_DESIGNER_ACCESS.md](./FAVICON_DESIGNER_ACCESS.md) for troubleshooting
+
+## 🏗️ Atomic Component Architecture
+
+CodeForge uses **Atomic Design** methodology for maximum maintainability and reusability:
+
+- **[ATOMIC_README.md](./ATOMIC_README.md)** - Quick start guide ⭐ **START HERE**
+- **[ATOMIC_REFACTOR_SUMMARY.md](./ATOMIC_REFACTOR_SUMMARY.md)** - Overview of the atomic structure
+- **[ATOMIC_COMPONENTS.md](./ATOMIC_COMPONENTS.md)** - Complete architecture guide
+- **[ATOMIC_USAGE_EXAMPLES.md](./ATOMIC_USAGE_EXAMPLES.md)** - Code examples and patterns
+- **[COMPONENT_MAP.md](./COMPONENT_MAP.md)** - Visual dependency maps
+
+### Component Levels
+- **Atoms** (7) - Basic building blocks: `AppLogo`, `StatusIcon`, `ErrorBadge`, etc.
+- **Molecules** (10) - Simple combinations: `SaveIndicator`, `ToolbarButton`, `EmptyState`, etc.
+- **Organisms** (4) - Complex components: `AppHeader`, `NavigationMenu`, `PageHeader`, etc.
+- **Features** (20+) - Domain-specific: `CodeEditor`, `ModelDesigner`, `ProjectDashboard`, etc.
 
 ## 📋 Technology Stack
 
