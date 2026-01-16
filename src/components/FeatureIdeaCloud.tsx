@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useKV } from '@github/spark/hooks'
 import ReactFlow, {
   Node,
@@ -16,6 +16,7 @@ import ReactFlow, {
   NodeProps,
   Handle,
   Position,
+  reconnectEdge,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { Button } from '@/components/ui/button'
@@ -275,6 +276,7 @@ export function FeatureIdeaCloud() {
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [edgeDialogOpen, setEdgeDialogOpen] = useState(false)
   const [connectionType, setConnectionType] = useState<ConnectionType>('association')
+  const edgeReconnectSuccessful = useRef(true)
 
   const safeIdeas = ideas || SEED_IDEAS
   const safeEdges = savedEdges || []
@@ -366,13 +368,15 @@ export function FeatureIdeaCloud() {
         animated: connectionType === 'dependency',
       }
       
-      const updatedEdges = addEdge(newEdge, edges)
-      setEdges(updatedEdges)
-      setSavedEdges(updatedEdges)
+      setEdges((eds) => {
+        const updatedEdges = addEdge(newEdge, eds)
+        setSavedEdges(updatedEdges)
+        return updatedEdges
+      })
       
       toast.success('Ideas connected!')
     },
-    [connectionType, edges, setEdges, setSavedEdges]
+    [connectionType, setEdges, setSavedEdges]
   )
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
@@ -384,6 +388,31 @@ export function FeatureIdeaCloud() {
     setSelectedIdea(node.data)
     setViewDialogOpen(true)
   }, [])
+
+  const onReconnectStart = useCallback(() => {
+    edgeReconnectSuccessful.current = false
+  }, [])
+
+  const onReconnect = useCallback((oldEdge: Edge, newConnection: RFConnection) => {
+    edgeReconnectSuccessful.current = true
+    setEdges((els) => {
+      const updatedEdges = reconnectEdge(oldEdge, newConnection, els)
+      setSavedEdges(updatedEdges)
+      return updatedEdges
+    })
+    toast.success('Connection remapped!')
+  }, [setEdges, setSavedEdges])
+
+  const onReconnectEnd = useCallback((_: MouseEvent | TouchEvent, edge: Edge) => {
+    if (!edgeReconnectSuccessful.current) {
+      setEdges((eds) => {
+        const updatedEdges = eds.filter((e) => e.id !== edge.id)
+        setSavedEdges(updatedEdges)
+        return updatedEdges
+      })
+    }
+    edgeReconnectSuccessful.current = true
+  }, [setEdges, setSavedEdges])
 
   const handleAddIdea = () => {
     const newIdea: FeatureIdea = {
@@ -537,10 +566,14 @@ export function FeatureIdeaCloud() {
         onNodesChange={onNodesChangeWrapper}
         onEdgesChange={onEdgesChangeWrapper}
         onConnect={onConnect}
+        onReconnect={onReconnect}
+        onReconnectStart={onReconnectStart}
+        onReconnectEnd={onReconnectEnd}
         onEdgeClick={onEdgeClick}
         onNodeDoubleClick={onNodeDoubleClick}
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
+        reconnectRadius={20}
         fitView
         minZoom={0.2}
         maxZoom={2}
@@ -637,6 +670,7 @@ export function FeatureIdeaCloud() {
           <div className="bg-card border border-border rounded-lg shadow-lg p-2 text-xs text-muted-foreground max-w-sm">
             <p className="mb-1">💡 <strong>Tip:</strong> Double-click ideas to view details</p>
             <p className="mb-1">🔗 Drag from handles on card edges to connect ideas</p>
+            <p className="mb-1">↪️ Drag existing connection ends to remap them</p>
             <p>⚙️ Click connections to edit or delete them</p>
           </div>
         </Panel>
