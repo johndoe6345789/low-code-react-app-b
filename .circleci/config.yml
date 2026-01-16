@@ -14,7 +14,7 @@ executors:
 
   playwright-executor:
     docker:
-      - image: mcr.microsoft.com/playwright:v1.42.0-focal
+      - image: mcr.microsoft.com/playwright:v1.57.0-jammy
     resource_class: large
     working_directory: ~/repo
 
@@ -120,15 +120,18 @@ jobs:
           at: .
       - run:
           name: Install Playwright browsers
-          command: npx playwright install chromium
+          command: npx playwright install --with-deps chromium
       - run:
           name: Run E2E tests
-          command: npm run test:e2e || echo "No E2E tests configured"
+          command: npm run test:e2e
       - store_test_results:
           path: playwright-report
       - store_artifacts:
           path: playwright-report
           destination: e2e-report
+      - store_artifacts:
+          path: test-results
+          destination: test-results
       - notify-slack-on-fail
 
   security-scan:

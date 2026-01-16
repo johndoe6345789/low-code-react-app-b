@@ -121,7 +121,7 @@ pipeline {
                     nodejs(nodeJSInstallationName: "Node ${NODE_VERSION}") {
                         sh '''
                             npx playwright install --with-deps chromium
-                            npm run test:e2e || echo "No E2E tests configured"
+                            npm run test:e2e
                         '''
                     }
                 }
@@ -136,6 +136,7 @@ pipeline {
                         reportFiles: 'index.html',
                         reportName: 'Playwright Report'
                     ])
+                    archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
                 }
             }
         }

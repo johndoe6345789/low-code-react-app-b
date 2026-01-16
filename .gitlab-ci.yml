@@ -74,20 +74,21 @@ build:app:
     - test:unit
 
 test:e2e:
-  image: mcr.microsoft.com/playwright:v1.42.0-focal
+  image: mcr.microsoft.com/playwright:v1.57.0-jammy
   stage: test
   script:
     - npm ci --cache .npm --prefer-offline
-    - npx playwright install chromium
-    - npm run test:e2e || echo "No E2E tests configured"
+    - npx playwright install --with-deps chromium
+    - npm run test:e2e
   artifacts:
     when: always
     paths:
       - playwright-report/
+      - test-results/
     expire_in: 1 week
   needs:
     - build:app
-  allow_failure: true
+  allow_failure: false
 
 security:audit:
   <<: *node_template

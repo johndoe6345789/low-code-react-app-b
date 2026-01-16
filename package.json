@@ -9,7 +9,13 @@
         "build": "tsc -b --noCheck && vite build",
         "lint": "eslint .",
         "optimize": "vite optimize",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "test:e2e": "playwright test",
+        "test:e2e:ui": "playwright test --ui",
+        "test:e2e:headed": "playwright test --headed",
+        "test:e2e:smoke": "playwright test smoke.spec.ts",
+        "test:e2e:debug": "playwright test --debug",
+        "test:e2e:report": "playwright show-report"
     },
     "dependencies": {
         "@github/spark": ">=0.43.1 <1",
@@ -79,6 +85,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.21.0",
+        "@playwright/test": "^1.57.0",
         "@tailwindcss/postcss": "^4.1.8",
         "@types/react": "^19.0.10",
         "@types/react-dom": "^19.0.4",
