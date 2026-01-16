@@ -450,8 +450,17 @@ export function FeatureIdeaCloud() {
     const edgesToRemove: string[] = []
     const conflicts: string[] = []
     
+    console.log('[Validator] Checking for conflicts:', {
+      newConnection: `${sourceNodeId}[${sourceHandleId}] -> ${targetNodeId}[${targetHandleId}]`,
+      existingEdges: edges.length,
+      excludeEdgeId
+    })
+    
     edges.forEach(edge => {
-      if (excludeEdgeId && edge.id === excludeEdgeId) return
+      if (excludeEdgeId && edge.id === excludeEdgeId) {
+        console.log('[Validator] Skipping excluded edge:', edge.id)
+        return
+      }
       
       const edgeSourceHandle = edge.sourceHandle || 'default'
       const edgeTargetHandle = edge.targetHandle || 'default'
@@ -459,24 +468,22 @@ export function FeatureIdeaCloud() {
       const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
       const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
       
-      if (hasSourceConflict) {
+      if (hasSourceConflict && !edgesToRemove.includes(edge.id)) {
         edgesToRemove.push(edge.id)
-        conflicts.push(`Source conflict: ${edge.source}[${edgeSourceHandle}] -> ${edge.target}[${edgeTargetHandle}]`)
+        conflicts.push(`Source: ${edge.source}[${edgeSourceHandle}] was connected to ${edge.target}[${edgeTargetHandle}]`)
+        console.log('[Validator] SOURCE CONFLICT DETECTED:', edge.id, edge)
       }
       
-      if (hasTargetConflict) {
-        if (!edgesToRemove.includes(edge.id)) {
-          edgesToRemove.push(edge.id)
-        }
-        conflicts.push(`Target conflict: ${edge.source}[${edgeSourceHandle}] -> ${edge.target}[${edgeTargetHandle}]`)
+      if (hasTargetConflict && !edgesToRemove.includes(edge.id)) {
+        edgesToRemove.push(edge.id)
+        conflicts.push(`Target: ${edge.target}[${edgeTargetHandle}] was connected from ${edge.source}[${edgeSourceHandle}]`)
+        console.log('[Validator] TARGET CONFLICT DETECTED:', edge.id, edge)
       }
     })
     
     const filteredEdges = edges.filter(e => !edgesToRemove.includes(e.id))
     
-    if (conflicts.length > 0) {
-      console.log('[Connection Validator] Conflicts detected and resolved:', conflicts)
-    }
+    console.log('[Validator] Conflicts found:', conflicts.length, 'edges to remove:', edgesToRemove)
     
     return { 
       filteredEdges, 
@@ -494,12 +501,16 @@ export function FeatureIdeaCloud() {
       const targetNodeId = params.target
       const targetHandleId = params.targetHandle || 'default'
       
-      console.log('[Connection] New connection attempt:', {
-        source: `${sourceNodeId}[${sourceHandleId}]`,
-        target: `${targetNodeId}[${targetHandleId}]`
-      })
+      console.log('[Connection] ==== NEW CONNECTION ATTEMPT ====')
+      console.log('[Connection] Source:', `${sourceNodeId}[${sourceHandleId}]`)
+      console.log('[Connection] Target:', `${targetNodeId}[${targetHandleId}]`)
       
       setEdges((eds) => {
+        console.log('[Connection] Current edges BEFORE validation:', eds.length)
+        eds.forEach(e => {
+          console.log(`  - ${e.id}: ${e.source}[${e.sourceHandle || 'default'}] -> ${e.target}[${e.targetHandle || 'default'}]`)
+        })
+        
         const { filteredEdges, removedCount, conflicts } = validateAndRemoveConflicts(
           eds,
           sourceNodeId,
@@ -508,12 +519,14 @@ export function FeatureIdeaCloud() {
           targetHandleId
         )
         
+        console.log('[Connection] Edges AFTER conflict removal:', filteredEdges.length)
+        
         const newEdge: Edge<IdeaEdgeData> = {
           id: `edge-${Date.now()}`,
           source: sourceNodeId,
           target: targetNodeId,
-          ...(params.sourceHandle && { sourceHandle: params.sourceHandle }),
-          ...(params.targetHandle && { targetHandle: params.targetHandle }),
+          sourceHandle: sourceHandleId,
+          targetHandle: targetHandleId,
           type: 'default',
           data: { label: 'relates to' },
           markerEnd: { 
@@ -529,15 +542,15 @@ export function FeatureIdeaCloud() {
           animated: false,
         }
         
+        console.log('[Connection] Creating new edge:', newEdge.id)
+        
         const updatedEdges = addEdge(newEdge, filteredEdges)
         
-        console.log('[Connection] New edge created:', newEdge.id)
-        console.log('[Connection] Total edges after addition:', updatedEdges.length)
-        console.log('[Connection] Edges by handle:', updatedEdges.map(e => ({
-          id: e.id,
-          source: `${e.source}[${e.sourceHandle || 'default'}]`,
-          target: `${e.target}[${e.targetHandle || 'default'}]`
-        })))
+        console.log('[Connection] Total edges AFTER addition:', updatedEdges.length)
+        console.log('[Connection] Final edge list:')
+        updatedEdges.forEach(e => {
+          console.log(`  - ${e.id}: ${e.source}[${e.sourceHandle || 'default'}] -> ${e.target}[${e.targetHandle || 'default'}]`)
+        })
         
         setSavedEdges(updatedEdges)
         
