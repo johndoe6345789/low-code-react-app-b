@@ -757,7 +757,7 @@ export function FeatureIdeaCloud() {
     setIdeas((currentIdeas) => {
       const existing = (currentIdeas || []).find(i => i.id === selectedIdea.id)
       if (existing) {
-      } else {
+        return (currentIdeas || []).map(i => i.id === selectedIdea.id ? selectedIdea : i)
       } else {
         return [...(currentIdeas || []), selectedIdea]
       }
