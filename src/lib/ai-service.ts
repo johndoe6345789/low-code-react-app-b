@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { PrismaModel, ComponentNode, ThemeConfig, ProjectFile } from '@/types/project'
+import { ProtectedLLMService } from './protected-llm-service'
 
 export class AIService {
   static async generateComponent(description: string): Promise<ComponentNode | null> {
@@ -21,9 +22,16 @@ Return a valid JSON object with a single property "component" containing the com
 
 Make sure to use appropriate Material UI components and props. Keep the structure clean and semantic.`
 
-      const response = await window.spark.llm(prompt, 'gpt-4o', true)
-      const parsed = JSON.parse(response)
-      return parsed.component
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: true, priority: 'medium', category: 'generate-component' }
+      )
+
+      if (result) {
+        const parsed = JSON.parse(result)
+        return parsed.component
+      }
+      return null
     } catch (error) {
       console.error('AI component generation failed:', error)
       return null
@@ -66,9 +74,16 @@ Return a valid JSON object with a single property "model" containing the model s
 
 Include an id field with uuid() default. Add createdAt and updatedAt DateTime fields with @default(now()) and @updatedAt. Use appropriate field types and relationships.`
 
-      const response = await window.spark.llm(prompt, 'gpt-4o', true)
-      const parsed = JSON.parse(response)
-      return parsed.model
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: true, priority: 'medium', category: 'generate-model' }
+      )
+
+      if (result) {
+        const parsed = JSON.parse(result)
+        return parsed.model
+      }
+      return null
     } catch (error) {
       console.error('AI model generation failed:', error)
       return null
@@ -95,8 +110,12 @@ Generate clean, production-ready code following Next.js 14 and Material UI best 
 
 Return ONLY the code without any markdown formatting or explanations.`
 
-      const code = await window.spark.llm(prompt, 'gpt-4o', false)
-      return code.trim()
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: false, priority: 'medium', category: 'generate-code' }
+      )
+
+      return result ? result.trim() : null
     } catch (error) {
       console.error('AI code generation failed:', error)
       return null
@@ -112,8 +131,12 @@ ${code}
 
 Return ONLY the improved code without any markdown formatting or explanations.`
 
-      const improved = await window.spark.llm(prompt, 'gpt-4o', false)
-      return improved.trim()
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: false, priority: 'high', category: 'improve-code' }
+      )
+
+      return result ? result.trim() : null
     } catch (error) {
       console.error('AI code improvement failed:', error)
       return null
@@ -145,9 +168,16 @@ Return a valid JSON object with a single property "theme" containing:
 
 Choose colors that match the description and ensure good contrast. Use common font stacks.`
 
-      const response = await window.spark.llm(prompt, 'gpt-4o', true)
-      const parsed = JSON.parse(response)
-      return parsed.theme
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: true, priority: 'low', category: 'generate-theme' }
+      )
+
+      if (result) {
+        const parsed = JSON.parse(result)
+        return parsed.theme
+      }
+      return null
     } catch (error) {
       console.error('AI theme generation failed:', error)
       return null
@@ -168,9 +198,16 @@ Return a valid JSON object with a single property "fields" containing an array o
 
 Suggest 3-5 common fields that would be useful for this model type. Use camelCase naming.`
 
-      const response = await window.spark.llm(prompt, 'gpt-4o', true)
-      const parsed = JSON.parse(response)
-      return parsed.fields
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: true, priority: 'low', category: 'suggest-fields' }
+      )
+
+      if (result) {
+        const parsed = JSON.parse(result)
+        return parsed.fields
+      }
+      return null
     } catch (error) {
       console.error('AI field suggestion failed:', error)
       return null
@@ -185,8 +222,12 @@ ${code}
 
 Provide a clear, concise explanation suitable for developers learning the codebase.`
 
-      const explanation = await window.spark.llm(prompt, 'gpt-4o', false)
-      return explanation.trim()
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: false, priority: 'low', category: 'explain-code', model: 'gpt-4o-mini' }
+      )
+
+      return result ? result.trim() : null
     } catch (error) {
       console.error('AI code explanation failed:', error)
       return null
@@ -240,9 +281,15 @@ Return a valid JSON object with properties "files", "models", and "theme":
 
 Create 2-4 essential files for the app structure. Include appropriate Prisma models. Design a cohesive theme.`
 
-      const response = await window.spark.llm(prompt, 'gpt-4o', true)
-      const parsed = JSON.parse(response)
-      return parsed
+      const result = await ProtectedLLMService.safeLLMCall(
+        prompt,
+        { jsonMode: true, priority: 'high', category: 'generate-app' }
+      )
+
+      if (result) {
+        return JSON.parse(result)
+      }
+      return null
     } catch (error) {
       console.error('AI app generation failed:', error)
       return null

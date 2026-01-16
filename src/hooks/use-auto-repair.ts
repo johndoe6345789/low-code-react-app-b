@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { ProjectFile } from '@/types/project'
 import { CodeError } from '@/types/errors'
 import { ErrorRepairService } from '@/lib/error-repair-service'
+import { scanRateLimiter } from '@/lib/rate-limiter'
 
 export function useAutoRepair(
   files: ProjectFile[],
@@ -15,18 +16,26 @@ export function useAutoRepair(
 
     setIsScanning(true)
     try {
-      const allErrors: CodeError[] = []
-      
-      for (const file of files) {
-        if (file && file.content) {
-          const fileErrors = await ErrorRepairService.detectErrors(file)
-          if (Array.isArray(fileErrors)) {
-            allErrors.push(...fileErrors)
+      const result = await scanRateLimiter.throttle(
+        'error-scan',
+        async () => {
+          const allErrors: CodeError[] = []
+          
+          for (const file of files) {
+            if (file && file.content) {
+              const fileErrors = await ErrorRepairService.detectErrors(file)
+              if (Array.isArray(fileErrors)) {
+                allErrors.push(...fileErrors)
+              }
+            }
           }
-        }
-      }
+          
+          return allErrors
+        },
+        'low'
+      )
       
-      setErrors(allErrors)
+      setErrors(result || [])
     } catch (error) {
       console.error('Auto-scan failed:', error)
       setErrors([])
@@ -34,16 +43,6 @@ export function useAutoRepair(
       setIsScanning(false)
     }
   }, [files, enabled])
-
-  useEffect(() => {
-    if (enabled) {
-      const timeoutId = setTimeout(() => {
-        scanFiles()
-      }, 2000)
-
-      return () => clearTimeout(timeoutId)
-    }
-  }, [files, enabled, scanFiles])
 
   return {
     errors: Array.isArray(errors) ? errors : [],
