@@ -46,24 +46,36 @@ export function generateComponentCode(node: ComponentNode, indent: number = 0): 
 }
 
 export function generateMUITheme(theme: ThemeConfig): string {
-  return `import { createTheme } from '@mui/material/styles';
+  const lightVariant = theme.variants.find((v) => v.id === 'light') || theme.variants[0]
+  const darkVariant = theme.variants.find((v) => v.id === 'dark')
 
-export const theme = createTheme({
+  let themeCode = `import { createTheme } from '@mui/material/styles';
+
+export const lightTheme = createTheme({
   palette: {
+    mode: 'light',
     primary: {
-      main: '${theme.primaryColor}',
+      main: '${lightVariant.colors.primaryColor}',
     },
     secondary: {
-      main: '${theme.secondaryColor}',
+      main: '${lightVariant.colors.secondaryColor}',
     },
     error: {
-      main: '${theme.errorColor}',
+      main: '${lightVariant.colors.errorColor}',
     },
     warning: {
-      main: '${theme.warningColor}',
+      main: '${lightVariant.colors.warningColor}',
     },
     success: {
-      main: '${theme.successColor}',
+      main: '${lightVariant.colors.successColor}',
+    },
+    background: {
+      default: '${lightVariant.colors.background}',
+      paper: '${lightVariant.colors.surface}',
+    },
+    text: {
+      primary: '${lightVariant.colors.text}',
+      secondary: '${lightVariant.colors.textSecondary}',
     },
   },
   typography: {
@@ -74,7 +86,54 @@ export const theme = createTheme({
   shape: {
     borderRadius: ${theme.borderRadius},
   },
-});`
+});
+`
+
+  if (darkVariant) {
+    themeCode += `
+export const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '${darkVariant.colors.primaryColor}',
+    },
+    secondary: {
+      main: '${darkVariant.colors.secondaryColor}',
+    },
+    error: {
+      main: '${darkVariant.colors.errorColor}',
+    },
+    warning: {
+      main: '${darkVariant.colors.warningColor}',
+    },
+    success: {
+      main: '${darkVariant.colors.successColor}',
+    },
+    background: {
+      default: '${darkVariant.colors.background}',
+      paper: '${darkVariant.colors.surface}',
+    },
+    text: {
+      primary: '${darkVariant.colors.text}',
+      secondary: '${darkVariant.colors.textSecondary}',
+    },
+  },
+  typography: {
+    fontFamily: '${theme.fontFamily}',
+    fontSize: ${theme.fontSize.medium},
+  },
+  spacing: ${theme.spacing},
+  shape: {
+    borderRadius: ${theme.borderRadius},
+  },
+});
+
+export const theme = lightTheme;`
+  } else {
+    themeCode += `\nexport const theme = lightTheme;`
+  }
+
+  return themeCode
 }
 
 export function generateNextJSProject(

@@ -41,11 +41,11 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Success criteria**: Can add/remove/reorder components; AI-generated components are well-structured; props are editable; generates valid React code
 
 ### Style Designer
-- **Functionality**: Visual interface for Material UI theming and component styling with AI theme generation from descriptions
-- **Purpose**: Configure colors, typography, spacing without manual theme object creation, with AI design assistance
+- **Functionality**: Visual interface for Material UI theming with support for multiple theme variants (light/dark/custom), custom color management, and AI theme generation from descriptions
+- **Purpose**: Configure colors, typography, spacing with support for unlimited theme variants and custom color palettes beyond standard specifications, with AI design assistance
 - **Trigger**: Opening the Styling tab
-- **Progression**: Select theme property → Adjust values with controls or describe style to AI → Preview updates live → Export theme configuration
-- **Success criteria**: Color pickers work; typography scales properly; AI themes match descriptions and have good contrast; generates valid MUI theme code
+- **Progression**: Select or create theme variant → Adjust standard colors or add custom colors → Configure typography and spacing → Preview updates live across all variants → Switch between variants → Export theme configuration with all variants
+- **Success criteria**: Color pickers work; custom colors can be added/removed; multiple theme variants persist; AI themes match descriptions and have good contrast; generates valid MUI theme code for all variants including light and dark modes
 
 ### Project Generator
 - **Functionality**: Exports complete Next.js project with all configurations

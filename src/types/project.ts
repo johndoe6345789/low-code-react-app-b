@@ -31,12 +31,29 @@ export interface ComponentNode {
   name: string
 }
 
-export interface ThemeConfig {
+export interface ColorPalette {
   primaryColor: string
   secondaryColor: string
   errorColor: string
   warningColor: string
   successColor: string
+  background: string
+  surface: string
+  text: string
+  textSecondary: string
+  border: string
+  customColors: Record<string, string>
+}
+
+export interface ThemeVariant {
+  id: string
+  name: string
+  colors: ColorPalette
+}
+
+export interface ThemeConfig {
+  variants: ThemeVariant[]
+  activeVariantId: string
   fontFamily: string
   fontSize: {
     small: number

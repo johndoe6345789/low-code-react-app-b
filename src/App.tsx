@@ -25,11 +25,43 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 
 const DEFAULT_THEME: ThemeConfig = {
-  primaryColor: '#1976d2',
-  secondaryColor: '#dc004e',
-  errorColor: '#f44336',
-  warningColor: '#ff9800',
-  successColor: '#4caf50',
+  variants: [
+    {
+      id: 'light',
+      name: 'Light',
+      colors: {
+        primaryColor: '#1976d2',
+        secondaryColor: '#dc004e',
+        errorColor: '#f44336',
+        warningColor: '#ff9800',
+        successColor: '#4caf50',
+        background: '#ffffff',
+        surface: '#f5f5f5',
+        text: '#000000',
+        textSecondary: '#666666',
+        border: '#e0e0e0',
+        customColors: {},
+      },
+    },
+    {
+      id: 'dark',
+      name: 'Dark',
+      colors: {
+        primaryColor: '#90caf9',
+        secondaryColor: '#f48fb1',
+        errorColor: '#f44336',
+        warningColor: '#ffa726',
+        successColor: '#66bb6a',
+        background: '#121212',
+        surface: '#1e1e1e',
+        text: '#ffffff',
+        textSecondary: '#b0b0b0',
+        border: '#333333',
+        customColors: {},
+      },
+    },
+  ],
+  activeVariantId: 'light',
   fontFamily: 'Roboto, Arial, sans-serif',
   fontSize: { small: 12, medium: 14, large: 20 },
   spacing: 8,
