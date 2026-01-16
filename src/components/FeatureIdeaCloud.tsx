@@ -26,7 +26,7 @@ import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Plus, Trash, Sparkle, DotsThree } from '@phosphor-icons/react'
+import { Plus, Trash, Sparkle, DotsThree, Package } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
 type ConnectionType = 'dependency' | 'association' | 'inheritance' | 'composition' | 'aggregation'
@@ -38,6 +38,14 @@ interface FeatureIdea {
   category: string
   priority: 'low' | 'medium' | 'high'
   status: 'idea' | 'planned' | 'in-progress' | 'completed'
+  createdAt: number
+  parentGroup?: string
+}
+
+interface IdeaGroup {
+  id: string
+  label: string
+  color: string
   createdAt: number
 }
 
@@ -173,6 +181,56 @@ const PRIORITY_COLORS = {
   high: 'border-red-400/60 bg-red-50/80 dark:bg-red-950/40',
 }
 
+const GROUP_COLORS = [
+  { name: 'Blue', value: '#3b82f6', bg: 'rgba(59, 130, 246, 0.08)', border: 'rgba(59, 130, 246, 0.3)' },
+  { name: 'Purple', value: '#a855f7', bg: 'rgba(168, 85, 247, 0.08)', border: 'rgba(168, 85, 247, 0.3)' },
+  { name: 'Green', value: '#10b981', bg: 'rgba(16, 185, 129, 0.08)', border: 'rgba(16, 185, 129, 0.3)' },
+  { name: 'Red', value: '#ef4444', bg: 'rgba(239, 68, 68, 0.08)', border: 'rgba(239, 68, 68, 0.3)' },
+  { name: 'Orange', value: '#f97316', bg: 'rgba(249, 115, 22, 0.08)', border: 'rgba(249, 115, 22, 0.3)' },
+  { name: 'Pink', value: '#ec4899', bg: 'rgba(236, 72, 153, 0.08)', border: 'rgba(236, 72, 153, 0.3)' },
+  { name: 'Cyan', value: '#06b6d4', bg: 'rgba(6, 182, 212, 0.08)', border: 'rgba(6, 182, 212, 0.3)' },
+  { name: 'Amber', value: '#f59e0b', bg: 'rgba(245, 158, 11, 0.08)', border: 'rgba(245, 158, 11, 0.3)' },
+]
+
+function GroupNode({ data, selected }: NodeProps<IdeaGroup>) {
+  const colorScheme = GROUP_COLORS.find(c => c.value === data.color) || GROUP_COLORS[0]
+  
+  return (
+    <div 
+      className="rounded-2xl backdrop-blur-sm transition-all"
+      style={{
+        width: 450,
+        height: 350,
+        backgroundColor: colorScheme.bg,
+        border: `3px dashed ${colorScheme.border}`,
+        boxShadow: selected ? `0 0 0 2px ${colorScheme.value}` : 'none',
+      }}
+    >
+      <div 
+        className="absolute -top-3 left-4 px-3 py-1 rounded-full text-xs font-semibold shadow-md"
+        style={{
+          backgroundColor: colorScheme.value,
+          color: 'white',
+        }}
+      >
+        {data.label}
+      </div>
+      <Button
+        size="icon"
+        variant="ghost"
+        className="absolute -top-2 -right-2 h-7 w-7 rounded-full shadow-md bg-background hover:bg-destructive hover:text-destructive-foreground"
+        onClick={(e) => {
+          e.stopPropagation()
+          const event = new CustomEvent('editGroup', { detail: data })
+          window.dispatchEvent(event)
+        }}
+      >
+        <DotsThree size={16} />
+      </Button>
+    </div>
+  )
+}
+
 function IdeaNode({ data, selected }: NodeProps<FeatureIdea>) {
   return (
     <div className="relative">
@@ -237,10 +295,12 @@ function IdeaNode({ data, selected }: NodeProps<FeatureIdea>) {
 
 const nodeTypes = {
   ideaNode: IdeaNode,
+  groupNode: GroupNode,
 }
 
 export function FeatureIdeaCloud() {
   const [ideas, setIdeas] = useKV<FeatureIdea[]>('feature-ideas', SEED_IDEAS)
+  const [groups, setGroups] = useKV<IdeaGroup[]>('feature-idea-groups', [])
   const [savedEdges, setSavedEdges] = useKV<Edge<IdeaEdgeData>[]>('feature-idea-edges', [
     {
       id: 'edge-1',
@@ -281,14 +341,17 @@ export function FeatureIdeaCloud() {
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
   const [selectedIdea, setSelectedIdea] = useState<FeatureIdea | null>(null)
+  const [selectedGroup, setSelectedGroup] = useState<IdeaGroup | null>(null)
   const [selectedEdge, setSelectedEdge] = useState<Edge<IdeaEdgeData> | null>(null)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [groupDialogOpen, setGroupDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [edgeDialogOpen, setEdgeDialogOpen] = useState(false)
   const [connectionType, setConnectionType] = useState<ConnectionType>('association')
   const edgeReconnectSuccessful = useRef(true)
 
   const safeIdeas = ideas || SEED_IDEAS
+  const safeGroups = groups || []
   const safeEdges = savedEdges || []
 
   useEffect(() => {
@@ -298,14 +361,30 @@ export function FeatureIdeaCloud() {
   }, [ideas, setIdeas])
 
   useEffect(() => {
-    const initialNodes: Node<FeatureIdea>[] = safeIdeas.map((idea, index) => ({
+    const groupNodes: Node<IdeaGroup>[] = safeGroups.map((group) => ({
+      id: group.id,
+      type: 'groupNode',
+      position: { x: 0, y: 0 },
+      data: group,
+      style: {
+        zIndex: -1,
+      },
+    }))
+
+    const ideaNodes: Node<FeatureIdea>[] = safeIdeas.map((idea, index) => ({
       id: idea.id,
       type: 'ideaNode',
       position: { x: 100 + (index % 3) * 350, y: 100 + Math.floor(index / 3) * 250 },
       data: idea,
+      parentNode: idea.parentGroup,
+      extent: idea.parentGroup ? 'parent' : undefined,
+      style: {
+        zIndex: 1,
+      },
     }))
-    setNodes(initialNodes)
-  }, [safeIdeas, setNodes])
+
+    setNodes([...groupNodes, ...ideaNodes])
+  }, [safeIdeas, safeGroups, setNodes])
 
   useEffect(() => {
     setEdges(safeEdges)
@@ -318,8 +397,18 @@ export function FeatureIdeaCloud() {
       setEditDialogOpen(true)
     }
 
+    const handleEditGroup = (e: Event) => {
+      const customEvent = e as CustomEvent<IdeaGroup>
+      setSelectedGroup(customEvent.detail)
+      setGroupDialogOpen(true)
+    }
+
     window.addEventListener('editIdea', handleEditIdea)
-    return () => window.removeEventListener('editIdea', handleEditIdea)
+    window.addEventListener('editGroup', handleEditGroup)
+    return () => {
+      window.removeEventListener('editIdea', handleEditIdea)
+      window.removeEventListener('editGroup', handleEditGroup)
+    }
   }, [])
 
   const onNodesChangeWrapper = useCallback(
@@ -486,6 +575,17 @@ export function FeatureIdeaCloud() {
     setEditDialogOpen(true)
   }
 
+  const handleAddGroup = () => {
+    const newGroup: IdeaGroup = {
+      id: `group-${Date.now()}`,
+      label: '',
+      color: GROUP_COLORS[0].value,
+      createdAt: Date.now(),
+    }
+    setSelectedGroup(newGroup)
+    setGroupDialogOpen(true)
+  }
+
   const handleSaveIdea = () => {
     if (!selectedIdea || !selectedIdea.title.trim()) {
       toast.error('Please enter a title')
@@ -528,6 +628,54 @@ export function FeatureIdeaCloud() {
     setViewDialogOpen(false)
     setSelectedIdea(null)
     toast.success('Idea deleted')
+  }
+
+  const handleSaveGroup = () => {
+    if (!selectedGroup || !selectedGroup.label.trim()) {
+      toast.error('Please enter a group name')
+      return
+    }
+
+    setGroups((currentGroups) => {
+      const existing = (currentGroups || []).find(g => g.id === selectedGroup.id)
+      if (existing) {
+        return (currentGroups || []).map(g => g.id === selectedGroup.id ? selectedGroup : g)
+      } else {
+        return [...(currentGroups || []), selectedGroup]
+      }
+    })
+
+    if (!(groups || []).find(g => g.id === selectedGroup.id)) {
+      const newNode: Node<IdeaGroup> = {
+        id: selectedGroup.id,
+        type: 'groupNode',
+        position: { x: 200, y: 200 },
+        data: selectedGroup,
+        style: {
+          zIndex: -1,
+        },
+      }
+      setNodes((nds) => [newNode, ...nds])
+    }
+
+    setGroupDialogOpen(false)
+    setSelectedGroup(null)
+    toast.success('Group saved!')
+  }
+
+  const handleDeleteGroup = (id: string) => {
+    setIdeas((currentIdeas) =>
+      (currentIdeas || []).map(idea =>
+        idea.parentGroup === id ? { ...idea, parentGroup: undefined } : idea
+      )
+    )
+    
+    setGroups((currentGroups) => (currentGroups || []).filter(g => g.id !== id))
+    setNodes((nds) => nds.filter(n => n.id !== id))
+    
+    setGroupDialogOpen(false)
+    setSelectedGroup(null)
+    toast.success('Group deleted')
   }
 
   const handleDeleteEdge = (edgeId: string) => {
@@ -674,6 +822,15 @@ export function FeatureIdeaCloud() {
 
             <Tooltip>
               <TooltipTrigger asChild>
+                <Button onClick={handleAddGroup} variant="outline" className="shadow-lg">
+                  <Package size={20} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Add Group</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button onClick={handleAddIdea} className="shadow-lg">
                   <Plus size={20} />
                 </Button>
@@ -727,12 +884,91 @@ export function FeatureIdeaCloud() {
         <Panel position="bottom-right">
           <div className="bg-card border border-border rounded-lg shadow-lg p-2 text-xs text-muted-foreground max-w-sm">
             <p className="mb-1">💡 <strong>Tip:</strong> Double-click ideas to view details</p>
+            <p className="mb-1">📦 Create groups to organize related ideas</p>
             <p className="mb-1">🔗 Drag from handles on card edges to connect ideas</p>
             <p className="mb-1">↪️ Drag existing connection ends to remap them</p>
             <p>⚙️ Click connections to edit or delete them</p>
           </div>
         </Panel>
       </ReactFlow>
+
+      <Dialog open={groupDialogOpen} onOpenChange={setGroupDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {selectedGroup?.label ? 'Edit Group' : 'New Group'}
+            </DialogTitle>
+            <DialogDescription>
+              Create a container to organize related ideas
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedGroup && (
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-1 block">Group Name</label>
+                <Input
+                  value={selectedGroup.label}
+                  onChange={(e) => setSelectedGroup({ ...selectedGroup, label: e.target.value })}
+                  placeholder="e.g., Authentication Features"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Color</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {GROUP_COLORS.map(color => (
+                    <button
+                      key={color.value}
+                      onClick={() => setSelectedGroup({ ...selectedGroup, color: color.value })}
+                      className={`h-12 rounded-lg border-2 transition-all hover:scale-105 ${
+                        selectedGroup.color === color.value
+                          ? 'border-foreground ring-2 ring-primary'
+                          : 'border-border'
+                      }`}
+                      style={{ backgroundColor: color.value }}
+                      title={color.name}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-3 bg-muted rounded-lg text-sm">
+                <p className="font-medium mb-1">💡 Tips:</p>
+                <ul className="space-y-1 text-xs text-muted-foreground">
+                  <li>• Groups provide visual organization for related ideas</li>
+                  <li>• Drag ideas into groups or assign them in the idea editor</li>
+                  <li>• Ideas stay within their group boundaries when moved</li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <div className="flex justify-between w-full">
+              <div>
+                {selectedGroup && groups?.find(g => g.id === selectedGroup.id) && (
+                  <Button
+                    variant="destructive"
+                    onClick={() => handleDeleteGroup(selectedGroup.id)}
+                  >
+                    <Trash size={16} className="mr-2" />
+                    Delete
+                  </Button>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setGroupDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleSaveGroup}>
+                  Save Group
+                </Button>
+              </div>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className="max-w-2xl">
@@ -810,6 +1046,22 @@ export function FeatureIdeaCloud() {
                   </select>
                 </div>
               </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Group</label>
+                <select
+                  value={selectedIdea.parentGroup || ''}
+                  onChange={(e) => setSelectedIdea({ ...selectedIdea, parentGroup: e.target.value || undefined })}
+                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm"
+                >
+                  <option value="">No group</option>
+                  {safeGroups.map(group => (
+                    <option key={group.id} value={group.id}>
+                      {group.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           )}
 
@@ -868,6 +1120,15 @@ export function FeatureIdeaCloud() {
                   {selectedIdea.status}
                 </Badge>
               </div>
+
+              {selectedIdea.parentGroup && (
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground">Group</label>
+                  <p className="text-sm font-medium">
+                    {safeGroups.find(g => g.id === selectedIdea.parentGroup)?.label || 'Unknown'}
+                  </p>
+                </div>
+              )}
 
               <div>
                 <label className="text-xs font-medium text-muted-foreground">Created</label>
