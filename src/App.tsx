@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile, Image, MagnifyingGlass, CloudArrowUp } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles, Project } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
@@ -550,77 +551,84 @@ Navigate to the backend directory and follow the setup instructions.
             </div>
           </div>
           <div className="flex gap-1 sm:gap-2 shrink-0">
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => setSearchDialogOpen(true)}
-              className="shrink-0"
-              title="Search (Ctrl+K)"
-            >
-              <MagnifyingGlass size={18} />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={() => setSearchDialogOpen(true)}
+                  className="shrink-0"
+                >
+                  <MagnifyingGlass size={18} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Search (Ctrl+K)</TooltipContent>
+            </Tooltip>
             <ProjectManager
               currentProject={getCurrentProject()}
               onProjectLoad={handleLoadProject}
             />
             {safeFeatureToggles.errorRepair && autoDetectedErrors.length > 0 && (
-              <Button 
-                variant="outline" 
-                size="icon"
-                onClick={() => setActiveTab('errors')}
-                className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground shrink-0 relative"
-                title={`${autoDetectedErrors.length} ${autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}`}
-              >
-                <Wrench size={18} />
-                <Badge 
-                  variant="destructive" 
-                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]"
-                >
-                  {autoDetectedErrors.length}
-                </Badge>
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => setActiveTab('errors')}
+                    className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground shrink-0 relative"
+                  >
+                    <Wrench size={18} />
+                    <Badge 
+                      variant="destructive" 
+                      className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]"
+                    >
+                      {autoDetectedErrors.length}
+                    </Badge>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {autoDetectedErrors.length} {autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}
+                </TooltipContent>
+              </Tooltip>
             )}
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => setShortcutsDialogOpen(true)}
-              title="Keyboard Shortcuts (Ctrl+/)"
-              className="hidden sm:flex shrink-0"
-            >
-              <Keyboard size={18} />
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={handleGenerateWithAI}
-              className="hidden lg:flex shrink-0 px-3"
-            >
-              <Sparkle size={16} className="mr-1.5" weight="duotone" />
-              AI Generate
-            </Button>
-            <Button 
-              variant="outline"
-              size="icon"
-              onClick={handleGenerateWithAI}
-              className="lg:hidden shrink-0"
-              title="AI Generate"
-            >
-              <Sparkle size={18} weight="duotone" />
-            </Button>
-            <Button 
-              onClick={handleExportProject}
-              className="hidden md:flex shrink-0 px-3"
-            >
-              <Download size={16} className="mr-1.5" />
-              Export
-            </Button>
-            <Button 
-              size="icon"
-              onClick={handleExportProject}
-              className="md:hidden shrink-0"
-              title="Export Project"
-            >
-              <Download size={18} />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => setShortcutsDialogOpen(true)}
+                  className="hidden sm:flex shrink-0"
+                >
+                  <Keyboard size={18} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Keyboard Shortcuts (Ctrl+/)</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline"
+                  size="icon"
+                  onClick={handleGenerateWithAI}
+                  className="shrink-0"
+                >
+                  <Sparkle size={18} weight="duotone" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>AI Generate (Ctrl+Shift+G)</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  size="icon"
+                  onClick={handleExportProject}
+                  className="shrink-0"
+                >
+                  <Download size={18} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Export Project (Ctrl+E)</TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </header>
