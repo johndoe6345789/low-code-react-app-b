@@ -15,6 +15,7 @@ import {
   DeviceMobile,
   Image,
   Faders,
+  Lightbulb,
 } from '@phosphor-icons/react'
 
 interface PageHeaderProps {
@@ -116,6 +117,11 @@ const tabInfo: Record<string, { title: string; icon: React.ReactNode; descriptio
     title: 'Features',
     icon: <Faders size={24} weight="duotone" />,
     description: 'Toggle feature modules',
+  },
+  ideas: {
+    title: 'Feature Ideas',
+    icon: <Lightbulb size={24} weight="duotone" />,
+    description: 'Brainstorm and organize feature ideas',
   },
 }
 

@@ -31,6 +31,7 @@ import {
   MagnifyingGlass,
   ClockCounterClockwise,
   X,
+  Lightbulb,
 } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, Workflow, Lambda, PlaywrightTest, StorybookStory, UnitTest } from '@/types/project'
 import { Badge } from '@/components/ui/badge'
@@ -316,6 +317,16 @@ export function GlobalSearch({
       icon: <Faders size={18} weight="duotone" />,
       action: () => onNavigate('features'),
       tags: ['settings', 'toggles', 'enable'],
+    })
+
+    results.push({
+      id: 'nav-ideas',
+      title: 'Feature Ideas',
+      subtitle: 'Brainstorm and organize ideas',
+      category: 'Navigation',
+      icon: <Lightbulb size={18} weight="duotone" />,
+      action: () => onNavigate('ideas'),
+      tags: ['brainstorm', 'ideas', 'planning'],
     })
 
     files.forEach((file) => {

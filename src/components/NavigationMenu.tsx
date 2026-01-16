@@ -26,6 +26,7 @@ import {
   CaretDoubleDown,
   CaretDoubleUp,
   Cloud,
+  Lightbulb,
 } from '@phosphor-icons/react'
 import { FeatureToggles } from '@/types/project'
 
@@ -153,6 +154,13 @@ export function NavigationMenu({
           icon: <Image size={18} />,
           value: 'favicon',
           featureKey: 'faviconDesigner',
+        },
+        {
+          id: 'ideas',
+          label: 'Feature Ideas',
+          icon: <Lightbulb size={18} />,
+          value: 'ideas',
+          featureKey: 'ideaCloud',
         },
       ],
     },

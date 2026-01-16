@@ -405,24 +405,18 @@ export function FaviconDesigner() {
 
   return (
     <div className="h-full flex flex-col bg-background">
-      <div className="border-b border-border bg-card px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold">Favicon Designer</h2>
-            <p className="text-sm text-muted-foreground">
-              Create custom favicons for your web applications
-            </p>
-          </div>
+      <div className="border-b border-border bg-card px-4 sm:px-6 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleNewDesign}>
+            <Button variant="outline" size="sm" onClick={handleNewDesign}>
               <Plus size={16} className="mr-2" />
               New Design
             </Button>
-            <Button variant="outline" onClick={handleDuplicateDesign}>
+            <Button variant="outline" size="sm" onClick={handleDuplicateDesign}>
               <Copy size={16} className="mr-2" />
               Duplicate
             </Button>
-            <Button variant="outline" onClick={handleDeleteDesign} disabled={safeDesigns.length === 1}>
+            <Button variant="outline" size="sm" onClick={handleDeleteDesign} disabled={safeDesigns.length === 1}>
               <Trash size={16} className="mr-2" />
               Delete
             </Button>
@@ -431,7 +425,7 @@ export function FaviconDesigner() {
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="h-full grid grid-cols-[1fr_400px]">
+        <div className="h-full grid grid-cols-1 lg:grid-cols-[1fr_400px]">
           <div className="border-r border-border p-6 flex flex-col items-center justify-center bg-muted/20">
             <Card className="p-8 mb-6">
               <div className="flex flex-col items-center gap-4">
