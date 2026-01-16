@@ -182,22 +182,46 @@ export function ProjectManager({ currentProject, onProjectLoad }: ProjectManager
 
   return (
     <>
-      <div className="flex gap-2">
-        <Button onClick={() => setSaveDialogOpen(true)} variant="outline">
-          <FloppyDisk size={16} className="mr-2" />
-          Save Project
+      <div className="flex gap-1 sm:gap-2">
+        <Button 
+          onClick={() => setSaveDialogOpen(true)} 
+          variant="outline"
+          size="icon"
+          className="sm:w-auto sm:px-4"
+          title="Save Project"
+        >
+          <FloppyDisk size={18} className="sm:mr-2" />
+          <span className="hidden sm:inline">Save Project</span>
         </Button>
-        <Button onClick={() => setLoadDialogOpen(true)} variant="outline">
-          <FolderOpen size={16} className="mr-2" />
-          Load Project
+        <Button 
+          onClick={() => setLoadDialogOpen(true)} 
+          variant="outline"
+          size="icon"
+          className="sm:w-auto sm:px-4"
+          title="Load Project"
+        >
+          <FolderOpen size={18} className="sm:mr-2" />
+          <span className="hidden sm:inline">Load Project</span>
         </Button>
-        <Button onClick={() => setNewProjectDialogOpen(true)} variant="outline">
-          <FolderPlus size={16} className="mr-2" />
-          New Project
+        <Button 
+          onClick={() => setNewProjectDialogOpen(true)} 
+          variant="outline"
+          size="icon"
+          className="sm:w-auto sm:px-4 hidden md:flex"
+          title="New Project"
+        >
+          <FolderPlus size={18} className="sm:mr-2" />
+          <span className="hidden sm:inline">New Project</span>
         </Button>
-        <Button onClick={() => setImportDialogOpen(true)} variant="outline">
-          <UploadSimple size={16} className="mr-2" />
-          Import
+        <Button 
+          onClick={() => setImportDialogOpen(true)} 
+          variant="outline"
+          size="icon"
+          className="sm:w-auto sm:px-4 hidden md:flex"
+          title="Import"
+        >
+          <UploadSimple size={18} className="sm:mr-2" />
+          <span className="hidden sm:inline">Import</span>
         </Button>
       </div>
 
