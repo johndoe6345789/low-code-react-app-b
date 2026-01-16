@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, useMemo } from 'react'
+import { useState, lazy, Suspense, useMemo, useEffect } from 'react'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
 import { LoadingFallback } from '@/components/molecules'
@@ -6,6 +6,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { useProjectState } from '@/hooks/use-project-state'
 import { useFileOperations } from '@/hooks/use-file-operations'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
+import { useSeedData } from '@/hooks/data/use-seed-data'
 import { getPageConfig, getEnabledPages, getPageShortcuts, resolveProps } from '@/config/page-loader'
 import { toast } from 'sonner'
 
@@ -74,12 +75,17 @@ function App() {
 
   const fileOps = useFileOperations(files, setFiles)
   const { activeFileId, setActiveFileId, handleFileChange, handleFileAdd, handleFileClose } = fileOps
+  const { loadSeedData } = useSeedData()
 
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchOpen, setSearchOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [lastSaved] = useState<number | null>(Date.now())
   const [errorCount] = useState(0)
+
+  useEffect(() => {
+    loadSeedData()
+  }, [])
 
   const pageConfig = useMemo(() => getPageConfig(), [])
   const enabledPages = useMemo(() => getEnabledPages(featureToggles), [featureToggles])

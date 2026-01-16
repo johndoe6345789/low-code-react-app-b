@@ -14,6 +14,7 @@ import {
   Warning
 } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig } from '@/types/project'
+import { SeedDataStatus } from '@/components/atoms'
 
 interface ProjectDashboardProps {
   files: ProjectFile[]
@@ -130,6 +131,8 @@ export function ProjectDashboard({
           color="text-cyan-500"
         />
       </div>
+
+      <SeedDataStatus />
 
       <Card>
         <CardHeader>

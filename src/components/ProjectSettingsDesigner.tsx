@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Plus, Trash, Package, Cube, Code } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui/badge'
+import { SeedDataManager } from '@/components/molecules'
 
 interface ProjectSettingsDesignerProps {
   nextjsConfig: NextJsConfig
@@ -134,6 +135,7 @@ export function ProjectSettingsDesigner({
             <TabsTrigger value="nextjs">Next.js Config</TabsTrigger>
             <TabsTrigger value="packages">NPM Packages</TabsTrigger>
             <TabsTrigger value="scripts">Scripts</TabsTrigger>
+            <TabsTrigger value="data">Data</TabsTrigger>
           </TabsList>
         </div>
 
@@ -502,6 +504,12 @@ export function ProjectSettingsDesigner({
                     </Card>
                   )}
                 </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="data" className="mt-0">
+              <div className="max-w-2xl">
+                <SeedDataManager />
               </div>
             </TabsContent>
           </div>
