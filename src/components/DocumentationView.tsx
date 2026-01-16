@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { Input } from '@/components/ui/input'
 import { 
   BookOpen, 
   MapPin, 
@@ -23,34 +24,47 @@ import {
   Package,
   Rocket,
   Target,
-  Lightbulb
+  Lightbulb,
+  MagnifyingGlass
 } from '@phosphor-icons/react'
 
 export function DocumentationView() {
   const [activeTab, setActiveTab] = useState('readme')
+  const [searchQuery, setSearchQuery] = useState('')
 
   return (
     <div className="h-full flex flex-col bg-background">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <div className="border-b border-border bg-card px-6 py-3">
-          <TabsList className="bg-muted/50">
-            <TabsTrigger value="readme" className="gap-2">
-              <BookOpen size={18} />
-              README
-            </TabsTrigger>
-            <TabsTrigger value="roadmap" className="gap-2">
-              <MapPin size={18} />
-              Roadmap
-            </TabsTrigger>
-            <TabsTrigger value="agents" className="gap-2">
-              <FileCode size={18} />
-              Agents Files
-            </TabsTrigger>
-            <TabsTrigger value="sass" className="gap-2">
-              <PaintBrush size={18} />
-              Sass Styles Guide
-            </TabsTrigger>
-          </TabsList>
+        <div className="border-b border-border bg-card px-6 py-3 space-y-3">
+          <div className="flex items-center gap-3">
+            <TabsList className="bg-muted/50">
+              <TabsTrigger value="readme" className="gap-2">
+                <BookOpen size={18} />
+                README
+              </TabsTrigger>
+              <TabsTrigger value="roadmap" className="gap-2">
+                <MapPin size={18} />
+                Roadmap
+              </TabsTrigger>
+              <TabsTrigger value="agents" className="gap-2">
+                <FileCode size={18} />
+                Agents Files
+              </TabsTrigger>
+              <TabsTrigger value="sass" className="gap-2">
+                <PaintBrush size={18} />
+                Sass Styles Guide
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          <div className="relative">
+            <MagnifyingGlass size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search documentation..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
         </div>
 
         <ScrollArea className="flex-1">

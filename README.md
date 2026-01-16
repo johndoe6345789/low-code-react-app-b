@@ -11,6 +11,7 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 ## ✨ Features
 
 ### 🎯 Core Capabilities
+- **Project Dashboard** - At-a-glance overview of project status, completion metrics, and quick tips
 - **Monaco Code Editor** - Full-featured IDE with syntax highlighting, autocomplete, and multi-file editing
 - **Prisma Schema Designer** - Visual database model builder with relations and field configuration
 - **Component Tree Builder** - Hierarchical React component designer with Material UI integration
@@ -18,6 +19,7 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 - **Sass Styling System** - Custom Material UI components with Sass, including utilities, mixins, and animations
 - **Flask Backend Designer** - Python REST API designer with blueprints, endpoints, and CORS configuration
 - **Project Settings** - Configure Next.js options, npm packages, scripts, and build settings
+- **Keyboard Shortcuts** - Power-user shortcuts for rapid navigation and actions
 
 ### 🤖 AI-Powered Generation
 - **Complete App Generation** - Describe your app and get a full project structure
@@ -89,7 +91,8 @@ Access documentation by clicking the **Documentation** tab in the application.
 
 ## 🗺️ Roadmap
 
-### ✅ Completed (v1.0 - v4.0)
+### ✅ Completed (v1.0 - v4.1)
+- Project dashboard with completion metrics
 - Monaco code editor integration
 - Visual designers for models, components, and themes
 - AI-powered generation across all features
@@ -99,6 +102,8 @@ Access documentation by clicking the **Documentation** tab in the application.
 - Flask backend designer
 - Project settings and npm management
 - Custom Sass styling system with utilities and mixins
+- ZIP file export with README generation
+- Keyboard shortcuts for power users
 
 ### 🔮 Planned
 - Real-time preview with hot reload

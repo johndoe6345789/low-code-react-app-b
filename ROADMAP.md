@@ -96,9 +96,24 @@ Backend and configuration tools:
 - ✅ Package manager selection (npm/yarn/pnpm)
 - ✅ Complete project settings control
 
+### v4.1 - Enhanced Export & Documentation (Completed)
+**Release Date:** Week 9
+
+Improved export and comprehensive documentation:
+- ✅ ZIP file download for complete project export
+- ✅ Auto-generated README in exported projects
+- ✅ Copy all files to clipboard functionality
+- ✅ Comprehensive in-app documentation system
+- ✅ Sass styles guide with live examples
+- ✅ Complete roadmap documentation
+- ✅ AI agents architecture documentation
+- ✅ Project dashboard with completion metrics
+- ✅ Keyboard shortcuts for power users
+- ✅ Search functionality in documentation
+
 ## Upcoming Releases
 
-### v4.1 - Real-Time Preview (In Planning)
+### v4.2 - Real-Time Preview (In Planning)
 **Estimated:** Q2 2024
 
 Live application preview:
@@ -115,7 +130,7 @@ Live application preview:
 - State preservation across reloads
 - Error boundary implementation
 
-### v4.2 - Data Management (In Planning)
+### v4.3 - Data Management (In Planning)
 **Estimated:** Q2 2024
 
 Database and API integration:
@@ -132,7 +147,7 @@ Database and API integration:
 - TypeScript API client with fetch/axios
 - Automatic type inference from endpoints
 
-### v4.3 - Form Builder (In Planning)
+### v4.4 - Form Builder (In Planning)
 **Estimated:** Q2-Q3 2024
 
 Visual form design:

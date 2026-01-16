@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -21,9 +21,13 @@ import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
 import { ErrorPanel } from '@/components/ErrorPanel'
 import { DocumentationView } from '@/components/DocumentationView'
 import { SassStylesShowcase } from '@/components/SassStylesShowcase'
+import { ProjectDashboard } from '@/components/ProjectDashboard'
+import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog'
+import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
 import { toast } from 'sonner'
+import JSZip from 'jszip'
 import {
   Dialog,
   DialogContent,
@@ -144,8 +148,9 @@ function App() {
   const [nextjsConfig, setNextjsConfig] = useKV<NextJsConfig>('project-nextjs-config', DEFAULT_NEXTJS_CONFIG)
   const [npmSettings, setNpmSettings] = useKV<NpmSettings>('project-npm-settings', DEFAULT_NPM_SETTINGS)
   const [activeFileId, setActiveFileId] = useState<string | null>((files || [])[0]?.id || null)
-  const [activeTab, setActiveTab] = useState('code')
+  const [activeTab, setActiveTab] = useState('dashboard')
   const [exportDialogOpen, setExportDialogOpen] = useState(false)
+  const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false)
   const [generatedCode, setGeneratedCode] = useState<Record<string, string>>({})
 
   const safeFiles = files || []
@@ -160,6 +165,57 @@ function App() {
   const safeNpmSettings = npmSettings || DEFAULT_NPM_SETTINGS
 
   const { errors: autoDetectedErrors } = useAutoRepair(safeFiles, false)
+
+  useKeyboardShortcuts([
+    {
+      key: '1',
+      ctrl: true,
+      description: 'Go to Dashboard',
+      action: () => setActiveTab('dashboard'),
+    },
+    {
+      key: '2',
+      ctrl: true,
+      description: 'Go to Code Editor',
+      action: () => setActiveTab('code'),
+    },
+    {
+      key: '3',
+      ctrl: true,
+      description: 'Go to Models',
+      action: () => setActiveTab('models'),
+    },
+    {
+      key: '4',
+      ctrl: true,
+      description: 'Go to Components',
+      action: () => setActiveTab('components'),
+    },
+    {
+      key: '5',
+      ctrl: true,
+      description: 'Go to Styling',
+      action: () => setActiveTab('styling'),
+    },
+    {
+      key: 'e',
+      ctrl: true,
+      description: 'Export Project',
+      action: () => handleExportProject(),
+    },
+    {
+      key: 'k',
+      ctrl: true,
+      description: 'AI Generate',
+      action: () => handleGenerateWithAI(),
+    },
+    {
+      key: '/',
+      ctrl: true,
+      description: 'Show Keyboard Shortcuts',
+      action: () => setShortcutsDialogOpen(true),
+    },
+  ])
 
   const handleFileChange = (fileId: string, content: string) => {
     setFiles((currentFiles) =>
@@ -232,6 +288,75 @@ function App() {
     toast.success('Project files generated!')
   }
 
+  const handleDownloadZip = async () => {
+    try {
+      toast.info('Creating ZIP file...')
+      
+      const zip = new JSZip()
+      
+      Object.entries(generatedCode).forEach(([path, content]) => {
+        const cleanPath = path.startsWith('/') ? path.slice(1) : path
+        zip.file(cleanPath, content)
+      })
+      
+      zip.file('README.md', `# ${safeNextjsConfig.appName}
+
+Generated with CodeForge
+
+## Getting Started
+
+1. Install dependencies:
+\`\`\`bash
+npm install
+\`\`\`
+
+2. Set up Prisma (if using database):
+\`\`\`bash
+npx prisma generate
+npx prisma db push
+\`\`\`
+
+3. Run the development server:
+\`\`\`bash
+npm run dev
+\`\`\`
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Testing
+
+Run E2E tests:
+\`\`\`bash
+npm run test:e2e
+\`\`\`
+
+Run unit tests:
+\`\`\`bash
+npm run test
+\`\`\`
+
+## Flask Backend (Optional)
+
+Navigate to the backend directory and follow the setup instructions.
+`)
+      
+      const blob = await zip.generateAsync({ type: 'blob' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${safeNextjsConfig.appName}.zip`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      
+      toast.success('Project downloaded successfully!')
+    } catch (error) {
+      console.error('Failed to create ZIP:', error)
+      toast.error('Failed to create ZIP file')
+    }
+  }
+
   const handleGenerateWithAI = async () => {
     const description = prompt('Describe the application you want to generate:')
     if (!description) return
@@ -287,6 +412,14 @@ function App() {
                 {autoDetectedErrors.length} {autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}
               </Button>
             )}
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setShortcutsDialogOpen(true)}
+              title="Keyboard Shortcuts (Ctrl+/)"
+            >
+              <Keyboard size={20} />
+            </Button>
             <Button variant="outline" onClick={handleGenerateWithAI}>
               <Sparkle size={16} className="mr-2" weight="duotone" />
               AI Generate
@@ -302,6 +435,10 @@ function App() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <div className="border-b border-border bg-card px-6">
           <TabsList className="h-auto bg-transparent flex-wrap py-2">
+            <TabsTrigger value="dashboard" className="gap-2">
+              <ChartBar size={18} />
+              Dashboard
+            </TabsTrigger>
             <TabsTrigger value="code" className="gap-2">
               <Code size={18} />
               Code Editor
@@ -359,6 +496,19 @@ function App() {
         </div>
 
         <div className="flex-1 overflow-hidden">
+          <TabsContent value="dashboard" className="h-full m-0">
+            <ProjectDashboard
+              files={safeFiles}
+              models={safeModels}
+              components={safeComponents}
+              theme={safeTheme}
+              playwrightTests={safePlaywrightTests}
+              storybookStories={safeStorybookStories}
+              unitTests={safeUnitTests}
+              flaskConfig={safeFlaskConfig}
+            />
+          </TabsContent>
+
           <TabsContent value="code" className="h-full m-0">
             <ResizablePanelGroup direction="horizontal">
               <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
@@ -445,9 +595,27 @@ function App() {
           <DialogHeader>
             <DialogTitle>Generated Project Files</DialogTitle>
             <DialogDescription>
-              Copy these files to create your Next.js application
+              Download as ZIP or copy individual files to create your Next.js application
             </DialogDescription>
           </DialogHeader>
+          <div className="flex gap-2 mb-4">
+            <Button onClick={handleDownloadZip} className="flex-1">
+              <Download size={16} className="mr-2" />
+              Download as ZIP
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => {
+                const allCode = Object.entries(generatedCode)
+                  .map(([path, content]) => `// ${path}\n${content}`)
+                  .join('\n\n---\n\n')
+                navigator.clipboard.writeText(allCode)
+                toast.success('All files copied to clipboard!')
+              }}
+            >
+              Copy All
+            </Button>
+          </div>
           <ScrollArea className="h-96">
             <div className="space-y-4">
               {Object.entries(generatedCode).map(([path, content]) => (
@@ -478,6 +646,11 @@ function App() {
           </ScrollArea>
         </DialogContent>
       </Dialog>
+
+      <KeyboardShortcutsDialog
+        open={shortcutsDialogOpen}
+        onOpenChange={setShortcutsDialogOpen}
+      />
     </div>
   )
 }
