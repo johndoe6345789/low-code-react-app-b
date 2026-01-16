@@ -275,6 +275,7 @@ export interface FeatureToggles {
   documentation: boolean
   sassStyles: boolean
   faviconDesigner: boolean
+  ideaCloud: boolean
 }
 
 export interface Project {

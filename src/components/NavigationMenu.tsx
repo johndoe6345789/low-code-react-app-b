@@ -25,6 +25,7 @@ import {
   CaretDown,
   CaretDoubleDown,
   CaretDoubleUp,
+  Cloud,
 } from '@phosphor-icons/react'
 import { FeatureToggles } from '@/types/project'
 

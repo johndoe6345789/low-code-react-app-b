@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile, Image, MagnifyingGlass } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile, Image, MagnifyingGlass, CloudArrowUp } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles, Project } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -33,6 +33,7 @@ import { PWAUpdatePrompt } from '@/components/PWAUpdatePrompt'
 import { PWAStatusBar } from '@/components/PWAStatusBar'
 import { PWASettings } from '@/components/PWASettings'
 import { FaviconDesigner } from '@/components/FaviconDesigner'
+import { FeatureIdeaCloud } from '@/components/FeatureIdeaCloud'
 import { GlobalSearch } from '@/components/GlobalSearch'
 import { NavigationMenu } from '@/components/NavigationMenu'
 import { PageHeader } from '@/components/PageHeader'
@@ -104,6 +105,7 @@ const DEFAULT_FEATURE_TOGGLES: FeatureToggles = {
   documentation: true,
   sassStyles: true,
   faviconDesigner: true,
+  ideaCloud: true,
 }
 
 const DEFAULT_THEME: ThemeConfig = {
@@ -782,6 +784,12 @@ Navigate to the backend directory and follow the setup instructions.
           {safeFeatureToggles.faviconDesigner && (
             <TabsContent value="favicon" className="h-full m-0">
               <FaviconDesigner />
+            </TabsContent>
+          )}
+
+          {safeFeatureToggles.ideaCloud && (
+            <TabsContent value="ideas" className="h-full m-0">
+              <FeatureIdeaCloud />
             </TabsContent>
           )}
         </div>
