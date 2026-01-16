@@ -7,7 +7,10 @@
       "component": "ProjectDashboard",
       "enabled": true,
       "shortcut": "ctrl+1",
-      "order": 1
+      "order": 1,
+      "props": {
+        "state": ["files", "models", "components", "theme", "playwrightTests", "storybookStories", "unitTests", "flaskConfig"]
+      }
     },
     {
       "id": "code",
@@ -18,7 +21,26 @@
       "toggleKey": "codeEditor",
       "shortcut": "ctrl+2",
       "order": 2,
-      "requiresResizable": true
+      "requiresResizable": true,
+      "props": {
+        "state": ["files", "activeFileId"],
+        "actions": ["onFileChange:handleFileChange", "onFileSelect:setActiveFileId", "onFileClose:handleFileClose"]
+      },
+      "resizableConfig": {
+        "leftComponent": "FileExplorer",
+        "leftProps": {
+          "state": ["files", "activeFileId"],
+          "actions": ["onFileSelect:setActiveFileId", "onFileAdd:handleFileAdd"]
+        },
+        "leftPanel": {
+          "defaultSize": 20,
+          "minSize": 15,
+          "maxSize": 30
+        },
+        "rightPanel": {
+          "defaultSize": 80
+        }
+      }
     },
     {
       "id": "models",
@@ -28,7 +50,11 @@
       "enabled": true,
       "toggleKey": "models",
       "shortcut": "ctrl+3",
-      "order": 3
+      "order": 3,
+      "props": {
+        "state": ["models"],
+        "actions": ["onModelsChange:setModels"]
+      }
     },
     {
       "id": "components",
@@ -38,7 +64,11 @@
       "enabled": true,
       "toggleKey": "components",
       "shortcut": "ctrl+4",
-      "order": 4
+      "order": 4,
+      "props": {
+        "state": ["components"],
+        "actions": ["onComponentsChange:setComponents"]
+      }
     },
     {
       "id": "component-trees",
@@ -48,7 +78,11 @@
       "enabled": true,
       "toggleKey": "componentTrees",
       "shortcut": "ctrl+5",
-      "order": 5
+      "order": 5,
+      "props": {
+        "state": ["trees:componentTrees"],
+        "actions": ["onTreesChange:setComponentTrees"]
+      }
     },
     {
       "id": "workflows",
@@ -58,7 +92,11 @@
       "enabled": true,
       "toggleKey": "workflows",
       "shortcut": "ctrl+6",
-      "order": 6
+      "order": 6,
+      "props": {
+        "state": ["workflows"],
+        "actions": ["onWorkflowsChange:setWorkflows"]
+      }
     },
     {
       "id": "lambdas",
@@ -68,7 +106,11 @@
       "enabled": true,
       "toggleKey": "lambdas",
       "shortcut": "ctrl+7",
-      "order": 7
+      "order": 7,
+      "props": {
+        "state": ["lambdas"],
+        "actions": ["onLambdasChange:setLambdas"]
+      }
     },
     {
       "id": "styling",
@@ -78,7 +120,11 @@
       "enabled": true,
       "toggleKey": "styling",
       "shortcut": "ctrl+8",
-      "order": 8
+      "order": 8,
+      "props": {
+        "state": ["theme"],
+        "actions": ["onThemeChange:setTheme"]
+      }
     },
     {
       "id": "favicon",
@@ -88,7 +134,8 @@
       "enabled": true,
       "toggleKey": "faviconDesigner",
       "shortcut": "ctrl+9",
-      "order": 9
+      "order": 9,
+      "props": {}
     },
     {
       "id": "ideas",
@@ -97,7 +144,8 @@
       "component": "FeatureIdeaCloud",
       "enabled": true,
       "toggleKey": "ideaCloud",
-      "order": 10
+      "order": 10,
+      "props": {}
     },
     {
       "id": "flask",
@@ -106,7 +154,11 @@
       "component": "FlaskDesigner",
       "enabled": true,
       "toggleKey": "flaskApi",
-      "order": 11
+      "order": 11,
+      "props": {
+        "state": ["config:flaskConfig"],
+        "actions": ["onConfigChange:setFlaskConfig"]
+      }
     },
     {
       "id": "playwright",
@@ -115,7 +167,11 @@
       "component": "PlaywrightDesigner",
       "enabled": true,
       "toggleKey": "playwright",
-      "order": 12
+      "order": 12,
+      "props": {
+        "state": ["tests:playwrightTests"],
+        "actions": ["onTestsChange:setPlaywrightTests"]
+      }
     },
     {
       "id": "storybook",
@@ -124,7 +180,11 @@
       "component": "StorybookDesigner",
       "enabled": true,
       "toggleKey": "storybook",
-      "order": 13
+      "order": 13,
+      "props": {
+        "state": ["stories:storybookStories"],
+        "actions": ["onStoriesChange:setStorybookStories"]
+      }
     },
     {
       "id": "unit-tests",
@@ -133,7 +193,11 @@
       "component": "UnitTestDesigner",
       "enabled": true,
       "toggleKey": "unitTests",
-      "order": 14
+      "order": 14,
+      "props": {
+        "state": ["tests:unitTests"],
+        "actions": ["onTestsChange:setUnitTests"]
+      }
     },
     {
       "id": "errors",
@@ -142,7 +206,11 @@
       "component": "ErrorPanel",
       "enabled": true,
       "toggleKey": "errorRepair",
-      "order": 15
+      "order": 15,
+      "props": {
+        "state": ["files"],
+        "actions": ["onFileChange:handleFileChange", "onFileSelect:setActiveFileId"]
+      }
     },
     {
       "id": "docs",
@@ -151,7 +219,8 @@
       "component": "DocumentationView",
       "enabled": true,
       "toggleKey": "documentation",
-      "order": 16
+      "order": 16,
+      "props": {}
     },
     {
       "id": "sass",
@@ -160,7 +229,8 @@
       "component": "SassStylesShowcase",
       "enabled": true,
       "toggleKey": "sassStyles",
-      "order": 17
+      "order": 17,
+      "props": {}
     },
     {
       "id": "settings",
@@ -168,7 +238,11 @@
       "icon": "Gear",
       "component": "ProjectSettingsDesigner",
       "enabled": true,
-      "order": 18
+      "order": 18,
+      "props": {
+        "state": ["nextjsConfig", "npmSettings"],
+        "actions": ["onNextjsConfigChange:setNextjsConfig", "onNpmSettingsChange:setNpmSettings"]
+      }
     },
     {
       "id": "pwa",
@@ -176,7 +250,8 @@
       "icon": "DeviceMobile",
       "component": "PWASettings",
       "enabled": true,
-      "order": 19
+      "order": 19,
+      "props": {}
     },
     {
       "id": "features",
@@ -184,7 +259,11 @@
       "icon": "ToggleRight",
       "component": "FeatureToggleSettings",
       "enabled": true,
-      "order": 20
+      "order": 20,
+      "props": {
+        "state": ["features:featureToggles"],
+        "actions": ["onFeaturesChange:setFeatureToggles"]
+      }
     }
   ]
 }

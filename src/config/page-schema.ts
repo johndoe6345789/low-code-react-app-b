@@ -1,5 +1,41 @@
 import { z } from 'zod'
 
+export const PropConfigSchema = z.object({
+  state: z.array(z.string()).optional(),
+  actions: z.array(z.string()).optional(),
+})
+
+export const ResizablePanelConfigSchema = z.object({
+  defaultSize: z.number(),
+  minSize: z.number().optional(),
+  maxSize: z.number().optional(),
+})
+
+export const ResizableConfigSchema = z.object({
+  leftComponent: z.string(),
+  leftProps: PropConfigSchema,
+  leftPanel: ResizablePanelConfigSchema,
+  rightPanel: ResizablePanelConfigSchema,
+})
+
+export const SimplePageConfigSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  icon: z.string(),
+  component: z.string(),
+  enabled: z.boolean(),
+  toggleKey: z.string().optional(),
+  shortcut: z.string().optional(),
+  order: z.number(),
+  requiresResizable: z.boolean().optional(),
+  props: PropConfigSchema.optional(),
+  resizableConfig: ResizableConfigSchema.optional(),
+})
+
+export const SimplePagesConfigSchema = z.object({
+  pages: z.array(SimplePageConfigSchema),
+})
+
 export const KeyboardShortcutSchema = z.object({
   key: z.string(),
   ctrl: z.boolean().optional(),
@@ -45,6 +81,11 @@ export const PageRegistrySchema = z.object({
   pages: z.array(PageConfigSchema),
 })
 
+export type PropConfig = z.infer<typeof PropConfigSchema>
+export type ResizablePanelConfig = z.infer<typeof ResizablePanelConfigSchema>
+export type ResizableConfig = z.infer<typeof ResizableConfigSchema>
+export type SimplePageConfig = z.infer<typeof SimplePageConfigSchema>
+export type SimplePagesConfig = z.infer<typeof SimplePagesConfigSchema>
 export type KeyboardShortcut = z.infer<typeof KeyboardShortcutSchema>
 export type PanelConfig = z.infer<typeof PanelConfigSchema>
 export type LayoutConfig = z.infer<typeof LayoutConfigSchema>

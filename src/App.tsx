@@ -6,7 +6,7 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { useProjectState } from '@/hooks/use-project-state'
 import { useFileOperations } from '@/hooks/use-file-operations'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
-import { getPageConfig, getEnabledPages, getPageShortcuts } from '@/config/page-loader'
+import { getPageConfig, getEnabledPages, getPageShortcuts, resolveProps } from '@/config/page-loader'
 import { toast } from 'sonner'
 
 const componentMap: Record<string, React.LazyExoticComponent<any>> = {
@@ -134,92 +134,48 @@ function App() {
   }
 
   const getPropsForComponent = (pageId: string) => {
-    const propsMap: Record<string, any> = {
-      'ProjectDashboard': {
-        files,
-        models,
-        components,
-        theme,
-        playwrightTests,
-        storybookStories,
-        unitTests,
-        flaskConfig,
-      },
-      'CodeEditor': {
-        files,
-        activeFileId,
-        onFileChange: handleFileChange,
-        onFileSelect: setActiveFileId,
-        onFileClose: handleFileClose,
-      },
-      'FileExplorer': {
-        files,
-        activeFileId,
-        onFileSelect: setActiveFileId,
-        onFileAdd: handleFileAdd,
-      },
-      'ModelDesigner': {
-        models,
-        onModelsChange: setModels,
-      },
-      'ComponentTreeBuilder': {
-        components,
-        onComponentsChange: setComponents,
-      },
-      'ComponentTreeManager': {
-        trees: componentTrees,
-        onTreesChange: setComponentTrees,
-      },
-      'WorkflowDesigner': {
-        workflows,
-        onWorkflowsChange: setWorkflows,
-      },
-      'LambdaDesigner': {
-        lambdas,
-        onLambdasChange: setLambdas,
-      },
-      'StyleDesigner': {
-        theme,
-        onThemeChange: setTheme,
-      },
-      'FlaskDesigner': {
-        config: flaskConfig,
-        onConfigChange: setFlaskConfig,
-      },
-      'PlaywrightDesigner': {
-        tests: playwrightTests,
-        onTestsChange: setPlaywrightTests,
-      },
-      'StorybookDesigner': {
-        stories: storybookStories,
-        onStoriesChange: setStorybookStories,
-      },
-      'UnitTestDesigner': {
-        tests: unitTests,
-        onTestsChange: setUnitTests,
-      },
-      'ErrorPanel': {
-        files,
-        onFileChange: handleFileChange,
-        onFileSelect: setActiveFileId,
-      },
-      'ProjectSettingsDesigner': {
-        nextjsConfig,
-        npmSettings,
-        onNextjsConfigChange: setNextjsConfig,
-        onNpmSettingsChange: setNpmSettings,
-      },
-      'FeatureToggleSettings': {
-        features: featureToggles,
-        onFeaturesChange: setFeatureToggles,
-      },
-      'DocumentationView': {},
-      'SassStylesShowcase': {},
-      'PWASettings': {},
-      'FaviconDesigner': {},
-      'FeatureIdeaCloud': {},
+    const page = enabledPages.find(p => p.id === pageId)
+    if (!page || !page.props) return {}
+
+    const stateContext = {
+      files,
+      models,
+      components,
+      componentTrees,
+      workflows,
+      lambdas,
+      theme,
+      playwrightTests,
+      storybookStories,
+      unitTests,
+      flaskConfig,
+      nextjsConfig,
+      npmSettings,
+      featureToggles,
+      activeFileId,
     }
-    return propsMap[pageId] || {}
+
+    const actionContext = {
+      handleFileChange,
+      setActiveFileId,
+      handleFileClose,
+      handleFileAdd,
+      setModels,
+      setComponents,
+      setComponentTrees,
+      setWorkflows,
+      setLambdas,
+      setTheme,
+      setPlaywrightTests,
+      setStorybookStories,
+      setUnitTests,
+      setFlaskConfig,
+      setNextjsConfig,
+      setNpmSettings,
+      setFeatureToggles,
+    }
+
+    return resolveProps(page.props, stateContext, actionContext)
   }
 
   const renderPageContent = (page: any) => {
@@ -228,27 +184,78 @@ function App() {
       return <LoadingFallback message={`Component ${page.component} not found`} />
     }
 
-    if (page.requiresResizable && page.id === 'code') {
-      const FileExplorerComp = componentMap['FileExplorer']
-      const CodeEditorComp = componentMap['CodeEditor']
+    if (page.requiresResizable && page.resizableConfig) {
+      const config = page.resizableConfig
+      const LeftComponent = componentMap[config.leftComponent]
+      const RightComponent = Component
+
+      if (!LeftComponent) {
+        return <LoadingFallback message={`Component ${config.leftComponent} not found`} />
+      }
+
+      const stateContext = {
+        files,
+        models,
+        components,
+        componentTrees,
+        workflows,
+        lambdas,
+        theme,
+        playwrightTests,
+        storybookStories,
+        unitTests,
+        flaskConfig,
+        nextjsConfig,
+        npmSettings,
+        featureToggles,
+        activeFileId,
+      }
+
+      const actionContext = {
+        handleFileChange,
+        setActiveFileId,
+        handleFileClose,
+        handleFileAdd,
+        setModels,
+        setComponents,
+        setComponentTrees,
+        setWorkflows,
+        setLambdas,
+        setTheme,
+        setPlaywrightTests,
+        setStorybookStories,
+        setUnitTests,
+        setFlaskConfig,
+        setNextjsConfig,
+        setNpmSettings,
+        setFeatureToggles,
+      }
+
+      const leftProps = resolveProps(config.leftProps, stateContext, actionContext)
+      const rightProps = getPropsForComponent(page.id)
+
       return (
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-            <Suspense fallback={<LoadingFallback message="Loading explorer..." />}>
-              <FileExplorerComp {...getPropsForComponent('FileExplorer')} />
+          <ResizablePanel 
+            defaultSize={config.leftPanel.defaultSize} 
+            minSize={config.leftPanel.minSize} 
+            maxSize={config.leftPanel.maxSize}
+          >
+            <Suspense fallback={<LoadingFallback message={`Loading ${config.leftComponent.toLowerCase()}...`} />}>
+              <LeftComponent {...leftProps} />
             </Suspense>
           </ResizablePanel>
           <ResizableHandle />
-          <ResizablePanel defaultSize={80}>
-            <Suspense fallback={<LoadingFallback message="Loading editor..." />}>
-              <CodeEditorComp {...getPropsForComponent('CodeEditor')} />
+          <ResizablePanel defaultSize={config.rightPanel.defaultSize}>
+            <Suspense fallback={<LoadingFallback message={`Loading ${page.title.toLowerCase()}...`} />}>
+              <RightComponent {...rightProps} />
             </Suspense>
           </ResizablePanel>
         </ResizablePanelGroup>
       )
     }
 
-    const props = getPropsForComponent(page.component)
+    const props = getPropsForComponent(page.id)
     return (
       <Suspense fallback={<LoadingFallback message={`Loading ${page.title.toLowerCase()}...`} />}>
         <Component {...props} />

@@ -13,6 +13,21 @@ export function validatePageConfig(): ValidationError[] {
   const seenIds = new Set<string>()
   const seenShortcuts = new Set<string>()
   const seenOrders = new Set<number>()
+  
+  const validStateKeys = [
+    'files', 'models', 'components', 'componentTrees', 'workflows',
+    'lambdas', 'theme', 'playwrightTests', 'storybookStories',
+    'unitTests', 'flaskConfig', 'nextjsConfig', 'npmSettings',
+    'featureToggles', 'activeFileId'
+  ]
+  
+  const validActionKeys = [
+    'handleFileChange', 'setActiveFileId', 'handleFileClose', 'handleFileAdd',
+    'setModels', 'setComponents', 'setComponentTrees', 'setWorkflows',
+    'setLambdas', 'setTheme', 'setPlaywrightTests', 'setStorybookStories',
+    'setUnitTests', 'setFlaskConfig', 'setNextjsConfig', 'setNpmSettings',
+    'setFeatureToggles'
+  ]
 
   pagesConfig.pages.forEach((page: PageConfig) => {
     if (!page.id) {
@@ -123,6 +138,82 @@ export function validatePageConfig(): ValidationError[] {
           message: `Unknown toggle key: ${page.toggleKey}. Must match a key in FeatureToggles type.`,
           severity: 'error',
         })
+      }
+    }
+    
+    if (page.props) {
+      if (page.props.state) {
+        page.props.state.forEach(stateKey => {
+          const [, contextKey] = stateKey.includes(':') 
+            ? stateKey.split(':') 
+            : [stateKey, stateKey]
+          
+          if (!validStateKeys.includes(contextKey)) {
+            errors.push({
+              page: page.id || 'Unknown',
+              field: 'props.state',
+              message: `Unknown state key: ${contextKey}. Valid keys: ${validStateKeys.join(', ')}`,
+              severity: 'error',
+            })
+          }
+        })
+      }
+      
+      if (page.props.actions) {
+        page.props.actions.forEach(actionKey => {
+          const [, contextKey] = actionKey.split(':')
+          
+          if (!contextKey) {
+            errors.push({
+              page: page.id || 'Unknown',
+              field: 'props.actions',
+              message: `Action key must use format "propName:functionName". Got: ${actionKey}`,
+              severity: 'error',
+            })
+          } else if (!validActionKeys.includes(contextKey)) {
+            errors.push({
+              page: page.id || 'Unknown',
+              field: 'props.actions',
+              message: `Unknown action key: ${contextKey}. Valid keys: ${validActionKeys.join(', ')}`,
+              severity: 'error',
+            })
+          }
+        })
+      }
+    }
+    
+    if (page.requiresResizable) {
+      if (!page.resizableConfig) {
+        errors.push({
+          page: page.id || 'Unknown',
+          field: 'resizableConfig',
+          message: 'resizableConfig is required when requiresResizable is true',
+          severity: 'error',
+        })
+      } else {
+        if (!page.resizableConfig.leftComponent) {
+          errors.push({
+            page: page.id || 'Unknown',
+            field: 'resizableConfig.leftComponent',
+            message: 'leftComponent is required in resizableConfig',
+            severity: 'error',
+          })
+        }
+        
+        const leftPanel = page.resizableConfig.leftPanel
+        const rightPanel = page.resizableConfig.rightPanel
+        
+        if (leftPanel && rightPanel) {
+          const totalSize = leftPanel.defaultSize + rightPanel.defaultSize
+          if (totalSize !== 100) {
+            errors.push({
+              page: page.id || 'Unknown',
+              field: 'resizableConfig',
+              message: `Panel defaultSize values must sum to 100. Got: ${totalSize}`,
+              severity: 'warning',
+            })
+          }
+        }
       }
     }
   })

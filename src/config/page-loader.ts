@@ -1,6 +1,24 @@
 import pagesConfig from './pages.json'
 import { FeatureToggles } from '@/types/project'
 
+export interface PropConfig {
+  state?: string[]
+  actions?: string[]
+}
+
+export interface ResizableConfig {
+  leftComponent: string
+  leftProps: PropConfig
+  leftPanel: {
+    defaultSize: number
+    minSize: number
+    maxSize: number
+  }
+  rightPanel: {
+    defaultSize: number
+  }
+}
+
 export interface PageConfig {
   id: string
   title: string
@@ -11,6 +29,8 @@ export interface PageConfig {
   shortcut?: string
   order: number
   requiresResizable?: boolean
+  props?: PropConfig
+  resizableConfig?: ResizableConfig
 }
 
 export interface PagesConfig {
@@ -56,4 +76,34 @@ export function getPageShortcuts(featureToggles?: FeatureToggles): Array<{
         action: page.id
       }
     })
+}
+
+export function resolveProps(propConfig: PropConfig | undefined, stateContext: Record<string, any>, actionContext: Record<string, any>): Record<string, any> {
+  if (!propConfig) return {}
+  
+  const resolvedProps: Record<string, any> = {}
+  
+  if (propConfig.state) {
+    for (const stateKey of propConfig.state) {
+      const [propName, contextKey] = stateKey.includes(':') 
+        ? stateKey.split(':') 
+        : [stateKey, stateKey]
+      
+      if (stateContext[contextKey] !== undefined) {
+        resolvedProps[propName] = stateContext[contextKey]
+      }
+    }
+  }
+  
+  if (propConfig.actions) {
+    for (const actionKey of propConfig.actions) {
+      const [propName, contextKey] = actionKey.split(':')
+      
+      if (actionContext[contextKey]) {
+        resolvedProps[propName] = actionContext[contextKey]
+      }
+    }
+  }
+  
+  return resolvedProps
 }
