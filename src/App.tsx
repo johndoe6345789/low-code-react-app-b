@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow } from '@phosphor-icons/react'
-import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda } from '@/types/project'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders } from '@phosphor-icons/react'
+import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
@@ -26,6 +26,7 @@ import { DocumentationView } from '@/components/DocumentationView'
 import { SassStylesShowcase } from '@/components/SassStylesShowcase'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
 import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog'
+import { FeatureToggleSettings } from '@/components/FeatureToggleSettings'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -76,6 +77,23 @@ const DEFAULT_NPM_SETTINGS: NpmSettings = {
     lint: 'next lint',
   },
   packageManager: 'npm',
+}
+
+const DEFAULT_FEATURE_TOGGLES: FeatureToggles = {
+  codeEditor: true,
+  models: true,
+  components: true,
+  componentTrees: true,
+  workflows: true,
+  lambdas: true,
+  styling: true,
+  flaskApi: true,
+  playwright: true,
+  storybook: true,
+  unitTests: true,
+  errorRepair: true,
+  documentation: true,
+  sassStyles: true,
 }
 
 const DEFAULT_THEME: ThemeConfig = {
@@ -162,6 +180,7 @@ function App() {
   const [flaskConfig, setFlaskConfig] = useKV<FlaskConfig>('project-flask-config', DEFAULT_FLASK_CONFIG)
   const [nextjsConfig, setNextjsConfig] = useKV<NextJsConfig>('project-nextjs-config', DEFAULT_NEXTJS_CONFIG)
   const [npmSettings, setNpmSettings] = useKV<NpmSettings>('project-npm-settings', DEFAULT_NPM_SETTINGS)
+  const [featureToggles, setFeatureToggles] = useKV<FeatureToggles>('project-feature-toggles', DEFAULT_FEATURE_TOGGLES)
   const [activeFileId, setActiveFileId] = useState<string | null>((files || [])[0]?.id || null)
   const [activeTab, setActiveTab] = useState('dashboard')
   const [exportDialogOpen, setExportDialogOpen] = useState(false)
@@ -181,12 +200,19 @@ function App() {
   const safeFlaskConfig = flaskConfig || DEFAULT_FLASK_CONFIG
   const safeNextjsConfig = nextjsConfig || DEFAULT_NEXTJS_CONFIG
   const safeNpmSettings = npmSettings || DEFAULT_NPM_SETTINGS
+  const safeFeatureToggles = featureToggles || DEFAULT_FEATURE_TOGGLES
 
   useEffect(() => {
     if (!theme || !theme.variants || theme.variants.length === 0) {
       setTheme(DEFAULT_THEME)
     }
   }, [theme, setTheme])
+
+  useEffect(() => {
+    if (!featureToggles) {
+      setFeatureToggles(DEFAULT_FEATURE_TOGGLES)
+    }
+  }, [featureToggles, setFeatureToggles])
 
   const { errors: autoDetectedErrors } = useAutoRepair(safeFiles, false)
 
@@ -197,48 +223,48 @@ function App() {
       description: 'Go to Dashboard',
       action: () => setActiveTab('dashboard'),
     },
-    {
+    ...(safeFeatureToggles.codeEditor ? [{
       key: '2',
       ctrl: true,
       description: 'Go to Code Editor',
       action: () => setActiveTab('code'),
-    },
-    {
+    }] : []),
+    ...(safeFeatureToggles.models ? [{
       key: '3',
       ctrl: true,
       description: 'Go to Models',
       action: () => setActiveTab('models'),
-    },
-    {
+    }] : []),
+    ...(safeFeatureToggles.components ? [{
       key: '4',
       ctrl: true,
       description: 'Go to Components',
       action: () => setActiveTab('components'),
-    },
-    {
+    }] : []),
+    ...(safeFeatureToggles.componentTrees ? [{
       key: '5',
       ctrl: true,
       description: 'Go to Component Trees',
       action: () => setActiveTab('component-trees'),
-    },
-    {
+    }] : []),
+    ...(safeFeatureToggles.workflows ? [{
       key: '6',
       ctrl: true,
       description: 'Go to Workflows',
       action: () => setActiveTab('workflows'),
-    },
-    {
+    }] : []),
+    ...(safeFeatureToggles.lambdas ? [{
       key: '7',
       ctrl: true,
       description: 'Go to Lambdas',
       action: () => setActiveTab('lambdas'),
-    },
-    {
+    }] : []),
+    ...(safeFeatureToggles.styling ? [{
       key: '8',
       ctrl: true,
       description: 'Go to Styling',
       action: () => setActiveTab('styling'),
-    },
+    }] : []),
     {
       key: 'e',
       ctrl: true,
@@ -444,7 +470,7 @@ Navigate to the backend directory and follow the setup instructions.
             </div>
           </div>
           <div className="flex gap-2">
-            {autoDetectedErrors.length > 0 && (
+            {safeFeatureToggles.errorRepair && autoDetectedErrors.length > 0 && (
               <Button 
                 variant="outline" 
                 onClick={() => setActiveTab('errors')}
@@ -454,6 +480,14 @@ Navigate to the backend directory and follow the setup instructions.
                 {autoDetectedErrors.length} {autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}
               </Button>
             )}
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setActiveTab('features')}
+              title="Toggle Features"
+            >
+              <Faders size={20} />
+            </Button>
             <Button 
               variant="ghost" 
               size="icon"
@@ -481,71 +515,103 @@ Navigate to the backend directory and follow the setup instructions.
               <ChartBar size={18} />
               Dashboard
             </TabsTrigger>
-            <TabsTrigger value="code" className="gap-2">
-              <Code size={18} />
-              Code Editor
-            </TabsTrigger>
-            <TabsTrigger value="models" className="gap-2">
-              <Database size={18} />
-              Models
-            </TabsTrigger>
-            <TabsTrigger value="components" className="gap-2">
-              <Tree size={18} />
-              Components
-            </TabsTrigger>
-            <TabsTrigger value="component-trees" className="gap-2">
-              <Tree size={18} />
-              Component Trees
-            </TabsTrigger>
-            <TabsTrigger value="workflows" className="gap-2">
-              <FlowArrow size={18} />
-              Workflows
-            </TabsTrigger>
-            <TabsTrigger value="lambdas" className="gap-2">
-              <Code size={18} />
-              Lambdas
-            </TabsTrigger>
-            <TabsTrigger value="styling" className="gap-2">
-              <PaintBrush size={18} />
-              Styling
-            </TabsTrigger>
-            <TabsTrigger value="flask" className="gap-2">
-              <Flask size={18} />
-              Flask API
-            </TabsTrigger>
+            {safeFeatureToggles.codeEditor && (
+              <TabsTrigger value="code" className="gap-2">
+                <Code size={18} />
+                Code Editor
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.models && (
+              <TabsTrigger value="models" className="gap-2">
+                <Database size={18} />
+                Models
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.components && (
+              <TabsTrigger value="components" className="gap-2">
+                <Tree size={18} />
+                Components
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.componentTrees && (
+              <TabsTrigger value="component-trees" className="gap-2">
+                <Tree size={18} />
+                Component Trees
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.workflows && (
+              <TabsTrigger value="workflows" className="gap-2">
+                <FlowArrow size={18} />
+                Workflows
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.lambdas && (
+              <TabsTrigger value="lambdas" className="gap-2">
+                <Code size={18} />
+                Lambdas
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.styling && (
+              <TabsTrigger value="styling" className="gap-2">
+                <PaintBrush size={18} />
+                Styling
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.flaskApi && (
+              <TabsTrigger value="flask" className="gap-2">
+                <Flask size={18} />
+                Flask API
+              </TabsTrigger>
+            )}
             <TabsTrigger value="settings" className="gap-2">
               <Gear size={18} />
               Settings
             </TabsTrigger>
-            <TabsTrigger value="playwright" className="gap-2">
-              <Play size={18} />
-              Playwright
+            <TabsTrigger value="features" className="gap-2">
+              <Faders size={18} />
+              Features
             </TabsTrigger>
-            <TabsTrigger value="storybook" className="gap-2">
-              <BookOpen size={18} />
-              Storybook
-            </TabsTrigger>
-            <TabsTrigger value="unit-tests" className="gap-2">
-              <Cube size={18} />
-              Unit Tests
-            </TabsTrigger>
-            <TabsTrigger value="errors" className="gap-2">
-              <Wrench size={18} />
-              Error Repair
-              {autoDetectedErrors.length > 0 && (
-                <Badge variant="destructive" className="ml-1">
-                  {autoDetectedErrors.length}
-                </Badge>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="docs" className="gap-2">
-              <FileText size={18} />
-              Documentation
-            </TabsTrigger>
-            <TabsTrigger value="sass" className="gap-2">
-              <PaintBrush size={18} />
-              Sass Styles
-            </TabsTrigger>
+            {safeFeatureToggles.playwright && (
+              <TabsTrigger value="playwright" className="gap-2">
+                <Play size={18} />
+                Playwright
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.storybook && (
+              <TabsTrigger value="storybook" className="gap-2">
+                <BookOpen size={18} />
+                Storybook
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.unitTests && (
+              <TabsTrigger value="unit-tests" className="gap-2">
+                <Cube size={18} />
+                Unit Tests
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.errorRepair && (
+              <TabsTrigger value="errors" className="gap-2">
+                <Wrench size={18} />
+                Error Repair
+                {autoDetectedErrors.length > 0 && (
+                  <Badge variant="destructive" className="ml-1">
+                    {autoDetectedErrors.length}
+                  </Badge>
+                )}
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.documentation && (
+              <TabsTrigger value="docs" className="gap-2">
+                <FileText size={18} />
+                Documentation
+              </TabsTrigger>
+            )}
+            {safeFeatureToggles.sassStyles && (
+              <TabsTrigger value="sass" className="gap-2">
+                <PaintBrush size={18} />
+                Sass Styles
+              </TabsTrigger>
+            )}
           </TabsList>
         </div>
 
@@ -563,68 +629,84 @@ Navigate to the backend directory and follow the setup instructions.
             />
           </TabsContent>
 
-          <TabsContent value="code" className="h-full m-0">
-            <ResizablePanelGroup direction="horizontal">
-              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
-                <FileExplorer
-                  files={safeFiles}
-                  activeFileId={activeFileId}
-                  onFileSelect={setActiveFileId}
-                  onFileAdd={handleFileAdd}
-                />
-              </ResizablePanel>
-              <ResizableHandle />
-              <ResizablePanel defaultSize={80}>
-                <CodeEditor
-                  files={safeFiles}
-                  activeFileId={activeFileId}
-                  onFileChange={handleFileChange}
-                  onFileSelect={setActiveFileId}
-                  onFileClose={handleFileClose}
-                />
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </TabsContent>
+          {safeFeatureToggles.codeEditor && (
+            <TabsContent value="code" className="h-full m-0">
+              <ResizablePanelGroup direction="horizontal">
+                <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                  <FileExplorer
+                    files={safeFiles}
+                    activeFileId={activeFileId}
+                    onFileSelect={setActiveFileId}
+                    onFileAdd={handleFileAdd}
+                  />
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel defaultSize={80}>
+                  <CodeEditor
+                    files={safeFiles}
+                    activeFileId={activeFileId}
+                    onFileChange={handleFileChange}
+                    onFileSelect={setActiveFileId}
+                    onFileClose={handleFileClose}
+                  />
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </TabsContent>
+          )}
 
-          <TabsContent value="models" className="h-full m-0">
-            <ModelDesigner models={safeModels} onModelsChange={setModels} />
-          </TabsContent>
+          {safeFeatureToggles.models && (
+            <TabsContent value="models" className="h-full m-0">
+              <ModelDesigner models={safeModels} onModelsChange={setModels} />
+            </TabsContent>
+          )}
 
-          <TabsContent value="components" className="h-full m-0">
-            <ComponentTreeBuilder
-              components={safeComponents}
-              onComponentsChange={setComponents}
-            />
-          </TabsContent>
+          {safeFeatureToggles.components && (
+            <TabsContent value="components" className="h-full m-0">
+              <ComponentTreeBuilder
+                components={safeComponents}
+                onComponentsChange={setComponents}
+              />
+            </TabsContent>
+          )}
 
-          <TabsContent value="component-trees" className="h-full m-0">
-            <ComponentTreeManager
-              trees={safeComponentTrees}
-              onTreesChange={setComponentTrees}
-            />
-          </TabsContent>
+          {safeFeatureToggles.componentTrees && (
+            <TabsContent value="component-trees" className="h-full m-0">
+              <ComponentTreeManager
+                trees={safeComponentTrees}
+                onTreesChange={setComponentTrees}
+              />
+            </TabsContent>
+          )}
 
-          <TabsContent value="workflows" className="h-full m-0">
-            <WorkflowDesigner
-              workflows={safeWorkflows}
-              onWorkflowsChange={setWorkflows}
-            />
-          </TabsContent>
+          {safeFeatureToggles.workflows && (
+            <TabsContent value="workflows" className="h-full m-0">
+              <WorkflowDesigner
+                workflows={safeWorkflows}
+                onWorkflowsChange={setWorkflows}
+              />
+            </TabsContent>
+          )}
 
-          <TabsContent value="lambdas" className="h-full m-0">
-            <LambdaDesigner
-              lambdas={safeLambdas}
-              onLambdasChange={setLambdas}
-            />
-          </TabsContent>
+          {safeFeatureToggles.lambdas && (
+            <TabsContent value="lambdas" className="h-full m-0">
+              <LambdaDesigner
+                lambdas={safeLambdas}
+                onLambdasChange={setLambdas}
+              />
+            </TabsContent>
+          )}
 
-          <TabsContent value="styling" className="h-full m-0">
-            <StyleDesigner theme={safeTheme} onThemeChange={setTheme} />
-          </TabsContent>
+          {safeFeatureToggles.styling && (
+            <TabsContent value="styling" className="h-full m-0">
+              <StyleDesigner theme={safeTheme} onThemeChange={setTheme} />
+            </TabsContent>
+          )}
 
-          <TabsContent value="flask" className="h-full m-0">
-            <FlaskDesigner config={safeFlaskConfig} onConfigChange={setFlaskConfig} />
-          </TabsContent>
+          {safeFeatureToggles.flaskApi && (
+            <TabsContent value="flask" className="h-full m-0">
+              <FlaskDesigner config={safeFlaskConfig} onConfigChange={setFlaskConfig} />
+            </TabsContent>
+          )}
 
           <TabsContent value="settings" className="h-full m-0">
             <ProjectSettingsDesigner
@@ -635,33 +717,52 @@ Navigate to the backend directory and follow the setup instructions.
             />
           </TabsContent>
 
-          <TabsContent value="playwright" className="h-full m-0">
-            <PlaywrightDesigner tests={safePlaywrightTests} onTestsChange={setPlaywrightTests} />
-          </TabsContent>
-
-          <TabsContent value="storybook" className="h-full m-0">
-            <StorybookDesigner stories={safeStorybookStories} onStoriesChange={setStorybookStories} />
-          </TabsContent>
-
-          <TabsContent value="unit-tests" className="h-full m-0">
-            <UnitTestDesigner tests={safeUnitTests} onTestsChange={setUnitTests} />
-          </TabsContent>
-
-          <TabsContent value="errors" className="h-full m-0">
-            <ErrorPanel
-              files={safeFiles}
-              onFileChange={handleFileChange}
-              onFileSelect={setActiveFileId}
+          <TabsContent value="features" className="h-full m-0">
+            <FeatureToggleSettings
+              features={safeFeatureToggles}
+              onFeaturesChange={setFeatureToggles}
             />
           </TabsContent>
 
-          <TabsContent value="docs" className="h-full m-0">
-            <DocumentationView />
-          </TabsContent>
+          {safeFeatureToggles.playwright && (
+            <TabsContent value="playwright" className="h-full m-0">
+              <PlaywrightDesigner tests={safePlaywrightTests} onTestsChange={setPlaywrightTests} />
+            </TabsContent>
+          )}
 
-          <TabsContent value="sass" className="h-full m-0">
-            <SassStylesShowcase />
-          </TabsContent>
+          {safeFeatureToggles.storybook && (
+            <TabsContent value="storybook" className="h-full m-0">
+              <StorybookDesigner stories={safeStorybookStories} onStoriesChange={setStorybookStories} />
+            </TabsContent>
+          )}
+
+          {safeFeatureToggles.unitTests && (
+            <TabsContent value="unit-tests" className="h-full m-0">
+              <UnitTestDesigner tests={safeUnitTests} onTestsChange={setUnitTests} />
+            </TabsContent>
+          )}
+
+          {safeFeatureToggles.errorRepair && (
+            <TabsContent value="errors" className="h-full m-0">
+              <ErrorPanel
+                files={safeFiles}
+                onFileChange={handleFileChange}
+                onFileSelect={setActiveFileId}
+              />
+            </TabsContent>
+          )}
+
+          {safeFeatureToggles.documentation && (
+            <TabsContent value="docs" className="h-full m-0">
+              <DocumentationView />
+            </TabsContent>
+          )}
+
+          {safeFeatureToggles.sassStyles && (
+            <TabsContent value="sass" className="h-full m-0">
+              <SassStylesShowcase />
+            </TabsContent>
+          )}
         </div>
       </Tabs>
 

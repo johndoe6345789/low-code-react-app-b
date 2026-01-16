@@ -259,6 +259,23 @@ export interface LambdaTrigger {
   config: Record<string, any>
 }
 
+export interface FeatureToggles {
+  codeEditor: boolean
+  models: boolean
+  components: boolean
+  componentTrees: boolean
+  workflows: boolean
+  lambdas: boolean
+  styling: boolean
+  flaskApi: boolean
+  playwright: boolean
+  storybook: boolean
+  unitTests: boolean
+  errorRepair: boolean
+  documentation: boolean
+  sassStyles: boolean
+}
+
 export interface Project {
   name: string
   files: ProjectFile[]
@@ -274,4 +291,5 @@ export interface Project {
   flaskConfig?: FlaskConfig
   nextjsConfig?: NextJsConfig
   npmSettings?: NpmSettings
+  featureToggles?: FeatureToggles
 }
