@@ -39,7 +39,7 @@ export function ProjectDashboard({
   const totalFiles = files.length
   const totalModels = models.length
   const totalComponents = components.length
-  const totalThemeVariants = theme.variants.length
+  const totalThemeVariants = theme?.variants?.length || 0
   const totalEndpoints = flaskConfig.blueprints.reduce((acc, bp) => acc + bp.endpoints.length, 0)
   const totalTests = playwrightTests.length + storybookStories.length + unitTests.length
 

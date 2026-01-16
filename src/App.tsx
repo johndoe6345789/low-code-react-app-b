@@ -156,13 +156,19 @@ function App() {
   const safeFiles = files || []
   const safeModels = models || []
   const safeComponents = components || []
-  const safeTheme = theme || DEFAULT_THEME
+  const safeTheme = (theme && theme.variants && theme.variants.length > 0) ? theme : DEFAULT_THEME
   const safePlaywrightTests = playwrightTests || []
   const safeStorybookStories = storybookStories || []
   const safeUnitTests = unitTests || []
   const safeFlaskConfig = flaskConfig || DEFAULT_FLASK_CONFIG
   const safeNextjsConfig = nextjsConfig || DEFAULT_NEXTJS_CONFIG
   const safeNpmSettings = npmSettings || DEFAULT_NPM_SETTINGS
+
+  useEffect(() => {
+    if (!theme || !theme.variants || theme.variants.length === 0) {
+      setTheme(DEFAULT_THEME)
+    }
+  }, [theme, setTheme])
 
   const { errors: autoDetectedErrors } = useAutoRepair(safeFiles, false)
 
