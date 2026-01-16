@@ -179,21 +179,25 @@ function IdeaNode({ data, selected }: NodeProps<FeatureIdea>) {
       <Handle
         type="target"
         position={Position.Left}
+        id="left"
         className="w-3 h-3 !bg-primary border-2 border-background"
       />
       <Handle
         type="source"
         position={Position.Right}
+        id="right"
         className="w-3 h-3 !bg-primary border-2 border-background"
       />
       <Handle
         type="target"
         position={Position.Top}
+        id="top"
         className="w-3 h-3 !bg-primary border-2 border-background"
       />
       <Handle
         type="source"
         position={Position.Bottom}
+        id="bottom"
         className="w-3 h-3 !bg-primary border-2 border-background"
       />
       
@@ -242,6 +246,8 @@ export function FeatureIdeaCloud() {
       id: 'edge-1',
       source: 'idea-1',
       target: 'idea-8',
+      sourceHandle: 'right',
+      targetHandle: 'left',
       type: 'default',
       animated: true,
       data: { type: 'dependency', label: 'requires' },
@@ -252,6 +258,8 @@ export function FeatureIdeaCloud() {
       id: 'edge-2',
       source: 'idea-2',
       target: 'idea-4',
+      sourceHandle: 'bottom',
+      targetHandle: 'top',
       type: 'default',
       data: { type: 'association', label: 'works with' },
       markerEnd: { type: MarkerType.Arrow, color: '#a78bfa', width: 20, height: 20 },
@@ -261,6 +269,8 @@ export function FeatureIdeaCloud() {
       id: 'edge-3',
       source: 'idea-8',
       target: 'idea-5',
+      sourceHandle: 'bottom',
+      targetHandle: 'left',
       type: 'default',
       data: { type: 'composition', label: 'includes' },
       markerEnd: { type: MarkerType.ArrowClosed, color: '#f87171', width: 20, height: 20 },
@@ -345,13 +355,24 @@ export function FeatureIdeaCloud() {
     (params: RFConnection) => {
       if (!params.source || !params.target) return
       
-      const isHandleAlreadyUsed = edges.some(edge => 
-        (edge.source === params.source && edge.sourceHandle === params.sourceHandle) ||
-        (edge.target === params.target && edge.targetHandle === params.targetHandle)
+      const sourceHandleId = params.sourceHandle || 'default'
+      const targetHandleId = params.targetHandle || 'default'
+      
+      const isSourceHandleUsed = edges.some(edge => 
+        edge.source === params.source && (edge.sourceHandle || 'default') === sourceHandleId
       )
       
-      if (isHandleAlreadyUsed) {
-        toast.error('Connection point already in use. Each handle can only have one connection.')
+      const isTargetHandleUsed = edges.some(edge => 
+        edge.target === params.target && (edge.targetHandle || 'default') === targetHandleId
+      )
+      
+      if (isSourceHandleUsed) {
+        toast.error('Source connection point already in use. Each handle can only have one arrow.')
+        return
+      }
+      
+      if (isTargetHandleUsed) {
+        toast.error('Target connection point already in use. Each handle can only have one arrow.')
         return
       }
       
@@ -404,15 +425,29 @@ export function FeatureIdeaCloud() {
   }, [])
 
   const onReconnect = useCallback((oldEdge: Edge, newConnection: RFConnection) => {
-    const isHandleAlreadyUsed = edges.some(edge => 
-      edge.id !== oldEdge.id && (
-        (edge.source === newConnection.source && edge.sourceHandle === newConnection.sourceHandle) ||
-        (edge.target === newConnection.target && edge.targetHandle === newConnection.targetHandle)
-      )
+    const newSourceHandleId = newConnection.sourceHandle || 'default'
+    const newTargetHandleId = newConnection.targetHandle || 'default'
+    
+    const isSourceHandleUsed = edges.some(edge => 
+      edge.id !== oldEdge.id && 
+      edge.source === newConnection.source && 
+      (edge.sourceHandle || 'default') === newSourceHandleId
     )
     
-    if (isHandleAlreadyUsed) {
-      toast.error('Connection point already in use. Each handle can only have one connection.')
+    const isTargetHandleUsed = edges.some(edge => 
+      edge.id !== oldEdge.id && 
+      edge.target === newConnection.target && 
+      (edge.targetHandle || 'default') === newTargetHandleId
+    )
+    
+    if (isSourceHandleUsed) {
+      toast.error('Source connection point already in use. Each handle can only have one arrow.')
+      edgeReconnectSuccessful.current = false
+      return
+    }
+    
+    if (isTargetHandleUsed) {
+      toast.error('Target connection point already in use. Each handle can only have one arrow.')
       edgeReconnectSuccessful.current = false
       return
     }
