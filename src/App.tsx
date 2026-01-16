@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -19,6 +19,7 @@ import { UnitTestDesigner } from '@/components/UnitTestDesigner'
 import { FlaskDesigner } from '@/components/FlaskDesigner'
 import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
 import { ErrorPanel } from '@/components/ErrorPanel'
+import { DocumentationView } from '@/components/DocumentationView'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
 import { toast } from 'sonner'
@@ -345,6 +346,10 @@ function App() {
                 </Badge>
               )}
             </TabsTrigger>
+            <TabsTrigger value="docs" className="gap-2">
+              <FileText size={18} />
+              Documentation
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -418,6 +423,10 @@ function App() {
               onFileChange={handleFileChange}
               onFileSelect={setActiveFileId}
             />
+          </TabsContent>
+
+          <TabsContent value="docs" className="h-full m-0">
+            <DocumentationView />
           </TabsContent>
         </div>
       </Tabs>
