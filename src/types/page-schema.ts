@@ -9,14 +9,14 @@ export const DataBindingSchema = z.object({
 export const EventHandlerSchema = z.object({
   event: z.string(),
   action: z.string(),
-  params: z.record(z.any()).optional(),
+  params: z.record(z.string(), z.any()).optional(),
 })
 
 export const ComponentSchema: z.ZodType<any> = z.lazy(() => 
   z.object({
     id: z.string(),
     type: z.string(),
-    props: z.record(z.any()).optional(),
+    props: z.record(z.string(), z.any()).optional(),
     children: z.array(ComponentSchema).optional(),
     bindings: z.array(DataBindingSchema).optional(),
     events: z.array(EventHandlerSchema).optional(),
@@ -26,7 +26,7 @@ export const ComponentSchema: z.ZodType<any> = z.lazy(() =>
 
 export const DataSourceSchema = z.object({
   id: z.string(),
-  type: z.enum(['kv', 'computed', 'static', 'ai']),
+  type: z.enum(['kv', 'computed', 'static', 'ai'], { message: 'Invalid data source type' }),
   key: z.string().optional(),
   defaultValue: z.any().optional(),
   dependencies: z.array(z.string()).optional(),
@@ -35,9 +35,9 @@ export const DataSourceSchema = z.object({
 
 export const ActionConfigSchema = z.object({
   id: z.string(),
-  type: z.enum(['create', 'update', 'delete', 'navigate', 'ai-generate', 'custom']),
+  type: z.enum(['create', 'update', 'delete', 'navigate', 'ai-generate', 'custom'], { message: 'Invalid action type' }),
   trigger: z.string(),
-  params: z.record(z.any()).optional(),
+  params: z.record(z.string(), z.any()).optional(),
   onSuccess: z.string().optional(),
   onError: z.string().optional(),
   handler: z.string().optional(),
@@ -46,13 +46,13 @@ export const ActionConfigSchema = z.object({
 export const HookConfigSchema = z.object({
   id: z.string(),
   name: z.string(),
-  params: z.record(z.any()).optional(),
+  params: z.record(z.string(), z.any()).optional(),
   exports: z.array(z.string()).optional(),
 })
 
 export const LayoutConfigSchema = z.object({
-  type: z.enum(['single', 'split', 'tabs', 'grid']),
-  direction: z.enum(['horizontal', 'vertical']).optional(),
+  type: z.enum(['single', 'split', 'tabs', 'grid'], { message: 'Invalid layout type' }),
+  direction: z.enum(['horizontal', 'vertical'], { message: 'Invalid direction' }).optional(),
   sizes: z.array(z.number()).optional(),
   gap: z.number().optional(),
 })
@@ -66,7 +66,7 @@ export const PageSchemaType = z.object({
   data: z.array(DataSourceSchema).optional(),
   actions: z.array(ActionConfigSchema).optional(),
   hooks: z.array(HookConfigSchema).optional(),
-  seedData: z.record(z.any()).optional(),
+  seedData: z.record(z.string(), z.any()).optional(),
 })
 
 export type PageSchema = z.infer<typeof PageSchemaType>

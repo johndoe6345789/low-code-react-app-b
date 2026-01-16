@@ -11,12 +11,12 @@ Return a valid JSON object with a single property "component" containing the com
 {
   "component": {
     "id": "unique-id",
-    "type": "Box" (use Material UI component names like Box, Typography, Button, TextField, Grid, Paper, Card, etc.),
+    "type": "Box",
     "name": "ComponentName",
     "props": {
-      "sx": { "p": 2 } (Material UI sx props)
+      "sx": { "p": 2 }
     },
-    "children": [] (array of nested components following same structure)
+    "children": []
   }
 }
 
@@ -41,7 +41,8 @@ Make sure to use appropriate Material UI components and props. Keep the structur
   static async generatePrismaModel(description: string, existingModels: PrismaModel[]): Promise<PrismaModel | null> {
     try {
       const existingModelNames = existingModels.map(m => m.name).join(', ')
-      const prompt = window.spark.llmPrompt`You are a Prisma schema designer. Create a database model based on this description: ${description}
+
+      const prompt = window.spark.llmPrompt`You are a Prisma schema expert. Create a Prisma model based on this description: ${description}
 
 Existing models in the schema: ${existingModelNames || 'none'}
 
@@ -49,7 +50,7 @@ Return a valid JSON object with a single property "model" containing the model s
 {
   "model": {
     "id": "unique-id-here",
-    "name": "ModelName" (PascalCase, singular),
+    "name": "ModelName",
     "fields": [
       {
         "id": "field-id-1",
@@ -63,16 +64,14 @@ Return a valid JSON object with a single property "model" containing the model s
       {
         "id": "field-id-2",
         "name": "fieldName",
-        "type": "String" (String, Int, Boolean, DateTime, Float, or existing model name for relations),
+        "type": "String",
         "isRequired": true,
         "isUnique": false,
         "isArray": false
       }
     ]
   }
-}
-
-Include an id field with uuid() default. Add createdAt and updatedAt DateTime fields with @default(now()) and @updatedAt. Use appropriate field types and relationships.`
+}`
 
       const result = await ProtectedLLMService.safeLLMCall(
         prompt,
@@ -112,7 +111,7 @@ Return ONLY the code without any markdown formatting or explanations.`
 
       const result = await ProtectedLLMService.safeLLMCall(
         prompt,
-        { jsonMode: false, priority: 'medium', category: 'generate-code' }
+        { jsonMode: false, priority: 'high', category: 'generate-code' }
       )
 
       return result ? result.trim() : null
@@ -164,9 +163,7 @@ Return a valid JSON object with a single property "theme" containing:
     "spacing": 8,
     "borderRadius": 4
   }
-}
-
-Choose colors that match the description and ensure good contrast. Use common font stacks.`
+}`
 
       const result = await ProtectedLLMService.safeLLMCall(
         prompt,
@@ -217,10 +214,9 @@ Suggest 3-5 common fields that would be useful for this model type. Use camelCas
   static async explainCode(code: string): Promise<string | null> {
     try {
       const prompt = window.spark.llmPrompt`You are a code teacher. Explain what this code does in simple terms:
-
 ${code}
 
-Provide a clear, concise explanation suitable for developers learning the codebase.`
+Provide a clear, concise explanation suitable for developers.`
 
       const result = await ProtectedLLMService.safeLLMCall(
         prompt,
@@ -236,7 +232,7 @@ Provide a clear, concise explanation suitable for developers learning the codeba
 
   static async generateCompleteApp(description: string): Promise<{ files: ProjectFile[], models: PrismaModel[], theme: Partial<ThemeConfig> } | null> {
     try {
-      const prompt = window.spark.llmPrompt`You are a full-stack application architect. Design a complete Next.js application based on: ${description}
+      const prompt = window.spark.llmPrompt`You are a full-stack architect. Generate a complete Next.js application structure based on this description: ${description}
 
 Return a valid JSON object with properties "files", "models", and "theme":
 {

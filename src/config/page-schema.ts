@@ -11,22 +11,22 @@ export const KeyboardShortcutSchema = z.object({
 export const PanelConfigSchema = z.object({
   id: z.string(),
   component: z.string(),
-  props: z.record(z.any()).optional(),
+  props: z.record(z.string(), z.any()).optional(),
   minSize: z.number().optional(),
   maxSize: z.number().optional(),
 })
 
 export const LayoutConfigSchema = z.object({
-  type: z.enum(['single', 'split', 'grid', 'tabs']),
+  type: z.enum(['single', 'split', 'grid', 'tabs'], { message: 'Invalid layout type' }),
   panels: z.array(PanelConfigSchema).optional(),
-  direction: z.enum(['horizontal', 'vertical']).optional(),
+  direction: z.enum(['horizontal', 'vertical'], { message: 'Invalid direction' }).optional(),
   defaultSizes: z.array(z.number()).optional(),
 })
 
 export const FeatureConfigSchema = z.object({
   id: z.string(),
   enabled: z.boolean(),
-  config: z.record(z.any()).optional(),
+  config: z.record(z.string(), z.any()).optional(),
 })
 
 export const PageConfigSchema = z.object({

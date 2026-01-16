@@ -2,15 +2,15 @@ import { z } from 'zod'
 
 export const ActionSchema = z.object({
   id: z.string(),
-  type: z.enum(['create', 'update', 'delete', 'navigate', 'api', 'transform', 'custom']),
+  type: z.enum(['create', 'update', 'delete', 'navigate', 'api', 'transform', 'custom'], { message: 'Invalid action type' }),
   target: z.string().optional(),
-  payload: z.record(z.any()).optional(),
+  payload: z.record(z.string(), z.any()).optional(),
   handler: z.string().optional(),
 })
 
 export const DataSourceSchema = z.object({
   id: z.string(),
-  type: z.enum(['kv', 'api', 'computed', 'static']),
+  type: z.enum(['kv', 'api', 'computed', 'static'], { message: 'Invalid data source type' }),
   key: z.string().optional(),
   endpoint: z.string().optional(),
   transform: z.string().optional(),
@@ -20,11 +20,11 @@ export const DataSourceSchema = z.object({
 
 export const HookConfigSchema = z.object({
   name: z.string(),
-  params: z.record(z.any()).optional(),
-  bindings: z.record(z.string()).optional(),
+  params: z.record(z.string(), z.any()).optional(),
+  bindings: z.record(z.string(), z.string()).optional(),
 })
 
-export const ComponentPropsSchema = z.record(z.any())
+export const ComponentPropsSchema = z.record(z.string(), z.any())
 
 export const ComponentSchema: any = z.object({
   id: z.string(),
@@ -32,12 +32,12 @@ export const ComponentSchema: any = z.object({
   props: ComponentPropsSchema.optional(),
   children: z.lazy(() => z.array(ComponentSchema)).optional(),
   dataBinding: z.string().optional(),
-  eventHandlers: z.record(z.string()).optional(),
+  eventHandlers: z.record(z.string(), z.string()).optional(),
 })
 
 export const LayoutSchema = z.object({
-  type: z.enum(['single', 'split', 'grid', 'tabs', 'flex']),
-  direction: z.enum(['horizontal', 'vertical', 'row', 'column']).optional(),
+  type: z.enum(['single', 'split', 'grid', 'tabs', 'flex'], { message: 'Invalid layout type' }),
+  direction: z.enum(['horizontal', 'vertical', 'row', 'column'], { message: 'Invalid layout direction' }).optional(),
   panels: z.array(z.object({
     id: z.string(),
     minSize: z.number().optional(),
@@ -56,7 +56,7 @@ export const PageSchemaDefinition = z.object({
   dataSources: z.array(DataSourceSchema).optional(),
   actions: z.array(ActionSchema).optional(),
   hooks: z.array(HookConfigSchema).optional(),
-  seedData: z.record(z.any()).optional(),
+  seedData: z.record(z.string(), z.any()).optional(),
   permissions: z.array(z.string()).optional(),
 })
 

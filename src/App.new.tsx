@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Toaster } from 'sonner'
+import { toast, Toaster } from 'sonner'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
@@ -65,10 +65,45 @@ function App() {
     setNextjsConfig,
     setNpmSettings,
     setFeatureToggles,
-    lastSaved,
-    getCurrentProject,
-    loadProject,
   } = useProjectState()
+
+  const [lastSaved] = useState<number | null>(Date.now())
+
+  const getCurrentProject = () => ({
+    name: nextjsConfig.appName,
+    files,
+    models,
+    components,
+    componentTrees,
+    workflows,
+    lambdas,
+    theme,
+    playwrightTests,
+    storybookStories,
+    unitTests,
+    flaskConfig,
+    nextjsConfig,
+    npmSettings,
+    featureToggles,
+  })
+
+  const loadProject = (project: any) => {
+    if (project.files) setFiles(project.files)
+    if (project.models) setModels(project.models)
+    if (project.components) setComponents(project.components)
+    if (project.componentTrees) setComponentTrees(project.componentTrees)
+    if (project.workflows) setWorkflows(project.workflows)
+    if (project.lambdas) setLambdas(project.lambdas)
+    if (project.theme) setTheme(project.theme)
+    if (project.playwrightTests) setPlaywrightTests(project.playwrightTests)
+    if (project.storybookStories) setStorybookStories(project.storybookStories)
+    if (project.unitTests) setUnitTests(project.unitTests)
+    if (project.flaskConfig) setFlaskConfig(project.flaskConfig)
+    if (project.nextjsConfig) setNextjsConfig(project.nextjsConfig)
+    if (project.npmSettings) setNpmSettings(project.npmSettings)
+    if (project.featureToggles) setFeatureToggles(project.featureToggles)
+    toast.success('Project loaded')
+  }
 
   const {
     activeFileId,
@@ -78,7 +113,7 @@ function App() {
     handleFileClose,
   } = useFileOperations(files, setFiles)
 
-  const { handleExportProject, exportDialogOpen, setExportDialogOpen, generatedCode, handleDownloadZip } = useProjectExport({
+  const { handleExportProject, exportDialogOpen, setExportDialogOpen, generatedCode, handleDownloadZip } = useProjectExport(
     files,
     models,
     components,
@@ -88,8 +123,8 @@ function App() {
     unitTests,
     flaskConfig,
     nextjsConfig,
-    npmSettings,
-  })
+    npmSettings
+  )
 
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchDialogOpen, setSearchDialogOpen] = useState(false)

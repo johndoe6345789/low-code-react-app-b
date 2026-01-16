@@ -45,11 +45,12 @@ export async function executeAction(
 
       case 'api':
         if (action.payload?.endpoint) {
-          const response = await fetch(action.payload.endpoint, {
+          const fetchOptions: RequestInit = {
             method: action.payload.method || 'GET',
-            headers: action.payload.headers || {},
+            headers: action.payload.headers || undefined,
             body: action.payload.body ? JSON.stringify(action.payload.body) : undefined,
-          })
+          }
+          const response = await fetch(action.payload.endpoint, fetchOptions)
           const data = await response.json()
           if (action.target) {
             context.updateData(action.target, data)
