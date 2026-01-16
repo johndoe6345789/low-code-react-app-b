@@ -8,7 +8,6 @@ import ReactFlow, {
   BackgroundVariant,
   useNodesState,
   useEdgesState,
-  addEdge,
   Connection as RFConnection,
   MarkerType,
   ConnectionMode,
@@ -544,7 +543,7 @@ export function FeatureIdeaCloud() {
         
         console.log('[Connection] Creating new edge:', newEdge.id)
         
-        const updatedEdges = addEdge(newEdge, filteredEdges)
+        const updatedEdges = [...filteredEdges, newEdge]
         
         console.log('[Connection] Total edges AFTER addition:', updatedEdges.length)
         console.log('[Connection] Final edge list:')
