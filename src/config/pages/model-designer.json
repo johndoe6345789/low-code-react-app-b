@@ -1,0 +1,165 @@
+{
+  "id": "model-designer",
+  "name": "Model Designer",
+  "description": "Visual Prisma model designer",
+  "layout": {
+    "type": "single"
+  },
+  "components": [
+    {
+      "id": "main-container",
+      "type": "div",
+      "props": {
+        "className": "h-full p-6"
+      },
+      "children": [
+        {
+          "id": "header",
+          "type": "div",
+          "props": {
+            "className": "flex items-center justify-between mb-6"
+          },
+          "children": [
+            {
+              "id": "title",
+              "type": "h1",
+              "props": {
+                "className": "text-2xl font-bold",
+                "children": "Models"
+              }
+            },
+            {
+              "id": "actions",
+              "type": "div",
+              "props": {
+                "className": "flex gap-2"
+              },
+              "children": [
+                {
+                  "id": "add-model-button",
+                  "type": "Button",
+                  "props": {
+                    "variant": "default"
+                  },
+                  "events": [
+                    {
+                      "event": "onClick",
+                      "action": "add-model"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "add-button-text",
+                      "type": "span",
+                      "props": {
+                        "children": "Add Model"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "ai-generate-button",
+                  "type": "Button",
+                  "props": {
+                    "variant": "outline"
+                  },
+                  "events": [
+                    {
+                      "event": "onClick",
+                      "action": "ai-generate-models"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": "ai-button-text",
+                      "type": "span",
+                      "props": {
+                        "children": "AI Generate"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "models-grid",
+          "type": "div",
+          "props": {
+            "className": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          },
+          "children": []
+        },
+        {
+          "id": "empty-state",
+          "type": "Card",
+          "props": {
+            "className": "p-8 text-center"
+          },
+          "condition": "context.models.length === 0",
+          "children": [
+            {
+              "id": "empty-text",
+              "type": "p",
+              "props": {
+                "className": "text-muted-foreground",
+                "children": "No models yet. Create your first model to get started."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "id": "add-model",
+      "type": "create",
+      "trigger": "button-click",
+      "params": {
+        "target": "Models",
+        "data": {
+          "id": "${Date.now()}",
+          "name": "NewModel",
+          "fields": [],
+          "relations": []
+        }
+      }
+    },
+    {
+      "id": "ai-generate-models",
+      "type": "ai-generate",
+      "trigger": "button-click",
+      "params": {
+        "prompt": "Generate a complete set of Prisma models for a typical e-commerce application including User, Product, Order, and related entities with proper relationships.",
+        "target": "Models"
+      }
+    }
+  ],
+  "seedData": {
+    "exampleModel": {
+      "id": "example-1",
+      "name": "User",
+      "fields": [
+        {
+          "name": "id",
+          "type": "String",
+          "isId": true,
+          "default": "uuid()"
+        },
+        {
+          "name": "email",
+          "type": "String",
+          "isUnique": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "isOptional": true
+        }
+      ],
+      "relations": []
+    }
+  }
+}
