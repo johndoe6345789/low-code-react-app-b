@@ -229,8 +229,11 @@ export function FeatureIdeaCloud() {
       }
       return
     }
-    
-    if (tool === 'select' && !draggedIdea) {
+  }
+
+  const handleIdeaDoubleClick = (idea: FeatureIdea, e: React.MouseEvent) => {
+    if (tool === 'select') {
+      e.stopPropagation()
       setSelectedIdea(idea)
       setViewDialogOpen(true)
     }
@@ -528,7 +531,7 @@ export function FeatureIdeaCloud() {
       </div>
 
       <div className="absolute bottom-4 right-4 z-10 bg-card border border-border rounded-lg shadow-lg p-2 text-xs text-muted-foreground">
-        <p>💡 <strong>Tip:</strong> Drag ideas to move, scroll to zoom</p>
+        <p>💡 <strong>Tip:</strong> Double-click to view, drag to move, scroll to zoom</p>
       </div>
 
       <div
@@ -570,6 +573,7 @@ export function FeatureIdeaCloud() {
               transition={{ type: 'spring', stiffness: 260, damping: 20 }}
               onMouseDown={(e) => handleIdeaMouseDown(idea, e)}
               onClick={(e) => handleIdeaClick(idea, e)}
+              onDoubleClick={(e) => handleIdeaDoubleClick(idea, e)}
             >
               <Card className={`p-4 shadow-xl hover:shadow-2xl transition-all border-2 ${PRIORITY_COLORS[idea.priority]} w-[240px] ${connectingFrom === idea.id ? 'ring-4 ring-primary' : ''}`}>
                 <div className="space-y-2">
