@@ -96,6 +96,13 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Progression**: User finalizes design → Clicks export → System bundles files → Downloads zip or shows code → User extracts and runs locally
 - **Success criteria**: Generated project structure is valid; includes package.json; code runs without errors
 
+### Custom Sass Styling System
+- **Functionality**: Comprehensive Sass-based styling system for non-standard Material UI components with pre-built components, utilities, mixins, and animations
+- **Purpose**: Extend Material UI with custom styled components and provide consistent design patterns through Sass
+- **Trigger**: Using Sass classes in components or importing Sass modules for custom styling
+- **Progression**: Import main.scss → Apply custom component classes → Use mixins for custom styles → Configure variables for theming
+- **Success criteria**: All Sass styles compile correctly; custom components render with proper styling; mixins work as expected; animations are smooth and respect reduced motion preferences
+
 ## Edge Case Handling
 - **Empty Projects**: Show welcome screen with quick-start templates when no project exists; AI can generate entire projects from scratch
 - **Invalid Prisma Schemas**: Validate models and show inline errors before generating code

@@ -46,6 +46,10 @@ export function DocumentationView() {
               <FileCode size={18} />
               Agents Files
             </TabsTrigger>
+            <TabsTrigger value="sass" className="gap-2">
+              <PaintBrush size={18} />
+              Sass Styles Guide
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -728,9 +732,413 @@ export function DocumentationView() {
                 </div>
               </div>
             </TabsContent>
+
+            <TabsContent value="sass" className="m-0 space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <PaintBrush size={32} weight="duotone" className="text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-4xl font-bold">Sass Styles Guide</h1>
+                    <p className="text-lg text-muted-foreground">
+                      Custom Material UI components with Sass
+                    </p>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">Overview</h2>
+                  <p className="text-foreground/90 leading-relaxed">
+                    CodeForge includes a comprehensive Sass-based styling system for non-standard Material UI components. 
+                    This system provides pre-built components, utilities, mixins, and animations that extend beyond the 
+                    standard Material UI component library.
+                  </p>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>File Structure</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-2">
+                      <code className="text-sm font-mono text-accent">src/styles/_variables.scss</code>
+                      <p className="text-sm text-muted-foreground ml-4">
+                        Color palettes, spacing scales, typography, transitions, and other design tokens
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <code className="text-sm font-mono text-accent">src/styles/_utilities.scss</code>
+                      <p className="text-sm text-muted-foreground ml-4">
+                        Mixins and functions for responsive design, colors, typography, and layout helpers
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <code className="text-sm font-mono text-accent">src/styles/_animations.scss</code>
+                      <p className="text-sm text-muted-foreground ml-4">
+                        Keyframe animations and animation utility classes for transitions and effects
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <code className="text-sm font-mono text-accent">src/styles/material-ui-custom.scss</code>
+                      <p className="text-sm text-muted-foreground ml-4">
+                        Custom Material UI component styles with variants and states
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <code className="text-sm font-mono text-accent">src/styles/main.scss</code>
+                      <p className="text-sm text-muted-foreground ml-4">
+                        Main entry point that imports all Sass modules and provides layout components
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Available Components</CardTitle>
+                    <CardDescription>Custom Material UI components built with Sass</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <SassComponentItem 
+                        name="Buttons"
+                        classes={['mui-custom-button--primary', 'mui-custom-button--secondary', 'mui-custom-button--accent', 'mui-custom-button--outline', 'mui-custom-button--ghost']}
+                        description="Custom styled buttons with hover effects and variants"
+                      />
+                      <SassComponentItem 
+                        name="Cards"
+                        classes={['mui-custom-card', 'mui-custom-card--gradient', 'mui-custom-card--glass']}
+                        description="Elevated cards with gradient and glassmorphism variants"
+                      />
+                      <SassComponentItem 
+                        name="Inputs"
+                        classes={['mui-custom-input', 'mui-custom-input--error', 'mui-custom-input--success']}
+                        description="Form inputs with focus states and validation styling"
+                      />
+                      <SassComponentItem 
+                        name="Chips"
+                        classes={['mui-custom-chip--primary', 'mui-custom-chip--success', 'mui-custom-chip--error', 'mui-custom-chip--warning']}
+                        description="Status chips and tags with color variants"
+                      />
+                      <SassComponentItem 
+                        name="Panels"
+                        classes={['mui-custom-panel', 'mui-custom-panel--with-header']}
+                        description="Content panels with headers and footers"
+                      />
+                      <SassComponentItem 
+                        name="Dialogs"
+                        classes={['mui-custom-dialog']}
+                        description="Modal dialogs with backdrop blur effects"
+                      />
+                      <SassComponentItem 
+                        name="Badges"
+                        classes={['custom-mui-badge', 'custom-mui-badge--dot']}
+                        description="Notification badges and indicators"
+                      />
+                      <SassComponentItem 
+                        name="Progress"
+                        classes={['mui-custom-progress', 'mui-custom-progress--indeterminate']}
+                        description="Loading progress bars with animations"
+                      />
+                      <SassComponentItem 
+                        name="Skeletons"
+                        classes={['mui-custom-skeleton--text', 'mui-custom-skeleton--circle', 'mui-custom-skeleton--rect']}
+                        description="Loading skeleton placeholders with shimmer effect"
+                      />
+                      <SassComponentItem 
+                        name="Accordions"
+                        classes={['mui-custom-accordion']}
+                        description="Collapsible content sections with animations"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Layout Components</CardTitle>
+                    <CardDescription>Sass-powered layout utilities</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <FeatureItem 
+                      icon={<Code size={18} />}
+                      title="custom-mui-container"
+                      description="Max-width container with responsive padding"
+                    />
+                    <FeatureItem 
+                      icon={<Code size={18} />}
+                      title="custom-mui-grid"
+                      description="CSS Grid layouts with responsive columns (--cols-1 to --cols-12, --responsive)"
+                    />
+                    <FeatureItem 
+                      icon={<Code size={18} />}
+                      title="custom-mui-flex"
+                      description="Flexbox utilities (--row, --col, --wrap, --center, --between, --around)"
+                    />
+                    <FeatureItem 
+                      icon={<Code size={18} />}
+                      title="custom-mui-stack"
+                      description="Vertical/horizontal stacks with configurable gaps"
+                    />
+                    <FeatureItem 
+                      icon={<Code size={18} />}
+                      title="custom-mui-surface"
+                      description="Interactive surfaces with elevation and hover effects"
+                    />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Sass Utilities & Mixins</CardTitle>
+                    <CardDescription>Reusable functions for custom styling</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <Lightbulb size={18} weight="duotone" className="text-accent" />
+                          Responsive Design
+                        </h3>
+                        <div className="ml-6 space-y-2 text-sm">
+                          <p className="font-mono text-accent">@include respond-to($breakpoint)</p>
+                          <p className="text-muted-foreground">Generate media queries for xs, sm, md, lg, xl, 2xl breakpoints</p>
+                          <pre className="custom-mui-code-block text-xs mt-2">
+{`@include respond-to('lg') {
+  padding: 2rem;
+}`}
+                          </pre>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <Lightbulb size={18} weight="duotone" className="text-accent" />
+                          Elevation & Shadows
+                        </h3>
+                        <div className="ml-6 space-y-2 text-sm">
+                          <p className="font-mono text-accent">@include elevation($level)</p>
+                          <p className="text-muted-foreground">Apply box shadows with levels 1-4</p>
+                          <pre className="custom-mui-code-block text-xs mt-2">
+{`@include elevation(2);`}
+                          </pre>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <Lightbulb size={18} weight="duotone" className="text-accent" />
+                          Glassmorphism
+                        </h3>
+                        <div className="ml-6 space-y-2 text-sm">
+                          <p className="font-mono text-accent">@include glassmorphism($blur, $opacity)</p>
+                          <p className="text-muted-foreground">Create frosted glass effects with backdrop blur</p>
+                          <pre className="custom-mui-code-block text-xs mt-2">
+{`@include glassmorphism(16px, 0.1);`}
+                          </pre>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <Lightbulb size={18} weight="duotone" className="text-accent" />
+                          Color Functions
+                        </h3>
+                        <div className="ml-6 space-y-2 text-sm">
+                          <p className="font-mono text-accent">get-color($palette, $shade)</p>
+                          <p className="text-muted-foreground">Access colors from predefined palettes (primary, secondary, accent, success, error, warning)</p>
+                          <pre className="custom-mui-code-block text-xs mt-2">
+{`color: get-color('primary', 500);`}
+                          </pre>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <Lightbulb size={18} weight="duotone" className="text-accent" />
+                          Text Truncation
+                        </h3>
+                        <div className="ml-6 space-y-2 text-sm">
+                          <p className="font-mono text-accent">@include truncate($lines)</p>
+                          <p className="text-muted-foreground">Truncate text with ellipsis after specified lines</p>
+                          <pre className="custom-mui-code-block text-xs mt-2">
+{`@include truncate(2);`}
+                          </pre>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <Lightbulb size={18} weight="duotone" className="text-accent" />
+                          Custom Scrollbars
+                        </h3>
+                        <div className="ml-6 space-y-2 text-sm">
+                          <p className="font-mono text-accent">@include show-scrollbar($track, $thumb)</p>
+                          <p className="text-muted-foreground">Style webkit scrollbars with custom colors</p>
+                          <pre className="custom-mui-code-block text-xs mt-2">
+{`@include show-scrollbar(rgba(0,0,0,0.1), rgba(0,0,0,0.3));`}
+                          </pre>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Animation Classes</CardTitle>
+                    <CardDescription>Pre-built animation utilities</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                      <AnimationItem name="animate-fade-in" description="Fade in from opacity 0" />
+                      <AnimationItem name="animate-slide-in-up" description="Slide in from bottom" />
+                      <AnimationItem name="animate-slide-in-down" description="Slide in from top" />
+                      <AnimationItem name="animate-scale-in" description="Scale in from 95%" />
+                      <AnimationItem name="animate-pulse" description="Pulsing opacity effect" />
+                      <AnimationItem name="animate-bounce" description="Bouncing effect" />
+                      <AnimationItem name="animate-spin" description="Continuous rotation" />
+                      <AnimationItem name="animate-shimmer" description="Shimmer effect for loading" />
+                      <AnimationItem name="animate-float" description="Floating up and down" />
+                      <AnimationItem name="animate-glow" description="Glowing shadow effect" />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-accent/5 border-accent/20">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Rocket size={20} weight="duotone" />
+                      Quick Start Example
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <h3 className="font-semibold">Using Custom Components</h3>
+                      <pre className="custom-mui-code-block">
+{`import './styles/main.scss'
+
+function MyComponent() {
+  return (
+    <div className="custom-mui-container">
+      <div className="custom-mui-grid custom-mui-grid--cols-3">
+        <div className="mui-custom-card">
+          <h3>Card Title</h3>
+          <p>Card content</p>
+          <button className="mui-custom-button mui-custom-button--primary">
+            Click Me
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}`}
+                      </pre>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-2">
+                      <h3 className="font-semibold">Creating Custom Styles with Mixins</h3>
+                      <pre className="custom-mui-code-block">
+{`@use './styles/utilities' as *;
+@use './styles/variables' as *;
+
+.my-custom-component {
+  @include elevation(2);
+  @include responsive-padding(spacing('6'));
+  background: get-color('primary', 500);
+  
+  @include respond-to('md') {
+    @include elevation(3);
+  }
+  
+  &:hover {
+    @include glassmorphism(12px, 0.15);
+  }
+}`}
+                      </pre>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-muted/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target size={20} weight="duotone" />
+                      Best Practices
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Import main.scss in your index.css to access all Sass components and utilities</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Use @use instead of @import for better module encapsulation</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Leverage mixins for consistent spacing, elevation, and responsive design</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Extend existing component classes rather than creating from scratch</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Use animation classes sparingly and respect prefers-reduced-motion</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Customize variables in _variables.scss to match your design system</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
           </div>
         </ScrollArea>
       </Tabs>
+    </div>
+  )
+}
+
+function SassComponentItem({ name, classes, description }: { name: string; classes: string[]; description: string }) {
+  return (
+    <div className="space-y-2 p-4 border rounded-lg bg-card">
+      <h4 className="font-semibold">{name}</h4>
+      <p className="text-sm text-muted-foreground">{description}</p>
+      <div className="space-y-1">
+        {classes.map((cls, idx) => (
+          <code key={idx} className="text-xs font-mono text-accent block">{cls}</code>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function AnimationItem({ name, description }: { name: string; description: string }) {
+  return (
+    <div className="space-y-1 p-3 border rounded-lg bg-card">
+      <code className="text-xs font-mono text-accent">{name}</code>
+      <p className="text-xs text-muted-foreground">{description}</p>
     </div>
   )
 }

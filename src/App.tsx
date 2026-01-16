@@ -20,6 +20,7 @@ import { FlaskDesigner } from '@/components/FlaskDesigner'
 import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
 import { ErrorPanel } from '@/components/ErrorPanel'
 import { DocumentationView } from '@/components/DocumentationView'
+import { SassStylesShowcase } from '@/components/SassStylesShowcase'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
 import { toast } from 'sonner'
@@ -350,6 +351,10 @@ function App() {
               <FileText size={18} />
               Documentation
             </TabsTrigger>
+            <TabsTrigger value="sass" className="gap-2">
+              <PaintBrush size={18} />
+              Sass Styles
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -427,6 +432,10 @@ function App() {
 
           <TabsContent value="docs" className="h-full m-0">
             <DocumentationView />
+          </TabsContent>
+
+          <TabsContent value="sass" className="h-full m-0">
+            <SassStylesShowcase />
           </TabsContent>
         </div>
       </Tabs>

@@ -15,6 +15,7 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 - **Prisma Schema Designer** - Visual database model builder with relations and field configuration
 - **Component Tree Builder** - Hierarchical React component designer with Material UI integration
 - **Theme Designer** - Advanced theming with multiple variants (light/dark/custom) and unlimited custom colors
+- **Sass Styling System** - Custom Material UI components with Sass, including utilities, mixins, and animations
 - **Flask Backend Designer** - Python REST API designer with blueprints, endpoints, and CORS configuration
 - **Project Settings** - Configure Next.js options, npm packages, scripts, and build settings
 
@@ -58,6 +59,7 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 - Next.js 14 with App Router
 - React 18 with TypeScript
 - Material UI 5
+- Sass/SCSS for custom styling
 - Monaco Editor
 - Tailwind CSS
 - Framer Motion
@@ -81,6 +83,7 @@ The application includes comprehensive built-in documentation:
 - **README** - Complete feature overview and getting started guide
 - **Roadmap** - Completed features and planned enhancements
 - **Agents Files** - AI service architecture and integration points
+- **Sass Styles Guide** - Custom Material UI components, utilities, mixins, and animations
 
 Access documentation by clicking the **Documentation** tab in the application.
 
@@ -95,6 +98,7 @@ Access documentation by clicking the **Documentation** tab in the application.
 - Auto error detection and repair
 - Flask backend designer
 - Project settings and npm management
+- Custom Sass styling system with utilities and mixins
 
 ### 🔮 Planned
 - Real-time preview with hot reload
