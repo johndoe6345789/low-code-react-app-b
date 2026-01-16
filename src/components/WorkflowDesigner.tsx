@@ -478,40 +478,36 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                         y1 = sourceCenterY
                         x2 = targetNode.position.x
                         y2 = targetCenterY
-                        controlOffset1X = 50
-                        controlOffset1Y = 0
-                        controlOffset2X = -50
-                        controlOffset2Y = 0
                       } else {
                         x1 = sourceNode.position.x
                         y1 = sourceCenterY
                         x2 = targetNode.position.x + nodeWidth
                         y2 = targetCenterY
-                        controlOffset1X = -50
-                        controlOffset1Y = 0
-                        controlOffset2X = 50
-                        controlOffset2Y = 0
                       }
+                      const distance = Math.abs(dx)
+                      const offset = Math.min(50, distance / 4)
+                      controlOffset1X = dx > 0 ? offset : -offset
+                      controlOffset1Y = 0
+                      controlOffset2X = dx > 0 ? -offset : offset
+                      controlOffset2Y = 0
                     } else {
                       if (dy > 0) {
                         x1 = sourceCenterX
                         y1 = sourceNode.position.y + nodeHeight
                         x2 = targetCenterX
                         y2 = targetNode.position.y
-                        controlOffset1X = 0
-                        controlOffset1Y = 50
-                        controlOffset2X = 0
-                        controlOffset2Y = -50
                       } else {
                         x1 = sourceCenterX
                         y1 = sourceNode.position.y
                         x2 = targetCenterX
                         y2 = targetNode.position.y + nodeHeight
-                        controlOffset1X = 0
-                        controlOffset1Y = -50
-                        controlOffset2X = 0
-                        controlOffset2Y = 50
                       }
+                      const distance = Math.abs(dy)
+                      const offset = Math.min(50, distance / 4)
+                      controlOffset1X = 0
+                      controlOffset1Y = dy > 0 ? offset : -offset
+                      controlOffset2X = 0
+                      controlOffset2Y = dy > 0 ? -offset : offset
                     }
 
                     return (
