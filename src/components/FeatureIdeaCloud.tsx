@@ -447,54 +447,87 @@ export function FeatureIdeaCloud() {
       const sourceHandleId = params.sourceHandle || 'default'
       const targetHandleId = params.targetHandle || 'default'
       
-      const isSourceHandleUsed = edges.some(edge => 
-        edge.source === params.source && (edge.sourceHandle || 'default') === sourceHandleId
+      const sourceHandleEdge = edges.find(edge => 
+        (edge.source === params.source && (edge.sourceHandle || 'default') === sourceHandleId) ||
+        (edge.target === params.source && (edge.targetHandle || 'default') === sourceHandleId)
       )
       
-      const isTargetHandleUsed = edges.some(edge => 
-        edge.target === params.target && (edge.targetHandle || 'default') === targetHandleId
+      const targetHandleEdge = edges.find(edge => 
+        (edge.target === params.target && (edge.targetHandle || 'default') === targetHandleId) ||
+        (edge.source === params.target && (edge.sourceHandle || 'default') === targetHandleId)
       )
       
-      if (isSourceHandleUsed) {
-        toast.error('Source connection point already in use. Each handle can only have one arrow.')
-        return
+      if (sourceHandleEdge || targetHandleEdge) {
+        const edgesToRemove: string[] = []
+        if (sourceHandleEdge) edgesToRemove.push(sourceHandleEdge.id)
+        if (targetHandleEdge && targetHandleEdge.id !== sourceHandleEdge?.id) {
+          edgesToRemove.push(targetHandleEdge.id)
+        }
+        
+        setEdges((eds) => {
+          const filteredEdges = eds.filter(e => !edgesToRemove.includes(e.id))
+          
+          const style = CONNECTION_STYLES[connectionType]
+          const newEdge: Edge<IdeaEdgeData> = {
+            id: `edge-${Date.now()}`,
+            source: params.source!,
+            target: params.target!,
+            ...(params.sourceHandle && { sourceHandle: params.sourceHandle }),
+            ...(params.targetHandle && { targetHandle: params.targetHandle }),
+            type: 'default',
+            data: { type: connectionType, label: CONNECTION_LABELS[connectionType] },
+            markerEnd: { 
+              type: style.markerEnd, 
+              color: style.stroke,
+              width: 20,
+              height: 20
+            },
+            style: { 
+              stroke: style.stroke, 
+              strokeDasharray: style.strokeDasharray,
+              strokeWidth: style.strokeWidth
+            },
+            animated: connectionType === 'dependency',
+          }
+          
+          const updatedEdges = addEdge(newEdge, filteredEdges)
+          setSavedEdges(updatedEdges)
+          return updatedEdges
+        })
+        
+        toast.success(`Connection remapped! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+      } else {
+        const style = CONNECTION_STYLES[connectionType]
+        const newEdge: Edge<IdeaEdgeData> = {
+          id: `edge-${Date.now()}`,
+          source: params.source!,
+          target: params.target!,
+          ...(params.sourceHandle && { sourceHandle: params.sourceHandle }),
+          ...(params.targetHandle && { targetHandle: params.targetHandle }),
+          type: 'default',
+          data: { type: connectionType, label: CONNECTION_LABELS[connectionType] },
+          markerEnd: { 
+            type: style.markerEnd, 
+            color: style.stroke,
+            width: 20,
+            height: 20
+          },
+          style: { 
+            stroke: style.stroke, 
+            strokeDasharray: style.strokeDasharray,
+            strokeWidth: style.strokeWidth
+          },
+          animated: connectionType === 'dependency',
+        }
+        
+        setEdges((eds) => {
+          const updatedEdges = addEdge(newEdge, eds)
+          setSavedEdges(updatedEdges)
+          return updatedEdges
+        })
+        
+        toast.success('Ideas connected!')
       }
-      
-      if (isTargetHandleUsed) {
-        toast.error('Target connection point already in use. Each handle can only have one arrow.')
-        return
-      }
-      
-      const style = CONNECTION_STYLES[connectionType]
-      const newEdge: Edge<IdeaEdgeData> = {
-        id: `edge-${Date.now()}`,
-        source: params.source,
-        target: params.target,
-        sourceHandle: params.sourceHandle,
-        targetHandle: params.targetHandle,
-        type: 'default',
-        data: { type: connectionType, label: CONNECTION_LABELS[connectionType] },
-        markerEnd: { 
-          type: style.markerEnd, 
-          color: style.stroke,
-          width: 20,
-          height: 20
-        },
-        style: { 
-          stroke: style.stroke, 
-          strokeDasharray: style.strokeDasharray,
-          strokeWidth: style.strokeWidth
-        },
-        animated: connectionType === 'dependency',
-      }
-      
-      setEdges((eds) => {
-        const updatedEdges = addEdge(newEdge, eds)
-        setSavedEdges(updatedEdges)
-        return updatedEdges
-      })
-      
-      toast.success('Ideas connected!')
     },
     [connectionType, edges, setEdges, setSavedEdges]
   )
@@ -517,37 +550,45 @@ export function FeatureIdeaCloud() {
     const newSourceHandleId = newConnection.sourceHandle || 'default'
     const newTargetHandleId = newConnection.targetHandle || 'default'
     
-    const isSourceHandleUsed = edges.some(edge => 
-      edge.id !== oldEdge.id && 
-      edge.source === newConnection.source && 
-      (edge.sourceHandle || 'default') === newSourceHandleId
+    const sourceHandleEdge = edges.find(edge => 
+      edge.id !== oldEdge.id && (
+        (edge.source === newConnection.source && (edge.sourceHandle || 'default') === newSourceHandleId) ||
+        (edge.target === newConnection.source && (edge.targetHandle || 'default') === newSourceHandleId)
+      )
     )
     
-    const isTargetHandleUsed = edges.some(edge => 
-      edge.id !== oldEdge.id && 
-      edge.target === newConnection.target && 
-      (edge.targetHandle || 'default') === newTargetHandleId
+    const targetHandleEdge = edges.find(edge => 
+      edge.id !== oldEdge.id && (
+        (edge.target === newConnection.target && (edge.targetHandle || 'default') === newTargetHandleId) ||
+        (edge.source === newConnection.target && (edge.sourceHandle || 'default') === newTargetHandleId)
+      )
     )
-    
-    if (isSourceHandleUsed) {
-      toast.error('Source connection point already in use. Each handle can only have one arrow.')
-      edgeReconnectSuccessful.current = false
-      return
-    }
-    
-    if (isTargetHandleUsed) {
-      toast.error('Target connection point already in use. Each handle can only have one arrow.')
-      edgeReconnectSuccessful.current = false
-      return
-    }
     
     edgeReconnectSuccessful.current = true
-    setEdges((els) => {
-      const updatedEdges = reconnectEdge(oldEdge, newConnection, els)
-      setSavedEdges(updatedEdges)
-      return updatedEdges
-    })
-    toast.success('Connection remapped!')
+    
+    if (sourceHandleEdge || targetHandleEdge) {
+      const edgesToRemove: string[] = []
+      if (sourceHandleEdge) edgesToRemove.push(sourceHandleEdge.id)
+      if (targetHandleEdge && targetHandleEdge.id !== sourceHandleEdge?.id) {
+        edgesToRemove.push(targetHandleEdge.id)
+      }
+      
+      setEdges((els) => {
+        const filteredEdges = els.filter(e => !edgesToRemove.includes(e.id))
+        const updatedEdges = reconnectEdge(oldEdge, newConnection, filteredEdges)
+        setSavedEdges(updatedEdges)
+        return updatedEdges
+      })
+      
+      toast.success(`Connection remapped! (${edgesToRemove.length} conflicting connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+    } else {
+      setEdges((els) => {
+        const updatedEdges = reconnectEdge(oldEdge, newConnection, els)
+        setSavedEdges(updatedEdges)
+        return updatedEdges
+      })
+      toast.success('Connection remapped!')
+    }
   }, [edges, setEdges, setSavedEdges])
 
   const onReconnectEnd = useCallback((_: MouseEvent | TouchEvent, edge: Edge) => {
