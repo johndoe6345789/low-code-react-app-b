@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile, Image } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile, Image, MagnifyingGlass } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles, Project } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -33,6 +33,7 @@ import { PWAUpdatePrompt } from '@/components/PWAUpdatePrompt'
 import { PWAStatusBar } from '@/components/PWAStatusBar'
 import { PWASettings } from '@/components/PWASettings'
 import { FaviconDesigner } from '@/components/FaviconDesigner'
+import { GlobalSearch } from '@/components/GlobalSearch'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -192,6 +193,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [exportDialogOpen, setExportDialogOpen] = useState(false)
   const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false)
+  const [searchDialogOpen, setSearchDialogOpen] = useState(false)
   const [generatedCode, setGeneratedCode] = useState<Record<string, string>>({})
 
   const safeFiles = files || []
@@ -287,14 +289,21 @@ function App() {
       action: () => setActiveTab('favicon'),
     }] : []),
     {
+      key: 'k',
+      ctrl: true,
+      description: 'Search everything',
+      action: () => setSearchDialogOpen(true),
+    },
+    {
       key: 'e',
       ctrl: true,
       description: 'Export Project',
       action: () => handleExportProject(),
     },
     {
-      key: 'k',
+      key: 'g',
       ctrl: true,
+      shift: true,
       description: 'AI Generate',
       action: () => handleGenerateWithAI(),
     },
@@ -531,6 +540,17 @@ Navigate to the backend directory and follow the setup instructions.
             </div>
           </div>
           <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setSearchDialogOpen(true)}
+              className="gap-2"
+            >
+              <MagnifyingGlass size={16} />
+              Search
+              <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </Button>
             <ProjectManager
               currentProject={getCurrentProject()}
               onProjectLoad={handleLoadProject}
@@ -911,6 +931,24 @@ Navigate to the backend directory and follow the setup instructions.
       <KeyboardShortcutsDialog
         open={shortcutsDialogOpen}
         onOpenChange={setShortcutsDialogOpen}
+      />
+
+      <GlobalSearch
+        open={searchDialogOpen}
+        onOpenChange={setSearchDialogOpen}
+        files={safeFiles}
+        models={safeModels}
+        components={safeComponents}
+        componentTrees={safeComponentTrees}
+        workflows={safeWorkflows}
+        lambdas={safeLambdas}
+        playwrightTests={safePlaywrightTests}
+        storybookStories={safeStorybookStories}
+        unitTests={safeUnitTests}
+        onNavigate={(tab, itemId) => {
+          setActiveTab(tab)
+        }}
+        onFileSelect={setActiveFileId}
       />
 
       <PWAInstallPrompt />

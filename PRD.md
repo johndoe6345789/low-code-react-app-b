@@ -1,6 +1,6 @@
 # Planning Guide
 
-A visual low-code platform for generating Next.js applications with Material UI styling, integrated Monaco code editor, Prisma schema designer, and persistent project management.
+A visual low-code platform for generating Next.js applications with Material UI styling, integrated Monaco code editor, Prisma schema designer, and persistent project management with comprehensive global search.
 
 **Experience Qualities**: 
 1. **Empowering** - Users feel in control with both visual and code-level editing capabilities
@@ -11,6 +11,13 @@ A visual low-code platform for generating Next.js applications with Material UI 
 This is a full-featured low-code IDE with multiple integrated tools (code editor, visual designers, schema builder), state management across views, persistent project storage, and code generation capabilities that require sophisticated UI organization.
 
 ## Essential Features
+
+### Global Search (Ctrl+K)
+- **Functionality**: Comprehensive fuzzy search across all application features, files, models, components, workflows, lambdas, tests, and navigation
+- **Purpose**: Quickly find and navigate to any part of the application without clicking through multiple tabs
+- **Trigger**: Clicking the Search button in header or pressing Ctrl+K (Cmd+K on Mac)
+- **Progression**: Press Ctrl+K → Type search query → See filtered results grouped by category → Select result → Navigate to that item/tab
+- **Success criteria**: Search is fast and responsive; results are relevantly ranked; all major entities are searchable; keyboard navigation works; shows helpful metadata (file paths, descriptions, counts)
 
 ### Project Save/Load Management
 - **Functionality**: Complete project persistence system using Spark KV database with save, load, duplicate, export, import, and delete operations
