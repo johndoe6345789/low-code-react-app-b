@@ -533,7 +533,7 @@ Navigate to the backend directory and follow the setup instructions.
       
       <header className="border-b border-border bg-card px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
             <NavigationMenu
               activeTab={activeTab}
               onTabChange={setActiveTab}
@@ -543,9 +543,9 @@ Navigate to the backend directory and follow the setup instructions.
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
               <Code size={20} weight="duotone" className="text-white sm:w-6 sm:h-6" />
             </div>
-            <div className="min-w-0">
-              <h1 className="text-base sm:text-xl font-bold truncate">CodeForge</h1>
-              <p className="text-xs text-muted-foreground hidden sm:block">
+            <div className="flex flex-col min-w-[100px]">
+              <h1 className="text-base sm:text-xl font-bold whitespace-nowrap">CodeForge</h1>
+              <p className="text-xs text-muted-foreground hidden sm:block whitespace-nowrap">
                 Low-Code Next.js App Builder
               </p>
             </div>
