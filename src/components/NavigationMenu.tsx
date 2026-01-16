@@ -23,6 +23,8 @@ import {
   Image,
   Faders,
   CaretDown,
+  CaretDoubleDown,
+  CaretDoubleUp,
 } from '@phosphor-icons/react'
 import { FeatureToggles } from '@/types/project'
 
@@ -260,6 +262,17 @@ export function NavigationMenu({
     return group.items.filter(isItemVisible).length
   }
 
+  const handleExpandAll = () => {
+    const allGroupIds = navigationGroups
+      .filter((group) => getVisibleItemsCount(group) > 0)
+      .map((group) => group.id)
+    setExpandedGroups(new Set(allGroupIds))
+  }
+
+  const handleCollapseAll = () => {
+    setExpandedGroups(new Set())
+  }
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -271,7 +284,27 @@ export function NavigationMenu({
         <SheetHeader>
           <SheetTitle>Navigation</SheetTitle>
         </SheetHeader>
-        <ScrollArea className="h-[calc(100vh-8rem)] mt-6">
+        <div className="flex gap-2 mt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExpandAll}
+            className="flex-1"
+          >
+            <CaretDoubleDown size={16} className="mr-2" />
+            Expand All
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCollapseAll}
+            className="flex-1"
+          >
+            <CaretDoubleUp size={16} className="mr-2" />
+            Collapse All
+          </Button>
+        </div>
+        <ScrollArea className="h-[calc(100vh-12rem)] mt-4">
           <div className="space-y-2">
             {navigationGroups.map((group) => {
               const visibleItemsCount = getVisibleItemsCount(group)
