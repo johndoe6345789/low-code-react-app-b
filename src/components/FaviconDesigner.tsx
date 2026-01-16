@@ -26,9 +26,16 @@ import {
   Copy,
   FloppyDisk,
   PencilSimple,
-  Eraser
+  Eraser,
+  Gradient,
+  Sparkle,
+  Drop,
+  MagicWand
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
+
+type BrushEffect = 'solid' | 'gradient' | 'spray' | 'glow'
+type CanvasFilter = 'none' | 'blur' | 'brightness' | 'contrast' | 'grayscale' | 'sepia' | 'invert' | 'saturate' | 'hue-rotate' | 'pixelate'
 
 interface FaviconElement {
   id: string
@@ -45,6 +52,9 @@ interface FaviconElement {
   emoji?: string
   paths?: Array<{ x: number; y: number }>
   strokeWidth?: number
+  brushEffect?: BrushEffect
+  gradientColor?: string
+  glowIntensity?: number
 }
 
 interface FaviconDesign {
@@ -55,6 +65,8 @@ interface FaviconDesign {
   elements: FaviconElement[]
   createdAt: number
   updatedAt: number
+  filter?: CanvasFilter
+  filterIntensity?: number
 }
 
 const PRESET_SIZES = [16, 32, 48, 64, 128, 256, 512]
@@ -101,6 +113,9 @@ export function FaviconDesigner() {
   const [drawMode, setDrawMode] = useState<'select' | 'draw' | 'erase'>('select')
   const [brushSize, setBrushSize] = useState(3)
   const [brushColor, setBrushColor] = useState('#ffffff')
+  const [brushEffect, setBrushEffect] = useState<BrushEffect>('solid')
+  const [gradientColor, setGradientColor] = useState('#ff00ff')
+  const [glowIntensity, setGlowIntensity] = useState(10)
   const [currentPath, setCurrentPath] = useState<Array<{ x: number; y: number }>>([])
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const drawingCanvasRef = useRef<HTMLCanvasElement>(null)
@@ -131,17 +146,56 @@ export function FaviconDesigner() {
       ctx.save()
       
       if (element.type === 'freehand' && element.paths && element.paths.length > 0) {
-        ctx.strokeStyle = element.color
-        ctx.lineWidth = element.strokeWidth || 3
+        const effect = element.brushEffect || 'solid'
+        const strokeWidth = element.strokeWidth || 3
+        
+        if (effect === 'glow') {
+          ctx.shadowColor = element.color
+          ctx.shadowBlur = element.glowIntensity || 10
+        }
+
+        if (effect === 'gradient' && element.gradientColor) {
+          const bounds = getPathBounds(element.paths)
+          const gradient = ctx.createLinearGradient(
+            bounds.minX,
+            bounds.minY,
+            bounds.maxX,
+            bounds.maxY
+          )
+          gradient.addColorStop(0, element.color)
+          gradient.addColorStop(1, element.gradientColor)
+          ctx.strokeStyle = gradient
+        } else {
+          ctx.strokeStyle = element.color
+        }
+
+        ctx.lineWidth = strokeWidth
         ctx.lineCap = 'round'
         ctx.lineJoin = 'round'
         
-        ctx.beginPath()
-        ctx.moveTo(element.paths[0].x, element.paths[0].y)
-        for (let i = 1; i < element.paths.length; i++) {
-          ctx.lineTo(element.paths[i].x, element.paths[i].y)
+        if (effect === 'spray') {
+          element.paths.forEach((point, i) => {
+            if (i % 2 === 0) {
+              for (let j = 0; j < 3; j++) {
+                const offsetX = (Math.random() - 0.5) * strokeWidth * 2
+                const offsetY = (Math.random() - 0.5) * strokeWidth * 2
+                ctx.fillStyle = element.color
+                ctx.beginPath()
+                ctx.arc(point.x + offsetX, point.y + offsetY, strokeWidth / 3, 0, Math.PI * 2)
+                ctx.fill()
+              }
+            }
+          })
+        } else {
+          ctx.beginPath()
+          ctx.moveTo(element.paths[0].x, element.paths[0].y)
+          for (let i = 1; i < element.paths.length; i++) {
+            ctx.lineTo(element.paths[i].x, element.paths[i].y)
+          }
+          ctx.stroke()
         }
-        ctx.stroke()
+
+        ctx.shadowBlur = 0
       } else {
         ctx.translate(element.x, element.y)
         ctx.rotate((element.rotation * Math.PI) / 180)
@@ -191,6 +245,84 @@ export function FaviconDesigner() {
 
       ctx.restore()
     })
+
+    if (activeDesign.filter && activeDesign.filter !== 'none') {
+      applyCanvasFilter(ctx, activeDesign.filter, activeDesign.filterIntensity || 50)
+    }
+  }
+
+  const getPathBounds = (paths: Array<{ x: number; y: number }>) => {
+    const xs = paths.map(p => p.x)
+    const ys = paths.map(p => p.y)
+    return {
+      minX: Math.min(...xs),
+      maxX: Math.max(...xs),
+      minY: Math.min(...ys),
+      maxY: Math.max(...ys),
+    }
+  }
+
+  const applyCanvasFilter = (ctx: CanvasRenderingContext2D, filter: CanvasFilter, intensity: number) => {
+    const canvas = ctx.canvas
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const data = imageData.data
+
+    switch (filter) {
+      case 'blur':
+        ctx.filter = `blur(${intensity / 10}px)`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'brightness':
+        ctx.filter = `brightness(${intensity / 50})`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'contrast':
+        ctx.filter = `contrast(${intensity / 50})`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'grayscale':
+        ctx.filter = `grayscale(${intensity / 100})`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'sepia':
+        ctx.filter = `sepia(${intensity / 100})`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'invert':
+        ctx.filter = `invert(${intensity / 100})`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'saturate':
+        ctx.filter = `saturate(${intensity / 50})`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'hue-rotate':
+        ctx.filter = `hue-rotate(${intensity * 3.6}deg)`
+        ctx.drawImage(canvas, 0, 0)
+        ctx.filter = 'none'
+        break
+      case 'pixelate':
+        const pixelSize = Math.max(1, Math.floor(intensity / 10))
+        const tempCanvas = document.createElement('canvas')
+        tempCanvas.width = canvas.width / pixelSize
+        tempCanvas.height = canvas.height / pixelSize
+        const tempCtx = tempCanvas.getContext('2d')
+        if (tempCtx) {
+          tempCtx.imageSmoothingEnabled = false
+          tempCtx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height)
+          ctx.imageSmoothingEnabled = false
+          ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height)
+          ctx.imageSmoothingEnabled = true
+        }
+        break
+    }
   }
 
   const drawStar = (ctx: CanvasRenderingContext2D, cx: number, cy: number, spikes: number, outerRadius: number, innerRadius: number) => {
@@ -463,18 +595,50 @@ export function FaviconDesigner() {
     if (!ctx) return
 
     if (drawMode === 'draw') {
-      ctx.strokeStyle = brushColor
+      if (brushEffect === 'glow') {
+        ctx.shadowColor = brushColor
+        ctx.shadowBlur = glowIntensity
+      }
+
+      if (brushEffect === 'gradient' && currentPath.length > 0) {
+        const gradient = ctx.createLinearGradient(
+          currentPath[0].x,
+          currentPath[0].y,
+          coords.x,
+          coords.y
+        )
+        gradient.addColorStop(0, brushColor)
+        gradient.addColorStop(1, gradientColor)
+        ctx.strokeStyle = gradient
+      } else {
+        ctx.strokeStyle = brushColor
+      }
+
       ctx.lineWidth = brushSize
       ctx.lineCap = 'round'
       ctx.lineJoin = 'round'
 
       if (currentPath.length > 0) {
         const prevPoint = currentPath[currentPath.length - 1]
-        ctx.beginPath()
-        ctx.moveTo(prevPoint.x, prevPoint.y)
-        ctx.lineTo(coords.x, coords.y)
-        ctx.stroke()
+        
+        if (brushEffect === 'spray') {
+          for (let i = 0; i < 5; i++) {
+            const offsetX = (Math.random() - 0.5) * brushSize * 2
+            const offsetY = (Math.random() - 0.5) * brushSize * 2
+            ctx.fillStyle = brushColor
+            ctx.beginPath()
+            ctx.arc(coords.x + offsetX, coords.y + offsetY, brushSize / 3, 0, Math.PI * 2)
+            ctx.fill()
+          }
+        } else {
+          ctx.beginPath()
+          ctx.moveTo(prevPoint.x, prevPoint.y)
+          ctx.lineTo(coords.x, coords.y)
+          ctx.stroke()
+        }
       }
+
+      ctx.shadowBlur = 0
     } else if (drawMode === 'erase') {
       ctx.globalCompositeOperation = 'destination-out'
       ctx.lineWidth = brushSize * 2
@@ -509,6 +673,9 @@ export function FaviconDesigner() {
         rotation: 0,
         paths: currentPath,
         strokeWidth: brushSize,
+        brushEffect: brushEffect,
+        gradientColor: brushEffect === 'gradient' ? gradientColor : undefined,
+        glowIntensity: brushEffect === 'glow' ? glowIntensity : undefined,
       }
 
       setDesigns((current) =>
@@ -667,7 +834,9 @@ export function FaviconDesigner() {
                   </Badge>
                   {drawMode !== 'select' && (
                     <Badge className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-accent">
-                      {drawMode === 'draw' ? `Brush: ${brushSize}px` : `Eraser: ${brushSize * 2}px`}
+                      {drawMode === 'draw' 
+                        ? `${brushEffect.charAt(0).toUpperCase() + brushEffect.slice(1)}: ${brushSize}px` 
+                        : `Eraser: ${brushSize * 2}px`}
                     </Badge>
                   )}
                 </div>
@@ -778,6 +947,43 @@ export function FaviconDesigner() {
                 </div>
               </div>
 
+              <div>
+                <Label>Image Filter</Label>
+                <Select
+                  value={activeDesign.filter || 'none'}
+                  onValueChange={(value) => handleUpdateDesign({ filter: value as CanvasFilter })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="blur">Blur</SelectItem>
+                    <SelectItem value="brightness">Brightness</SelectItem>
+                    <SelectItem value="contrast">Contrast</SelectItem>
+                    <SelectItem value="grayscale">Grayscale</SelectItem>
+                    <SelectItem value="sepia">Sepia</SelectItem>
+                    <SelectItem value="invert">Invert</SelectItem>
+                    <SelectItem value="saturate">Saturate</SelectItem>
+                    <SelectItem value="hue-rotate">Hue Rotate</SelectItem>
+                    <SelectItem value="pixelate">Pixelate</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {activeDesign.filter && activeDesign.filter !== 'none' && (
+                <div>
+                  <Label>Filter Intensity: {activeDesign.filterIntensity || 50}%</Label>
+                  <Slider
+                    value={[activeDesign.filterIntensity || 50]}
+                    onValueChange={([value]) => handleUpdateDesign({ filterIntensity: value })}
+                    min={0}
+                    max={100}
+                    step={1}
+                  />
+                </div>
+              )}
+
               <Separator />
 
               <div>
@@ -813,22 +1019,91 @@ export function FaviconDesigner() {
                     </Label>
 
                     {drawMode === 'draw' && (
-                      <div>
-                        <Label>Brush Color</Label>
-                        <div className="flex gap-2">
-                          <Input
-                            type="color"
-                            value={brushColor}
-                            onChange={(e) => setBrushColor(e.target.value)}
-                            className="w-20 h-10"
-                          />
-                          <Input
-                            value={brushColor}
-                            onChange={(e) => setBrushColor(e.target.value)}
-                            placeholder="#ffffff"
-                          />
+                      <>
+                        <div>
+                          <Label>Brush Effect</Label>
+                          <Select value={brushEffect} onValueChange={(value) => setBrushEffect(value as BrushEffect)}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="solid">
+                                <div className="flex items-center gap-2">
+                                  <PencilSimple size={16} />
+                                  Solid
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="gradient">
+                                <div className="flex items-center gap-2">
+                                  <Gradient size={16} />
+                                  Gradient
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="spray">
+                                <div className="flex items-center gap-2">
+                                  <Drop size={16} />
+                                  Spray Paint
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="glow">
+                                <div className="flex items-center gap-2">
+                                  <Sparkle size={16} />
+                                  Glow
+                                </div>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
-                      </div>
+
+                        <div>
+                          <Label>Brush Color</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              type="color"
+                              value={brushColor}
+                              onChange={(e) => setBrushColor(e.target.value)}
+                              className="w-20 h-10"
+                            />
+                            <Input
+                              value={brushColor}
+                              onChange={(e) => setBrushColor(e.target.value)}
+                              placeholder="#ffffff"
+                            />
+                          </div>
+                        </div>
+
+                        {brushEffect === 'gradient' && (
+                          <div>
+                            <Label>Gradient End Color</Label>
+                            <div className="flex gap-2">
+                              <Input
+                                type="color"
+                                value={gradientColor}
+                                onChange={(e) => setGradientColor(e.target.value)}
+                                className="w-20 h-10"
+                              />
+                              <Input
+                                value={gradientColor}
+                                onChange={(e) => setGradientColor(e.target.value)}
+                                placeholder="#ff00ff"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {brushEffect === 'glow' && (
+                          <div>
+                            <Label>Glow Intensity: {glowIntensity}px</Label>
+                            <Slider
+                              value={[glowIntensity]}
+                              onValueChange={([value]) => setGlowIntensity(value)}
+                              min={1}
+                              max={30}
+                              step={1}
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
 
                     <div>
@@ -916,6 +1191,44 @@ export function FaviconDesigner() {
                     {selectedElement.type === 'freehand' && (
                       <>
                         <div>
+                          <Label>Brush Effect</Label>
+                          <Select 
+                            value={selectedElement.brushEffect || 'solid'} 
+                            onValueChange={(value) => handleUpdateElement({ brushEffect: value as BrushEffect })}
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="solid">
+                                <div className="flex items-center gap-2">
+                                  <PencilSimple size={16} />
+                                  Solid
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="gradient">
+                                <div className="flex items-center gap-2">
+                                  <Gradient size={16} />
+                                  Gradient
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="spray">
+                                <div className="flex items-center gap-2">
+                                  <Drop size={16} />
+                                  Spray Paint
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="glow">
+                                <div className="flex items-center gap-2">
+                                  <Sparkle size={16} />
+                                  Glow
+                                </div>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div>
                           <Label>Stroke Color</Label>
                           <div className="flex gap-2">
                             <Input
@@ -931,6 +1244,38 @@ export function FaviconDesigner() {
                             />
                           </div>
                         </div>
+
+                        {selectedElement.brushEffect === 'gradient' && (
+                          <div>
+                            <Label>Gradient End Color</Label>
+                            <div className="flex gap-2">
+                              <Input
+                                type="color"
+                                value={selectedElement.gradientColor || '#ff00ff'}
+                                onChange={(e) => handleUpdateElement({ gradientColor: e.target.value })}
+                                className="w-20 h-10"
+                              />
+                              <Input
+                                value={selectedElement.gradientColor || '#ff00ff'}
+                                onChange={(e) => handleUpdateElement({ gradientColor: e.target.value })}
+                                placeholder="#ff00ff"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {selectedElement.brushEffect === 'glow' && (
+                          <div>
+                            <Label>Glow Intensity: {selectedElement.glowIntensity || 10}px</Label>
+                            <Slider
+                              value={[selectedElement.glowIntensity || 10]}
+                              onValueChange={([value]) => handleUpdateElement({ glowIntensity: value })}
+                              min={1}
+                              max={30}
+                              step={1}
+                            />
+                          </div>
+                        )}
 
                         <div>
                           <Label>Stroke Width: {selectedElement.strokeWidth || 3}px</Label>
