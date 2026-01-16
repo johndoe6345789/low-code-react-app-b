@@ -229,7 +229,7 @@ function App() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <div className="border-b border-border bg-card px-6">
-          <TabsList className="h-12 bg-transparent">
+          <TabsList className="h-auto bg-transparent flex-wrap py-2">
             <TabsTrigger value="code" className="gap-2">
               <Code size={18} />
               Code Editor
