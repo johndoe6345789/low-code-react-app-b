@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { FeatureToggles } from '@/types/project'
-import { Code, Database, Tree, PaintBrush, Flask, Play, BookOpen, Cube, Wrench, FileText, FlowArrow } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Flask, Play, BookOpen, Cube, Wrench, FileText, FlowArrow, Image, Lightbulb } from '@phosphor-icons/react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 interface FeatureToggleSettingsProps {
@@ -94,6 +94,18 @@ const featuresList = [
     label: 'Sass Styles', 
     description: 'Custom Sass/SCSS styling showcase',
     icon: PaintBrush
+  },
+  { 
+    key: 'faviconDesigner' as keyof FeatureToggles, 
+    label: 'Favicon Designer', 
+    description: 'Design and generate app favicons and icons',
+    icon: Image
+  },
+  { 
+    key: 'ideaCloud' as keyof FeatureToggles, 
+    label: 'Feature Idea Cloud', 
+    description: 'Brainstorm and organize feature ideas',
+    icon: Lightbulb
   },
 ]
 
