@@ -478,11 +478,11 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                         y1 = sourceCenterY
                         x2 = targetNode.position.x
                         y2 = targetCenterY
+                      } else {
+                        x1 = sourceNode.position.x
+                        y1 = sourceCenterY
+                        x2 = targetNode.position.x + nodeWidth
                         y2 = targetCenterY
-                      }
-                      const distance = Math.abs(dx)
-                      const offset = Math.min(50, distance / 4)
-                      controlOffset1X = dx > 0 ? offset : -offset
                       }
                       const distance = Math.abs(dx)
                       const offset = Math.min(50, distance / 4)
@@ -490,24 +490,32 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                       controlOffset1Y = 0
                       controlOffset2X = dx > 0 ? -offset : offset
                       controlOffset2Y = 0
+                    } else {
+                      if (dy > 0) {
+                        x1 = sourceCenterX
+                        y1 = sourceNode.position.y + nodeHeight
                         x2 = targetCenterX
                         y2 = targetNode.position.y
                       } else {
                         x1 = sourceCenterX
                         y1 = sourceNode.position.y
                         x2 = targetCenterX
+                        y2 = targetNode.position.y + nodeHeight
+                      }
+                      const distance = Math.abs(dy)
+                      const offset = Math.min(50, distance / 4)
                       controlOffset1X = 0
                       controlOffset1Y = dy > 0 ? offset : -offset
                       controlOffset2X = 0
                       controlOffset2Y = dy > 0 ? -offset : offset
                     }
-                      }
-                      const distance = Math.abs(dy)
-                      const offset = Math.min(50, distance / 4)
-                      controlOffset1X = 0
-                      controlOffset1Y = dy > 0 ? offset : -offsetet1Y}, ${x2 + controlOffset2X} ${y2 + controlOffset2Y}, ${x2} ${y2}`}
-                      controlOffset2X = 0
-                      controlOffset2Y = dy > 0 ? -offset : offset
+
+                    return (
+                      <g key={conn.id}>
+                        <path
+                          d={`M ${x1} ${y1} C ${x1 + controlOffset1X} ${y1 + controlOffset1Y}, ${x2 + controlOffset2X} ${y2 + controlOffset2Y}, ${x2} ${y2}`}
+                          stroke="hsl(var(--primary))"
+                          strokeWidth="2"
                           fill="none"
                           markerEnd="url(#arrowhead)"
                         />
