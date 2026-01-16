@@ -207,6 +207,8 @@ export function FeatureIdeaCloud() {
   const [connectingFrom, setConnectingFrom] = useState<string | null>(null)
   const [connectionType, setConnectionType] = useState<ConnectionType>('association')
   const [hoveredConnection, setHoveredConnection] = useState<string | null>(null)
+  const [draggingConnection, setDraggingConnection] = useState<{ fromId: string, x: number, y: number } | null>(null)
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null)
 
   const safeIdeas = ideas || SEED_IDEAS
   const safeConnections = connections || SEED_CONNECTIONS
@@ -408,10 +410,19 @@ export function FeatureIdeaCloud() {
             : idea
         )
       )
+    } else if (draggingConnection) {
+      setDraggingConnection({
+        ...draggingConnection,
+        x: e.clientX,
+        y: e.clientY,
+      })
     }
   }
 
-  const handleCanvasMouseUp = () => {
+  const handleCanvasMouseUp = (e: React.MouseEvent) => {
+    if (draggingConnection) {
+      setDraggingConnection(null)
+    }
     setIsPanning(false)
     setDraggedIdea(null)
   }
@@ -445,6 +456,42 @@ export function FeatureIdeaCloud() {
     
     setZoom(newZoom)
     setPan({ x: newPanX, y: newPanY })
+  }
+
+  const handleConnectionNodeMouseDown = (ideaId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    const idea = safeIdeas.find(i => i.id === ideaId)
+    if (idea) {
+      setDraggingConnection({
+        fromId: ideaId,
+        x: e.clientX,
+        y: e.clientY,
+      })
+    }
+  }
+
+  const handleConnectionNodeMouseUp = (ideaId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (draggingConnection && draggingConnection.fromId !== ideaId) {
+      const existingConnection = safeConnections.find(
+        c => c.fromId === draggingConnection.fromId && c.toId === ideaId
+      )
+      
+      if (existingConnection) {
+        toast.error('Connection already exists')
+      } else {
+        const newConnection: Connection = {
+          id: `conn-${Date.now()}`,
+          fromId: draggingConnection.fromId,
+          toId: ideaId,
+          type: connectionType,
+          label: CONNECTION_LABELS[connectionType],
+        }
+        setConnections((current) => [...(current || []), newConnection])
+        toast.success('Ideas connected!')
+      }
+    }
+    setDraggingConnection(null)
   }
 
   const renderArrowhead = (connection: Connection, x: number, y: number, angle: number) => {
@@ -533,9 +580,9 @@ export function FeatureIdeaCloud() {
       const toIdea = safeIdeas.find(i => i.id === connection.toId)
       
       if (fromIdea && toIdea) {
-        const fromX = fromIdea.x * zoom + pan.x + 120
+        const fromX = fromIdea.x * zoom + pan.x + 240
         const fromY = fromIdea.y * zoom + pan.y + 80
-        const toX = toIdea.x * zoom + pan.x + 120
+        const toX = toIdea.x * zoom + pan.x
         const toY = toIdea.y * zoom + pan.y + 80
         
         const dx = toX - fromX
@@ -615,6 +662,41 @@ export function FeatureIdeaCloud() {
       }
     })
     
+    if (draggingConnection) {
+      const fromIdea = safeIdeas.find(i => i.id === draggingConnection.fromId)
+      if (fromIdea) {
+        const fromX = fromIdea.x * zoom + pan.x + 240
+        const fromY = fromIdea.y * zoom + pan.y + 80
+        const toX = draggingConnection.x
+        const toY = draggingConnection.y
+        
+        const style = CONNECTION_STYLES[connectionType]
+        
+        elements.push(
+          <g key="dragging-connection">
+            <line
+              x1={fromX}
+              y1={fromY}
+              x2={toX}
+              y2={toY}
+              stroke={style.stroke}
+              strokeWidth={2}
+              strokeDasharray={style.strokeDasharray}
+              opacity={0.6}
+              style={{ pointerEvents: 'none' }}
+            />
+            <circle
+              cx={toX}
+              cy={toY}
+              r={6}
+              fill={style.stroke}
+              opacity={0.8}
+            />
+          </g>
+        )
+      }
+    }
+    
     return elements
   }
 
@@ -674,22 +756,21 @@ export function FeatureIdeaCloud() {
           </Tooltip>
         </TooltipProvider>
 
-        {tool === 'connect' && (
-          <div className="flex items-center gap-2 px-3 bg-card border border-border rounded-md shadow-lg">
-            <select
-              value={connectionType}
-              onChange={(e) => setConnectionType(e.target.value as ConnectionType)}
-              className="text-sm bg-transparent border-none outline-none pr-1 font-medium"
-              style={{ cursor: 'pointer' }}
-            >
-              {CONNECTION_TYPES.map(type => (
-                <option key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className="flex items-center gap-2 px-3 bg-card border border-border rounded-md shadow-lg">
+          <span className="text-xs font-medium text-muted-foreground">Type:</span>
+          <select
+            value={connectionType}
+            onChange={(e) => setConnectionType(e.target.value as ConnectionType)}
+            className="text-sm bg-transparent border-none outline-none pr-1 font-medium"
+            style={{ cursor: 'pointer' }}
+          >
+            {CONNECTION_TYPES.map(type => (
+              <option key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className="w-px bg-border mx-1" />
 
@@ -776,7 +857,8 @@ export function FeatureIdeaCloud() {
 
       <div className="absolute bottom-4 right-4 z-10 bg-card border border-border rounded-lg shadow-lg p-2 text-xs text-muted-foreground max-w-sm">
         <p className="mb-1">💡 <strong>Tip:</strong> Double-click ideas to view details</p>
-        <p>🔗 Use Connect tool to create UML-style relationships</p>
+        <p className="mb-1">🔗 Drag connection nodes on card sides to connect ideas</p>
+        <p>⚙️ Change connection type in toolbar before connecting</p>
       </div>
 
       <div
@@ -820,35 +902,79 @@ export function FeatureIdeaCloud() {
               onClick={(e) => handleIdeaClick(idea, e)}
               onDoubleClick={(e) => handleIdeaDoubleClick(idea, e)}
             >
-              <Card className={`p-4 shadow-xl hover:shadow-2xl transition-all border-2 ${PRIORITY_COLORS[idea.priority]} w-[240px] ${connectingFrom === idea.id ? 'ring-4 ring-primary' : ''}`}>
-                <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-sm line-clamp-2 flex-1">{idea.title}</h3>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="h-6 w-6 shrink-0"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleEditIdea(idea)
-                      }}
-                    >
-                      <DotsThree size={16} />
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground line-clamp-2">
-                    {idea.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    <Badge variant="secondary" className="text-xs">
-                      {idea.category}
-                    </Badge>
-                    <Badge className={`text-xs ${STATUS_COLORS[idea.status]}`}>
-                      {idea.status}
-                    </Badge>
+              <div className="relative">
+                <div
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 w-6 h-6 rounded-full bg-primary border-2 border-background shadow-lg cursor-crosshair hover:scale-125 transition-transform opacity-0 hover:opacity-100"
+                  style={{
+                    opacity: hoveredNode === `${idea.id}-left` || draggingConnection ? 1 : 0.3,
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation()
+                    handleConnectionNodeMouseDown(idea.id, e)
+                  }}
+                  onMouseUp={(e) => {
+                    e.stopPropagation()
+                    handleConnectionNodeMouseUp(idea.id, e)
+                  }}
+                  onMouseEnter={() => setHoveredNode(`${idea.id}-left`)}
+                  onMouseLeave={() => setHoveredNode(null)}
+                >
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-background" />
                   </div>
                 </div>
-              </Card>
+
+                <div
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 w-6 h-6 rounded-full bg-primary border-2 border-background shadow-lg cursor-crosshair hover:scale-125 transition-transform opacity-0 hover:opacity-100"
+                  style={{
+                    opacity: hoveredNode === `${idea.id}-right` || draggingConnection ? 1 : 0.3,
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation()
+                    handleConnectionNodeMouseDown(idea.id, e)
+                  }}
+                  onMouseUp={(e) => {
+                    e.stopPropagation()
+                    handleConnectionNodeMouseUp(idea.id, e)
+                  }}
+                  onMouseEnter={() => setHoveredNode(`${idea.id}-right`)}
+                  onMouseLeave={() => setHoveredNode(null)}
+                >
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-background" />
+                  </div>
+                </div>
+
+                <Card className={`p-4 shadow-xl hover:shadow-2xl transition-all border-2 ${PRIORITY_COLORS[idea.priority]} w-[240px] ${connectingFrom === idea.id ? 'ring-4 ring-primary' : ''}`}>
+                  <div className="space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="font-semibold text-sm line-clamp-2 flex-1">{idea.title}</h3>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-6 w-6 shrink-0"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleEditIdea(idea)
+                        }}
+                      >
+                        <DotsThree size={16} />
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {idea.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1">
+                      <Badge variant="secondary" className="text-xs">
+                        {idea.category}
+                      </Badge>
+                      <Badge className={`text-xs ${STATUS_COLORS[idea.status]}`}>
+                        {idea.status}
+                      </Badge>
+                    </div>
+                  </div>
+                </Card>
+              </div>
             </motion.div>
           ))}
         </div>
