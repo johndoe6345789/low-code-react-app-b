@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles, Project } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -28,6 +28,10 @@ import { ProjectDashboard } from '@/components/ProjectDashboard'
 import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog'
 import { FeatureToggleSettings } from '@/components/FeatureToggleSettings'
 import { ProjectManager } from '@/components/ProjectManager'
+import { PWAInstallPrompt } from '@/components/PWAInstallPrompt'
+import { PWAUpdatePrompt } from '@/components/PWAUpdatePrompt'
+import { PWAStatusBar } from '@/components/PWAStatusBar'
+import { PWASettings } from '@/components/PWASettings'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -202,6 +206,14 @@ function App() {
   const safeNextjsConfig = nextjsConfig || DEFAULT_NEXTJS_CONFIG
   const safeNpmSettings = npmSettings || DEFAULT_NPM_SETTINGS
   const safeFeatureToggles = featureToggles || DEFAULT_FEATURE_TOGGLES
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const shortcut = params.get('shortcut')
+    if (shortcut) {
+      setActiveTab(shortcut)
+    }
+  }, [])
 
   useEffect(() => {
     if (!theme || !theme.variants || theme.variants.length === 0) {
@@ -494,6 +506,9 @@ Navigate to the backend directory and follow the setup instructions.
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground">
+      <PWAStatusBar />
+      <PWAUpdatePrompt />
+      
       <header className="border-b border-border bg-card px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -608,6 +623,10 @@ Navigate to the backend directory and follow the setup instructions.
             <TabsTrigger value="settings" className="gap-2">
               <Gear size={18} />
               Settings
+            </TabsTrigger>
+            <TabsTrigger value="pwa" className="gap-2">
+              <DeviceMobile size={18} />
+              PWA
             </TabsTrigger>
             <TabsTrigger value="features" className="gap-2">
               <Faders size={18} />
@@ -759,6 +778,10 @@ Navigate to the backend directory and follow the setup instructions.
             />
           </TabsContent>
 
+          <TabsContent value="pwa" className="h-full m-0">
+            <PWASettings />
+          </TabsContent>
+
           <TabsContent value="features" className="h-full m-0">
             <FeatureToggleSettings
               features={safeFeatureToggles}
@@ -869,6 +892,8 @@ Navigate to the backend directory and follow the setup instructions.
         open={shortcutsDialogOpen}
         onOpenChange={setShortcutsDialogOpen}
       />
+
+      <PWAInstallPrompt />
     </div>
   )
 }

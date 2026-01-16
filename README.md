@@ -1,16 +1,18 @@
 # 🔨 CodeForge - Low-Code Next.js App Builder
 
-![CodeForge](https://img.shields.io/badge/CodeForge-v5.2-blueviolet)
+![CodeForge](https://img.shields.io/badge/CodeForge-v5.3-blueviolet)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![React](https://img.shields.io/badge/React-18-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![AI Powered](https://img.shields.io/badge/AI-Powered-green)
+![PWA](https://img.shields.io/badge/PWA-Enabled-orange)
 
-A comprehensive visual low-code platform for generating production-ready Next.js applications with Material UI, Prisma, Flask backends, comprehensive testing suites, and persistent project management. Built with AI-powered code generation at its core.
+A comprehensive visual low-code platform for generating production-ready Next.js applications with Material UI, Prisma, Flask backends, comprehensive testing suites, and persistent project management. Built with AI-powered code generation and Progressive Web App capabilities for offline-first development.
 
 ## ✨ Features
 
 ### 🎯 Core Capabilities
+- **Progressive Web App** - Install on desktop/mobile, work offline, automatic updates, and push notifications
 - **Project Management** - Save, load, duplicate, export, and import complete projects with full state persistence
 - **Project Dashboard** - At-a-glance overview of project status, completion metrics, and quick tips
 - **Monaco Code Editor** - Full-featured IDE with syntax highlighting, autocomplete, and multi-file editing
@@ -107,12 +109,38 @@ The application includes comprehensive built-in documentation:
 - **Agents Files** - AI service architecture and integration points
 - **Sass Styles Guide** - Custom Material UI components, utilities, mixins, and animations
 - **CI/CD Guide** - Complete setup guide for all CI/CD platforms
+- **PWA Features** - Progressive Web App capabilities and offline support
 
 Access documentation by clicking the **Documentation** tab in the application.
 
+### 📱 Progressive Web App Features
+
+CodeForge is a full-featured PWA that you can install and use offline:
+
+- **Install Anywhere** - Install on desktop (Windows, Mac, Linux) or mobile (iOS, Android)
+- **Offline Support** - Work without internet connection; changes sync when reconnected
+- **Automatic Updates** - Get notified when new versions are available
+- **Push Notifications** - Stay informed about project builds and updates (optional)
+- **Fast Loading** - Intelligent caching for near-instant startup
+- **App Shortcuts** - Quick access to Dashboard, Code Editor, and Models from your OS
+- **Share Target** - Share code files directly to CodeForge from other apps
+- **Background Sync** - Project changes sync automatically in the background
+
+**To Install:**
+1. Visit the app in a supported browser (Chrome, Edge, Safari, Firefox)
+2. Look for the install prompt in the address bar or use the "Install" button in the app
+3. Follow the installation prompts for your platform
+4. Access the app from your applications menu or home screen
+
+**PWA Settings:**
+- Navigate to **PWA** tab to configure notifications, clear cache, and check installation status
+- Monitor network status and cache size
+- Manage service worker and offline capabilities
+
 ## 🗺️ Roadmap
 
-### ✅ Completed (v1.0 - v5.2)
+### ✅ Completed (v1.0 - v5.3)
+- Progressive Web App with offline support and installability
 - Project persistence with save/load functionality
 - Project dashboard with completion metrics
 - Monaco code editor integration
@@ -134,6 +162,9 @@ Access documentation by clicking the **Documentation** tab in the application.
 - Feature toggle system for customizable workspace
 - Project export/import as JSON
 - Project duplication and deletion
+- Service Worker with intelligent caching
+- Push notifications and background sync
+- App shortcuts and share target API
 
 ### 🔮 Planned
 - Real-time preview with hot reload

@@ -51,6 +51,10 @@ export function DocumentationView() {
                 <FileCode size={18} />
                 Agents Files
               </TabsTrigger>
+              <TabsTrigger value="pwa" className="gap-2">
+                <Rocket size={18} />
+                PWA Guide
+              </TabsTrigger>
               <TabsTrigger value="sass" className="gap-2">
                 <PaintBrush size={18} />
                 Sass Styles Guide
@@ -761,6 +765,302 @@ export function DocumentationView() {
                     </CardContent>
                   </Card>
                 </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="pwa" className="m-0 space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <Rocket size={32} weight="duotone" className="text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-4xl font-bold">Progressive Web App</h1>
+                    <p className="text-lg text-muted-foreground">
+                      Offline-first experience with native-like capabilities
+                    </p>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">Overview</h2>
+                  <p className="text-foreground/90 leading-relaxed">
+                    CodeForge is a fully-featured Progressive Web App that can be installed on any device and works offline. 
+                    With intelligent caching, automatic updates, and native app-like features, you can build applications anywhere, anytime.
+                  </p>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>PWA Features</CardTitle>
+                    <CardDescription>Native app capabilities in your browser</CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={16} weight="fill" className="text-accent" />
+                        <span className="font-semibold text-sm">Installable</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground ml-6">
+                        Install on desktop or mobile for quick access from your home screen or applications menu
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={16} weight="fill" className="text-accent" />
+                        <span className="font-semibold text-sm">Offline Support</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground ml-6">
+                        Work without internet connection; changes sync automatically when you reconnect
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={16} weight="fill" className="text-accent" />
+                        <span className="font-semibold text-sm">Automatic Updates</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground ml-6">
+                        Get notified when new versions are available with one-click updates
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={16} weight="fill" className="text-accent" />
+                        <span className="font-semibold text-sm">Push Notifications</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground ml-6">
+                        Opt-in to receive updates about builds, errors, and new features
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={16} weight="fill" className="text-accent" />
+                        <span className="font-semibold text-sm">App Shortcuts</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground ml-6">
+                        Quick access to Dashboard, Code Editor, and Models from your OS
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={16} weight="fill" className="text-accent" />
+                        <span className="font-semibold text-sm">Share Target</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground ml-6">
+                        Share code files directly to CodeForge from other apps
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">Installation</h2>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Desktop Installation</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3 text-sm">
+                        <div>
+                          <div className="font-semibold mb-1">Chrome/Edge/Brave:</div>
+                          <ol className="list-decimal list-inside space-y-1 text-muted-foreground ml-2">
+                            <li>Look for install icon (⊕) in address bar</li>
+                            <li>Click "Install" or use prompt in app</li>
+                            <li>App added to applications menu</li>
+                          </ol>
+                        </div>
+                        <div>
+                          <div className="font-semibold mb-1">Safari (macOS):</div>
+                          <ol className="list-decimal list-inside space-y-1 text-muted-foreground ml-2">
+                            <li>Click File → Add to Dock</li>
+                            <li>App appears in Dock</li>
+                          </ol>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Mobile Installation</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3 text-sm">
+                        <div>
+                          <div className="font-semibold mb-1">iOS (Safari):</div>
+                          <ol className="list-decimal list-inside space-y-1 text-muted-foreground ml-2">
+                            <li>Tap Share button</li>
+                            <li>Select "Add to Home Screen"</li>
+                            <li>Tap "Add"</li>
+                          </ol>
+                        </div>
+                        <div>
+                          <div className="font-semibold mb-1">Android (Chrome):</div>
+                          <ol className="list-decimal list-inside space-y-1 text-muted-foreground ml-2">
+                            <li>Tap menu (three dots)</li>
+                            <li>Select "Install app"</li>
+                            <li>Confirm installation</li>
+                          </ol>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">PWA Settings</h2>
+                  <p className="text-foreground/90 leading-relaxed">
+                    Navigate to the <strong>PWA</strong> tab to manage all Progressive Web App features:
+                  </p>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Available Controls</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <div className="font-semibold">Installation Status</div>
+                        <p className="text-sm text-muted-foreground">
+                          Check if app is installed and trigger installation if available
+                        </p>
+                      </div>
+                      <Separator />
+                      <div className="space-y-2">
+                        <div className="font-semibold">Network Status</div>
+                        <p className="text-sm text-muted-foreground">
+                          Real-time online/offline indicator with connectivity information
+                        </p>
+                      </div>
+                      <Separator />
+                      <div className="space-y-2">
+                        <div className="font-semibold">Push Notifications</div>
+                        <p className="text-sm text-muted-foreground">
+                          Toggle notifications and manage permissions
+                        </p>
+                      </div>
+                      <Separator />
+                      <div className="space-y-2">
+                        <div className="font-semibold">Cache Management</div>
+                        <p className="text-sm text-muted-foreground">
+                          View cache size, service worker status, and clear cached data
+                        </p>
+                      </div>
+                      <Separator />
+                      <div className="space-y-2">
+                        <div className="font-semibold">Update Management</div>
+                        <p className="text-sm text-muted-foreground">
+                          Install pending updates when new versions are available
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">Offline Capabilities</h2>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <Card className="border-accent/50">
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <CheckCircle size={20} weight="fill" className="text-accent" />
+                          Works Offline
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2 text-sm text-foreground/80">
+                          <li className="flex items-start gap-2">
+                            <span className="text-accent mt-0.5">•</span>
+                            <span>View and edit existing projects</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-accent mt-0.5">•</span>
+                            <span>Browse files and code</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-accent mt-0.5">•</span>
+                            <span>Use Monaco editor</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-accent mt-0.5">•</span>
+                            <span>Navigate all tabs</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-accent mt-0.5">•</span>
+                            <span>View documentation</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-accent mt-0.5">•</span>
+                            <span>Make changes locally</span>
+                          </li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-muted">
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Wrench size={20} weight="duotone" className="text-muted-foreground" />
+                          Requires Internet
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                          <li className="flex items-start gap-2">
+                            <span className="mt-0.5">•</span>
+                            <span>AI-powered generation</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-0.5">•</span>
+                            <span>External font loading</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-0.5">•</span>
+                            <span>Database sync</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="mt-0.5">•</span>
+                            <span>External resources</span>
+                          </li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                <Card className="bg-accent/10 border-accent/20">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Lightbulb size={20} weight="duotone" className="text-accent" />
+                      Pro Tips
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-1">•</span>
+                        <span><strong>Install for best performance:</strong> Installed apps load faster and work more reliably offline</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-1">•</span>
+                        <span><strong>Save before going offline:</strong> Ensure projects are saved to local storage before losing connection</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-1">•</span>
+                        <span><strong>Clear cache if issues arise:</strong> Use PWA settings to clear cache and reload with fresh data</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-1">•</span>
+                        <span><strong>Enable notifications:</strong> Stay informed about updates and build completions</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-1">•</span>
+                        <span><strong>Update regularly:</strong> New versions bring performance improvements and features</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
