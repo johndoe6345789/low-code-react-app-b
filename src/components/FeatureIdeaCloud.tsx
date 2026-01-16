@@ -6,9 +6,9 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Trash, Cloud, Sparkle, ArrowsClockwise, Eye } from '@phosphor-icons/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Plus, Trash, Sparkle, MagnifyingGlassMinus, MagnifyingGlassPlus, ArrowsOut, Hand, Link as LinkIcon, Selection, DotsThree } from '@phosphor-icons/react'
+import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 
 interface FeatureIdea {
@@ -21,6 +21,7 @@ interface FeatureIdea {
   createdAt: number
   x: number
   y: number
+  connectedTo?: string[]
 }
 
 const SEED_IDEAS: FeatureIdea[] = [
@@ -32,8 +33,9 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'high',
     status: 'completed',
     createdAt: Date.now() - 10000000,
-    x: 10,
-    y: 15,
+    x: 100,
+    y: 150,
+    connectedTo: ['idea-8'],
   },
   {
     id: 'idea-2',
@@ -43,8 +45,9 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'high',
     status: 'idea',
     createdAt: Date.now() - 9000000,
-    x: 60,
-    y: 25,
+    x: 600,
+    y: 250,
+    connectedTo: ['idea-4'],
   },
   {
     id: 'idea-3',
@@ -54,8 +57,8 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'medium',
     status: 'idea',
     createdAt: Date.now() - 8000000,
-    x: 25,
-    y: 55,
+    x: 250,
+    y: 550,
   },
   {
     id: 'idea-4',
@@ -65,8 +68,9 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'high',
     status: 'planned',
     createdAt: Date.now() - 7000000,
-    x: 70,
-    y: 60,
+    x: 700,
+    y: 600,
+    connectedTo: ['idea-8'],
   },
   {
     id: 'idea-5',
@@ -76,8 +80,8 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'medium',
     status: 'idea',
     createdAt: Date.now() - 6000000,
-    x: 15,
-    y: 80,
+    x: 150,
+    y: 800,
   },
   {
     id: 'idea-6',
@@ -87,8 +91,8 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'medium',
     status: 'idea',
     createdAt: Date.now() - 5000000,
-    x: 80,
-    y: 35,
+    x: 800,
+    y: 350,
   },
   {
     id: 'idea-7',
@@ -98,8 +102,8 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'low',
     status: 'completed',
     createdAt: Date.now() - 4000000,
-    x: 45,
-    y: 10,
+    x: 450,
+    y: 100,
   },
   {
     id: 'idea-8',
@@ -109,8 +113,9 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'high',
     status: 'in-progress',
     createdAt: Date.now() - 3000000,
-    x: 30,
-    y: 40,
+    x: 300,
+    y: 400,
+    connectedTo: ['idea-5'],
   },
   {
     id: 'idea-9',
@@ -120,8 +125,8 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'medium',
     status: 'planned',
     createdAt: Date.now() - 2000000,
-    x: 55,
-    y: 75,
+    x: 550,
+    y: 750,
   },
   {
     id: 'idea-10',
@@ -131,30 +136,8 @@ const SEED_IDEAS: FeatureIdea[] = [
     priority: 'high',
     status: 'idea',
     createdAt: Date.now() - 1000000,
-    x: 85,
-    y: 50,
-  },
-  {
-    id: 'idea-11',
-    title: 'Code Templates',
-    description: 'Reusable code snippets and patterns library',
-    category: 'Productivity',
-    priority: 'medium',
-    status: 'completed',
-    createdAt: Date.now() - 900000,
-    x: 40,
-    y: 85,
-  },
-  {
-    id: 'idea-12',
-    title: 'Webhook Testing',
-    description: 'Test and debug webhooks locally with request inspection',
-    category: 'DevOps',
-    priority: 'low',
-    status: 'idea',
-    createdAt: Date.now() - 800000,
-    x: 65,
-    y: 45,
+    x: 850,
+    y: 500,
   },
 ]
 
@@ -170,9 +153,9 @@ const STATUS_COLORS = {
 }
 
 const PRIORITY_COLORS = {
-  low: 'border-blue-400 bg-blue-50 dark:bg-blue-950',
-  medium: 'border-amber-400 bg-amber-50 dark:bg-amber-950',
-  high: 'border-red-400 bg-red-50 dark:bg-red-950',
+  low: 'border-blue-400/60 bg-blue-50/80 dark:bg-blue-950/40',
+  medium: 'border-amber-400/60 bg-amber-50/80 dark:bg-amber-950/40',
+  high: 'border-red-400/60 bg-red-50/80 dark:bg-red-950/40',
 }
 
 export function FeatureIdeaCloud() {
@@ -180,11 +163,16 @@ export function FeatureIdeaCloud() {
   const [selectedIdea, setSelectedIdea] = useState<FeatureIdea | null>(null)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
-  const [filterCategory, setFilterCategory] = useState<string>('all')
-  const [filterStatus, setFilterStatus] = useState<string>('all')
-  const [filterPriority, setFilterPriority] = useState<string>('all')
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [containerSize, setContainerSize] = useState({ width: 800, height: 600 })
+  const canvasRef = useRef<HTMLDivElement>(null)
+  const [zoom, setZoom] = useState(1)
+  const [pan, setPan] = useState({ x: 0, y: 0 })
+  const [isPanning, setIsPanning] = useState(false)
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 })
+  const [draggedIdea, setDraggedIdea] = useState<string | null>(null)
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const [tool, setTool] = useState<'select' | 'pan' | 'connect'>('select')
+  const [connectingFrom, setConnectingFrom] = useState<string | null>(null)
+  const [filtersPanelOpen, setFiltersPanelOpen] = useState(false)
 
   const safeIdeas = ideas || SEED_IDEAS
 
@@ -194,22 +182,10 @@ export function FeatureIdeaCloud() {
     }
   }, [ideas, setIdeas])
 
-  useEffect(() => {
-    const updateSize = () => {
-      if (containerRef.current) {
-        setContainerSize({
-          width: containerRef.current.offsetWidth,
-          height: containerRef.current.offsetHeight,
-        })
-      }
-    }
-    
-    updateSize()
-    window.addEventListener('resize', updateSize)
-    return () => window.removeEventListener('resize', updateSize)
-  }, [])
-
   const handleAddIdea = () => {
+    const canvasCenterX = (window.innerWidth / 2 - pan.x) / zoom
+    const canvasCenterY = (window.innerHeight / 2 - pan.y) / zoom
+    
     const newIdea: FeatureIdea = {
       id: `idea-${Date.now()}`,
       title: '',
@@ -218,8 +194,8 @@ export function FeatureIdeaCloud() {
       priority: 'medium',
       status: 'idea',
       createdAt: Date.now(),
-      x: Math.random() * 80,
-      y: Math.random() * 80,
+      x: canvasCenterX,
+      y: canvasCenterY,
     }
     setSelectedIdea(newIdea)
     setEditDialogOpen(true)
@@ -230,9 +206,34 @@ export function FeatureIdeaCloud() {
     setEditDialogOpen(true)
   }
 
-  const handleViewIdea = (idea: FeatureIdea) => {
-    setSelectedIdea(idea)
-    setViewDialogOpen(true)
+  const handleIdeaClick = (idea: FeatureIdea, e: React.MouseEvent) => {
+    if (tool === 'connect') {
+      e.stopPropagation()
+      if (!connectingFrom) {
+        setConnectingFrom(idea.id)
+        toast.info('Click another idea to connect')
+      } else if (connectingFrom !== idea.id) {
+        setIdeas((currentIdeas) => 
+          (currentIdeas || []).map(i => {
+            if (i.id === connectingFrom) {
+              const connectedTo = i.connectedTo || []
+              if (!connectedTo.includes(idea.id)) {
+                return { ...i, connectedTo: [...connectedTo, idea.id] }
+              }
+            }
+            return i
+          })
+        )
+        setConnectingFrom(null)
+        toast.success('Ideas connected!')
+      }
+      return
+    }
+    
+    if (tool === 'select' && !draggedIdea) {
+      setSelectedIdea(idea)
+      setViewDialogOpen(true)
+    }
   }
 
   const handleSaveIdea = () => {
@@ -267,13 +268,14 @@ export function FeatureIdeaCloud() {
     toast.info('Generating ideas with AI...')
     
     try {
+      const categoryList = CATEGORIES.join('|')
       const promptText = `Generate 3 innovative feature ideas for a low-code application builder. Each idea should be practical and valuable. Return as JSON with this structure:
 {
   "ideas": [
     {
       "title": "Feature Name",
       "description": "Brief description",
-      "category": "${CATEGORIES.join('|')}",
+      "category": "${categoryList}",
       "priority": "low|medium|high"
     }
   ]
@@ -291,8 +293,8 @@ export function FeatureIdeaCloud() {
           priority: idea.priority || 'medium',
           status: 'idea' as const,
           createdAt: Date.now(),
-          x: 20 + (index * 20),
-          y: 20 + (index * 15),
+          x: 400 + (index * 250),
+          y: 300 + (index * 150),
         }))
         
         setIdeas((currentIdeas) => [...(currentIdeas || []), ...newIdeas])
@@ -304,154 +306,286 @@ export function FeatureIdeaCloud() {
     }
   }
 
-  const handleRandomizePositions = () => {
-    setIdeas((currentIdeas) => 
-      (currentIdeas || []).map(idea => ({
-        ...idea,
-        x: Math.random() * 80,
-        y: Math.random() * 80,
-      }))
-    )
-    toast.success('Positions randomized!')
+  const handleZoomIn = () => {
+    setZoom(z => Math.min(z * 1.2, 3))
   }
 
-  const filteredIdeas = safeIdeas.filter(idea => {
-    if (filterCategory !== 'all' && idea.category !== filterCategory) return false
-    if (filterStatus !== 'all' && idea.status !== filterStatus) return false
-    if (filterPriority !== 'all' && idea.priority !== filterPriority) return false
-    return true
-  })
+  const handleZoomOut = () => {
+    setZoom(z => Math.max(z / 1.2, 0.25))
+  }
 
-  const categoryStats = safeIdeas.reduce((acc, idea) => {
-    acc[idea.category] = (acc[idea.category] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
+  const handleResetView = () => {
+    setZoom(1)
+    setPan({ x: 0, y: 0 })
+  }
 
-  const statusStats = safeIdeas.reduce((acc, idea) => {
-    acc[idea.status] = (acc[idea.status] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    if (tool === 'pan' || e.button === 1 || (e.button === 0 && e.ctrlKey)) {
+      setIsPanning(true)
+      setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y })
+      e.preventDefault()
+    }
+  }
+
+  const handleCanvasMouseMove = (e: React.MouseEvent) => {
+    if (isPanning) {
+      setPan({
+        x: e.clientX - panStart.x,
+        y: e.clientY - panStart.y,
+      })
+    } else if (draggedIdea) {
+      const canvasX = (e.clientX - pan.x) / zoom
+      const canvasY = (e.clientY - pan.y) / zoom
+      
+      setIdeas((currentIdeas) =>
+        (currentIdeas || []).map(idea =>
+          idea.id === draggedIdea
+            ? { ...idea, x: canvasX - dragOffset.x, y: canvasY - dragOffset.y }
+            : idea
+        )
+      )
+    }
+  }
+
+  const handleCanvasMouseUp = () => {
+    setIsPanning(false)
+    setDraggedIdea(null)
+  }
+
+  const handleIdeaMouseDown = (idea: FeatureIdea, e: React.MouseEvent) => {
+    if (tool === 'select') {
+      e.stopPropagation()
+      const canvasX = (e.clientX - pan.x) / zoom
+      const canvasY = (e.clientY - pan.y) / zoom
+      setDraggedIdea(idea.id)
+      setDragOffset({
+        x: canvasX - idea.x,
+        y: canvasY - idea.y,
+      })
+    }
+  }
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault()
+    const delta = e.deltaY > 0 ? 0.9 : 1.1
+    const newZoom = Math.max(0.25, Math.min(3, zoom * delta))
+    
+    const mouseX = e.clientX
+    const mouseY = e.clientY
+    
+    const zoomPointX = (mouseX - pan.x) / zoom
+    const zoomPointY = (mouseY - pan.y) / zoom
+    
+    const newPanX = mouseX - zoomPointX * newZoom
+    const newPanY = mouseY - zoomPointY * newZoom
+    
+    setZoom(newZoom)
+    setPan({ x: newPanX, y: newPanY })
+  }
+
+  const renderConnections = () => {
+    const connections: React.ReactNode[] = []
+    safeIdeas.forEach((fromIdea) => {
+      fromIdea.connectedTo?.forEach((toId) => {
+        const toIdea = safeIdeas.find(i => i.id === toId)
+        if (toIdea) {
+          const fromX = fromIdea.x * zoom + pan.x + 120
+          const fromY = fromIdea.y * zoom + pan.y + 80
+          const toX = toIdea.x * zoom + pan.x + 120
+          const toY = toIdea.y * zoom + pan.y + 80
+          
+          connections.push(
+            <line
+              key={`${fromIdea.id}-${toId}`}
+              x1={fromX}
+              y1={fromY}
+              x2={toX}
+              y2={toY}
+              stroke="hsl(var(--accent))"
+              strokeWidth={2}
+              strokeDasharray="5,5"
+              opacity={0.5}
+            />
+          )
+        }
+      })
+    })
+    return connections
+  }
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-background via-background to-card">
-      <div className="p-4 sm:p-6 border-b border-border space-y-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-2">
-              <Cloud size={32} weight="duotone" className="text-primary" />
-              Feature Idea Cloud
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              Brainstorm and visualize your app features
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button onClick={handleRandomizePositions} variant="outline" size="sm">
-              <ArrowsClockwise size={16} className="mr-2" />
-              Shuffle
-            </Button>
-            <Button onClick={handleGenerateIdeas} variant="outline" size="sm">
-              <Sparkle size={16} weight="duotone" className="mr-2" />
-              AI Generate
-            </Button>
-            <Button onClick={handleAddIdea}>
-              <Plus size={16} className="mr-2" />
-              Add Idea
-            </Button>
-          </div>
-        </div>
+    <div className="h-full flex flex-col bg-gradient-to-br from-background via-muted/20 to-background">
+      <div className="absolute top-4 left-4 z-10 flex gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant={tool === 'select' ? 'default' : 'outline'}
+                onClick={() => {
+                  setTool('select')
+                  setConnectingFrom(null)
+                }}
+                className="shadow-lg"
+              >
+                <Selection size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Select & Drag</TooltipContent>
+          </Tooltip>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">Category</label>
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm"
-            >
-              <option value="all">All Categories ({safeIdeas.length})</option>
-              {CATEGORIES.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat} ({categoryStats[cat] || 0})
-                </option>
-              ))}
-            </select>
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant={tool === 'pan' ? 'default' : 'outline'}
+                onClick={() => {
+                  setTool('pan')
+                  setConnectingFrom(null)
+                }}
+                className="shadow-lg"
+              >
+                <Hand size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Pan Canvas</TooltipContent>
+          </Tooltip>
 
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">Status</label>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm"
-            >
-              <option value="all">All Statuses</option>
-              <option value="idea">Idea ({statusStats.idea || 0})</option>
-              <option value="planned">Planned ({statusStats.planned || 0})</option>
-              <option value="in-progress">In Progress ({statusStats['in-progress'] || 0})</option>
-              <option value="completed">Completed ({statusStats.completed || 0})</option>
-            </select>
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant={tool === 'connect' ? 'default' : 'outline'}
+                onClick={() => {
+                  setTool('connect')
+                  setConnectingFrom(null)
+                }}
+                className="shadow-lg"
+              >
+                <LinkIcon size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Connect Ideas</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
-          <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">Priority</label>
-            <select
-              value={filterPriority}
-              onChange={(e) => setFilterPriority(e.target.value)}
-              className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm"
-            >
-              <option value="all">All Priorities</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
+        <div className="w-px bg-border mx-1" />
 
-          <div className="flex items-end">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setFilterCategory('all')
-                setFilterStatus('all')
-                setFilterPriority('all')
-              }}
-              className="w-full"
-            >
-              Clear Filters
-            </Button>
-          </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="outline" onClick={handleZoomIn} className="shadow-lg">
+                <MagnifyingGlassPlus size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Zoom In</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="outline" onClick={handleZoomOut} className="shadow-lg">
+                <MagnifyingGlassMinus size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Zoom Out</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="outline" onClick={handleResetView} className="shadow-lg">
+                <ArrowsOut size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Reset View</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <div className="flex items-center gap-2 px-3 bg-card border border-border rounded-md shadow-lg">
+          <span className="text-sm font-medium">{Math.round(zoom * 100)}%</span>
         </div>
       </div>
 
-      <div className="flex-1 relative overflow-hidden" ref={containerRef}>
-        <AnimatePresence>
-          {filteredIdeas.map((idea) => (
+      <div className="absolute top-4 right-4 z-10 flex gap-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleGenerateIdeas} variant="outline" className="shadow-lg">
+                <Sparkle size={20} weight="duotone" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>AI Generate Ideas</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleAddIdea} className="shadow-lg">
+                <Plus size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Add Idea</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+
+      <div className="absolute bottom-4 right-4 z-10 bg-card border border-border rounded-lg shadow-lg p-2 text-xs text-muted-foreground">
+        <p>💡 <strong>Tip:</strong> Drag ideas to move, scroll to zoom</p>
+      </div>
+
+      <div
+        ref={canvasRef}
+        className="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing"
+        onMouseDown={handleCanvasMouseDown}
+        onMouseMove={handleCanvasMouseMove}
+        onMouseUp={handleCanvasMouseUp}
+        onMouseLeave={handleCanvasMouseUp}
+        onWheel={handleWheel}
+        style={{
+          cursor: tool === 'pan' ? 'grab' : tool === 'connect' ? 'crosshair' : isPanning ? 'grabbing' : 'default',
+        }}
+      >
+        <svg
+          className="absolute inset-0 pointer-events-none"
+          style={{ width: '100%', height: '100%' }}
+        >
+          {renderConnections()}
+        </svg>
+
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+            transformOrigin: '0 0',
+          }}
+        >
+          {safeIdeas.map((idea) => (
             <motion.div
               key={idea.id}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{
-                scale: 1,
-                opacity: 1,
-                x: `${idea.x}%`,
-                y: `${idea.y}%`,
-              }}
-              exit={{ scale: 0, opacity: 0 }}
-              transition={{
-                type: 'spring',
-                stiffness: 260,
-                damping: 20,
-              }}
-              className="absolute cursor-pointer"
+              className={`absolute ${tool === 'select' ? 'cursor-move' : tool === 'connect' ? 'cursor-pointer' : 'cursor-default'}`}
               style={{
-                left: 0,
-                top: 0,
+                left: idea.x,
+                top: idea.y,
               }}
-              onClick={() => handleViewIdea(idea)}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              onMouseDown={(e) => handleIdeaMouseDown(idea, e)}
+              onClick={(e) => handleIdeaClick(idea, e)}
             >
-              <Card className={`p-3 sm:p-4 shadow-lg hover:shadow-xl transition-shadow border-2 ${PRIORITY_COLORS[idea.priority]} max-w-[200px] sm:max-w-[240px]`}>
+              <Card className={`p-4 shadow-xl hover:shadow-2xl transition-all border-2 ${PRIORITY_COLORS[idea.priority]} w-[240px] ${connectingFrom === idea.id ? 'ring-4 ring-primary' : ''}`}>
                 <div className="space-y-2">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-sm line-clamp-2">{idea.title}</h3>
+                    <h3 className="font-semibold text-sm line-clamp-2 flex-1">{idea.title}</h3>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-6 w-6 shrink-0"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleEditIdea(idea)
+                      }}
+                    >
+                      <DotsThree size={16} />
+                    </Button>
                   </div>
                   <p className="text-xs text-muted-foreground line-clamp-2">
                     {idea.description}
@@ -468,13 +602,12 @@ export function FeatureIdeaCloud() {
               </Card>
             </motion.div>
           ))}
-        </AnimatePresence>
+        </div>
 
-        {filteredIdeas.length === 0 && (
+        {safeIdeas.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center space-y-3">
-              <Cloud size={64} className="mx-auto text-muted-foreground opacity-50" />
-              <p className="text-muted-foreground">No ideas match your filters</p>
+              <p className="text-muted-foreground">No ideas yet</p>
               <Button onClick={handleAddIdea} variant="outline">
                 <Plus size={16} className="mr-2" />
                 Add Your First Idea
