@@ -592,9 +592,9 @@ Navigate to the backend directory and follow the setup instructions.
             <Button 
               variant="outline" 
               onClick={handleGenerateWithAI}
-              className="hidden lg:flex shrink-0"
+              className="hidden lg:flex shrink-0 px-3"
             >
-              <Sparkle size={16} className="mr-2" weight="duotone" />
+              <Sparkle size={16} className="mr-1.5" weight="duotone" />
               AI Generate
             </Button>
             <Button 
@@ -608,9 +608,9 @@ Navigate to the backend directory and follow the setup instructions.
             </Button>
             <Button 
               onClick={handleExportProject}
-              className="hidden md:flex shrink-0"
+              className="hidden md:flex shrink-0 px-3"
             >
-              <Download size={16} className="mr-2" />
+              <Download size={16} className="mr-1.5" />
               Export
             </Button>
             <Button 
