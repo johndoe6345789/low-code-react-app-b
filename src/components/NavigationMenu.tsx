@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import {
   List,
   ChartBar,
@@ -21,6 +22,7 @@ import {
   DeviceMobile,
   Image,
   Faders,
+  CaretDown,
 } from '@phosphor-icons/react'
 import { FeatureToggles } from '@/types/project'
 
@@ -53,6 +55,9 @@ export function NavigationMenu({
   errorCount = 0,
 }: NavigationMenuProps) {
   const [open, setOpen] = useState(false)
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    new Set(['overview', 'development', 'automation', 'design', 'backend', 'testing', 'tools'])
+  )
 
   const navigationGroups: NavigationGroup[] = [
     {
@@ -234,6 +239,18 @@ export function NavigationMenu({
     setOpen(false)
   }
 
+  const toggleGroup = (groupId: string) => {
+    setExpandedGroups((prev) => {
+      const newSet = new Set(prev)
+      if (newSet.has(groupId)) {
+        newSet.delete(groupId)
+      } else {
+        newSet.add(groupId)
+      }
+      return newSet
+    })
+  }
+
   const isItemVisible = (item: NavigationItem) => {
     if (!item.featureKey) return true
     return featureToggles[item.featureKey]
@@ -255,51 +272,71 @@ export function NavigationMenu({
           <SheetTitle>Navigation</SheetTitle>
         </SheetHeader>
         <ScrollArea className="h-[calc(100vh-8rem)] mt-6">
-          <div className="space-y-6">
+          <div className="space-y-2">
             {navigationGroups.map((group) => {
               const visibleItemsCount = getVisibleItemsCount(group)
               if (visibleItemsCount === 0) return null
 
+              const isExpanded = expandedGroups.has(group.id)
+
               return (
-                <div key={group.id}>
-                  <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">
-                    {group.label}
-                  </h3>
-                  <div className="space-y-1">
-                    {group.items.map((item) => {
-                      if (!isItemVisible(item)) return null
+                <Collapsible
+                  key={group.id}
+                  open={isExpanded}
+                  onOpenChange={() => toggleGroup(group.id)}
+                >
+                  <CollapsibleTrigger className="w-full flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-muted transition-colors group">
+                    <CaretDown
+                      size={16}
+                      weight="bold"
+                      className={`text-muted-foreground transition-transform ${
+                        isExpanded ? 'rotate-0' : '-rotate-90'
+                      }`}
+                    />
+                    <h3 className="flex-1 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                      {group.label}
+                    </h3>
+                    <span className="text-xs text-muted-foreground">
+                      {visibleItemsCount}
+                    </span>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-1">
+                    <div className="space-y-1 pl-2">
+                      {group.items.map((item) => {
+                        if (!isItemVisible(item)) return null
 
-                      const isActive = activeTab === item.value
+                        const isActive = activeTab === item.value
 
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => handleItemClick(item.value)}
-                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                            isActive
-                              ? 'bg-primary text-primary-foreground'
-                              : 'hover:bg-muted text-foreground'
-                          }`}
-                        >
-                          <span className={isActive ? 'text-primary-foreground' : 'text-muted-foreground'}>
-                            {item.icon}
-                          </span>
-                          <span className="flex-1 text-left text-sm font-medium">
-                            {item.label}
-                          </span>
-                          {item.badge !== undefined && item.badge > 0 && (
-                            <Badge
-                              variant={isActive ? 'secondary' : 'destructive'}
-                              className="ml-auto"
-                            >
-                              {item.badge}
-                            </Badge>
-                          )}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => handleItemClick(item.value)}
+                            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                              isActive
+                                ? 'bg-primary text-primary-foreground'
+                                : 'hover:bg-muted text-foreground'
+                            }`}
+                          >
+                            <span className={isActive ? 'text-primary-foreground' : 'text-muted-foreground'}>
+                              {item.icon}
+                            </span>
+                            <span className="flex-1 text-left text-sm font-medium">
+                              {item.label}
+                            </span>
+                            {item.badge !== undefined && item.badge > 0 && (
+                              <Badge
+                                variant={isActive ? 'secondary' : 'destructive'}
+                                className="ml-auto"
+                              >
+                                {item.badge}
+                              </Badge>
+                            )}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
               )
             })}
           </div>
