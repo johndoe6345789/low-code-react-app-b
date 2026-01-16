@@ -18,12 +18,13 @@ const MAX_IMAGE_CACHE_SIZE = 30
 
 const limitCacheSize = (cacheName, maxItems) => {
   caches.open(cacheName).then(cache => {
+    if (!cache) return
     cache.keys().then(keys => {
       if (keys.length > maxItems) {
         cache.delete(keys[0]).then(() => limitCacheSize(cacheName, maxItems))
       }
-    })
-  })
+    }).catch(err => console.error('[Service Worker] Cache keys error:', err))
+  }).catch(err => console.error('[Service Worker] Cache open error:', err))
 }
 
 self.addEventListener('install', (event) => {
@@ -32,11 +33,19 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then(cache => {
+        if (!cache || !cache.addAll) {
+          console.error('[Service Worker] Cache API not available')
+          return Promise.resolve()
+        }
         console.log('[Service Worker] Caching static assets')
-        return cache.addAll(STATIC_ASSETS)
+        return cache.addAll(STATIC_ASSETS).catch(err => {
+          console.error('[Service Worker] Failed to cache some assets:', err)
+          return Promise.resolve()
+        })
       })
       .catch(err => {
-        console.error('[Service Worker] Cache failed:', err)
+        console.error('[Service Worker] Cache open failed:', err)
+        return Promise.resolve()
       })
   )
   
@@ -80,10 +89,14 @@ self.addEventListener('fetch', (event) => {
       caches.match(request).then(response => {
         return response || fetch(request).then(fetchRes => {
           return caches.open(STATIC_CACHE).then(cache => {
-            cache.put(request, fetchRes.clone())
+            if (cache && cache.put) {
+              cache.put(request, fetchRes.clone()).catch(err => 
+                console.error('[Service Worker] Cache put error:', err)
+              )
+            }
             return fetchRes
-          })
-        })
+          }).catch(() => fetchRes)
+        }).catch(() => response)
       })
     )
     return
@@ -94,10 +107,14 @@ self.addEventListener('fetch', (event) => {
       caches.match(request).then(response => {
         return response || fetch(request).then(fetchRes => {
           return caches.open(IMAGE_CACHE).then(cache => {
-            cache.put(request, fetchRes.clone())
-            limitCacheSize(IMAGE_CACHE, MAX_IMAGE_CACHE_SIZE)
+            if (cache && cache.put) {
+              cache.put(request, fetchRes.clone()).catch(err => 
+                console.error('[Service Worker] Image cache put error:', err)
+              )
+              limitCacheSize(IMAGE_CACHE, MAX_IMAGE_CACHE_SIZE)
+            }
             return fetchRes
-          })
+          }).catch(() => fetchRes)
         }).catch(() => {
           return new Response('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="#ccc" width="100" height="100"/></svg>', {
             headers: { 'Content-Type': 'image/svg+xml' }
@@ -113,10 +130,14 @@ self.addEventListener('fetch', (event) => {
       caches.match(request).then(response => {
         return response || fetch(request).then(fetchRes => {
           return caches.open(DYNAMIC_CACHE).then(cache => {
-            cache.put(request, fetchRes.clone())
-            limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE)
+            if (cache && cache.put) {
+              cache.put(request, fetchRes.clone()).catch(err => 
+                console.error('[Service Worker] Dynamic cache put error:', err)
+              )
+              limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE)
+            }
             return fetchRes
-          })
+          }).catch(() => fetchRes)
         }).catch(() => {
           if (request.destination === 'document') {
             return caches.match('/index.html')
@@ -132,10 +153,14 @@ self.addEventListener('fetch', (event) => {
       .then(response => {
         return response || fetch(request).then(fetchRes => {
           return caches.open(DYNAMIC_CACHE).then(cache => {
-            cache.put(request, fetchRes.clone())
-            limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE)
+            if (cache && cache.put) {
+              cache.put(request, fetchRes.clone()).catch(err => 
+                console.error('[Service Worker] Cache put error:', err)
+              )
+              limitCacheSize(DYNAMIC_CACHE, MAX_DYNAMIC_CACHE_SIZE)
+            }
             return fetchRes
-          })
+          }).catch(() => fetchRes)
         })
       })
       .catch(() => {
