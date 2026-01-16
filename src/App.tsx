@@ -34,6 +34,8 @@ import { PWAStatusBar } from '@/components/PWAStatusBar'
 import { PWASettings } from '@/components/PWASettings'
 import { FaviconDesigner } from '@/components/FaviconDesigner'
 import { GlobalSearch } from '@/components/GlobalSearch'
+import { NavigationMenu } from '@/components/NavigationMenu'
+import { PageHeader } from '@/components/PageHeader'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -526,30 +528,34 @@ Navigate to the backend directory and follow the setup instructions.
       <PWAStatusBar />
       <PWAUpdatePrompt />
       
-      <header className="border-b border-border bg-card px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Code size={24} weight="duotone" className="text-white" />
+      <header className="border-b border-border bg-card px-4 sm:px-6 py-3 sm:py-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <NavigationMenu
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              featureToggles={safeFeatureToggles}
+              errorCount={autoDetectedErrors.length}
+            />
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
+              <Code size={20} weight="duotone" className="text-white sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold">CodeForge</h1>
-              <p className="text-xs text-muted-foreground">
+            <div className="min-w-0">
+              <h1 className="text-base sm:text-xl font-bold truncate">CodeForge</h1>
+              <p className="text-xs text-muted-foreground hidden sm:block">
                 Low-Code Next.js App Builder
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-1 sm:gap-2 shrink-0">
             <Button 
               variant="outline" 
+              size="icon"
               onClick={() => setSearchDialogOpen(true)}
-              className="gap-2"
+              className="shrink-0"
+              title="Search (Ctrl+K)"
             >
-              <MagnifyingGlass size={16} />
-              Search
-              <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-                <span className="text-xs">⌘</span>K
-              </kbd>
+              <MagnifyingGlass size={18} />
             </Button>
             <ProjectManager
               currentProject={getCurrentProject()}
@@ -558,158 +564,68 @@ Navigate to the backend directory and follow the setup instructions.
             {safeFeatureToggles.errorRepair && autoDetectedErrors.length > 0 && (
               <Button 
                 variant="outline" 
+                size="icon"
                 onClick={() => setActiveTab('errors')}
-                className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+                className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground shrink-0 relative"
+                title={`${autoDetectedErrors.length} ${autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}`}
               >
-                <Wrench size={16} className="mr-2" />
-                {autoDetectedErrors.length} {autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}
+                <Wrench size={18} />
+                <Badge 
+                  variant="destructive" 
+                  className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]"
+                >
+                  {autoDetectedErrors.length}
+                </Badge>
               </Button>
             )}
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => setActiveTab('features')}
-              title="Toggle Features"
-            >
-              <Faders size={20} />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="icon"
               onClick={() => setShortcutsDialogOpen(true)}
               title="Keyboard Shortcuts (Ctrl+/)"
+              className="hidden sm:flex shrink-0"
             >
-              <Keyboard size={20} />
+              <Keyboard size={18} />
             </Button>
-            <Button variant="outline" onClick={handleGenerateWithAI}>
+            <Button 
+              variant="outline" 
+              onClick={handleGenerateWithAI}
+              className="hidden lg:flex shrink-0"
+            >
               <Sparkle size={16} className="mr-2" weight="duotone" />
               AI Generate
             </Button>
-            <Button onClick={handleExportProject}>
+            <Button 
+              variant="outline"
+              size="icon"
+              onClick={handleGenerateWithAI}
+              className="lg:hidden shrink-0"
+              title="AI Generate"
+            >
+              <Sparkle size={18} weight="duotone" />
+            </Button>
+            <Button 
+              onClick={handleExportProject}
+              className="hidden md:flex shrink-0"
+            >
               <Download size={16} className="mr-2" />
-              Export Project
+              Export
+            </Button>
+            <Button 
+              size="icon"
+              onClick={handleExportProject}
+              className="md:hidden shrink-0"
+              title="Export Project"
+            >
+              <Download size={18} />
             </Button>
           </div>
         </div>
       </header>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <div className="border-b border-border bg-card px-3 sm:px-6">
-          <TabsList className="h-auto bg-transparent flex-wrap py-2 gap-1 justify-start">
-            <TabsTrigger value="dashboard" className="gap-2">
-              <ChartBar size={18} />
-              Dashboard
-            </TabsTrigger>
-            {safeFeatureToggles.codeEditor && (
-              <TabsTrigger value="code" className="gap-2">
-                <Code size={18} />
-                Code Editor
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.models && (
-              <TabsTrigger value="models" className="gap-2">
-                <Database size={18} />
-                Models
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.components && (
-              <TabsTrigger value="components" className="gap-2">
-                <Tree size={18} />
-                Components
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.componentTrees && (
-              <TabsTrigger value="component-trees" className="gap-2">
-                <Tree size={18} />
-                Component Trees
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.workflows && (
-              <TabsTrigger value="workflows" className="gap-2">
-                <FlowArrow size={18} />
-                Workflows
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.lambdas && (
-              <TabsTrigger value="lambdas" className="gap-2">
-                <Code size={18} />
-                Lambdas
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.styling && (
-              <TabsTrigger value="styling" className="gap-2">
-                <PaintBrush size={18} />
-                Styling
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.flaskApi && (
-              <TabsTrigger value="flask" className="gap-2">
-                <Flask size={18} />
-                Flask API
-              </TabsTrigger>
-            )}
-            <TabsTrigger value="settings" className="gap-2">
-              <Gear size={18} />
-              Settings
-            </TabsTrigger>
-            <TabsTrigger value="pwa" className="gap-2">
-              <DeviceMobile size={18} />
-              PWA
-            </TabsTrigger>
-            {safeFeatureToggles.faviconDesigner && (
-              <TabsTrigger value="favicon" className="gap-2">
-                <Image size={18} />
-                Favicon
-              </TabsTrigger>
-            )}
-            <TabsTrigger value="features" className="gap-2">
-              <Faders size={18} />
-              Features
-            </TabsTrigger>
-            {safeFeatureToggles.playwright && (
-              <TabsTrigger value="playwright" className="gap-2">
-                <Play size={18} />
-                Playwright
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.storybook && (
-              <TabsTrigger value="storybook" className="gap-2">
-                <BookOpen size={18} />
-                Storybook
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.unitTests && (
-              <TabsTrigger value="unit-tests" className="gap-2">
-                <Cube size={18} />
-                Unit Tests
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.errorRepair && (
-              <TabsTrigger value="errors" className="gap-2">
-                <Wrench size={18} />
-                Error Repair
-                {autoDetectedErrors.length > 0 && (
-                  <Badge variant="destructive" className="ml-1">
-                    {autoDetectedErrors.length}
-                  </Badge>
-                )}
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.documentation && (
-              <TabsTrigger value="docs" className="gap-2">
-                <FileText size={18} />
-                Documentation
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.sassStyles && (
-              <TabsTrigger value="sass" className="gap-2">
-                <PaintBrush size={18} />
-                Sass Styles
-              </TabsTrigger>
-            )}
-          </TabsList>
-        </div>
-
+        <PageHeader activeTab={activeTab} />
+        
         <div className="flex-1 overflow-hidden">
           <TabsContent value="dashboard" className="h-full m-0">
             <ProjectDashboard

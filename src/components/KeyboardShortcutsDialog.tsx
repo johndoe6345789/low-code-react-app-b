@@ -53,7 +53,23 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
               />
               <ShortcutRow
                 keys={[ctrlKey, '5']}
+                description="Go to Component Trees"
+              />
+              <ShortcutRow
+                keys={[ctrlKey, '6']}
+                description="Go to Workflows"
+              />
+              <ShortcutRow
+                keys={[ctrlKey, '7']}
+                description="Go to Lambdas"
+              />
+              <ShortcutRow
+                keys={[ctrlKey, '8']}
                 description="Go to Styling"
+              />
+              <ShortcutRow
+                keys={[ctrlKey, '9']}
+                description="Go to Favicon Designer"
               />
             </div>
           </div>
@@ -64,16 +80,16 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
             <h3 className="font-semibold mb-3">Actions</h3>
             <div className="space-y-2">
               <ShortcutRow
+                keys={[ctrlKey, 'K']}
+                description="Search Everything"
+              />
+              <ShortcutRow
                 keys={[ctrlKey, 'E']}
                 description="Export Project"
               />
               <ShortcutRow
-                keys={[ctrlKey, 'K']}
+                keys={[ctrlKey, 'Shift', 'G']}
                 description="AI Generate"
-              />
-              <ShortcutRow
-                keys={[ctrlKey, 'S']}
-                description="Save (Auto-save enabled)"
               />
               <ShortcutRow
                 keys={[ctrlKey, '/']}

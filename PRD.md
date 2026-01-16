@@ -242,8 +242,12 @@ Animations should feel responsive and purposeful - quick panel transitions (200m
   - Section margins: mb-6 (24px) between major sections
   
 - **Mobile**: 
+  - Burger menu navigation with grouped feature categories for cleaner mobile experience
+  - Page header displays current section with icon and description
+  - Responsive toolbar with icon-only buttons on mobile, full labels on desktop
   - Stack panels vertically instead of resizable horizontal splits
-  - Convert main tabs to a drawer menu on mobile
   - Full-screen editor mode as default on small screens
   - Collapse file tree into slide-out sheet
-  - Touch-friendly hit areas (min 44px) for all tree items and buttons
+  - Touch-friendly hit areas (min 44px) for all interactive elements
+  - Error badge overlays on navigation icon when errors present
+  - Search accessible via icon-only button on mobile
