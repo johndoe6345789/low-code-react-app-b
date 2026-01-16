@@ -459,14 +459,6 @@ export function FeatureIdeaCloud() {
           edgesToRemove.push(edge.id)
         }
         
-        if (edge.target === sourceNodeId && edgeTargetHandle === sourceHandleId) {
-          edgesToRemove.push(edge.id)
-        }
-        
-        if (edge.source === targetNodeId && edgeSourceHandle === targetHandleId) {
-          edgesToRemove.push(edge.id)
-        }
-        
         if (edge.target === targetNodeId && edgeTargetHandle === targetHandleId) {
           edgesToRemove.push(edge.id)
         }
@@ -504,7 +496,7 @@ export function FeatureIdeaCloud() {
       })
       
       if (edgesToRemove.length > 0) {
-        toast.success(`Connection ${edgesToRemove.length > 0 ? 'remapped' : 'created'}! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
+        toast.success(`Connection remapped! (${edgesToRemove.length} old connection${edgesToRemove.length > 1 ? 's' : ''} removed)`)
       } else {
         toast.success('Ideas connected!')
       }
@@ -543,14 +535,6 @@ export function FeatureIdeaCloud() {
       const edgeTargetHandle = edge.targetHandle || 'default'
       
       if (edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId) {
-        edgesToRemove.push(edge.id)
-      }
-      
-      if (edge.target === sourceNodeId && edgeTargetHandle === sourceHandleId) {
-        edgesToRemove.push(edge.id)
-      }
-      
-      if (edge.source === targetNodeId && edgeSourceHandle === targetHandleId) {
         edgesToRemove.push(edge.id)
       }
       
