@@ -10,6 +10,23 @@ import "./main.css"
 import "./styles/theme.css"
 import "./index.css"
 
+const originalError = console.error
+console.error = (...args) => {
+  if (
+    typeof args[0] === 'string' &&
+    args[0].includes('ResizeObserver loop completed with undelivered notifications')
+  ) {
+    return
+  }
+  originalError.call(console, ...args)
+}
+
+window.addEventListener('error', (e) => {
+  if (e.message === 'ResizeObserver loop completed with undelivered notifications.') {
+    e.stopImmediatePropagation()
+  }
+})
+
 createRoot(document.getElementById('root')!).render(
   <ErrorBoundary FallbackComponent={ErrorFallback}>
     <App />
