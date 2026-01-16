@@ -24,13 +24,15 @@ import {
   Image as ImageIcon,
   ArrowCounterClockwise,
   Copy,
-  FloppyDisk
+  FloppyDisk,
+  PencilSimple,
+  Eraser
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
 interface FaviconElement {
   id: string
-  type: 'circle' | 'square' | 'triangle' | 'star' | 'heart' | 'polygon' | 'text' | 'emoji'
+  type: 'circle' | 'square' | 'triangle' | 'star' | 'heart' | 'polygon' | 'text' | 'emoji' | 'freehand'
   x: number
   y: number
   width: number
@@ -41,6 +43,8 @@ interface FaviconElement {
   fontSize?: number
   fontWeight?: string
   emoji?: string
+  paths?: Array<{ x: number; y: number }>
+  strokeWidth?: number
 }
 
 interface FaviconDesign {
@@ -93,7 +97,13 @@ export function FaviconDesigner() {
   const [designs, setDesigns] = useKV<FaviconDesign[]>('favicon-designs', [DEFAULT_DESIGN])
   const [activeDesignId, setActiveDesignId] = useState<string>(DEFAULT_DESIGN.id)
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null)
+  const [isDrawing, setIsDrawing] = useState(false)
+  const [drawMode, setDrawMode] = useState<'select' | 'draw' | 'erase'>('select')
+  const [brushSize, setBrushSize] = useState(3)
+  const [brushColor, setBrushColor] = useState('#ffffff')
+  const [currentPath, setCurrentPath] = useState<Array<{ x: number; y: number }>>([])
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const drawingCanvasRef = useRef<HTMLCanvasElement>(null)
 
   const safeDesigns = designs || [DEFAULT_DESIGN]
   const activeDesign = safeDesigns.find((d) => d.id === activeDesignId) || DEFAULT_DESIGN
@@ -119,49 +129,64 @@ export function FaviconDesigner() {
 
     activeDesign.elements.forEach((element) => {
       ctx.save()
-      ctx.translate(element.x, element.y)
-      ctx.rotate((element.rotation * Math.PI) / 180)
-      ctx.fillStyle = element.color
+      
+      if (element.type === 'freehand' && element.paths && element.paths.length > 0) {
+        ctx.strokeStyle = element.color
+        ctx.lineWidth = element.strokeWidth || 3
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+        
+        ctx.beginPath()
+        ctx.moveTo(element.paths[0].x, element.paths[0].y)
+        for (let i = 1; i < element.paths.length; i++) {
+          ctx.lineTo(element.paths[i].x, element.paths[i].y)
+        }
+        ctx.stroke()
+      } else {
+        ctx.translate(element.x, element.y)
+        ctx.rotate((element.rotation * Math.PI) / 180)
+        ctx.fillStyle = element.color
 
-      switch (element.type) {
-        case 'circle':
-          ctx.beginPath()
-          ctx.arc(0, 0, element.width / 2, 0, Math.PI * 2)
-          ctx.fill()
-          break
-        case 'square':
-          ctx.fillRect(-element.width / 2, -element.height / 2, element.width, element.height)
-          break
-        case 'triangle':
-          ctx.beginPath()
-          ctx.moveTo(0, -element.height / 2)
-          ctx.lineTo(element.width / 2, element.height / 2)
-          ctx.lineTo(-element.width / 2, element.height / 2)
-          ctx.closePath()
-          ctx.fill()
-          break
-        case 'star':
-          drawStar(ctx, 0, 0, 5, element.width / 2, element.width / 4)
-          break
-        case 'heart':
-          drawHeart(ctx, 0, 0, element.width)
-          break
-        case 'polygon':
-          drawPolygon(ctx, 0, 0, 6, element.width / 2)
-          break
-        case 'text':
-          ctx.fillStyle = element.color
-          ctx.font = `${element.fontWeight || 'bold'} ${element.fontSize || 32}px sans-serif`
-          ctx.textAlign = 'center'
-          ctx.textBaseline = 'middle'
-          ctx.fillText(element.text || '', 0, 0)
-          break
-        case 'emoji':
-          ctx.font = `${element.fontSize || 32}px sans-serif`
-          ctx.textAlign = 'center'
-          ctx.textBaseline = 'middle'
-          ctx.fillText(element.emoji || '😀', 0, 0)
-          break
+        switch (element.type) {
+          case 'circle':
+            ctx.beginPath()
+            ctx.arc(0, 0, element.width / 2, 0, Math.PI * 2)
+            ctx.fill()
+            break
+          case 'square':
+            ctx.fillRect(-element.width / 2, -element.height / 2, element.width, element.height)
+            break
+          case 'triangle':
+            ctx.beginPath()
+            ctx.moveTo(0, -element.height / 2)
+            ctx.lineTo(element.width / 2, element.height / 2)
+            ctx.lineTo(-element.width / 2, element.height / 2)
+            ctx.closePath()
+            ctx.fill()
+            break
+          case 'star':
+            drawStar(ctx, 0, 0, 5, element.width / 2, element.width / 4)
+            break
+          case 'heart':
+            drawHeart(ctx, 0, 0, element.width)
+            break
+          case 'polygon':
+            drawPolygon(ctx, 0, 0, 6, element.width / 2)
+            break
+          case 'text':
+            ctx.fillStyle = element.color
+            ctx.font = `${element.fontWeight || 'bold'} ${element.fontSize || 32}px sans-serif`
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText(element.text || '', 0, 0)
+            break
+          case 'emoji':
+            ctx.font = `${element.fontSize || 32}px sans-serif`
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText(element.emoji || '😀', 0, 0)
+            break
+        }
       }
 
       ctx.restore()
@@ -403,6 +428,153 @@ export function FaviconDesigner() {
     toast.success('Exporting all sizes...')
   }
 
+  const getCanvasCoordinates = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = drawingCanvasRef.current
+    if (!canvas) return { x: 0, y: 0 }
+
+    const rect = canvas.getBoundingClientRect()
+    const scaleX = activeDesign.size / rect.width
+    const scaleY = activeDesign.size / rect.height
+
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
+    }
+  }
+
+  const handleCanvasMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (drawMode === 'select') return
+
+    setIsDrawing(true)
+    const coords = getCanvasCoordinates(e)
+    setCurrentPath([coords])
+  }
+
+  const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || drawMode === 'select') return
+
+    const coords = getCanvasCoordinates(e)
+    setCurrentPath((prev) => [...prev, coords])
+
+    const canvas = drawingCanvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    if (drawMode === 'draw') {
+      ctx.strokeStyle = brushColor
+      ctx.lineWidth = brushSize
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+
+      if (currentPath.length > 0) {
+        const prevPoint = currentPath[currentPath.length - 1]
+        ctx.beginPath()
+        ctx.moveTo(prevPoint.x, prevPoint.y)
+        ctx.lineTo(coords.x, coords.y)
+        ctx.stroke()
+      }
+    } else if (drawMode === 'erase') {
+      ctx.globalCompositeOperation = 'destination-out'
+      ctx.lineWidth = brushSize * 2
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+
+      if (currentPath.length > 0) {
+        const prevPoint = currentPath[currentPath.length - 1]
+        ctx.beginPath()
+        ctx.moveTo(prevPoint.x, prevPoint.y)
+        ctx.lineTo(coords.x, coords.y)
+        ctx.stroke()
+      }
+      ctx.globalCompositeOperation = 'source-over'
+    }
+  }
+
+  const handleCanvasMouseUp = () => {
+    if (!isDrawing || drawMode === 'select') return
+
+    setIsDrawing(false)
+
+    if (drawMode === 'draw' && currentPath.length > 1) {
+      const newElement: FaviconElement = {
+        id: `element-${Date.now()}`,
+        type: 'freehand',
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        color: brushColor,
+        rotation: 0,
+        paths: currentPath,
+        strokeWidth: brushSize,
+      }
+
+      setDesigns((current) =>
+        (current || []).map((d) =>
+          d.id === activeDesignId
+            ? { ...d, elements: [...d.elements, newElement], updatedAt: Date.now() }
+            : d
+        )
+      )
+    } else if (drawMode === 'erase') {
+      const canvas = canvasRef.current
+      if (!canvas) return
+
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+
+      const imageData = ctx.getImageData(0, 0, activeDesign.size, activeDesign.size)
+      
+      const filteredElements = activeDesign.elements.filter((element) => {
+        if (element.type !== 'freehand' || !element.paths) return true
+
+        return !element.paths.some((point) =>
+          currentPath.some((erasePoint) => {
+            const distance = Math.sqrt(
+              Math.pow(point.x - erasePoint.x, 2) + Math.pow(point.y - erasePoint.y, 2)
+            )
+            return distance < brushSize * 2
+          })
+        )
+      })
+
+      if (filteredElements.length !== activeDesign.elements.length) {
+        setDesigns((current) =>
+          (current || []).map((d) =>
+            d.id === activeDesignId
+              ? { ...d, elements: filteredElements, updatedAt: Date.now() }
+              : d
+          )
+        )
+      }
+    }
+
+    setCurrentPath([])
+    drawCanvas()
+  }
+
+  const handleCanvasMouseLeave = () => {
+    if (isDrawing) {
+      handleCanvasMouseUp()
+    }
+  }
+
+  useEffect(() => {
+    const canvas = drawingCanvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = activeDesign.size
+    canvas.height = activeDesign.size
+
+    ctx.clearRect(0, 0, activeDesign.size, activeDesign.size)
+  }, [activeDesign, drawMode])
+
+
   return (
     <div className="h-full flex flex-col bg-background">
       <div className="border-b border-border bg-card px-4 sm:px-6 py-3">
@@ -421,6 +593,40 @@ export function FaviconDesigner() {
               Delete
             </Button>
           </div>
+          <div className="flex gap-2">
+            <Button
+              variant={drawMode === 'select' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setDrawMode('select')
+                setSelectedElementId(null)
+              }}
+            >
+              Select
+            </Button>
+            <Button
+              variant={drawMode === 'draw' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setDrawMode('draw')
+                setSelectedElementId(null)
+              }}
+            >
+              <PencilSimple size={16} className="mr-2" />
+              Draw
+            </Button>
+            <Button
+              variant={drawMode === 'erase' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => {
+                setDrawMode('erase')
+                setSelectedElementId(null)
+              }}
+            >
+              <Eraser size={16} className="mr-2" />
+              Erase
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -430,18 +636,40 @@ export function FaviconDesigner() {
             <Card className="p-8 mb-6">
               <div className="flex flex-col items-center gap-4">
                 <div className="relative">
-                  <canvas
-                    ref={canvasRef}
-                    className="border-2 border-border rounded-lg shadow-xl"
-                    style={{
-                      width: '400px',
-                      height: '400px',
-                      imageRendering: 'pixelated',
-                    }}
-                  />
+                  <div className="relative">
+                    <canvas
+                      ref={canvasRef}
+                      className="border-2 border-border rounded-lg shadow-xl absolute top-0 left-0"
+                      style={{
+                        width: '400px',
+                        height: '400px',
+                        imageRendering: 'pixelated',
+                        pointerEvents: 'none',
+                      }}
+                    />
+                    <canvas
+                      ref={drawingCanvasRef}
+                      className="border-2 border-border rounded-lg shadow-xl relative z-10"
+                      style={{
+                        width: '400px',
+                        height: '400px',
+                        imageRendering: 'pixelated',
+                        cursor: drawMode === 'draw' ? 'crosshair' : drawMode === 'erase' ? 'not-allowed' : 'default',
+                      }}
+                      onMouseDown={handleCanvasMouseDown}
+                      onMouseMove={handleCanvasMouseMove}
+                      onMouseUp={handleCanvasMouseUp}
+                      onMouseLeave={handleCanvasMouseLeave}
+                    />
+                  </div>
                   <Badge className="absolute -top-3 -right-3">
                     {activeDesign.size}x{activeDesign.size}
                   </Badge>
+                  {drawMode !== 'select' && (
+                    <Badge className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-accent">
+                      {drawMode === 'draw' ? `Brush: ${brushSize}px` : `Eraser: ${brushSize * 2}px`}
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="flex gap-2 flex-wrap justify-center">
@@ -562,13 +790,62 @@ export function FaviconDesigner() {
                       size="sm"
                       onClick={() => handleAddElement(value as FaviconElement['type'])}
                       className="flex flex-col gap-1 h-auto py-2"
+                      disabled={drawMode !== 'select'}
                     >
                       <Icon size={20} />
                       <span className="text-xs">{label}</span>
                     </Button>
                   ))}
                 </div>
+                {drawMode !== 'select' && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Switch to Select mode to add elements
+                  </p>
+                )}
               </div>
+
+              {drawMode !== 'select' && (
+                <>
+                  <Separator />
+                  <div className="space-y-4">
+                    <Label className="text-base font-semibold">
+                      {drawMode === 'draw' ? 'Brush Settings' : 'Eraser Settings'}
+                    </Label>
+
+                    {drawMode === 'draw' && (
+                      <div>
+                        <Label>Brush Color</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            type="color"
+                            value={brushColor}
+                            onChange={(e) => setBrushColor(e.target.value)}
+                            className="w-20 h-10"
+                          />
+                          <Input
+                            value={brushColor}
+                            onChange={(e) => setBrushColor(e.target.value)}
+                            placeholder="#ffffff"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <Label>
+                        {drawMode === 'draw' ? 'Brush' : 'Eraser'} Size: {brushSize}px
+                      </Label>
+                      <Slider
+                        value={[brushSize]}
+                        onValueChange={([value]) => setBrushSize(value)}
+                        min={1}
+                        max={20}
+                        step={1}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
 
               <Separator />
 
@@ -586,16 +863,24 @@ export function FaviconDesigner() {
                             ? 'border-primary bg-primary/10'
                             : 'border-border hover:bg-accent/50'
                         }`}
-                        onClick={() => setSelectedElementId(element.id)}
+                        onClick={() => {
+                          if (drawMode === 'select') {
+                            setSelectedElementId(element.id)
+                          }
+                        }}
                       >
                         <div className="flex items-center gap-2">
-                          {ELEMENT_TYPES.find((t) => t.value === element.type)?.icon && (
-                            <span>
-                              {(() => {
-                                const Icon = ELEMENT_TYPES.find((t) => t.value === element.type)!.icon
-                                return <Icon size={16} />
-                              })()}
-                            </span>
+                          {element.type === 'freehand' ? (
+                            <PencilSimple size={16} />
+                          ) : (
+                            ELEMENT_TYPES.find((t) => t.value === element.type)?.icon && (
+                              <span>
+                                {(() => {
+                                  const Icon = ELEMENT_TYPES.find((t) => t.value === element.type)!.icon
+                                  return <Icon size={16} />
+                                })()}
+                              </span>
+                            )
                           )}
                           <span className="text-sm capitalize">{element.type}</span>
                           {element.text && <span className="text-xs text-muted-foreground">"{element.text}"</span>}
@@ -615,18 +900,50 @@ export function FaviconDesigner() {
                     ))}
                     {activeDesign.elements.length === 0 && (
                       <p className="text-sm text-muted-foreground text-center py-4">
-                        No elements yet. Add some!
+                        No elements yet. Add some or start drawing!
                       </p>
                     )}
                   </div>
                 </ScrollArea>
               </div>
 
-              {selectedElement && (
+              {selectedElement && drawMode === 'select' && (
                 <>
                   <Separator />
                   <div className="space-y-4">
                     <Label className="text-base font-semibold">Edit Element</Label>
+
+                    {selectedElement.type === 'freehand' && (
+                      <>
+                        <div>
+                          <Label>Stroke Color</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              type="color"
+                              value={selectedElement.color}
+                              onChange={(e) => handleUpdateElement({ color: e.target.value })}
+                              className="w-20 h-10"
+                            />
+                            <Input
+                              value={selectedElement.color}
+                              onChange={(e) => handleUpdateElement({ color: e.target.value })}
+                              placeholder="#ffffff"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label>Stroke Width: {selectedElement.strokeWidth || 3}px</Label>
+                          <Slider
+                            value={[selectedElement.strokeWidth || 3]}
+                            onValueChange={([value]) => handleUpdateElement({ strokeWidth: value })}
+                            min={1}
+                            max={20}
+                            step={1}
+                          />
+                        </div>
+                      </>
+                    )}
 
                     {(selectedElement.type === 'text' || selectedElement.type === 'emoji') && (
                       <>
@@ -684,7 +1001,7 @@ export function FaviconDesigner() {
                       </>
                     )}
 
-                    {selectedElement.type !== 'text' && selectedElement.type !== 'emoji' && (
+                    {selectedElement.type !== 'text' && selectedElement.type !== 'emoji' && selectedElement.type !== 'freehand' && (
                       <>
                         <div>
                           <Label>Width: {selectedElement.width}px</Label>
@@ -710,55 +1027,61 @@ export function FaviconDesigner() {
                       </>
                     )}
 
-                    <div>
-                      <Label>X Position: {selectedElement.x}px</Label>
-                      <Slider
-                        value={[selectedElement.x]}
-                        onValueChange={([value]) => handleUpdateElement({ x: value })}
-                        min={0}
-                        max={activeDesign.size}
-                        step={1}
-                      />
-                    </div>
+                    {selectedElement.type !== 'freehand' && (
+                      <>
+                        <div>
+                          <Label>X Position: {selectedElement.x}px</Label>
+                          <Slider
+                            value={[selectedElement.x]}
+                            onValueChange={([value]) => handleUpdateElement({ x: value })}
+                            min={0}
+                            max={activeDesign.size}
+                            step={1}
+                          />
+                        </div>
 
-                    <div>
-                      <Label>Y Position: {selectedElement.y}px</Label>
-                      <Slider
-                        value={[selectedElement.y]}
-                        onValueChange={([value]) => handleUpdateElement({ y: value })}
-                        min={0}
-                        max={activeDesign.size}
-                        step={1}
-                      />
-                    </div>
+                        <div>
+                          <Label>Y Position: {selectedElement.y}px</Label>
+                          <Slider
+                            value={[selectedElement.y]}
+                            onValueChange={([value]) => handleUpdateElement({ y: value })}
+                            min={0}
+                            max={activeDesign.size}
+                            step={1}
+                          />
+                        </div>
 
-                    <div>
-                      <Label>Rotation: {selectedElement.rotation}°</Label>
-                      <Slider
-                        value={[selectedElement.rotation]}
-                        onValueChange={([value]) => handleUpdateElement({ rotation: value })}
-                        min={0}
-                        max={360}
-                        step={1}
-                      />
-                    </div>
+                        <div>
+                          <Label>Rotation: {selectedElement.rotation}°</Label>
+                          <Slider
+                            value={[selectedElement.rotation]}
+                            onValueChange={([value]) => handleUpdateElement({ rotation: value })}
+                            min={0}
+                            max={360}
+                            step={1}
+                          />
+                        </div>
+                      </>
+                    )}
 
-                    <div>
-                      <Label>Color</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          type="color"
-                          value={selectedElement.color}
-                          onChange={(e) => handleUpdateElement({ color: e.target.value })}
-                          className="w-20 h-10"
-                        />
-                        <Input
-                          value={selectedElement.color}
-                          onChange={(e) => handleUpdateElement({ color: e.target.value })}
-                          placeholder="#ffffff"
-                        />
+                    {selectedElement.type !== 'freehand' && (
+                      <div>
+                        <Label>Color</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            type="color"
+                            value={selectedElement.color}
+                            onChange={(e) => handleUpdateElement({ color: e.target.value })}
+                            className="w-20 h-10"
+                          />
+                          <Input
+                            value={selectedElement.color}
+                            onChange={(e) => handleUpdateElement({ color: e.target.value })}
+                            placeholder="#ffffff"
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </>
               )}
