@@ -22,6 +22,7 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 - **Workflow Designer** - n8n-style visual workflow builder with triggers, actions, conditions, and lambdas
 - **Lambda Designer** - Serverless function editor with multi-runtime support and trigger configuration
 - **Theme Designer** - Advanced theming with multiple variants (light/dark/custom) and unlimited custom colors
+- **Favicon Designer** - Visual icon designer with shapes, text, emojis, and multi-size export (16px to 512px)
 - **Sass Styling System** - Custom Material UI components with Sass, including utilities, mixins, and animations
 - **Flask Backend Designer** - Python REST API designer with blueprints, endpoints, and CORS configuration
 - **Project Settings** - Configure Next.js options, npm packages, scripts, and build settings
@@ -106,10 +107,17 @@ npm run test:e2e:report
 4. **Workflows Tab** - Design automation workflows visually
 5. **Lambdas Tab** - Create serverless functions
 6. **Styling Tab** - Design your theme with custom colors and typography
-7. **Flask API Tab** - Configure your backend REST API
-8. **Settings Tab** - Configure Next.js and npm packages
-9. **Code Editor Tab** - Fine-tune generated code directly
-10. **Export** - Download your complete, production-ready application
+7. **Favicon Designer Tab** - Create app icons and favicons with visual designer
+8. **Flask API Tab** - Configure your backend REST API
+9. **Settings Tab** - Configure Next.js and npm packages
+10. **Code Editor Tab** - Fine-tune generated code directly
+11. **Export** - Download your complete, production-ready application
+
+### Accessing Features
+- **Global Search** - Press `Ctrl+K` (or `Cmd+K`) to search all features, files, and navigate instantly
+- **Hamburger Menu** - Click the menu icon (☰) in the top-left to browse all available tabs
+- **Feature Toggles** - Go to **Features** tab to enable/disable specific designers
+- **Need Help?** - See [FAVICON_DESIGNER_ACCESS.md](./FAVICON_DESIGNER_ACCESS.md) for troubleshooting
 
 ## 📋 Technology Stack
 
@@ -232,6 +240,7 @@ The Spark Template files and resources from GitHub are licensed under the terms 
 - [Full Documentation](./PRD.md) - Complete product requirements and design decisions
 - [Error Repair Guide](./ERROR_REPAIR_GUIDE.md) - Error detection and repair system documentation
 - [CI/CD Guide](./CI_CD_GUIDE.md) - Complete CI/CD setup and configuration guide
+- [Favicon Designer Access](./FAVICON_DESIGNER_ACCESS.md) - How to access and use the Favicon Designer
 - [E2E Test Documentation](./e2e/README.md) - Comprehensive Playwright test suite guide
 - [E2E Test Summary](./E2E_TEST_SUMMARY.md) - Test coverage and validation details
 - [Run Tests Guide](./RUN_TESTS.md) - How to execute smoke tests and full test suite
