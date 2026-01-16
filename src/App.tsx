@@ -594,8 +594,8 @@ Navigate to the backend directory and follow the setup instructions.
       </header>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <div className="border-b border-border bg-card px-6">
-          <TabsList className="h-auto bg-transparent flex-wrap py-2">
+        <div className="border-b border-border bg-card px-3 sm:px-6">
+          <TabsList className="h-auto bg-transparent flex-wrap py-2 gap-1 justify-start">
             <TabsTrigger value="dashboard" className="gap-2">
               <ChartBar size={18} />
               Dashboard
@@ -656,6 +656,12 @@ Navigate to the backend directory and follow the setup instructions.
               <DeviceMobile size={18} />
               PWA
             </TabsTrigger>
+            {safeFeatureToggles.faviconDesigner && (
+              <TabsTrigger value="favicon" className="gap-2">
+                <Image size={18} />
+                Favicon
+              </TabsTrigger>
+            )}
             <TabsTrigger value="features" className="gap-2">
               <Faders size={18} />
               Features
@@ -699,12 +705,6 @@ Navigate to the backend directory and follow the setup instructions.
               <TabsTrigger value="sass" className="gap-2">
                 <PaintBrush size={18} />
                 Sass Styles
-              </TabsTrigger>
-            )}
-            {safeFeatureToggles.faviconDesigner && (
-              <TabsTrigger value="favicon" className="gap-2">
-                <Image size={18} />
-                Favicon Designer
               </TabsTrigger>
             )}
           </TabsList>

@@ -80,3 +80,13 @@
   --radius-2xl: calc(var(--radius) * 3);
   --radius-full: 9999px;
 }
+
+@layer components {
+  [data-slot="tabs-list"] {
+    @apply w-full;
+  }
+  
+  [data-slot="tabs-trigger"] {
+    @apply flex-none;
+  }
+}
