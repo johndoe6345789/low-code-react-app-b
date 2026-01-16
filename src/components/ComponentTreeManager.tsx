@@ -1,24 +1,10 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { ComponentTree, ComponentNode } from '@/types/project'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Badge } from '@/components/ui/badge'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { Plus, Tree, Trash, Pencil, Copy, FolderOpen } from '@phosphor-icons/react'
+import { TreeFormDialog } from '@/components/molecules'
+import { TreeListPanel } from '@/components/organisms'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
+import { TreeIcon } from '@/components/atoms'
 import { toast } from 'sonner'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface ComponentTreeManagerProps {
   trees: ComponentTree[]
@@ -32,6 +18,7 @@ export function ComponentTreeManager({ trees, onTreesChange }: ComponentTreeMana
   const [newTreeName, setNewTreeName] = useState('')
   const [newTreeDescription, setNewTreeDescription] = useState('')
   const [editingTree, setEditingTree] = useState<ComponentTree | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const selectedTree = trees.find(t => t.id === selectedTreeId)
 
@@ -123,92 +110,88 @@ export function ComponentTreeManager({ trees, onTreesChange }: ComponentTreeMana
     setEditDialogOpen(true)
   }
 
+  const handleExportJson = () => {
+    if (!selectedTree) {
+      toast.error('No tree selected to export')
+      return
+    }
+
+    try {
+      const json = JSON.stringify(selectedTree, null, 2)
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${selectedTree.name.toLowerCase().replace(/\s+/g, '-')}-tree.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      toast.success('Component tree exported as JSON')
+    } catch (error) {
+      console.error('Export failed:', error)
+      toast.error('Failed to export component tree')
+    }
+  }
+
+  const handleImportJson = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    try {
+      const text = await file.text()
+      const importedTree = JSON.parse(text) as ComponentTree
+
+      if (!importedTree.id || !importedTree.name || !Array.isArray(importedTree.rootNodes)) {
+        toast.error('Invalid component tree JSON format')
+        return
+      }
+
+      const newTree: ComponentTree = {
+        ...importedTree,
+        id: `tree-${Date.now()}`,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      }
+
+      onTreesChange((current) => [...current, newTree])
+      setSelectedTreeId(newTree.id)
+      toast.success(`Component tree "${newTree.name}" imported successfully`)
+    } catch (error) {
+      console.error('Import failed:', error)
+      toast.error('Failed to import component tree. Please check the JSON format.')
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
   return (
     <div className="h-full flex">
-      <div className="w-80 border-r border-border bg-card p-4 flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Tree size={20} weight="duotone" />
-            Component Trees
-          </h2>
-          <Button size="sm" onClick={() => setCreateDialogOpen(true)}>
-            <Plus size={16} />
-          </Button>
-        </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json"
+        onChange={handleFileChange}
+        className="hidden"
+      />
 
-        <ScrollArea className="flex-1">
-          <div className="space-y-2">
-            {trees.map((tree) => (
-              <Card
-                key={tree.id}
-                className={`cursor-pointer transition-all ${
-                  selectedTreeId === tree.id
-                    ? 'ring-2 ring-primary bg-accent'
-                    : 'hover:bg-accent/50'
-                }`}
-                onClick={() => setSelectedTreeId(tree.id)}
-              >
-                <CardHeader className="p-4">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 min-w-0">
-                      <CardTitle className="text-sm truncate">{tree.name}</CardTitle>
-                      {tree.description && (
-                        <CardDescription className="text-xs mt-1 line-clamp-2">
-                          {tree.description}
-                        </CardDescription>
-                      )}
-                      <div className="flex gap-2 mt-2">
-                        <Badge variant="outline" className="text-xs">
-                          {tree.rootNodes.length} components
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-1 mt-2" onClick={(e) => e.stopPropagation()}>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => openEditDialog(tree)}
-                      title="Edit tree"
-                    >
-                      <Pencil size={14} />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleDuplicateTree(tree)}
-                      title="Duplicate tree"
-                    >
-                      <Copy size={14} />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleDeleteTree(tree.id)}
-                      disabled={trees.length === 1}
-                      title="Delete tree"
-                    >
-                      <Trash size={14} />
-                    </Button>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </ScrollArea>
-
-        {trees.length === 0 && (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center text-muted-foreground">
-              <FolderOpen size={48} className="mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No component trees yet</p>
-              <Button size="sm" className="mt-2" onClick={() => setCreateDialogOpen(true)}>
-                Create First Tree
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+      <TreeListPanel
+        trees={trees}
+        selectedTreeId={selectedTreeId}
+        onTreeSelect={setSelectedTreeId}
+        onTreeEdit={openEditDialog}
+        onTreeDuplicate={handleDuplicateTree}
+        onTreeDelete={handleDeleteTree}
+        onCreateNew={() => setCreateDialogOpen(true)}
+        onImportJson={handleImportJson}
+        onExportJson={handleExportJson}
+      />
 
       <div className="flex-1 overflow-hidden">
         {selectedTree ? (
@@ -219,84 +202,38 @@ export function ComponentTreeManager({ trees, onTreesChange }: ComponentTreeMana
         ) : (
           <div className="h-full flex items-center justify-center text-muted-foreground">
             <div className="text-center">
-              <Tree size={64} className="mx-auto mb-4 opacity-50" weight="duotone" />
+              <TreeIcon size={64} className="mx-auto mb-4 opacity-50" />
               <p>Select a component tree to edit</p>
             </div>
           </div>
         )}
       </div>
 
-      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create Component Tree</DialogTitle>
-            <DialogDescription>
-              Create a new component tree to organize your UI components
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="tree-name">Tree Name</Label>
-              <Input
-                id="tree-name"
-                value={newTreeName}
-                onChange={(e) => setNewTreeName(e.target.value)}
-                placeholder="e.g., Main App, Dashboard, Admin Panel"
-              />
-            </div>
-            <div>
-              <Label htmlFor="tree-description">Description</Label>
-              <Textarea
-                id="tree-description"
-                value={newTreeDescription}
-                onChange={(e) => setNewTreeDescription(e.target.value)}
-                placeholder="Describe the purpose of this component tree"
-                rows={3}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleCreateTree}>Create Tree</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <TreeFormDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+        title="Create Component Tree"
+        description="Create a new component tree to organize your UI components"
+        name={newTreeName}
+        treeDescription={newTreeDescription}
+        onNameChange={setNewTreeName}
+        onDescriptionChange={setNewTreeDescription}
+        onSubmit={handleCreateTree}
+        submitLabel="Create Tree"
+      />
 
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Component Tree</DialogTitle>
-            <DialogDescription>Update the component tree details</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="edit-tree-name">Tree Name</Label>
-              <Input
-                id="edit-tree-name"
-                value={newTreeName}
-                onChange={(e) => setNewTreeName(e.target.value)}
-              />
-            </div>
-            <div>
-              <Label htmlFor="edit-tree-description">Description</Label>
-              <Textarea
-                id="edit-tree-description"
-                value={newTreeDescription}
-                onChange={(e) => setNewTreeDescription(e.target.value)}
-                rows={3}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleEditTree}>Save Changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <TreeFormDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        title="Edit Component Tree"
+        description="Update the component tree details"
+        name={newTreeName}
+        treeDescription={newTreeDescription}
+        onNameChange={setNewTreeName}
+        onDescriptionChange={setNewTreeDescription}
+        onSubmit={handleEditTree}
+        submitLabel="Save Changes"
+      />
     </div>
   )
 }
