@@ -7,9 +7,19 @@ import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Plus, Trash, Sparkle, MagnifyingGlassMinus, MagnifyingGlassPlus, ArrowsOut, Hand, Link as LinkIcon, Selection, DotsThree } from '@phosphor-icons/react'
+import { Plus, Trash, Sparkle, MagnifyingGlassMinus, MagnifyingGlassPlus, ArrowsOut, Hand, Link as LinkIcon, Selection, DotsThree, X } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
+
+type ConnectionType = 'dependency' | 'association' | 'inheritance' | 'composition' | 'aggregation'
+
+interface Connection {
+  id: string
+  fromId: string
+  toId: string
+  type: ConnectionType
+  label?: string
+}
 
 interface FeatureIdea {
   id: string
@@ -22,6 +32,7 @@ interface FeatureIdea {
   x: number
   y: number
   connectedTo?: string[]
+  connections?: Connection[]
 }
 
 const SEED_IDEAS: FeatureIdea[] = [
@@ -35,7 +46,6 @@ const SEED_IDEAS: FeatureIdea[] = [
     createdAt: Date.now() - 10000000,
     x: 100,
     y: 150,
-    connectedTo: ['idea-8'],
   },
   {
     id: 'idea-2',
@@ -47,7 +57,6 @@ const SEED_IDEAS: FeatureIdea[] = [
     createdAt: Date.now() - 9000000,
     x: 600,
     y: 250,
-    connectedTo: ['idea-4'],
   },
   {
     id: 'idea-3',
@@ -70,7 +79,6 @@ const SEED_IDEAS: FeatureIdea[] = [
     createdAt: Date.now() - 7000000,
     x: 700,
     y: 600,
-    connectedTo: ['idea-8'],
   },
   {
     id: 'idea-5',
@@ -115,7 +123,6 @@ const SEED_IDEAS: FeatureIdea[] = [
     createdAt: Date.now() - 3000000,
     x: 300,
     y: 400,
-    connectedTo: ['idea-5'],
   },
   {
     id: 'idea-9',
@@ -141,9 +148,32 @@ const SEED_IDEAS: FeatureIdea[] = [
   },
 ]
 
+const SEED_CONNECTIONS: Connection[] = [
+  { id: 'conn-1', fromId: 'idea-1', toId: 'idea-8', type: 'dependency', label: 'requires' },
+  { id: 'conn-2', fromId: 'idea-2', toId: 'idea-4', type: 'association', label: 'works with' },
+  { id: 'conn-3', fromId: 'idea-8', toId: 'idea-5', type: 'composition', label: 'includes' },
+]
+
 const CATEGORIES = ['AI/ML', 'Collaboration', 'Community', 'DevOps', 'Testing', 'Performance', 'Design', 'Database', 'Mobile', 'Accessibility', 'Productivity', 'Security', 'Analytics', 'Other']
 const PRIORITIES = ['low', 'medium', 'high'] as const
 const STATUSES = ['idea', 'planned', 'in-progress', 'completed'] as const
+const CONNECTION_TYPES = ['dependency', 'association', 'inheritance', 'composition', 'aggregation'] as const
+
+const CONNECTION_STYLES = {
+  dependency: { stroke: 'hsl(var(--accent))', strokeDasharray: '8,4', arrowType: 'open' },
+  association: { stroke: 'hsl(var(--primary))', strokeDasharray: '', arrowType: 'line' },
+  inheritance: { stroke: 'hsl(var(--chart-2))', strokeDasharray: '', arrowType: 'hollow' },
+  composition: { stroke: 'hsl(var(--destructive))', strokeDasharray: '', arrowType: 'diamond-filled' },
+  aggregation: { stroke: 'hsl(var(--chart-4))', strokeDasharray: '', arrowType: 'diamond-hollow' },
+}
+
+const CONNECTION_LABELS = {
+  dependency: 'depends on',
+  association: 'relates to',
+  inheritance: 'extends',
+  composition: 'contains',
+  aggregation: 'has',
+}
 
 const STATUS_COLORS = {
   idea: 'bg-muted text-muted-foreground',
@@ -160,9 +190,12 @@ const PRIORITY_COLORS = {
 
 export function FeatureIdeaCloud() {
   const [ideas, setIdeas] = useKV<FeatureIdea[]>('feature-ideas', SEED_IDEAS)
+  const [connections, setConnections] = useKV<Connection[]>('feature-connections', SEED_CONNECTIONS)
   const [selectedIdea, setSelectedIdea] = useState<FeatureIdea | null>(null)
+  const [selectedConnection, setSelectedConnection] = useState<Connection | null>(null)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
+  const [connectionDialogOpen, setConnectionDialogOpen] = useState(false)
   const canvasRef = useRef<HTMLDivElement>(null)
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
@@ -172,15 +205,20 @@ export function FeatureIdeaCloud() {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [tool, setTool] = useState<'select' | 'pan' | 'connect'>('select')
   const [connectingFrom, setConnectingFrom] = useState<string | null>(null)
-  const [filtersPanelOpen, setFiltersPanelOpen] = useState(false)
+  const [connectionType, setConnectionType] = useState<ConnectionType>('association')
+  const [hoveredConnection, setHoveredConnection] = useState<string | null>(null)
 
   const safeIdeas = ideas || SEED_IDEAS
+  const safeConnections = connections || SEED_CONNECTIONS
 
   useEffect(() => {
     if (!ideas || ideas.length === 0) {
       setIdeas(SEED_IDEAS)
     }
-  }, [ideas, setIdeas])
+    if (!connections || connections.length === 0) {
+      setConnections(SEED_CONNECTIONS)
+    }
+  }, [ideas, setIdeas, connections, setConnections])
 
   const handleAddIdea = () => {
     const canvasCenterX = (window.innerWidth / 2 - pan.x) / zoom
@@ -211,21 +249,26 @@ export function FeatureIdeaCloud() {
       e.stopPropagation()
       if (!connectingFrom) {
         setConnectingFrom(idea.id)
-        toast.info('Click another idea to connect')
+        toast.info(`Click another idea to connect (${CONNECTION_LABELS[connectionType]})`)
       } else if (connectingFrom !== idea.id) {
-        setIdeas((currentIdeas) => 
-          (currentIdeas || []).map(i => {
-            if (i.id === connectingFrom) {
-              const connectedTo = i.connectedTo || []
-              if (!connectedTo.includes(idea.id)) {
-                return { ...i, connectedTo: [...connectedTo, idea.id] }
-              }
-            }
-            return i
-          })
+        const existingConnection = safeConnections.find(
+          c => c.fromId === connectingFrom && c.toId === idea.id
         )
+        
+        if (existingConnection) {
+          toast.error('Connection already exists')
+        } else {
+          const newConnection: Connection = {
+            id: `conn-${Date.now()}`,
+            fromId: connectingFrom,
+            toId: idea.id,
+            type: connectionType,
+            label: CONNECTION_LABELS[connectionType],
+          }
+          setConnections((current) => [...(current || []), newConnection])
+          toast.success('Ideas connected!')
+        }
         setConnectingFrom(null)
-        toast.success('Ideas connected!')
       }
       return
     }
@@ -261,10 +304,28 @@ export function FeatureIdeaCloud() {
 
   const handleDeleteIdea = (id: string) => {
     setIdeas((currentIdeas) => (currentIdeas || []).filter(i => i.id !== id))
+    setConnections((currentConnections) => 
+      (currentConnections || []).filter(c => c.fromId !== id && c.toId !== id)
+    )
     setEditDialogOpen(false)
     setViewDialogOpen(false)
     setSelectedIdea(null)
     toast.success('Idea deleted')
+  }
+
+  const handleDeleteConnection = (connectionId: string) => {
+    setConnections((current) => (current || []).filter(c => c.id !== connectionId))
+    setConnectionDialogOpen(false)
+    setSelectedConnection(null)
+    toast.success('Connection removed')
+  }
+
+  const handleConnectionClick = (connection: Connection, e: React.MouseEvent) => {
+    if (tool === 'select') {
+      e.stopPropagation()
+      setSelectedConnection(connection)
+      setConnectionDialogOpen(true)
+    }
   }
 
   const handleGenerateIdeas = async () => {
@@ -386,34 +447,175 @@ export function FeatureIdeaCloud() {
     setPan({ x: newPanX, y: newPanY })
   }
 
+  const renderArrowhead = (connection: Connection, x: number, y: number, angle: number) => {
+    const style = CONNECTION_STYLES[connection.type]
+    const size = 12
+    
+    if (style.arrowType === 'open') {
+      const points = [
+        [x, y],
+        [x - size * Math.cos(angle - Math.PI / 6), y - size * Math.sin(angle - Math.PI / 6)],
+        [x - size * Math.cos(angle + Math.PI / 6), y - size * Math.sin(angle + Math.PI / 6)]
+      ]
+      return (
+        <polyline
+          points={points.map(p => p.join(',')).join(' ')}
+          fill="none"
+          stroke={style.stroke}
+          strokeWidth={2}
+        />
+      )
+    } else if (style.arrowType === 'line') {
+      return (
+        <line
+          x1={x}
+          y1={y}
+          x2={x - size * Math.cos(angle)}
+          y2={y - size * Math.sin(angle)}
+          stroke={style.stroke}
+          strokeWidth={2}
+        />
+      )
+    } else if (style.arrowType === 'hollow') {
+      const points = [
+        [x, y],
+        [x - size * Math.cos(angle - Math.PI / 6), y - size * Math.sin(angle - Math.PI / 6)],
+        [x - size * 0.7 * Math.cos(angle), y - size * 0.7 * Math.sin(angle)],
+        [x - size * Math.cos(angle + Math.PI / 6), y - size * Math.sin(angle + Math.PI / 6)]
+      ]
+      return (
+        <polygon
+          points={points.map(p => p.join(',')).join(' ')}
+          fill="hsl(var(--background))"
+          stroke={style.stroke}
+          strokeWidth={2}
+        />
+      )
+    } else if (style.arrowType === 'diamond-filled') {
+      const points = [
+        [x, y],
+        [x - size * 0.6 * Math.cos(angle - Math.PI / 3), y - size * 0.6 * Math.sin(angle - Math.PI / 3)],
+        [x - size * Math.cos(angle), y - size * Math.sin(angle)],
+        [x - size * 0.6 * Math.cos(angle + Math.PI / 3), y - size * 0.6 * Math.sin(angle + Math.PI / 3)]
+      ]
+      return (
+        <polygon
+          points={points.map(p => p.join(',')).join(' ')}
+          fill={style.stroke}
+          stroke={style.stroke}
+          strokeWidth={2}
+        />
+      )
+    } else if (style.arrowType === 'diamond-hollow') {
+      const points = [
+        [x, y],
+        [x - size * 0.6 * Math.cos(angle - Math.PI / 3), y - size * 0.6 * Math.sin(angle - Math.PI / 3)],
+        [x - size * Math.cos(angle), y - size * Math.sin(angle)],
+        [x - size * 0.6 * Math.cos(angle + Math.PI / 3), y - size * 0.6 * Math.sin(angle + Math.PI / 3)]
+      ]
+      return (
+        <polygon
+          points={points.map(p => p.join(',')).join(' ')}
+          fill="hsl(var(--background))"
+          stroke={style.stroke}
+          strokeWidth={2}
+        />
+      )
+    }
+    return null
+  }
+
   const renderConnections = () => {
-    const connections: React.ReactNode[] = []
-    safeIdeas.forEach((fromIdea) => {
-      fromIdea.connectedTo?.forEach((toId) => {
-        const toIdea = safeIdeas.find(i => i.id === toId)
-        if (toIdea) {
-          const fromX = fromIdea.x * zoom + pan.x + 120
-          const fromY = fromIdea.y * zoom + pan.y + 80
-          const toX = toIdea.x * zoom + pan.x + 120
-          const toY = toIdea.y * zoom + pan.y + 80
-          
-          connections.push(
+    const elements: React.ReactNode[] = []
+    
+    safeConnections.forEach((connection) => {
+      const fromIdea = safeIdeas.find(i => i.id === connection.fromId)
+      const toIdea = safeIdeas.find(i => i.id === connection.toId)
+      
+      if (fromIdea && toIdea) {
+        const fromX = fromIdea.x * zoom + pan.x + 120
+        const fromY = fromIdea.y * zoom + pan.y + 80
+        const toX = toIdea.x * zoom + pan.x + 120
+        const toY = toIdea.y * zoom + pan.y + 80
+        
+        const dx = toX - fromX
+        const dy = toY - fromY
+        const angle = Math.atan2(dy, dx)
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        
+        const arrowSize = 12
+        const endX = toX - arrowSize * Math.cos(angle)
+        const endY = toY - arrowSize * Math.sin(angle)
+        
+        const midX = (fromX + toX) / 2
+        const midY = (fromY + toY) / 2
+        
+        const style = CONNECTION_STYLES[connection.type]
+        const isHovered = hoveredConnection === connection.id
+        
+        elements.push(
+          <g key={connection.id}>
             <line
-              key={`${fromIdea.id}-${toId}`}
               x1={fromX}
               y1={fromY}
-              x2={toX}
-              y2={toY}
-              stroke="hsl(var(--accent))"
-              strokeWidth={2}
-              strokeDasharray="5,5"
-              opacity={0.5}
+              x2={endX}
+              y2={endY}
+              stroke={style.stroke}
+              strokeWidth={isHovered ? 3 : 2}
+              strokeDasharray={style.strokeDasharray}
+              opacity={isHovered ? 0.9 : 0.6}
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={() => setHoveredConnection(connection.id)}
+              onMouseLeave={() => setHoveredConnection(null)}
+              onClick={(e) => handleConnectionClick(connection, e as any)}
             />
-          )
-        }
-      })
+            
+            <line
+              x1={fromX}
+              y1={fromY}
+              x2={endX}
+              y2={endY}
+              stroke="transparent"
+              strokeWidth={12}
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={() => setHoveredConnection(connection.id)}
+              onMouseLeave={() => setHoveredConnection(null)}
+              onClick={(e) => handleConnectionClick(connection, e as any)}
+            />
+            
+            {renderArrowhead(connection, toX, toY, angle)}
+            
+            {(isHovered || connection.label) && (
+              <g>
+                <rect
+                  x={midX - 40}
+                  y={midY - 12}
+                  width={80}
+                  height={24}
+                  fill="hsl(var(--card))"
+                  stroke="hsl(var(--border))"
+                  strokeWidth={1}
+                  rx={4}
+                  opacity={0.95}
+                />
+                <text
+                  x={midX}
+                  y={midY + 5}
+                  textAnchor="middle"
+                  fill="hsl(var(--foreground))"
+                  fontSize="11"
+                  fontWeight="500"
+                >
+                  {connection.label || CONNECTION_LABELS[connection.type]}
+                </text>
+              </g>
+            )}
+          </g>
+        )
+      }
     })
-    return connections
+    
+    return elements
   }
 
   return (
@@ -471,6 +673,23 @@ export function FeatureIdeaCloud() {
             <TooltipContent>Connect Ideas</TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
+        {tool === 'connect' && (
+          <div className="flex items-center gap-2 px-3 bg-card border border-border rounded-md shadow-lg">
+            <select
+              value={connectionType}
+              onChange={(e) => setConnectionType(e.target.value as ConnectionType)}
+              className="text-sm bg-transparent border-none outline-none pr-1 font-medium"
+              style={{ cursor: 'pointer' }}
+            >
+              {CONNECTION_TYPES.map(type => (
+                <option key={type} value={type}>
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="w-px bg-border mx-1" />
 
@@ -530,8 +749,34 @@ export function FeatureIdeaCloud() {
         </TooltipProvider>
       </div>
 
-      <div className="absolute bottom-4 right-4 z-10 bg-card border border-border rounded-lg shadow-lg p-2 text-xs text-muted-foreground">
-        <p>💡 <strong>Tip:</strong> Double-click to view, drag to move, scroll to zoom</p>
+      <div className="absolute bottom-4 left-4 z-10 bg-card border border-border rounded-lg shadow-lg p-3 text-xs">
+        <p className="font-semibold mb-2 text-foreground">Connection Types:</p>
+        <div className="space-y-1.5">
+          {CONNECTION_TYPES.map(type => {
+            const style = CONNECTION_STYLES[type]
+            return (
+              <div key={type} className="flex items-center gap-2">
+                <svg width="40" height="12" className="shrink-0">
+                  <line
+                    x1="0"
+                    y1="6"
+                    x2="40"
+                    y2="6"
+                    stroke={style.stroke}
+                    strokeWidth={2}
+                    strokeDasharray={style.strokeDasharray}
+                  />
+                </svg>
+                <span className="text-muted-foreground capitalize">{type}</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="absolute bottom-4 right-4 z-10 bg-card border border-border rounded-lg shadow-lg p-2 text-xs text-muted-foreground max-w-sm">
+        <p className="mb-1">💡 <strong>Tip:</strong> Double-click ideas to view details</p>
+        <p>🔗 Use Connect tool to create UML-style relationships</p>
       </div>
 
       <div
@@ -760,6 +1005,31 @@ export function FeatureIdeaCloud() {
                 <label className="text-xs font-medium text-muted-foreground">Created</label>
                 <p className="text-sm">{new Date(selectedIdea.createdAt).toLocaleDateString()}</p>
               </div>
+
+              <div>
+                <label className="text-xs font-medium text-muted-foreground mb-2 block">Connections</label>
+                <div className="space-y-2">
+                  {safeConnections
+                    .filter(c => c.fromId === selectedIdea.id || c.toId === selectedIdea.id)
+                    .map(conn => {
+                      const otherIdea = safeIdeas.find(i => 
+                        i.id === (conn.fromId === selectedIdea.id ? conn.toId : conn.fromId)
+                      )
+                      const isOutgoing = conn.fromId === selectedIdea.id
+                      return (
+                        <div key={conn.id} className="flex items-center gap-2 text-sm p-2 bg-muted rounded">
+                          <Badge variant="outline" className="text-xs">{conn.type}</Badge>
+                          <span className="flex-1">
+                            {isOutgoing ? '→' : '←'} {otherIdea?.title || 'Unknown'}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  {safeConnections.filter(c => c.fromId === selectedIdea.id || c.toId === selectedIdea.id).length === 0 && (
+                    <p className="text-sm text-muted-foreground">No connections</p>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
@@ -773,6 +1043,108 @@ export function FeatureIdeaCloud() {
             }}>
               Edit
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={connectionDialogOpen} onOpenChange={setConnectionDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Connection Details</DialogTitle>
+            <DialogDescription>
+              Manage the relationship between ideas
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedConnection && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground">From</label>
+                  <p className="text-sm font-medium">
+                    {safeIdeas.find(i => i.id === selectedConnection.fromId)?.title}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground">To</label>
+                  <p className="text-sm font-medium">
+                    {safeIdeas.find(i => i.id === selectedConnection.toId)?.title}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Type</label>
+                <select
+                  value={selectedConnection.type}
+                  onChange={(e) => setSelectedConnection({ 
+                    ...selectedConnection, 
+                    type: e.target.value as ConnectionType,
+                    label: CONNECTION_LABELS[e.target.value as ConnectionType]
+                  })}
+                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm"
+                >
+                  {CONNECTION_TYPES.map(type => (
+                    <option key={type} value={type}>
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Label</label>
+                <Input
+                  value={selectedConnection.label || ''}
+                  onChange={(e) => setSelectedConnection({ 
+                    ...selectedConnection, 
+                    label: e.target.value 
+                  })}
+                  placeholder={CONNECTION_LABELS[selectedConnection.type]}
+                />
+              </div>
+
+              <div className="p-3 bg-muted rounded-lg text-sm">
+                <p className="font-medium mb-2">Connection Type Guide:</p>
+                <ul className="space-y-1 text-xs text-muted-foreground">
+                  <li><strong>Dependency:</strong> One feature needs another to function</li>
+                  <li><strong>Association:</strong> Features work together or are related</li>
+                  <li><strong>Inheritance:</strong> One feature extends another</li>
+                  <li><strong>Composition:</strong> One feature contains another as essential part</li>
+                  <li><strong>Aggregation:</strong> One feature has another as optional part</li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter>
+            <div className="flex justify-between w-full">
+              <Button
+                variant="destructive"
+                onClick={() => selectedConnection && handleDeleteConnection(selectedConnection.id)}
+              >
+                <Trash size={16} className="mr-2" />
+                Delete
+              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setConnectionDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => {
+                  if (selectedConnection) {
+                    setConnections((current) =>
+                      (current || []).map(c =>
+                        c.id === selectedConnection.id ? selectedConnection : c
+                      )
+                    )
+                    setConnectionDialogOpen(false)
+                    toast.success('Connection updated!')
+                  }
+                }}>
+                  Save
+                </Button>
+              </div>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
