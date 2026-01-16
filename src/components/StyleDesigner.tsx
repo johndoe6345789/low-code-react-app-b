@@ -30,6 +30,17 @@ export function StyleDesigner({ theme, onThemeChange }: StyleDesignerProps) {
   const [newVariantDialogOpen, setNewVariantDialogOpen] = useState(false)
   const [newVariantName, setNewVariantName] = useState('')
 
+  if (!theme.variants || theme.variants.length === 0) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <div className="text-center">
+          <PaintBrush size={48} className="mx-auto mb-4 text-muted-foreground" weight="duotone" />
+          <p className="text-muted-foreground">Theme configuration is invalid or missing</p>
+        </div>
+      </div>
+    )
+  }
+
   const activeVariant = theme.variants.find((v) => v.id === theme.activeVariantId) || theme.variants[0]
 
   const updateTheme = (updates: Partial<ThemeConfig>) => {
@@ -39,7 +50,7 @@ export function StyleDesigner({ theme, onThemeChange }: StyleDesignerProps) {
   const updateActiveVariantColors = (colorUpdates: Partial<typeof activeVariant.colors>) => {
     onThemeChange((current) => ({
       ...current,
-      variants: current.variants.map((v) =>
+      variants: (current.variants || []).map((v) =>
         v.id === current.activeVariantId
           ? { ...v, colors: { ...v.colors, ...colorUpdates } }
           : v
@@ -88,7 +99,7 @@ export function StyleDesigner({ theme, onThemeChange }: StyleDesignerProps) {
 
     onThemeChange((current) => ({
       ...current,
-      variants: [...current.variants, newVariant],
+      variants: [...(current.variants || []), newVariant],
       activeVariantId: newVariant.id,
     }))
 
@@ -98,13 +109,13 @@ export function StyleDesigner({ theme, onThemeChange }: StyleDesignerProps) {
   }
 
   const deleteVariant = (variantId: string) => {
-    if (theme.variants.length <= 1) {
+    if (!theme.variants || theme.variants.length <= 1) {
       toast.error('Cannot delete the last theme variant')
       return
     }
 
     onThemeChange((current) => {
-      const remainingVariants = current.variants.filter((v) => v.id !== variantId)
+      const remainingVariants = (current.variants || []).filter((v) => v.id !== variantId)
       return {
         ...current,
         variants: remainingVariants,
@@ -116,7 +127,7 @@ export function StyleDesigner({ theme, onThemeChange }: StyleDesignerProps) {
   }
 
   const duplicateVariant = (variantId: string) => {
-    const variantToDuplicate = theme.variants.find((v) => v.id === variantId)
+    const variantToDuplicate = (theme.variants || []).find((v) => v.id === variantId)
     if (!variantToDuplicate) return
 
     const newVariant: ThemeVariant = {
@@ -127,7 +138,7 @@ export function StyleDesigner({ theme, onThemeChange }: StyleDesignerProps) {
 
     onThemeChange((current) => ({
       ...current,
-      variants: [...current.variants, newVariant],
+      variants: [...(current.variants || []), newVariant],
     }))
 
     toast.success('Theme variant duplicated')

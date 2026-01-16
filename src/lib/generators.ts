@@ -46,6 +46,16 @@ export function generateComponentCode(node: ComponentNode, indent: number = 0): 
 }
 
 export function generateMUITheme(theme: ThemeConfig): string {
+  if (!theme.variants || theme.variants.length === 0) {
+    return `import { createTheme } from '@mui/material/styles';
+
+export const theme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+});`
+  }
+
   const lightVariant = theme.variants.find((v) => v.id === 'light') || theme.variants[0]
   const darkVariant = theme.variants.find((v) => v.id === 'dark')
 
