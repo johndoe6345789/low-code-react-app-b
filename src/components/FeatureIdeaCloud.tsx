@@ -1113,7 +1113,7 @@ export function FeatureIdeaCloud() {
                                 rightHandles.length !== rightUnique ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
                                 rightHandles.length >= 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
                               }`}>
-                                → {rightHandles.length}/{rightUnique} {rightHandles.length !== rightUnique ? '⚠️' : rightHandles.length > 0 ? '���' : '○'}
+                                → {rightHandles.length}/{rightUnique} {rightHandles.length !== rightUnique ? '⚠️' : rightHandles.length > 0 ? '�����' : '○'}
                               </div>
                               <div className={`p-1 rounded text-center ${
                                 topHandles.length !== topUnique ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
