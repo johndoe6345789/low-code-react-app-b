@@ -1,0 +1,49 @@
+{
+  "id": "dashboard-json",
+  "name": "Dashboard (JSON)",
+  "description": "JSON-driven dashboard page",
+  "icon": "ChartBar",
+  "layout": {
+    "type": "single"
+  },
+  "dataSources": [
+    {
+      "id": "files",
+      "type": "kv",
+      "key": "project-files",
+      "defaultValue": []
+    },
+    {
+      "id": "models",
+      "type": "kv",
+      "key": "project-models",
+      "defaultValue": []
+    },
+    {
+      "id": "components",
+      "type": "kv",
+      "key": "project-components",
+      "defaultValue": []
+    }
+  ],
+  "components": [
+    {
+      "id": "dashboard-root",
+      "type": "ProjectDashboard",
+      "props": {},
+      "dataBinding": "files"
+    }
+  ],
+  "actions": [
+    {
+      "id": "navigate-to-code",
+      "type": "navigate",
+      "target": "code"
+    },
+    {
+      "id": "create-file",
+      "type": "create",
+      "target": "files"
+    }
+  ]
+}

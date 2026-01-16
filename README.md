@@ -1,6 +1,6 @@
 # 🔨 CodeForge - Low-Code Next.js App Builder
 
-![CodeForge](https://img.shields.io/badge/CodeForge-v5.3-blueviolet)
+![CodeForge](https://img.shields.io/badge/CodeForge-v6.0-blueviolet)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![React](https://img.shields.io/badge/React-18-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
@@ -11,10 +11,12 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 
 ## ✨ Features
 
-### 🏗️ Architecture
-- **Atomic Component Library** - Organized component structure (atoms → molecules → organisms → features)
-- **Type-Safe Components** - Full TypeScript support with strict prop interfaces
-- **Centralized Configuration** - Navigation and routing configuration in one place
+### 🏗️ Architecture (Phase 4: Refactored ✨)
+- **Comprehensive Hook Library** - 12+ custom hooks for data, UI, and form management (all <150 LOC)
+- **JSON Orchestration Engine** - Build entire pages using JSON schemas without writing React code
+- **Atomic Component Library** - All components under 150 LOC for maximum maintainability
+- **Type-Safe Everything** - Full TypeScript + Zod validation for hooks, components, and JSON schemas
+- **Centralized Configuration** - Navigation, pages, and features configured via JSON
 
 ### 🎯 Core Capabilities
 - **Progressive Web App** - Install on desktop/mobile, work offline, automatic updates, and push notifications
@@ -124,11 +126,79 @@ npm run test:e2e:report
 - **Feature Toggles** - Go to **Features** tab to enable/disable specific designers
 - **Need Help?** - See [FAVICON_DESIGNER_ACCESS.md](./FAVICON_DESIGNER_ACCESS.md) for troubleshooting
 
+## 🏗️ Phase 4: Refactored Architecture
+
+CodeForge has been completely refactored with a modular, JSON-driven architecture:
+
+### 📚 Complete Documentation
+- **[INDEX.md](./INDEX.md)** - 📖 **START HERE** - Navigation hub for all documentation
+- **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - ⚡ Fast lookup guide with code examples
+- **[COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md)** - 🎣 Complete hook API reference
+- **[JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md)** - 📄 JSON page orchestration guide
+- **[PHASE4_IMPLEMENTATION_COMPLETE.md](./PHASE4_IMPLEMENTATION_COMPLETE.md)** - 📊 Implementation summary
+- **[ARCHITECTURE_VISUAL_GUIDE.md](./ARCHITECTURE_VISUAL_GUIDE.md)** - 🎨 Visual architecture diagrams
+
+### 🎣 Hook Library (12+ Hooks, All <150 LOC)
+
+#### Data Management (`/src/hooks/data/`)
+- **`useArray`** - Enhanced array operations with persistence
+- **`useCRUD`** - Complete CRUD operations for entities  
+- **`useSearch`** - Multi-field debounced search
+- **`useSort`** - Multi-key sorting with direction toggle
+- **`usePagination`** - Client-side pagination
+- **`useDebounce`** - Generic value debouncing
+
+#### UI State (`/src/hooks/ui/`)
+- **`useDialog`** - Modal/dialog state management
+- **`useTabs`** - Type-safe tab navigation
+- **`useSelection`** - Multi-select state management
+- **`useClipboard`** - Copy to clipboard with feedback
+
+#### Forms (`/src/hooks/forms/`)
+- **`useForm`** - Complete form management with validation
+- **`useFormField`** - Single field with validation rules
+
+### 📄 JSON Orchestration Engine
+
+Build entire pages using JSON schemas without writing React code:
+
+```json
+{
+  "id": "my-page",
+  "name": "My Page",
+  "layout": { "type": "single" },
+  "dataSources": [
+    { "id": "data", "type": "kv", "key": "my-data", "defaultValue": [] }
+  ],
+  "components": [
+    { "id": "root", "type": "Card", "children": [...] }
+  ],
+  "actions": [
+    { "id": "add", "type": "create", "target": "data" }
+  ]
+}
+```
+
+**Engine Components:**
+- **PageRenderer** - Interprets JSON schemas and renders React components
+- **ActionExecutor** - Executes CRUD, navigation, API, and custom actions
+- **DataSourceManager** - Manages KV store, API, and computed data sources
+- **ComponentRegistry** - Maps JSON component types to React components
+
+### 🎯 Key Benefits
+
+- ✅ **All components <150 LOC** - Maximum maintainability
+- ✅ **Reusable hooks** - Extract and share business logic
+- ✅ **JSON-driven pages** - Build pages without writing code
+- ✅ **Full type safety** - TypeScript + Zod validation
+- ✅ **Easy testing** - Small, focused units
+- ✅ **Rapid prototyping** - Create pages by editing JSON
+
 ## 🏗️ Atomic Component Architecture
 
-CodeForge uses **Atomic Design** methodology for maximum maintainability and reusability:
+CodeForge also uses **Atomic Design** methodology for legacy components:
 
-- **[ATOMIC_README.md](./ATOMIC_README.md)** - Quick start guide ⭐ **START HERE**
+- **[ATOMIC_README.md](./ATOMIC_README.md)** - Quick start guide
 - **[ATOMIC_REFACTOR_SUMMARY.md](./ATOMIC_REFACTOR_SUMMARY.md)** - Overview of the atomic structure
 - **[ATOMIC_COMPONENTS.md](./ATOMIC_COMPONENTS.md)** - Complete architecture guide
 - **[ATOMIC_USAGE_EXAMPLES.md](./ATOMIC_USAGE_EXAMPLES.md)** - Code examples and patterns

@@ -1,17 +1,17 @@
 import { useState, useCallback } from 'react'
 
-export function useDialog(initialOpen = false) {
-  const [open, setOpen] = useState(initialOpen)
+export function useDialog(initialOpen: boolean = false) {
+  const [isOpen, setIsOpen] = useState(initialOpen)
 
-  const openDialog = useCallback(() => setOpen(true), [])
-  const closeDialog = useCallback(() => setOpen(false), [])
-  const toggleDialog = useCallback(() => setOpen((prev) => !prev), [])
+  const open = useCallback(() => setIsOpen(true), [])
+  const close = useCallback(() => setIsOpen(false), [])
+  const toggle = useCallback(() => setIsOpen((prev) => !prev), [])
 
   return {
+    isOpen,
     open,
-    setOpen,
-    openDialog,
-    closeDialog,
-    toggleDialog,
+    close,
+    toggle,
+    setIsOpen,
   }
 }
