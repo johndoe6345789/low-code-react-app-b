@@ -144,11 +144,11 @@ const STATUSES = ['idea', 'planned', 'in-progress', 'completed'] as const
 const CONNECTION_TYPES = ['dependency', 'association', 'inheritance', 'composition', 'aggregation'] as const
 
 const CONNECTION_STYLES = {
-  dependency: { stroke: 'hsl(var(--accent))', strokeDasharray: '8,4', markerEnd: MarkerType.ArrowClosed },
-  association: { stroke: 'hsl(var(--primary))', strokeDasharray: '', markerEnd: MarkerType.Arrow },
-  inheritance: { stroke: 'hsl(var(--chart-2))', strokeDasharray: '', markerEnd: MarkerType.ArrowClosed },
-  composition: { stroke: 'hsl(var(--destructive))', strokeDasharray: '', markerEnd: MarkerType.ArrowClosed },
-  aggregation: { stroke: 'hsl(var(--chart-4))', strokeDasharray: '', markerEnd: MarkerType.Arrow },
+  dependency: { stroke: '#70c0ff', strokeDasharray: '8,4', strokeWidth: 2.5, markerEnd: MarkerType.ArrowClosed },
+  association: { stroke: '#a78bfa', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.Arrow },
+  inheritance: { stroke: '#60d399', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.ArrowClosed },
+  composition: { stroke: '#f87171', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.ArrowClosed },
+  aggregation: { stroke: '#facc15', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.Arrow },
 }
 
 const CONNECTION_LABELS = {
@@ -244,8 +244,8 @@ export function FeatureIdeaCloud() {
       type: 'default',
       animated: true,
       data: { type: 'dependency', label: 'requires' },
-      markerEnd: { type: MarkerType.ArrowClosed, color: 'hsl(var(--accent))' },
-      style: { stroke: 'hsl(var(--accent))', strokeDasharray: '8,4' },
+      markerEnd: { type: MarkerType.ArrowClosed, color: '#70c0ff', width: 20, height: 20 },
+      style: { stroke: '#70c0ff', strokeDasharray: '8,4', strokeWidth: 2.5 },
     },
     {
       id: 'edge-2',
@@ -253,8 +253,8 @@ export function FeatureIdeaCloud() {
       target: 'idea-4',
       type: 'default',
       data: { type: 'association', label: 'works with' },
-      markerEnd: { type: MarkerType.Arrow, color: 'hsl(var(--primary))' },
-      style: { stroke: 'hsl(var(--primary))' },
+      markerEnd: { type: MarkerType.Arrow, color: '#a78bfa', width: 20, height: 20 },
+      style: { stroke: '#a78bfa', strokeWidth: 2.5 },
     },
     {
       id: 'edge-3',
@@ -262,8 +262,8 @@ export function FeatureIdeaCloud() {
       target: 'idea-5',
       type: 'default',
       data: { type: 'composition', label: 'includes' },
-      markerEnd: { type: MarkerType.ArrowClosed, color: 'hsl(var(--destructive))' },
-      style: { stroke: 'hsl(var(--destructive))' },
+      markerEnd: { type: MarkerType.ArrowClosed, color: '#f87171', width: 20, height: 20 },
+      style: { stroke: '#f87171', strokeWidth: 2.5 },
     },
   ])
   
@@ -310,6 +310,35 @@ export function FeatureIdeaCloud() {
     return () => window.removeEventListener('editIdea', handleEditIdea)
   }, [])
 
+  const onNodesChangeWrapper = useCallback(
+    (changes: any) => {
+      onNodesChange(changes)
+      const moveChange = changes.find((c: any) => c.type === 'position' && c.dragging === false)
+      if (moveChange) {
+        setTimeout(() => {
+          setEdges((currentEdges) => {
+            setSavedEdges(currentEdges)
+            return currentEdges
+          })
+        }, 100)
+      }
+    },
+    [onNodesChange, setEdges, setSavedEdges]
+  )
+
+  const onEdgesChangeWrapper = useCallback(
+    (changes: any) => {
+      onEdgesChange(changes)
+      setTimeout(() => {
+        setEdges((currentEdges) => {
+          setSavedEdges(currentEdges)
+          return currentEdges
+        })
+      }, 100)
+    },
+    [onEdgesChange, setEdges, setSavedEdges]
+  )
+
   const onConnect = useCallback(
     (params: RFConnection) => {
       if (!params.source || !params.target) return
@@ -323,20 +352,27 @@ export function FeatureIdeaCloud() {
         targetHandle: params.targetHandle,
         type: 'default',
         data: { type: connectionType, label: CONNECTION_LABELS[connectionType] },
-        markerEnd: { type: style.markerEnd, color: style.stroke },
-        style: { stroke: style.stroke, strokeDasharray: style.strokeDasharray },
+        markerEnd: { 
+          type: style.markerEnd, 
+          color: style.stroke,
+          width: 20,
+          height: 20
+        },
+        style: { 
+          stroke: style.stroke, 
+          strokeDasharray: style.strokeDasharray,
+          strokeWidth: style.strokeWidth
+        },
         animated: connectionType === 'dependency',
       }
       
-      setEdges((eds) => {
-        const updatedEdges = addEdge(newEdge, eds)
-        setSavedEdges(updatedEdges)
-        return updatedEdges
-      })
+      const updatedEdges = addEdge(newEdge, edges)
+      setEdges(updatedEdges)
+      setSavedEdges(updatedEdges)
       
       toast.success('Ideas connected!')
     },
-    [connectionType, setEdges, setSavedEdges]
+    [connectionType, edges, setEdges, setSavedEdges]
   )
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
@@ -422,8 +458,17 @@ export function FeatureIdeaCloud() {
       const updatedEdge = {
         ...selectedEdge,
         data: selectedEdge.data,
-        markerEnd: { type: style.markerEnd, color: style.stroke },
-        style: { stroke: style.stroke, strokeDasharray: style.strokeDasharray },
+        markerEnd: { 
+          type: style.markerEnd, 
+          color: style.stroke,
+          width: 20,
+          height: 20
+        },
+        style: { 
+          stroke: style.stroke, 
+          strokeDasharray: style.strokeDasharray,
+          strokeWidth: style.strokeWidth
+        },
         animated: selectedEdge.data!.type === 'dependency',
       }
       
@@ -489,8 +534,8 @@ export function FeatureIdeaCloud() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        onNodesChange={onNodesChangeWrapper}
+        onEdgesChange={onEdgesChangeWrapper}
         onConnect={onConnect}
         onEdgeClick={onEdgeClick}
         onNodeDoubleClick={onNodeDoubleClick}
@@ -555,15 +600,29 @@ export function FeatureIdeaCloud() {
                 const style = CONNECTION_STYLES[type]
                 return (
                   <div key={type} className="flex items-center gap-2">
-                    <svg width="40" height="12" className="shrink-0">
+                    <svg width="50" height="12" className="shrink-0">
+                      <defs>
+                        <marker
+                          id={`arrow-${type}`}
+                          markerWidth="10"
+                          markerHeight="10"
+                          refX="8"
+                          refY="3"
+                          orient="auto"
+                          markerUnits="strokeWidth"
+                        >
+                          <path d="M0,0 L0,6 L9,3 z" fill={style.stroke} />
+                        </marker>
+                      </defs>
                       <line
-                        x1="0"
+                        x1="2"
                         y1="6"
-                        x2="40"
+                        x2="48"
                         y2="6"
                         stroke={style.stroke}
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         strokeDasharray={style.strokeDasharray}
+                        markerEnd={`url(#arrow-${type})`}
                       />
                     </svg>
                     <span className="text-muted-foreground capitalize">{type}</span>
