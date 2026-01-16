@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:80'
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost/health']
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.codeforge.rule=Host(`codeforge.example.com`)'
+      - 'traefik.http.services.codeforge.loadbalancer.server.port=80'
+
+networks:
+  default:
+    name: codeforge-network

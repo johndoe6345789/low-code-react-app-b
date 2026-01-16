@@ -86,6 +86,7 @@ The application includes comprehensive built-in documentation:
 - **Roadmap** - Completed features and planned enhancements
 - **Agents Files** - AI service architecture and integration points
 - **Sass Styles Guide** - Custom Material UI components, utilities, mixins, and animations
+- **CI/CD Guide** - Complete setup guide for all CI/CD platforms
 
 Access documentation by clicking the **Documentation** tab in the application.
 
@@ -105,16 +106,23 @@ Access documentation by clicking the **Documentation** tab in the application.
 - ZIP file export with README generation
 - Keyboard shortcuts for power users
 
+### ✅ Recently Added (v4.2)
+- Complete CI/CD configurations (GitHub Actions, GitLab CI, Jenkins, CircleCI)
+- Docker containerization with multi-stage builds
+- Nginx configuration for production deployment
+- Automated release workflow with versioning
+- Security scanning integration (Trivy, npm audit)
+- Slack notification integration
+- Health check endpoints
+
 ### 🔮 Planned
 - Real-time preview with hot reload
 - Database seeding designer
 - API client generator
 - Visual form builder
 - Authentication designer (JWT, OAuth, sessions)
-- Docker configuration generator
 - GraphQL API designer
 - State management designer (Redux, Zustand, Jotai)
-- CI/CD pipeline generator
 - Component library export
 - Design system generator
 - Collaboration features
@@ -138,6 +146,7 @@ The Spark Template files and resources from GitHub are licensed under the terms 
 
 - [Full Documentation](./PRD.md) - Complete product requirements and design decisions
 - [Error Repair Guide](./ERROR_REPAIR_GUIDE.md) - Error detection and repair system documentation
+- [CI/CD Guide](./CI_CD_GUIDE.md) - Complete CI/CD setup and configuration guide
 
 ---
 

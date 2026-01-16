@@ -25,7 +25,8 @@ import {
   Rocket,
   Target,
   Lightbulb,
-  MagnifyingGlass
+  MagnifyingGlass,
+  GitBranch
 } from '@phosphor-icons/react'
 
 export function DocumentationView() {
@@ -53,6 +54,10 @@ export function DocumentationView() {
               <TabsTrigger value="sass" className="gap-2">
                 <PaintBrush size={18} />
                 Sass Styles Guide
+              </TabsTrigger>
+              <TabsTrigger value="cicd" className="gap-2">
+                <GitBranch size={18} />
+                CI/CD Guide
               </TabsTrigger>
             </TabsList>
           </div>
@@ -432,6 +437,18 @@ export function DocumentationView() {
                         title="Project Settings Designer"
                         description="Next.js configuration, npm package management, and build script customization"
                         version="v4.0"
+                      />
+                      <RoadmapItem 
+                        status="completed"
+                        title="CI/CD Configuration"
+                        description="Complete CI/CD pipelines for GitHub Actions, GitLab CI, Jenkins, and CircleCI"
+                        version="v4.2"
+                      />
+                      <RoadmapItem 
+                        status="completed"
+                        title="Docker Containerization"
+                        description="Multi-stage Docker builds with Nginx, docker-compose, and health checks"
+                        version="v4.2"
                       />
                     </div>
                   </div>
@@ -1127,10 +1144,507 @@ function MyComponent() {
                 </Card>
               </div>
             </TabsContent>
+
+            <TabsContent value="cicd" className="m-0 space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <GitBranch size={32} weight="duotone" className="text-white" />
+                  </div>
+                  <div>
+                    <h1 className="text-4xl font-bold">CI/CD Guide</h1>
+                    <p className="text-lg text-muted-foreground">
+                      Complete deployment automation for multiple platforms
+                    </p>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">Overview</h2>
+                  <p className="text-foreground/90 leading-relaxed">
+                    CodeForge includes production-ready CI/CD configurations for GitHub Actions, GitLab CI, Jenkins, 
+                    and CircleCI. Each pipeline includes linting, testing, security scanning, Docker image building, 
+                    and automated deployment workflows.
+                  </p>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Available Configurations</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <CICDPlatformItem 
+                      name="GitHub Actions"
+                      file=".github/workflows/ci.yml"
+                      description="Complete CI/CD with GHCR Docker registry integration"
+                      features={[
+                        'Parallel lint and test execution',
+                        'E2E tests with Playwright',
+                        'Docker build and push to GitHub Container Registry',
+                        'Security scanning with Trivy',
+                        'Automated staging and production deployments',
+                        'Release workflow with versioned artifacts'
+                      ]}
+                    />
+                    <CICDPlatformItem 
+                      name="GitLab CI"
+                      file=".gitlab-ci.yml"
+                      description="Multi-stage pipeline with GitLab Container Registry"
+                      features={[
+                        'Dependency caching for faster builds',
+                        'Coverage reporting with Cobertura',
+                        'Docker-in-Docker builds',
+                        'Manual production approval gates',
+                        'Webhook-based deployment triggers'
+                      ]}
+                    />
+                    <CICDPlatformItem 
+                      name="Jenkins"
+                      file="Jenkinsfile"
+                      description="Declarative pipeline with Slack notifications"
+                      features={[
+                        'Node.js environment configuration',
+                        'HTML report publishing for tests and coverage',
+                        'Artifact archiving and fingerprinting',
+                        'Manual production deployment approval',
+                        'Slack integration for deployment notifications'
+                      ]}
+                    />
+                    <CICDPlatformItem 
+                      name="CircleCI"
+                      file=".circleci/config.yml"
+                      description="Workflow orchestration with orb integrations"
+                      features={[
+                        'Docker layer caching for optimization',
+                        'Job dependency management',
+                        'Test results and artifact storage',
+                        'Approval workflows for production',
+                        'Slack notifications via orb'
+                      ]}
+                    />
+                  </CardContent>
+                </Card>
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">Pipeline Stages</h2>
+                  <p className="text-foreground/90 leading-relaxed">
+                    All CI/CD configurations follow a similar multi-stage pipeline structure:
+                  </p>
+                  <div className="grid gap-3">
+                    <PipelineStageCard 
+                      stage="Lint"
+                      description="ESLint and TypeScript type checking to ensure code quality"
+                      duration="~1-2 min"
+                    />
+                    <PipelineStageCard 
+                      stage="Test"
+                      description="Unit tests with coverage reporting and result artifacts"
+                      duration="~2-3 min"
+                    />
+                    <PipelineStageCard 
+                      stage="Build"
+                      description="Production build with artifact generation for deployment"
+                      duration="~2-4 min"
+                    />
+                    <PipelineStageCard 
+                      stage="E2E Tests"
+                      description="Playwright end-to-end tests with HTML reports"
+                      duration="~3-5 min"
+                    />
+                    <PipelineStageCard 
+                      stage="Security"
+                      description="npm audit and Trivy vulnerability scanning"
+                      duration="~1-2 min"
+                    />
+                    <PipelineStageCard 
+                      stage="Docker Build"
+                      description="Multi-stage Docker image build and push to registry"
+                      duration="~3-5 min"
+                    />
+                    <PipelineStageCard 
+                      stage="Deploy"
+                      description="Automated deployment to staging and production environments"
+                      duration="~1-3 min"
+                    />
+                  </div>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Docker Configuration</CardTitle>
+                    <CardDescription>Containerization for production deployment</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <h3 className="font-semibold">Files Included</h3>
+                      <div className="space-y-2 ml-4">
+                        <div className="space-y-1">
+                          <code className="text-sm font-mono text-accent">Dockerfile</code>
+                          <p className="text-sm text-muted-foreground">Multi-stage build with Node.js builder and Nginx runtime</p>
+                        </div>
+                        <div className="space-y-1">
+                          <code className="text-sm font-mono text-accent">nginx.conf</code>
+                          <p className="text-sm text-muted-foreground">Production Nginx configuration with health checks and caching</p>
+                        </div>
+                        <div className="space-y-1">
+                          <code className="text-sm font-mono text-accent">docker-compose.yml</code>
+                          <p className="text-sm text-muted-foreground">Local development and deployment orchestration</p>
+                        </div>
+                        <div className="space-y-1">
+                          <code className="text-sm font-mono text-accent">.dockerignore</code>
+                          <p className="text-sm text-muted-foreground">Optimized build context by excluding unnecessary files</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-2">
+                      <h3 className="font-semibold">Docker Commands</h3>
+                      <pre className="custom-mui-code-block">
+{`# Build image locally
+docker build -t codeforge:local .
+
+# Run container
+docker run -p 3000:80 codeforge:local
+
+# Use docker-compose
+docker-compose up -d
+
+# Pull from registry
+docker pull ghcr.io/<username>/<repo>:latest`}
+                      </pre>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-2">
+                      <h3 className="font-semibold">Features</h3>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex items-start gap-2">
+                          <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                          <span>Multi-stage build reduces final image size to ~50MB</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                          <span>Nginx serves static files with gzip compression</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                          <span>Health check endpoint at /health for orchestration</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                          <span>Automatic cache headers for static assets</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                          <span>SPA routing support with fallback to index.html</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Environment Variables</CardTitle>
+                    <CardDescription>Required configuration for CI/CD platforms</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="border-b">
+                              <th className="text-left py-2 pr-4 font-semibold">Variable</th>
+                              <th className="text-left py-2 pr-4 font-semibold">Description</th>
+                              <th className="text-left py-2 font-semibold">Required</th>
+                            </tr>
+                          </thead>
+                          <tbody className="text-muted-foreground">
+                            <tr className="border-b">
+                              <td className="py-2 pr-4"><code className="text-accent">NODE_VERSION</code></td>
+                              <td className="py-2 pr-4">Node.js version (default: 20)</td>
+                              <td className="py-2">No</td>
+                            </tr>
+                            <tr className="border-b">
+                              <td className="py-2 pr-4"><code className="text-accent">REGISTRY</code></td>
+                              <td className="py-2 pr-4">Docker registry URL (default: ghcr.io)</td>
+                              <td className="py-2">No</td>
+                            </tr>
+                            <tr className="border-b">
+                              <td className="py-2 pr-4"><code className="text-accent">STAGING_WEBHOOK_URL</code></td>
+                              <td className="py-2 pr-4">Webhook for staging deployments</td>
+                              <td className="py-2">Optional</td>
+                            </tr>
+                            <tr className="border-b">
+                              <td className="py-2 pr-4"><code className="text-accent">PRODUCTION_WEBHOOK_URL</code></td>
+                              <td className="py-2 pr-4">Webhook for production deployments</td>
+                              <td className="py-2">Optional</td>
+                            </tr>
+                            <tr className="border-b">
+                              <td className="py-2 pr-4"><code className="text-accent">CODECOV_TOKEN</code></td>
+                              <td className="py-2 pr-4">Codecov integration token</td>
+                              <td className="py-2">Optional</td>
+                            </tr>
+                            <tr className="border-b">
+                              <td className="py-2 pr-4"><code className="text-accent">SLACK_WEBHOOK</code></td>
+                              <td className="py-2 pr-4">Slack webhook for notifications</td>
+                              <td className="py-2">Optional</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">Branch Strategy</h2>
+                  <div className="grid gap-4">
+                    <Card className="bg-green-500/5 border-green-500/20">
+                      <CardContent className="pt-4 pb-4">
+                        <div className="flex items-start gap-3">
+                          <GitBranch size={20} weight="duotone" className="text-green-500 mt-0.5" />
+                          <div className="space-y-1">
+                            <h4 className="font-semibold">main</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Production branch - deploys to production environment (manual approval required)
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-blue-500/5 border-blue-500/20">
+                      <CardContent className="pt-4 pb-4">
+                        <div className="flex items-start gap-3">
+                          <GitBranch size={20} weight="duotone" className="text-blue-500 mt-0.5" />
+                          <div className="space-y-1">
+                            <h4 className="font-semibold">develop</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Development branch - automatically deploys to staging environment
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-purple-500/5 border-purple-500/20">
+                      <CardContent className="pt-4 pb-4">
+                        <div className="flex items-start gap-3">
+                          <GitBranch size={20} weight="duotone" className="text-purple-500 mt-0.5" />
+                          <div className="space-y-1">
+                            <h4 className="font-semibold">feature/*</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Feature branches - runs tests only, no deployment
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card className="bg-orange-500/5 border-orange-500/20">
+                      <CardContent className="pt-4 pb-4">
+                        <div className="flex items-start gap-3">
+                          <GitBranch size={20} weight="duotone" className="text-orange-500 mt-0.5" />
+                          <div className="space-y-1">
+                            <h4 className="font-semibold">v* tags</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Version tags - triggers release workflow with artifacts and changelog
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                <Card className="bg-accent/10 border-accent/20">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Lightbulb size={20} weight="duotone" className="text-accent" />
+                      Quick Start
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-sm">1</span>
+                          Choose Your Platform
+                        </h3>
+                        <p className="text-sm text-foreground/80 ml-8">
+                          Select GitHub Actions, GitLab CI, Jenkins, or CircleCI based on your infrastructure
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-sm">2</span>
+                          Configure Secrets
+                        </h3>
+                        <p className="text-sm text-foreground/80 ml-8">
+                          Add required environment variables and secrets in your platform's settings
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-sm">3</span>
+                          Push to Repository
+                        </h3>
+                        <p className="text-sm text-foreground/80 ml-8">
+                          Push code to main or develop branch to trigger the CI/CD pipeline
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-sm">4</span>
+                          Monitor Pipeline
+                        </h3>
+                        <p className="text-sm text-foreground/80 ml-8">
+                          View pipeline status, test results, and deployment logs in your platform's dashboard
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-muted/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Rocket size={20} weight="duotone" />
+                      Best Practices
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Never commit secrets - use environment variables and platform secret management</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Enable branch protection on main and develop branches</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Require code reviews and passing tests before merging</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Use manual approval gates for production deployments</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Monitor security scan results and fix vulnerabilities promptly</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Keep dependencies updated with Dependabot or Renovate</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Use semantic versioning for releases (v1.0.0, v1.1.0, etc.)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                        <span>Configure Slack or email notifications for deployment status</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-primary/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Package size={20} weight="duotone" />
+                      Additional Resources
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-start gap-2">
+                        <FileCode size={16} className="text-accent mt-1 flex-shrink-0" />
+                        <span><code className="text-accent">CI_CD_GUIDE.md</code> - Detailed setup guide for all platforms</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FileCode size={16} className="text-accent mt-1 flex-shrink-0" />
+                        <span><code className="text-accent">.github/workflows/</code> - GitHub Actions workflows</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FileCode size={16} className="text-accent mt-1 flex-shrink-0" />
+                        <span><code className="text-accent">.gitlab-ci.yml</code> - GitLab CI configuration</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FileCode size={16} className="text-accent mt-1 flex-shrink-0" />
+                        <span><code className="text-accent">Jenkinsfile</code> - Jenkins pipeline definition</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FileCode size={16} className="text-accent mt-1 flex-shrink-0" />
+                        <span><code className="text-accent">.circleci/config.yml</code> - CircleCI configuration</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
           </div>
         </ScrollArea>
       </Tabs>
     </div>
+  )
+}
+
+function CICDPlatformItem({ name, file, description, features }: {
+  name: string
+  file: string
+  description: string
+  features: string[]
+}) {
+  return (
+    <div className="space-y-3 border-l-2 border-accent pl-4">
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <GitBranch size={18} className="text-accent" />
+          <h3 className="text-base font-semibold">{name}</h3>
+        </div>
+        <code className="text-xs text-muted-foreground font-mono">{file}</code>
+        <p className="text-sm text-foreground/90">{description}</p>
+      </div>
+      <div className="space-y-1">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Key Features:</p>
+        <ul className="space-y-1">
+          {features.map((feature, idx) => (
+            <li key={idx} className="text-sm text-foreground/80 flex items-start gap-2">
+              <CheckCircle size={14} weight="fill" className="text-accent mt-1 flex-shrink-0" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+function PipelineStageCard({ stage, description, duration }: {
+  stage: string
+  description: string
+  duration: string
+}) {
+  return (
+    <Card className="bg-primary/5 border-primary/20">
+      <CardContent className="pt-4 pb-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1 flex-1">
+            <h4 className="font-semibold text-sm">{stage}</h4>
+            <p className="text-sm text-muted-foreground">{description}</p>
+          </div>
+          <Badge variant="secondary" className="text-xs whitespace-nowrap">
+            {duration}
+          </Badge>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
