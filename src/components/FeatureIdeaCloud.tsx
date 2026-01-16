@@ -150,8 +150,7 @@ const STATUSES = ['idea', 'planned', 'in-progress', 'completed'] as const
 
 const CONNECTION_STYLE = { 
   stroke: '#a78bfa', 
-  strokeWidth: 2.5, 
-  markerEnd: MarkerType.ArrowClosed 
+  strokeWidth: 2.5
 }
 
 const STATUS_COLORS = {
@@ -598,7 +597,7 @@ export function FeatureIdeaCloud() {
           type: 'default',
           data: { label: 'relates to' },
           markerEnd: { 
-            type: CONNECTION_STYLE.markerEnd, 
+            type: MarkerType.ArrowClosed,
             color: CONNECTION_STYLE.stroke,
             width: 20,
             height: 20
@@ -881,7 +880,7 @@ export function FeatureIdeaCloud() {
         ...selectedEdge,
         data: selectedEdge.data,
         markerEnd: { 
-          type: CONNECTION_STYLE.markerEnd, 
+          type: MarkerType.ArrowClosed,
           color: CONNECTION_STYLE.stroke,
           width: 20,
           height: 20
