@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, ReactElement } from 'react'
 import { useKV } from '@github/spark/hooks'
 import ReactFlow, {
   Node,
@@ -217,33 +217,64 @@ function GroupNode({ data, selected }: NodeProps<IdeaGroup>) {
   )
 }
 
-function IdeaNode({ data, selected }: NodeProps<FeatureIdea>) {
+function IdeaNode({ data, selected, id }: NodeProps<FeatureIdea> & { id: string }) {
+  const [connectionCounts, setConnectionCounts] = useState<Record<string, number>>({
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  })
+
+  useEffect(() => {
+    const updateConnectionCounts = (event: CustomEvent) => {
+      const { nodeId, counts } = event.detail
+      if (nodeId === id) {
+        setConnectionCounts(counts)
+      }
+    }
+
+    window.addEventListener('updateConnectionCounts' as any, updateConnectionCounts as EventListener)
+    return () => {
+      window.removeEventListener('updateConnectionCounts' as any, updateConnectionCounts as EventListener)
+    }
+  }, [id])
+
+  const generateHandles = (position: Position, type: 'source' | 'target', side: string) => {
+    const count = connectionCounts[side] || 0
+    const totalHandles = Math.max(2, count + 1)
+    const handles: ReactElement[] = []
+    
+    for (let i = 0; i < totalHandles; i++) {
+      const handleId = `${side}-${i}`
+      const isVertical = position === Position.Top || position === Position.Bottom
+      const positionStyle = isVertical
+        ? { left: `${((i + 1) / (totalHandles + 1)) * 100}%` }
+        : { top: `${((i + 1) / (totalHandles + 1)) * 100}%` }
+      
+      handles.push(
+        <Handle
+          key={handleId}
+          type={type}
+          position={position}
+          id={handleId}
+          className="w-3 h-3 !bg-primary border-2 border-background transition-all hover:scale-125"
+          style={{
+            ...positionStyle,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      )
+    }
+    
+    return handles
+  }
+
   return (
     <div className="relative">
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="left"
-        className="w-3 h-3 !bg-primary border-2 border-background"
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="right"
-        className="w-3 h-3 !bg-primary border-2 border-background"
-      />
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="top"
-        className="w-3 h-3 !bg-primary border-2 border-background"
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottom"
-        className="w-3 h-3 !bg-primary border-2 border-background"
-      />
+      {generateHandles(Position.Left, 'target', 'left')}
+      {generateHandles(Position.Right, 'source', 'right')}
+      {generateHandles(Position.Top, 'target', 'top')}
+      {generateHandles(Position.Bottom, 'source', 'bottom')}
       
       <Card className={`p-4 shadow-xl hover:shadow-2xl transition-all border-2 ${PRIORITY_COLORS[data.priority]} w-[240px] ${selected ? 'ring-2 ring-primary' : ''}`}>
         <div className="space-y-2">
@@ -292,8 +323,8 @@ export function FeatureIdeaCloud() {
       id: 'edge-1',
       source: 'idea-1',
       target: 'idea-8',
-      sourceHandle: 'right',
-      targetHandle: 'left',
+      sourceHandle: 'right-0',
+      targetHandle: 'left-0',
       type: 'default',
       animated: false,
       data: { label: 'requires' },
@@ -304,8 +335,8 @@ export function FeatureIdeaCloud() {
       id: 'edge-2',
       source: 'idea-2',
       target: 'idea-4',
-      sourceHandle: 'bottom',
-      targetHandle: 'top',
+      sourceHandle: 'bottom-0',
+      targetHandle: 'top-0',
       type: 'default',
       data: { label: 'works with' },
       markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
@@ -315,8 +346,8 @@ export function FeatureIdeaCloud() {
       id: 'edge-3',
       source: 'idea-8',
       target: 'idea-5',
-      sourceHandle: 'bottom',
-      targetHandle: 'left',
+      sourceHandle: 'bottom-0',
+      targetHandle: 'left-0',
       type: 'default',
       data: { label: 'includes' },
       markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
@@ -341,6 +372,42 @@ export function FeatureIdeaCloud() {
   const safeGroups = groups || []
   const safeEdges = savedEdges || []
   const safeNodePositions = savedNodePositions || {}
+
+  const updateNodeConnectionCounts = useCallback((edges: Edge<IdeaEdgeData>[]) => {
+    const nodeConnectionMap = new Map<string, Record<string, Set<string>>>()
+    
+    edges.forEach(edge => {
+      const sourceHandle = edge.sourceHandle || 'default'
+      const targetHandle = edge.targetHandle || 'default'
+      
+      if (!nodeConnectionMap.has(edge.source)) {
+        nodeConnectionMap.set(edge.source, { left: new Set(), right: new Set(), top: new Set(), bottom: new Set() })
+      }
+      if (!nodeConnectionMap.has(edge.target)) {
+        nodeConnectionMap.set(edge.target, { left: new Set(), right: new Set(), top: new Set(), bottom: new Set() })
+      }
+      
+      const sourceSide = sourceHandle.split('-')[0]
+      const targetSide = targetHandle.split('-')[0]
+      
+      nodeConnectionMap.get(edge.source)![sourceSide].add(sourceHandle)
+      nodeConnectionMap.get(edge.target)![targetSide].add(targetHandle)
+    })
+    
+    nodeConnectionMap.forEach((connections, nodeId) => {
+      const counts = {
+        left: connections.left.size,
+        right: connections.right.size,
+        top: connections.top.size,
+        bottom: connections.bottom.size,
+      }
+      
+      const event = new CustomEvent('updateConnectionCounts', {
+        detail: { nodeId, counts }
+      })
+      window.dispatchEvent(event)
+    })
+  }, [])
 
   useEffect(() => {
     if (!ideas || ideas.length === 0) {
@@ -376,7 +443,8 @@ export function FeatureIdeaCloud() {
 
   useEffect(() => {
     setEdges(safeEdges)
-  }, [safeEdges, setEdges])
+    updateNodeConnectionCounts(safeEdges)
+  }, [safeEdges, setEdges, updateNodeConnectionCounts])
 
   useEffect(() => {
     const handleEditIdea = (e: Event) => {
@@ -431,11 +499,12 @@ export function FeatureIdeaCloud() {
       setTimeout(() => {
         setEdges((currentEdges) => {
           setSavedEdges(currentEdges)
+          updateNodeConnectionCounts(currentEdges)
           return currentEdges
         })
       }, 100)
     },
-    [onEdgesChange, setEdges, setSavedEdges]
+    [onEdgesChange, setEdges, setSavedEdges, updateNodeConnectionCounts]
   )
 
   const validateAndRemoveConflicts = useCallback((
@@ -552,6 +621,7 @@ export function FeatureIdeaCloud() {
         })
         
         setSavedEdges(updatedEdges)
+        updateNodeConnectionCounts(updatedEdges)
         
         if (removedCount > 0) {
           setTimeout(() => {
@@ -568,7 +638,7 @@ export function FeatureIdeaCloud() {
         return updatedEdges
       })
     },
-    [setEdges, setSavedEdges, validateAndRemoveConflicts]
+    [setEdges, setSavedEdges, validateAndRemoveConflicts, updateNodeConnectionCounts]
   )
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
@@ -624,6 +694,7 @@ export function FeatureIdeaCloud() {
       })))
       
       setSavedEdges(updatedEdges)
+      updateNodeConnectionCounts(updatedEdges)
       
       if (removedCount > 0) {
         setTimeout(() => {
@@ -639,7 +710,7 @@ export function FeatureIdeaCloud() {
       
       return updatedEdges
     })
-  }, [setEdges, setSavedEdges, validateAndRemoveConflicts])
+  }, [setEdges, setSavedEdges, validateAndRemoveConflicts, updateNodeConnectionCounts])
 
   const onReconnectEnd = useCallback((_: MouseEvent | TouchEvent, edge: Edge) => {
     if (!edgeReconnectSuccessful.current) {
@@ -726,6 +797,7 @@ export function FeatureIdeaCloud() {
     const updatedEdges = edges.filter(e => e.source !== id && e.target !== id)
     setEdges(updatedEdges)
     setSavedEdges(updatedEdges)
+    updateNodeConnectionCounts(updatedEdges)
     
     setEditDialogOpen(false)
     setViewDialogOpen(false)
@@ -797,6 +869,7 @@ export function FeatureIdeaCloud() {
     const updatedEdges = edges.filter(e => e.id !== edgeId)
     setEdges(updatedEdges)
     setSavedEdges(updatedEdges)
+    updateNodeConnectionCounts(updatedEdges)
     setEdgeDialogOpen(false)
     setSelectedEdge(null)
     toast.success('Connection removed')
@@ -1010,12 +1083,18 @@ export function FeatureIdeaCloud() {
                     <div className="p-2 space-y-2 text-xs font-mono">
                       {safeIdeas.slice(0, 10).map((idea) => {
                         const nodeEdges = edges.filter(e => e.source === idea.id || e.target === idea.id)
-                        const leftHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'left')
-                        const rightHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'right')
-                        const topHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'top')
-                        const bottomHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'bottom')
+                        const leftHandles = edges.filter(e => e.target === idea.id && e.targetHandle?.startsWith('left'))
+                        const rightHandles = edges.filter(e => e.source === idea.id && e.sourceHandle?.startsWith('right'))
+                        const topHandles = edges.filter(e => e.target === idea.id && e.targetHandle?.startsWith('top'))
+                        const bottomHandles = edges.filter(e => e.source === idea.id && e.sourceHandle?.startsWith('bottom'))
                         
-                        const hasViolation = leftHandles.length > 1 || rightHandles.length > 1 || topHandles.length > 1 || bottomHandles.length > 1
+                        const leftUnique = new Set(leftHandles.map(e => e.targetHandle)).size
+                        const rightUnique = new Set(rightHandles.map(e => e.sourceHandle)).size
+                        const topUnique = new Set(topHandles.map(e => e.targetHandle)).size
+                        const bottomUnique = new Set(bottomHandles.map(e => e.sourceHandle)).size
+                        
+                        const hasViolation = leftHandles.length !== leftUnique || rightHandles.length !== rightUnique || 
+                                            topHandles.length !== topUnique || bottomHandles.length !== bottomUnique
                         
                         return (
                           <div key={idea.id} className={`p-2 rounded border ${hasViolation ? 'bg-red-500/20 border-red-500' : 'bg-muted/30'}`}>
@@ -1025,32 +1104,32 @@ export function FeatureIdeaCloud() {
                             </div>
                             <div className="grid grid-cols-4 gap-1 text-[10px]">
                               <div className={`p-1 rounded text-center ${
-                                leftHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
-                                leftHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                                leftHandles.length !== leftUnique ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                leftHandles.length >= 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
                               }`}>
-                                ← {leftHandles.length > 0 ? `✓${leftHandles.length > 1 ? `(${leftHandles.length})` : ''}` : '○'}
+                                ← {leftHandles.length}/{leftUnique} {leftHandles.length !== leftUnique ? '⚠️' : leftHandles.length > 0 ? '✓' : '○'}
                               </div>
                               <div className={`p-1 rounded text-center ${
-                                rightHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
-                                rightHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                                rightHandles.length !== rightUnique ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                rightHandles.length >= 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
                               }`}>
-                                → {rightHandles.length > 0 ? `✓${rightHandles.length > 1 ? `(${rightHandles.length})` : ''}` : '○'}
+                                → {rightHandles.length}/{rightUnique} {rightHandles.length !== rightUnique ? '⚠️' : rightHandles.length > 0 ? '✓' : '○'}
                               </div>
                               <div className={`p-1 rounded text-center ${
-                                topHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
-                                topHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                                topHandles.length !== topUnique ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                topHandles.length >= 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
                               }`}>
-                                ↑ {topHandles.length > 0 ? `✓${topHandles.length > 1 ? `(${topHandles.length})` : ''}` : '○'}
+                                ↑ {topHandles.length}/{topUnique} {topHandles.length !== topUnique ? '⚠️' : topHandles.length > 0 ? '✓' : '○'}
                               </div>
                               <div className={`p-1 rounded text-center ${
-                                bottomHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
-                                bottomHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                                bottomHandles.length !== bottomUnique ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                bottomHandles.length >= 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
                               }`}>
-                                ↓ {bottomHandles.length > 0 ? `✓${bottomHandles.length > 1 ? `(${bottomHandles.length})` : ''}` : '○'}
+                                ↓ {bottomHandles.length}/{bottomUnique} {bottomHandles.length !== bottomUnique ? '⚠️' : bottomHandles.length > 0 ? '✓' : '○'}
                               </div>
                             </div>
                             <div className="mt-1 text-[10px] text-muted-foreground">
-                              Total: {nodeEdges.length} connection{nodeEdges.length !== 1 ? 's' : ''}
+                              Total: {nodeEdges.length} connection{nodeEdges.length !== 1 ? 's' : ''}, Handles: L{leftUnique}|R{rightUnique}|T{topUnique}|B{bottomUnique}
                             </div>
                           </div>
                         )
@@ -1067,15 +1146,20 @@ export function FeatureIdeaCloud() {
                 {(() => {
                   const violations: string[] = []
                   safeIdeas.forEach(idea => {
-                    const leftHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'left')
-                    const rightHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'right')
-                    const topHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'top')
-                    const bottomHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'bottom')
+                    const leftHandles = edges.filter(e => e.target === idea.id && e.targetHandle?.startsWith('left'))
+                    const rightHandles = edges.filter(e => e.source === idea.id && e.sourceHandle?.startsWith('right'))
+                    const topHandles = edges.filter(e => e.target === idea.id && e.targetHandle?.startsWith('top'))
+                    const bottomHandles = edges.filter(e => e.source === idea.id && e.sourceHandle?.startsWith('bottom'))
                     
-                    if (leftHandles.length > 1) violations.push(`${idea.title}: Left handle has ${leftHandles.length} connections`)
-                    if (rightHandles.length > 1) violations.push(`${idea.title}: Right handle has ${rightHandles.length} connections`)
-                    if (topHandles.length > 1) violations.push(`${idea.title}: Top handle has ${topHandles.length} connections`)
-                    if (bottomHandles.length > 1) violations.push(`${idea.title}: Bottom handle has ${bottomHandles.length} connections`)
+                    const leftUnique = new Set(leftHandles.map(e => e.targetHandle)).size
+                    const rightUnique = new Set(rightHandles.map(e => e.sourceHandle)).size
+                    const topUnique = new Set(topHandles.map(e => e.targetHandle)).size
+                    const bottomUnique = new Set(bottomHandles.map(e => e.sourceHandle)).size
+                    
+                    if (leftHandles.length !== leftUnique) violations.push(`${idea.title}: Left side has duplicate handle usage (${leftHandles.length} connections on ${leftUnique} handles)`)
+                    if (rightHandles.length !== rightUnique) violations.push(`${idea.title}: Right side has duplicate handle usage (${rightHandles.length} connections on ${rightUnique} handles)`)
+                    if (topHandles.length !== topUnique) violations.push(`${idea.title}: Top side has duplicate handle usage (${topHandles.length} connections on ${topUnique} handles)`)
+                    if (bottomHandles.length !== bottomUnique) violations.push(`${idea.title}: Bottom side has duplicate handle usage (${bottomHandles.length} connections on ${bottomUnique} handles)`)
                   })
                   
                   return violations.length > 0 ? (
@@ -1095,8 +1179,9 @@ export function FeatureIdeaCloud() {
                         ✅ All Constraints Satisfied
                       </div>
                       <div className="text-xs space-y-0.5">
-                        <div>• Each handle has at most 1 connection ✓</div>
+                        <div>• Each handle has exactly 1 connection (1:1 mapping) ✓</div>
                         <div>• New connections automatically remove conflicts ✓</div>
+                        <div>• Spare blank handles always available ✓</div>
                         <div>• Remapping preserves 1:1 constraint ✓</div>
                         <div>• Changes persist to database immediately ✓</div>
                       </div>
