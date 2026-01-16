@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
+import { useAutoRepair } from '@/hooks/use-auto-repair'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -14,6 +16,7 @@ import { FileExplorer } from '@/components/FileExplorer'
 import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
 import { StorybookDesigner } from '@/components/StorybookDesigner'
 import { UnitTestDesigner } from '@/components/UnitTestDesigner'
+import { ErrorPanel } from '@/components/ErrorPanel'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
 import { toast } from 'sonner'
@@ -109,6 +112,8 @@ function App() {
   const safeStorybookStories = storybookStories || []
   const safeUnitTests = unitTests || []
 
+  const { errors: autoDetectedErrors } = useAutoRepair(safeFiles, false)
+
   const handleFileChange = (fileId: string, content: string) => {
     setFiles((currentFiles) =>
       (currentFiles || []).map((f) => (f.id === fileId ? { ...f, content } : f))
@@ -200,6 +205,16 @@ function App() {
             </div>
           </div>
           <div className="flex gap-2">
+            {autoDetectedErrors.length > 0 && (
+              <Button 
+                variant="outline" 
+                onClick={() => setActiveTab('errors')}
+                className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
+              >
+                <Wrench size={16} className="mr-2" />
+                {autoDetectedErrors.length} {autoDetectedErrors.length === 1 ? 'Error' : 'Errors'}
+              </Button>
+            )}
             <Button variant="outline" onClick={handleGenerateWithAI}>
               <Sparkle size={16} className="mr-2" weight="duotone" />
               AI Generate
@@ -242,6 +257,15 @@ function App() {
             <TabsTrigger value="unit-tests" className="gap-2">
               <Flask size={18} />
               Unit Tests
+            </TabsTrigger>
+            <TabsTrigger value="errors" className="gap-2">
+              <Wrench size={18} />
+              Error Repair
+              {autoDetectedErrors.length > 0 && (
+                <Badge variant="destructive" className="ml-1">
+                  {autoDetectedErrors.length}
+                </Badge>
+              )}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -295,6 +319,14 @@ function App() {
 
           <TabsContent value="unit-tests" className="h-full m-0">
             <UnitTestDesigner tests={safeUnitTests} onTestsChange={setUnitTests} />
+          </TabsContent>
+
+          <TabsContent value="errors" className="h-full m-0">
+            <ErrorPanel
+              files={safeFiles}
+              onFileChange={handleFileChange}
+              onFileSelect={setActiveFileId}
+            />
           </TabsContent>
         </div>
       </Tabs>

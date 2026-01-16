@@ -1,0 +1,48 @@
+import { useState, useEffect, useCallback } from 'react'
+import { ProjectFile } from '@/types/project'
+import { CodeError } from '@/types/errors'
+import { ErrorRepairService } from '@/lib/error-repair-service'
+
+export function useAutoRepair(
+  files: ProjectFile[],
+  enabled: boolean = false
+) {
+  const [errors, setErrors] = useState<CodeError[]>([])
+  const [isScanning, setIsScanning] = useState(false)
+
+  const scanFiles = useCallback(async () => {
+    if (!enabled || files.length === 0) return
+
+    setIsScanning(true)
+    try {
+      const allErrors: CodeError[] = []
+      
+      for (const file of files) {
+        const fileErrors = await ErrorRepairService.detectErrors(file)
+        allErrors.push(...fileErrors)
+      }
+      
+      setErrors(allErrors)
+    } catch (error) {
+      console.error('Auto-scan failed:', error)
+    } finally {
+      setIsScanning(false)
+    }
+  }, [files, enabled])
+
+  useEffect(() => {
+    if (enabled) {
+      const timeoutId = setTimeout(() => {
+        scanFiles()
+      }, 2000)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [files, enabled, scanFiles])
+
+  return {
+    errors,
+    isScanning,
+    scanFiles,
+  }
+}

@@ -68,6 +68,13 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Progression**: Create test suite manually or with AI → Select test type (component/function/hook/integration) → Add test cases → Configure setup, assertions, and teardown → AI can generate complete test suites → Export test files for Vitest/React Testing Library
 - **Success criteria**: Can create test suites for different types; test cases have multiple assertions; setup/teardown code is optional; AI tests are comprehensive; generates valid Vitest test code
 
+### Auto Error Detection & Repair
+- **Functionality**: Automated error detection and AI-powered code repair system that scans files for syntax, type, import, and lint errors
+- **Purpose**: Automatically identify and fix code errors without manual debugging, saving time and reducing bugs
+- **Trigger**: Opening the Error Repair tab or clicking "Scan" button
+- **Progression**: Scan files → Detect errors (syntax, imports, types, lint) → Display errors grouped by file → Repair individual errors or batch repair all → View explanations → Rescan to verify fixes
+- **Success criteria**: Detects common errors accurately; AI repairs produce valid, working code; can repair single errors or entire files; provides clear explanations of fixes; supports context-aware repair using related files
+
 ### Project Generator
 - **Functionality**: Exports complete Next.js project with all configurations
 - **Purpose**: Converts visual designs into downloadable, runnable applications
@@ -88,6 +95,9 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Invalid Test Selectors**: Warn when Playwright selectors might be problematic
 - **Missing Test Assertions**: Highlight test cases without assertions as incomplete
 - **Storybook Args Type Mismatch**: Auto-detect arg types and provide appropriate input controls
+- **No Errors Found**: Show success state when error scan finds no issues
+- **Unrepairable Errors**: Display clear messages when AI cannot fix certain errors and suggest manual intervention
+- **Context-Dependent Errors**: Use related files as context for more accurate error repair
 
 ## Design Direction
 The design should evoke a professional IDE environment while remaining approachable - think Visual Studio Code meets Figma. Clean panels, clear hierarchy, and purposeful use of space to avoid overwhelming users with options.
@@ -149,10 +159,15 @@ Animations should feel responsive and purposeful - quick panel transitions (200m
   - Play (play icon) for Playwright E2E tests
   - BookOpen (book-open icon) for Storybook stories
   - Flask (flask icon) for unit tests
+  - Wrench (wrench icon) for error repair
   - FileCode (file-code icon) for individual files
   - Plus (plus icon) for create actions
   - Download (download icon) for export
   - Sparkle (sparkle icon) for AI generation
+  - Lightning (lightning icon) for scan/quick actions
+  - CheckCircle (check-circle icon) for success states
+  - Warning (warning icon) for warnings
+  - X (x icon) for errors
   
 - **Spacing**: 
   - Panel padding: p-6 (24px) for main content areas
