@@ -1,4 +1,4 @@
-import { PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest } from '@/types/project'
+import { PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, FlaskBlueprint, FlaskEndpoint } from '@/types/project'
 
 export function generatePrismaSchema(models: PrismaModel[]): string {
   let schema = `generator client {\n  provider = "prisma-client-js"\n}\n\n`
@@ -395,3 +395,171 @@ export function generateUnitTests(tests: UnitTest[]): Record<string, string> {
 
   return files
 }
+
+export function generateFlaskBlueprint(blueprint: FlaskBlueprint): string {
+  let code = `from flask import Blueprint, request, jsonify\n`
+  code += `from typing import Dict, Any\n\n`
+  
+  const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+  code += `${blueprintVarName}_bp = Blueprint('${blueprintVarName}', __name__, url_prefix='${blueprint.urlPrefix}')\n\n`
+
+  blueprint.endpoints.forEach(endpoint => {
+    const functionName = endpoint.name.toLowerCase().replace(/\s+/g, '_')
+    code += `@${blueprintVarName}_bp.route('${endpoint.path}', methods=['${endpoint.method}'])\n`
+    code += `def ${functionName}():\n`
+    code += `    """\n`
+    code += `    ${endpoint.description || endpoint.name}\n`
+    
+    if (endpoint.queryParams && endpoint.queryParams.length > 0) {
+      code += `    \n    Query Parameters:\n`
+      endpoint.queryParams.forEach(param => {
+        code += `    - ${param.name} (${param.type})${param.required ? ' [required]' : ''}: ${param.description || ''}\n`
+      })
+    }
+    
+    code += `    """\n`
+    
+    if (endpoint.authentication) {
+      code += `    # TODO: Add authentication check\n`
+      code += `    # if not is_authenticated(request):\n`
+      code += `    #     return jsonify({'error': 'Unauthorized'}), 401\n\n`
+    }
+
+    if (endpoint.queryParams && endpoint.queryParams.length > 0) {
+      endpoint.queryParams.forEach(param => {
+        if (param.required) {
+          code += `    ${param.name} = request.args.get('${param.name}')\n`
+          code += `    if ${param.name} is None:\n`
+          code += `        return jsonify({'error': '${param.name} is required'}), 400\n\n`
+        } else {
+          const defaultVal = param.defaultValue || (param.type === 'string' ? "''" : param.type === 'number' ? '0' : 'None')
+          code += `    ${param.name} = request.args.get('${param.name}', ${defaultVal})\n`
+        }
+      })
+      code += `\n`
+    }
+
+    if (endpoint.method === 'POST' || endpoint.method === 'PUT' || endpoint.method === 'PATCH') {
+      code += `    data = request.get_json()\n`
+      code += `    if not data:\n`
+      code += `        return jsonify({'error': 'No data provided'}), 400\n\n`
+    }
+
+    code += `    # TODO: Implement ${endpoint.name} logic\n`
+    code += `    result = {\n`
+    code += `        'message': '${endpoint.name} endpoint',\n`
+    code += `        'method': '${endpoint.method}',\n`
+    code += `        'path': '${endpoint.path}'\n`
+    code += `    }\n\n`
+    code += `    return jsonify(result), 200\n\n\n`
+  })
+
+  return code
+}
+
+export function generateFlaskApp(config: FlaskConfig): Record<string, string> {
+  const files: Record<string, string> = {}
+
+  let appCode = `from flask import Flask\n`
+  if (config.corsOrigins && config.corsOrigins.length > 0) {
+    appCode += `from flask_cors import CORS\n`
+  }
+  appCode += `\n`
+
+  config.blueprints.forEach(blueprint => {
+    const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+    appCode += `from blueprints.${blueprintVarName} import ${blueprintVarName}_bp\n`
+  })
+
+  appCode += `\ndef create_app():\n`
+  appCode += `    app = Flask(__name__)\n\n`
+
+  if (config.debug !== undefined) {
+    appCode += `    app.config['DEBUG'] = ${config.debug ? 'True' : 'False'}\n`
+  }
+
+  if (config.databaseUrl) {
+    appCode += `    app.config['SQLALCHEMY_DATABASE_URI'] = '${config.databaseUrl}'\n`
+    appCode += `    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\n`
+  }
+
+  appCode += `\n`
+
+  if (config.corsOrigins && config.corsOrigins.length > 0) {
+    appCode += `    CORS(app, resources={r"/*": {"origins": ${JSON.stringify(config.corsOrigins)}}})\n\n`
+  }
+
+  config.blueprints.forEach(blueprint => {
+    const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+    appCode += `    app.register_blueprint(${blueprintVarName}_bp)\n`
+  })
+
+  appCode += `\n    @app.route('/')\n`
+  appCode += `    def index():\n`
+  appCode += `        return {'message': 'Flask API is running', 'version': '1.0.0'}\n\n`
+
+  appCode += `    return app\n\n\n`
+  appCode += `if __name__ == '__main__':\n`
+  appCode += `    app = create_app()\n`
+  appCode += `    app.run(host='0.0.0.0', port=${config.port || 5000}, debug=${config.debug ? 'True' : 'False'})\n`
+
+  files['app.py'] = appCode
+
+  config.blueprints.forEach(blueprint => {
+    const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+    files[`blueprints/${blueprintVarName}.py`] = generateFlaskBlueprint(blueprint)
+  })
+
+  files['blueprints/__init__.py'] = '# Flask blueprints\n'
+
+  files['requirements.txt'] = `Flask>=3.0.0
+${config.corsOrigins && config.corsOrigins.length > 0 ? 'Flask-CORS>=4.0.0' : ''}
+${config.databaseUrl ? 'Flask-SQLAlchemy>=3.0.0\npsycopg2-binary>=2.9.0' : ''}
+${config.jwtSecret ? 'PyJWT>=2.8.0\nFlask-JWT-Extended>=4.5.0' : ''}
+python-dotenv>=1.0.0
+`
+
+  files['.env'] = `FLASK_APP=app.py
+FLASK_ENV=${config.debug ? 'development' : 'production'}
+${config.databaseUrl ? `DATABASE_URL=${config.databaseUrl}` : 'DATABASE_URL=postgresql://user:password@localhost:5432/mydb'}
+${config.jwtSecret ? 'JWT_SECRET_KEY=your-secret-key-here' : ''}
+`
+
+  files['README.md'] = `# Flask API
+
+Generated with CodeForge
+
+## Getting Started
+
+1. Create a virtual environment:
+\`\`\`bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\\Scripts\\activate
+\`\`\`
+
+2. Install dependencies:
+\`\`\`bash
+pip install -r requirements.txt
+\`\`\`
+
+3. Set up your environment variables in .env
+
+4. Run the application:
+\`\`\`bash
+python app.py
+\`\`\`
+
+The API will be available at http://localhost:${config.port || 5000}
+
+## Blueprints
+
+${config.blueprints.map(bp => `- **${bp.name}**: ${bp.description || 'No description'} (${bp.urlPrefix})`).join('\n')}
+
+## API Documentation
+
+${config.enableSwagger ? 'Swagger documentation available at /docs' : 'No API documentation configured'}
+`
+
+  return files
+}
+

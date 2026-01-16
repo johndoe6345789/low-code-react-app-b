@@ -68,6 +68,20 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Progression**: Create test suite manually or with AI → Select test type (component/function/hook/integration) → Add test cases → Configure setup, assertions, and teardown → AI can generate complete test suites → Export test files for Vitest/React Testing Library
 - **Success criteria**: Can create test suites for different types; test cases have multiple assertions; setup/teardown code is optional; AI tests are comprehensive; generates valid Vitest test code
 
+### Flask Backend Designer
+- **Functionality**: Visual designer for Flask REST API with blueprint management, endpoint configuration, route parameters, authentication settings, and CORS configuration
+- **Purpose**: Design Python Flask backends without writing Flask code manually, creating a complete full-stack application ecosystem
+- **Trigger**: Opening the Flask API tab
+- **Progression**: Create blueprint → Add endpoints with HTTP methods → Configure query/path parameters → Set authentication and CORS requirements → Generate complete Flask application with blueprints
+- **Success criteria**: Can create blueprints with multiple endpoints; supports all HTTP methods (GET/POST/PUT/DELETE/PATCH); parameters are properly configured; generates valid Flask code with proper routing
+
+### Project Settings Designer
+- **Functionality**: Configure Next.js settings, manage npm packages and dependencies, define npm scripts, and set package manager preferences
+- **Purpose**: Comprehensive project configuration without manually editing package.json or config files
+- **Trigger**: Opening the Settings tab
+- **Progression**: Configure Next.js features (TypeScript, ESLint, Tailwind, App Router) → Add/edit npm packages → Define build scripts → Set package manager → Export complete package.json
+- **Success criteria**: Next.js config options are properly applied; packages separated into dependencies and devDependencies; scripts are valid; supports npm/yarn/pnpm; generates valid package.json
+
 ### Auto Error Detection & Repair
 - **Functionality**: Automated error detection and AI-powered code repair system that scans files for syntax, type, import, and lint errors
 - **Purpose**: Automatically identify and fix code errors without manual debugging, saving time and reducing bugs
@@ -98,6 +112,12 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **No Errors Found**: Show success state when error scan finds no issues
 - **Unrepairable Errors**: Display clear messages when AI cannot fix certain errors and suggest manual intervention
 - **Context-Dependent Errors**: Use related files as context for more accurate error repair
+- **Empty Flask Blueprints**: Show empty state with guidance for creating first endpoint
+- **Invalid Flask Routes**: Validate route paths and warn about conflicts or invalid syntax
+- **Missing Required Parameters**: Highlight endpoints with incomplete parameter configurations
+- **Duplicate Package Names**: Prevent adding the same npm package twice
+- **Invalid Package Versions**: Validate semantic versioning format for npm packages
+- **Conflicting Scripts**: Warn when npm script names conflict with built-in commands
 
 ## Design Direction
 The design should evoke a professional IDE environment while remaining approachable - think Visual Studio Code meets Figma. Clean panels, clear hierarchy, and purposeful use of space to avoid overwhelming users with options.
@@ -156,9 +176,11 @@ Animations should feel responsive and purposeful - quick panel transitions (200m
   - Database (database icon) for models
   - Tree (tree-structure icon) for components  
   - PaintBrush (paint-brush icon) for styling
+  - Flask (flask icon) for Flask backend API
+  - Gear (gear icon) for project settings
   - Play (play icon) for Playwright E2E tests
   - BookOpen (book-open icon) for Storybook stories
-  - Flask (flask icon) for unit tests
+  - Cube (cube icon) for unit tests
   - Wrench (wrench icon) for error repair
   - FileCode (file-code icon) for individual files
   - Plus (plus icon) for create actions
@@ -168,6 +190,8 @@ Animations should feel responsive and purposeful - quick panel transitions (200m
   - CheckCircle (check-circle icon) for success states
   - Warning (warning icon) for warnings
   - X (x icon) for errors
+  - Package (package icon) for npm packages
+  - Pencil (pencil icon) for edit actions
   
 - **Spacing**: 
   - Panel padding: p-6 (24px) for main content areas

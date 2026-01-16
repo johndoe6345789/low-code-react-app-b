@@ -107,6 +107,85 @@ export interface TestCase {
   teardown?: string
 }
 
+export interface FlaskEndpoint {
+  id: string
+  path: string
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+  name: string
+  description: string
+  requestBody?: FlaskRequestBody
+  queryParams?: FlaskParam[]
+  pathParams?: FlaskParam[]
+  responseSchema?: string
+  authentication?: boolean
+  corsEnabled?: boolean
+}
+
+export interface FlaskRequestBody {
+  contentType: 'application/json' | 'multipart/form-data' | 'application/x-www-form-urlencoded'
+  schema: Record<string, FlaskFieldSchema>
+}
+
+export interface FlaskParam {
+  id: string
+  name: string
+  type: 'string' | 'number' | 'boolean' | 'array'
+  required: boolean
+  description?: string
+  defaultValue?: string
+}
+
+export interface FlaskFieldSchema {
+  type: 'string' | 'number' | 'boolean' | 'object' | 'array'
+  required: boolean
+  description?: string
+  validation?: string
+}
+
+export interface FlaskBlueprint {
+  id: string
+  name: string
+  urlPrefix: string
+  endpoints: FlaskEndpoint[]
+  description: string
+}
+
+export interface FlaskConfig {
+  blueprints: FlaskBlueprint[]
+  databaseUrl?: string
+  corsOrigins?: string[]
+  jwtSecret?: boolean
+  enableSwagger?: boolean
+  port?: number
+  debug?: boolean
+}
+
+export interface NextJsConfig {
+  appName: string
+  typescript: boolean
+  eslint: boolean
+  tailwind: boolean
+  srcDirectory: boolean
+  appRouter: boolean
+  importAlias: string
+  turbopack?: boolean
+}
+
+export interface NpmPackage {
+  id: string
+  name: string
+  version: string
+  isDev: boolean
+  description?: string
+}
+
+export interface NpmSettings {
+  packages: NpmPackage[]
+  scripts: Record<string, string>
+  nodeVersion?: string
+  packageManager: 'npm' | 'yarn' | 'pnpm'
+}
+
 export interface Project {
   name: string
   files: ProjectFile[]
@@ -116,4 +195,7 @@ export interface Project {
   playwrightTests?: PlaywrightTest[]
   storybookStories?: StorybookStory[]
   unitTests?: UnitTest[]
+  flaskConfig?: FlaskConfig
+  nextjsConfig?: NextJsConfig
+  npmSettings?: NpmSettings
 }

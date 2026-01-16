@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench } from '@phosphor-icons/react'
-import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest } from '@/types/project'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube } from '@phosphor-icons/react'
+import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
@@ -16,8 +16,10 @@ import { FileExplorer } from '@/components/FileExplorer'
 import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
 import { StorybookDesigner } from '@/components/StorybookDesigner'
 import { UnitTestDesigner } from '@/components/UnitTestDesigner'
+import { FlaskDesigner } from '@/components/FlaskDesigner'
+import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
 import { ErrorPanel } from '@/components/ErrorPanel'
-import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests } from '@/lib/generators'
+import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
 import { toast } from 'sonner'
 import {
@@ -29,6 +31,43 @@ import {
 } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
+
+const DEFAULT_FLASK_CONFIG: FlaskConfig = {
+  blueprints: [],
+  corsOrigins: ['http://localhost:3000'],
+  enableSwagger: true,
+  port: 5000,
+  debug: true,
+}
+
+const DEFAULT_NEXTJS_CONFIG: NextJsConfig = {
+  appName: 'my-nextjs-app',
+  typescript: true,
+  eslint: true,
+  tailwind: true,
+  srcDirectory: true,
+  appRouter: true,
+  importAlias: '@/*',
+  turbopack: false,
+}
+
+const DEFAULT_NPM_SETTINGS: NpmSettings = {
+  packages: [
+    { id: '1', name: 'react', version: '^18.2.0', isDev: false },
+    { id: '2', name: 'react-dom', version: '^18.2.0', isDev: false },
+    { id: '3', name: 'next', version: '^14.0.0', isDev: false },
+    { id: '4', name: '@mui/material', version: '^5.14.0', isDev: false },
+    { id: '5', name: 'typescript', version: '^5.0.0', isDev: true },
+    { id: '6', name: '@types/react', version: '^18.2.0', isDev: true },
+  ],
+  scripts: {
+    dev: 'next dev',
+    build: 'next build',
+    start: 'next start',
+    lint: 'next lint',
+  },
+  packageManager: 'npm',
+}
 
 const DEFAULT_THEME: ThemeConfig = {
   variants: [
@@ -99,6 +138,9 @@ function App() {
   const [playwrightTests, setPlaywrightTests] = useKV<PlaywrightTest[]>('project-playwright-tests', [])
   const [storybookStories, setStorybookStories] = useKV<StorybookStory[]>('project-storybook-stories', [])
   const [unitTests, setUnitTests] = useKV<UnitTest[]>('project-unit-tests', [])
+  const [flaskConfig, setFlaskConfig] = useKV<FlaskConfig>('project-flask-config', DEFAULT_FLASK_CONFIG)
+  const [nextjsConfig, setNextjsConfig] = useKV<NextJsConfig>('project-nextjs-config', DEFAULT_NEXTJS_CONFIG)
+  const [npmSettings, setNpmSettings] = useKV<NpmSettings>('project-npm-settings', DEFAULT_NPM_SETTINGS)
   const [activeFileId, setActiveFileId] = useState<string | null>((files || [])[0]?.id || null)
   const [activeTab, setActiveTab] = useState('code')
   const [exportDialogOpen, setExportDialogOpen] = useState(false)
@@ -111,6 +153,9 @@ function App() {
   const safePlaywrightTests = playwrightTests || []
   const safeStorybookStories = storybookStories || []
   const safeUnitTests = unitTests || []
+  const safeFlaskConfig = flaskConfig || DEFAULT_FLASK_CONFIG
+  const safeNextjsConfig = nextjsConfig || DEFAULT_NEXTJS_CONFIG
+  const safeNpmSettings = npmSettings || DEFAULT_NPM_SETTINGS
 
   const { errors: autoDetectedErrors } = useAutoRepair(safeFiles, false)
 
@@ -134,26 +179,51 @@ function App() {
   }
 
   const handleExportProject = () => {
-    const projectFiles = generateNextJSProject('my-nextjs-app', safeModels, safeComponents, safeTheme)
+    const projectFiles = generateNextJSProject(safeNextjsConfig.appName, safeModels, safeComponents, safeTheme)
     
     const prismaSchema = generatePrismaSchema(safeModels)
     const themeCode = generateMUITheme(safeTheme)
     const playwrightTestCode = generatePlaywrightTests(safePlaywrightTests)
     const storybookFiles = generateStorybookStories(safeStorybookStories)
     const unitTestFiles = generateUnitTests(safeUnitTests)
+    const flaskFiles = generateFlaskApp(safeFlaskConfig)
     
-    const allFiles = {
+    const packageJson = {
+      name: safeNextjsConfig.appName,
+      version: '0.1.0',
+      private: true,
+      scripts: safeNpmSettings.scripts,
+      dependencies: safeNpmSettings.packages
+        .filter(pkg => !pkg.isDev)
+        .reduce((acc, pkg) => {
+          acc[pkg.name] = pkg.version
+          return acc
+        }, {} as Record<string, string>),
+      devDependencies: safeNpmSettings.packages
+        .filter(pkg => pkg.isDev)
+        .reduce((acc, pkg) => {
+          acc[pkg.name] = pkg.version
+          return acc
+        }, {} as Record<string, string>),
+    }
+    
+    const allFiles: Record<string, string> = {
       ...projectFiles,
+      'package.json': JSON.stringify(packageJson, null, 2),
       'prisma/schema.prisma': prismaSchema,
       'src/theme.ts': themeCode,
       'e2e/tests.spec.ts': playwrightTestCode,
       ...storybookFiles,
       ...unitTestFiles,
-      ...safeFiles.reduce((acc, file) => {
-        acc[file.path] = file.content
-        return acc
-      }, {} as Record<string, string>),
     }
+    
+    Object.entries(flaskFiles).forEach(([path, content]) => {
+      allFiles[`backend/${path}`] = content
+    })
+    
+    safeFiles.forEach(file => {
+      allFiles[file.path] = file.content
+    })
 
     setGeneratedCode(allFiles)
     setExportDialogOpen(true)
@@ -246,6 +316,14 @@ function App() {
               <PaintBrush size={18} />
               Styling
             </TabsTrigger>
+            <TabsTrigger value="flask" className="gap-2">
+              <Flask size={18} />
+              Flask API
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="gap-2">
+              <Gear size={18} />
+              Settings
+            </TabsTrigger>
             <TabsTrigger value="playwright" className="gap-2">
               <Play size={18} />
               Playwright
@@ -255,7 +333,7 @@ function App() {
               Storybook
             </TabsTrigger>
             <TabsTrigger value="unit-tests" className="gap-2">
-              <Flask size={18} />
+              <Cube size={18} />
               Unit Tests
             </TabsTrigger>
             <TabsTrigger value="errors" className="gap-2">
@@ -307,6 +385,19 @@ function App() {
 
           <TabsContent value="styling" className="h-full m-0">
             <StyleDesigner theme={safeTheme} onThemeChange={setTheme} />
+          </TabsContent>
+
+          <TabsContent value="flask" className="h-full m-0">
+            <FlaskDesigner config={safeFlaskConfig} onConfigChange={setFlaskConfig} />
+          </TabsContent>
+
+          <TabsContent value="settings" className="h-full m-0">
+            <ProjectSettingsDesigner
+              nextjsConfig={safeNextjsConfig}
+              npmSettings={safeNpmSettings}
+              onNextjsConfigChange={setNextjsConfig}
+              onNpmSettingsChange={setNpmSettings}
+            />
           </TabsContent>
 
           <TabsContent value="playwright" className="h-full m-0">
