@@ -274,6 +274,7 @@ export interface FeatureToggles {
   errorRepair: boolean
   documentation: boolean
   sassStyles: boolean
+  faviconDesigner: boolean
 }
 
 export interface Project {

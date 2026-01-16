@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile } from '@phosphor-icons/react'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders, DeviceMobile, Image } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles, Project } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
@@ -32,6 +32,7 @@ import { PWAInstallPrompt } from '@/components/PWAInstallPrompt'
 import { PWAUpdatePrompt } from '@/components/PWAUpdatePrompt'
 import { PWAStatusBar } from '@/components/PWAStatusBar'
 import { PWASettings } from '@/components/PWASettings'
+import { FaviconDesigner } from '@/components/FaviconDesigner'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -99,6 +100,7 @@ const DEFAULT_FEATURE_TOGGLES: FeatureToggles = {
   errorRepair: true,
   documentation: true,
   sassStyles: true,
+  faviconDesigner: true,
 }
 
 const DEFAULT_THEME: ThemeConfig = {
@@ -277,6 +279,12 @@ function App() {
       ctrl: true,
       description: 'Go to Styling',
       action: () => setActiveTab('styling'),
+    }] : []),
+    ...(safeFeatureToggles.faviconDesigner ? [{
+      key: '9',
+      ctrl: true,
+      description: 'Go to Favicon Designer',
+      action: () => setActiveTab('favicon'),
     }] : []),
     {
       key: 'e',
@@ -673,6 +681,12 @@ Navigate to the backend directory and follow the setup instructions.
                 Sass Styles
               </TabsTrigger>
             )}
+            {safeFeatureToggles.faviconDesigner && (
+              <TabsTrigger value="favicon" className="gap-2">
+                <Image size={18} />
+                Favicon Designer
+              </TabsTrigger>
+            )}
           </TabsList>
         </div>
 
@@ -826,6 +840,12 @@ Navigate to the backend directory and follow the setup instructions.
           {safeFeatureToggles.sassStyles && (
             <TabsContent value="sass" className="h-full m-0">
               <SassStylesShowcase />
+            </TabsContent>
+          )}
+
+          {safeFeatureToggles.faviconDesigner && (
+            <TabsContent value="favicon" className="h-full m-0">
+              <FaviconDesigner />
             </TabsContent>
           )}
         </div>
