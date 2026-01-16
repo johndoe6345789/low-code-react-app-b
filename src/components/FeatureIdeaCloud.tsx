@@ -345,6 +345,16 @@ export function FeatureIdeaCloud() {
     (params: RFConnection) => {
       if (!params.source || !params.target) return
       
+      const isHandleAlreadyUsed = edges.some(edge => 
+        (edge.source === params.source && edge.sourceHandle === params.sourceHandle) ||
+        (edge.target === params.target && edge.targetHandle === params.targetHandle)
+      )
+      
+      if (isHandleAlreadyUsed) {
+        toast.error('Connection point already in use. Each handle can only have one connection.')
+        return
+      }
+      
       const style = CONNECTION_STYLES[connectionType]
       const newEdge: Edge<IdeaEdgeData> = {
         id: `edge-${Date.now()}`,
@@ -376,7 +386,7 @@ export function FeatureIdeaCloud() {
       
       toast.success('Ideas connected!')
     },
-    [connectionType, setEdges, setSavedEdges]
+    [connectionType, edges, setEdges, setSavedEdges]
   )
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
@@ -394,6 +404,19 @@ export function FeatureIdeaCloud() {
   }, [])
 
   const onReconnect = useCallback((oldEdge: Edge, newConnection: RFConnection) => {
+    const isHandleAlreadyUsed = edges.some(edge => 
+      edge.id !== oldEdge.id && (
+        (edge.source === newConnection.source && edge.sourceHandle === newConnection.sourceHandle) ||
+        (edge.target === newConnection.target && edge.targetHandle === newConnection.targetHandle)
+      )
+    )
+    
+    if (isHandleAlreadyUsed) {
+      toast.error('Connection point already in use. Each handle can only have one connection.')
+      edgeReconnectSuccessful.current = false
+      return
+    }
+    
     edgeReconnectSuccessful.current = true
     setEdges((els) => {
       const updatedEdges = reconnectEdge(oldEdge, newConnection, els)
@@ -401,7 +424,7 @@ export function FeatureIdeaCloud() {
       return updatedEdges
     })
     toast.success('Connection remapped!')
-  }, [setEdges, setSavedEdges])
+  }, [edges, setEdges, setSavedEdges])
 
   const onReconnectEnd = useCallback((_: MouseEvent | TouchEvent, edge: Edge) => {
     if (!edgeReconnectSuccessful.current) {
