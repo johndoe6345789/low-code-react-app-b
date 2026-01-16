@@ -30,8 +30,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Plus, Trash, Sparkle, DotsThree, Package } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
-type ConnectionType = 'dependency' | 'association' | 'inheritance' | 'composition' | 'aggregation'
-
 interface FeatureIdea {
   id: string
   title: string
@@ -51,7 +49,6 @@ interface IdeaGroup {
 }
 
 interface IdeaEdgeData {
-  type: ConnectionType
   label?: string
 }
 
@@ -151,22 +148,11 @@ const SEED_IDEAS: FeatureIdea[] = [
 const CATEGORIES = ['AI/ML', 'Collaboration', 'Community', 'DevOps', 'Testing', 'Performance', 'Design', 'Database', 'Mobile', 'Accessibility', 'Productivity', 'Security', 'Analytics', 'Other']
 const PRIORITIES = ['low', 'medium', 'high'] as const
 const STATUSES = ['idea', 'planned', 'in-progress', 'completed'] as const
-const CONNECTION_TYPES = ['dependency', 'association', 'inheritance', 'composition', 'aggregation'] as const
 
-const CONNECTION_STYLES = {
-  dependency: { stroke: '#70c0ff', strokeDasharray: '8,4', strokeWidth: 2.5, markerEnd: MarkerType.ArrowClosed },
-  association: { stroke: '#a78bfa', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.Arrow },
-  inheritance: { stroke: '#60d399', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.ArrowClosed },
-  composition: { stroke: '#f87171', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.ArrowClosed },
-  aggregation: { stroke: '#facc15', strokeDasharray: '', strokeWidth: 2.5, markerEnd: MarkerType.Arrow },
-}
-
-const CONNECTION_LABELS = {
-  dependency: 'depends on',
-  association: 'relates to',
-  inheritance: 'extends',
-  composition: 'contains',
-  aggregation: 'has',
+const CONNECTION_STYLE = { 
+  stroke: '#a78bfa', 
+  strokeWidth: 2.5, 
+  markerEnd: MarkerType.ArrowClosed 
 }
 
 const STATUS_COLORS = {
@@ -310,10 +296,10 @@ export function FeatureIdeaCloud() {
       sourceHandle: 'right',
       targetHandle: 'left',
       type: 'default',
-      animated: true,
-      data: { type: 'dependency', label: 'requires' },
-      markerEnd: { type: MarkerType.ArrowClosed, color: '#70c0ff', width: 20, height: 20 },
-      style: { stroke: '#70c0ff', strokeDasharray: '8,4', strokeWidth: 2.5 },
+      animated: false,
+      data: { label: 'requires' },
+      markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
+      style: { stroke: '#a78bfa', strokeWidth: 2.5 },
     },
     {
       id: 'edge-2',
@@ -322,8 +308,8 @@ export function FeatureIdeaCloud() {
       sourceHandle: 'bottom',
       targetHandle: 'top',
       type: 'default',
-      data: { type: 'association', label: 'works with' },
-      markerEnd: { type: MarkerType.Arrow, color: '#a78bfa', width: 20, height: 20 },
+      data: { label: 'works with' },
+      markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
       style: { stroke: '#a78bfa', strokeWidth: 2.5 },
     },
     {
@@ -333,9 +319,9 @@ export function FeatureIdeaCloud() {
       sourceHandle: 'bottom',
       targetHandle: 'left',
       type: 'default',
-      data: { type: 'composition', label: 'includes' },
-      markerEnd: { type: MarkerType.ArrowClosed, color: '#f87171', width: 20, height: 20 },
-      style: { stroke: '#f87171', strokeWidth: 2.5 },
+      data: { label: 'includes' },
+      markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
+      style: { stroke: '#a78bfa', strokeWidth: 2.5 },
     },
   ])
   const [savedNodePositions, setSavedNodePositions] = useKV<Record<string, { x: number; y: number }>>('feature-idea-node-positions', {})
@@ -350,7 +336,6 @@ export function FeatureIdeaCloud() {
   const [viewDialogOpen, setViewDialogOpen] = useState(false)
   const [edgeDialogOpen, setEdgeDialogOpen] = useState(false)
   const [debugPanelOpen, setDebugPanelOpen] = useState(false)
-  const [connectionType, setConnectionType] = useState<ConnectionType>('association')
   const edgeReconnectSuccessful = useRef(true)
 
   const safeIdeas = ideas || SEED_IDEAS
@@ -523,7 +508,6 @@ export function FeatureIdeaCloud() {
           targetHandleId
         )
         
-        const style = CONNECTION_STYLES[connectionType]
         const newEdge: Edge<IdeaEdgeData> = {
           id: `edge-${Date.now()}`,
           source: sourceNodeId,
@@ -531,19 +515,18 @@ export function FeatureIdeaCloud() {
           ...(params.sourceHandle && { sourceHandle: params.sourceHandle }),
           ...(params.targetHandle && { targetHandle: params.targetHandle }),
           type: 'default',
-          data: { type: connectionType, label: CONNECTION_LABELS[connectionType] },
+          data: { label: 'relates to' },
           markerEnd: { 
-            type: style.markerEnd, 
-            color: style.stroke,
+            type: CONNECTION_STYLE.markerEnd, 
+            color: CONNECTION_STYLE.stroke,
             width: 20,
             height: 20
           },
           style: { 
-            stroke: style.stroke, 
-            strokeDasharray: style.strokeDasharray,
-            strokeWidth: style.strokeWidth
+            stroke: CONNECTION_STYLE.stroke, 
+            strokeWidth: CONNECTION_STYLE.strokeWidth
           },
-          animated: connectionType === 'dependency',
+          animated: false,
         }
         
         const updatedEdges = addEdge(newEdge, filteredEdges)
@@ -573,7 +556,7 @@ export function FeatureIdeaCloud() {
         return updatedEdges
       })
     },
-    [connectionType, setEdges, setSavedEdges, validateAndRemoveConflicts]
+    [setEdges, setSavedEdges, validateAndRemoveConflicts]
   )
 
   const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
@@ -809,22 +792,20 @@ export function FeatureIdeaCloud() {
 
   const handleSaveEdge = () => {
     if (selectedEdge) {
-      const style = CONNECTION_STYLES[selectedEdge.data!.type]
       const updatedEdge = {
         ...selectedEdge,
         data: selectedEdge.data,
         markerEnd: { 
-          type: style.markerEnd, 
-          color: style.stroke,
+          type: CONNECTION_STYLE.markerEnd, 
+          color: CONNECTION_STYLE.stroke,
           width: 20,
           height: 20
         },
         style: { 
-          stroke: style.stroke, 
-          strokeDasharray: style.strokeDasharray,
-          strokeWidth: style.strokeWidth
+          stroke: CONNECTION_STYLE.stroke, 
+          strokeWidth: CONNECTION_STYLE.strokeWidth
         },
-        animated: selectedEdge.data!.type === 'dependency',
+        animated: false,
       }
       
       const updatedEdges = edges.map(e => e.id === selectedEdge.id ? updatedEdge : e)
@@ -921,24 +902,6 @@ export function FeatureIdeaCloud() {
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="hsl(var(--border))" />
         <Controls showInteractive={false} />
-        
-        <Panel position="top-left" className="flex gap-2 items-center">
-          <div className="flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-md shadow-lg">
-            <span className="text-xs font-medium text-muted-foreground">Connection Type:</span>
-            <select
-              value={connectionType}
-              onChange={(e) => setConnectionType(e.target.value as ConnectionType)}
-              className="text-sm bg-transparent border-none outline-none pr-1 font-medium"
-              style={{ cursor: 'pointer' }}
-            >
-              {CONNECTION_TYPES.map(type => (
-                <option key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
-        </Panel>
 
         <Panel position="top-right" className="flex gap-2">
           <TooltipProvider>
@@ -983,47 +946,6 @@ export function FeatureIdeaCloud() {
               <TooltipContent>Add Idea</TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </Panel>
-
-        <Panel position="bottom-left">
-          <div className="bg-card border border-border rounded-lg shadow-lg p-3 text-xs">
-            <p className="font-semibold mb-2 text-foreground">Connection Types:</p>
-            <div className="space-y-1.5">
-              {CONNECTION_TYPES.map(type => {
-                const style = CONNECTION_STYLES[type]
-                return (
-                  <div key={type} className="flex items-center gap-2">
-                    <svg width="50" height="12" className="shrink-0">
-                      <defs>
-                        <marker
-                          id={`arrow-${type}`}
-                          markerWidth="10"
-                          markerHeight="10"
-                          refX="8"
-                          refY="3"
-                          orient="auto"
-                          markerUnits="strokeWidth"
-                        >
-                          <path d="M0,0 L0,6 L9,3 z" fill={style.stroke} />
-                        </marker>
-                      </defs>
-                      <line
-                        x1="2"
-                        y1="6"
-                        x2="48"
-                        y2="6"
-                        stroke={style.stroke}
-                        strokeWidth={2.5}
-                        strokeDasharray={style.strokeDasharray}
-                        markerEnd={`url(#arrow-${type})`}
-                      />
-                    </svg>
-                    <span className="text-muted-foreground capitalize">{type}</span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
         </Panel>
 
         <Panel position="bottom-right">
@@ -1076,28 +998,43 @@ export function FeatureIdeaCloud() {
                     <div className="p-2 space-y-2 text-xs font-mono">
                       {safeIdeas.slice(0, 10).map((idea) => {
                         const nodeEdges = edges.filter(e => e.source === idea.id || e.target === idea.id)
-                        const leftHandle = edges.find(e => e.target === idea.id && e.targetHandle === 'left')
-                        const rightHandle = edges.find(e => e.source === idea.id && e.sourceHandle === 'right')
-                        const topHandle = edges.find(e => e.target === idea.id && e.targetHandle === 'top')
-                        const bottomHandle = edges.find(e => e.source === idea.id && e.sourceHandle === 'bottom')
+                        const leftHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'left')
+                        const rightHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'right')
+                        const topHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'top')
+                        const bottomHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'bottom')
+                        
+                        const hasViolation = leftHandles.length > 1 || rightHandles.length > 1 || topHandles.length > 1 || bottomHandles.length > 1
                         
                         return (
-                          <div key={idea.id} className="p-2 bg-muted/30 rounded border">
-                            <div className="font-semibold truncate mb-1" title={idea.title}>
+                          <div key={idea.id} className={`p-2 rounded border ${hasViolation ? 'bg-red-500/20 border-red-500' : 'bg-muted/30'}`}>
+                            <div className="font-semibold truncate mb-1 flex items-center gap-2" title={idea.title}>
+                              {hasViolation && <span className="text-red-500">⚠️</span>}
                               {idea.title}
                             </div>
                             <div className="grid grid-cols-4 gap-1 text-[10px]">
-                              <div className={`p-1 rounded text-center ${leftHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
-                                ← {leftHandle ? '✓' : '○'}
+                              <div className={`p-1 rounded text-center ${
+                                leftHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                leftHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                              }`}>
+                                ← {leftHandles.length > 0 ? `✓${leftHandles.length > 1 ? `(${leftHandles.length})` : ''}` : '○'}
                               </div>
-                              <div className={`p-1 rounded text-center ${rightHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
-                                → {rightHandle ? '✓' : '○'}
+                              <div className={`p-1 rounded text-center ${
+                                rightHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                rightHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                              }`}>
+                                → {rightHandles.length > 0 ? `✓${rightHandles.length > 1 ? `(${rightHandles.length})` : ''}` : '○'}
                               </div>
-                              <div className={`p-1 rounded text-center ${topHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
-                                ↑ {topHandle ? '✓' : '○'}
+                              <div className={`p-1 rounded text-center ${
+                                topHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                topHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                              }`}>
+                                ↑ {topHandles.length > 0 ? `✓${topHandles.length > 1 ? `(${topHandles.length})` : ''}` : '○'}
                               </div>
-                              <div className={`p-1 rounded text-center ${bottomHandle ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'}`}>
-                                ↓ {bottomHandle ? '✓' : '○'}
+                              <div className={`p-1 rounded text-center ${
+                                bottomHandles.length > 1 ? 'bg-red-500/40 text-red-900 dark:text-red-100 font-bold' :
+                                bottomHandles.length === 1 ? 'bg-green-500/20 text-green-700 dark:text-green-300' : 'bg-muted'
+                              }`}>
+                                ↓ {bottomHandles.length > 0 ? `✓${bottomHandles.length > 1 ? `(${bottomHandles.length})` : ''}` : '○'}
                               </div>
                             </div>
                             <div className="mt-1 text-[10px] text-muted-foreground">
@@ -1115,17 +1052,45 @@ export function FeatureIdeaCloud() {
                   </ScrollArea>
                 </div>
 
-                <div className="space-y-1 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                  <div className="font-semibold text-xs text-green-700 dark:text-green-300 flex items-center gap-1">
-                    ✅ Test Status
-                  </div>
-                  <div className="text-xs space-y-0.5">
-                    <div>• Each handle can connect to exactly 1 other handle</div>
-                    <div>• New connections automatically remove conflicts</div>
-                    <div>• Remapping preserves 1:1 constraint</div>
-                    <div>• Changes persist to database immediately</div>
-                  </div>
-                </div>
+                {(() => {
+                  const violations: string[] = []
+                  safeIdeas.forEach(idea => {
+                    const leftHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'left')
+                    const rightHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'right')
+                    const topHandles = edges.filter(e => e.target === idea.id && e.targetHandle === 'top')
+                    const bottomHandles = edges.filter(e => e.source === idea.id && e.sourceHandle === 'bottom')
+                    
+                    if (leftHandles.length > 1) violations.push(`${idea.title}: Left handle has ${leftHandles.length} connections`)
+                    if (rightHandles.length > 1) violations.push(`${idea.title}: Right handle has ${rightHandles.length} connections`)
+                    if (topHandles.length > 1) violations.push(`${idea.title}: Top handle has ${topHandles.length} connections`)
+                    if (bottomHandles.length > 1) violations.push(`${idea.title}: Bottom handle has ${bottomHandles.length} connections`)
+                  })
+                  
+                  return violations.length > 0 ? (
+                    <div className="space-y-1 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                      <div className="font-semibold text-xs text-red-700 dark:text-red-300 flex items-center gap-1">
+                        ❌ CONSTRAINT VIOLATIONS DETECTED
+                      </div>
+                      <div className="text-xs space-y-0.5 text-red-600 dark:text-red-400">
+                        {violations.map((v, i) => (
+                          <div key={i}>• {v}</div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-1 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                      <div className="font-semibold text-xs text-green-700 dark:text-green-300 flex items-center gap-1">
+                        ✅ All Constraints Satisfied
+                      </div>
+                      <div className="text-xs space-y-0.5">
+                        <div>• Each handle has at most 1 connection ✓</div>
+                        <div>• New connections automatically remove conflicts ✓</div>
+                        <div>• Remapping preserves 1:1 constraint ✓</div>
+                        <div>• Changes persist to database immediately ✓</div>
+                      </div>
+                    </div>
+                  )
+                })()}
               </div>
             </Card>
           </Panel>
@@ -1386,10 +1351,12 @@ export function FeatureIdeaCloud() {
                       const isOutgoing = edge.source === selectedIdea.id
                       return (
                         <div key={edge.id} className="flex items-center gap-2 text-sm p-2 bg-muted rounded">
-                          <Badge variant="outline" className="text-xs">{edge.data?.type || 'unknown'}</Badge>
                           <span className="flex-1">
                             {isOutgoing ? '→' : '←'} {otherIdea?.title || 'Unknown'}
                           </span>
+                          {edge.data?.label && (
+                            <Badge variant="outline" className="text-xs">{edge.data.label}</Badge>
+                          )}
                         </div>
                       )
                     })}
@@ -1442,31 +1409,9 @@ export function FeatureIdeaCloud() {
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-1 block">Type</label>
-                <select
-                  value={selectedEdge.data.type}
-                  onChange={(e) => setSelectedEdge({ 
-                    ...selectedEdge, 
-                    data: {
-                      ...selectedEdge.data!,
-                      type: e.target.value as ConnectionType,
-                      label: CONNECTION_LABELS[e.target.value as ConnectionType]
-                    }
-                  })}
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-sm"
-                >
-                  {CONNECTION_TYPES.map(type => (
-                    <option key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
                 <label className="text-sm font-medium mb-1 block">Label</label>
                 <Input
-                  value={selectedEdge.data.label || ''}
+                  value={selectedEdge.data?.label || ''}
                   onChange={(e) => setSelectedEdge({ 
                     ...selectedEdge, 
                     data: {
@@ -1474,19 +1419,15 @@ export function FeatureIdeaCloud() {
                       label: e.target.value 
                     }
                   })}
-                  placeholder={CONNECTION_LABELS[selectedEdge.data.type]}
+                  placeholder="relates to"
                 />
               </div>
 
               <div className="p-3 bg-muted rounded-lg text-sm">
-                <p className="font-medium mb-2">Connection Type Guide:</p>
-                <ul className="space-y-1 text-xs text-muted-foreground">
-                  <li><strong>Dependency:</strong> One feature needs another to function</li>
-                  <li><strong>Association:</strong> Features work together or are related</li>
-                  <li><strong>Inheritance:</strong> One feature extends another</li>
-                  <li><strong>Composition:</strong> One feature contains another as essential part</li>
-                  <li><strong>Aggregation:</strong> One feature has another as optional part</li>
-                </ul>
+                <p className="font-medium mb-2">💡 Connection Info:</p>
+                <p className="text-xs text-muted-foreground">
+                  Each connection point can have exactly one arrow. Creating a new connection from an occupied point will automatically remap the existing connection.
+                </p>
               </div>
             </div>
           )}
