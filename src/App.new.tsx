@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Toaster } from 'sonner'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
@@ -30,12 +31,11 @@ import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { useProjectState } from '@/hooks/use-project-state'
 import { useFileOperations } from '@/hooks/use-file-operations'
+import { useProjectExport } from '@/hooks/use-project-export'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { useAutoRepair } from '@/hooks/use-auto-repair'
-import { toast } from 'sonner'
 
 function App() {
-  const projectState = useProjectState()
   const {
     files,
     models,
@@ -65,34 +65,23 @@ function App() {
     setNextjsConfig,
     setNpmSettings,
     setFeatureToggles,
-  } = projectState
+    lastSaved,
+    getCurrentProject,
+    loadProject,
+  } = useProjectState()
 
-  const fileOps = useFileOperations(files, setFiles)
-  const { activeFileId, setActiveFileId, handleFileChange, handleFileAdd, handleFileClose } = fileOps
+  const {
+    activeFileId,
+    setActiveFileId,
+    handleFileChange,
+    handleFileAdd,
+    handleFileClose,
+  } = useFileOperations(files, setFiles)
 
-  const [activeTab, setActiveTab] = useState('dashboard')
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [shortcutsOpen, setShortcutsOpen] = useState(false)
-  const [lastSaved] = useState(Date.now())
-
-  const { errors = [] } = useAutoRepair(files, false)
-  const errorCount = errors.length
-
-  useKeyboardShortcuts([
-    { key: '1', ctrl: true, description: 'Dashboard', action: () => setActiveTab('dashboard') },
-    { key: '2', ctrl: true, description: 'Code', action: () => setActiveTab('code') },
-    { key: 'k', ctrl: true, description: 'Search', action: () => setSearchOpen(true) },
-    { key: '/', ctrl: true, description: 'Shortcuts', action: () => setShortcutsOpen(true) },
-  ])
-
-  const getCurrentProject = () => ({
-    name: nextjsConfig.appName,
+  const { handleExportProject, exportDialogOpen, setExportDialogOpen, generatedCode, handleDownloadZip } = useProjectExport({
     files,
     models,
     components,
-    componentTrees,
-    workflows,
-    lambdas,
     theme,
     playwrightTests,
     storybookStories,
@@ -100,31 +89,29 @@ function App() {
     flaskConfig,
     nextjsConfig,
     npmSettings,
-    featureToggles,
   })
 
-  const handleProjectLoad = (project: any) => {
-    if (project.files) setFiles(project.files)
-    if (project.models) setModels(project.models)
-    if (project.components) setComponents(project.components)
-    if (project.componentTrees) setComponentTrees(project.componentTrees)
-    if (project.workflows) setWorkflows(project.workflows)
-    if (project.lambdas) setLambdas(project.lambdas)
-    if (project.theme) setTheme(project.theme)
-    if (project.playwrightTests) setPlaywrightTests(project.playwrightTests)
-    if (project.storybookStories) setStorybookStories(project.storybookStories)
-    if (project.unitTests) setUnitTests(project.unitTests)
-    if (project.flaskConfig) setFlaskConfig(project.flaskConfig)
-    if (project.nextjsConfig) setNextjsConfig(project.nextjsConfig)
-    if (project.npmSettings) setNpmSettings(project.npmSettings)
-    if (project.featureToggles) setFeatureToggles(project.featureToggles)
-    toast.success('Project loaded')
-  }
+  const [activeTab, setActiveTab] = useState('dashboard')
+  const [searchDialogOpen, setSearchDialogOpen] = useState(false)
+  const [shortcutsDialogOpen, setShortcutsDialogOpen] = useState(false)
+
+  const { errors: autoDetectedErrors = [] } = useAutoRepair(files, false)
+  const errorCount = Array.isArray(autoDetectedErrors) ? autoDetectedErrors.length : 0
+
+  useKeyboardShortcuts([
+    { key: '1', ctrl: true, description: 'Dashboard', action: () => setActiveTab('dashboard') },
+    { key: '2', ctrl: true, description: 'Code Editor', action: () => setActiveTab('code') },
+    { key: '3', ctrl: true, description: 'Models', action: () => setActiveTab('models') },
+    { key: 'k', ctrl: true, description: 'Search', action: () => setSearchDialogOpen(true) },
+    { key: 'e', ctrl: true, description: 'Export', action: () => handleExportProject() },
+    { key: '/', ctrl: true, description: 'Shortcuts', action: () => setShortcutsDialogOpen(true) },
+  ])
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background text-foreground">
       <PWAStatusBar />
       <PWAUpdatePrompt />
+      
       <AppHeader
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -132,15 +119,17 @@ function App() {
         errorCount={errorCount}
         lastSaved={lastSaved}
         currentProject={getCurrentProject()}
-        onProjectLoad={handleProjectLoad}
-        onSearch={() => setSearchOpen(true)}
-        onShowShortcuts={() => setShortcutsOpen(true)}
-        onGenerateAI={() => toast.info('AI generation coming soon')}
-        onExport={() => toast.info('Export coming soon')}
+        onProjectLoad={loadProject}
+        onSearch={() => setSearchDialogOpen(true)}
+        onShowShortcuts={() => setShortcutsDialogOpen(true)}
+        onGenerateAI={() => {}}
+        onExport={handleExportProject}
         onShowErrors={() => setActiveTab('errors')}
       />
+
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <PageHeader activeTab={activeTab} />
+        
         <div className="flex-1 overflow-hidden">
           <TabsContent value="dashboard" className="h-full m-0">
             <ProjectDashboard
@@ -259,7 +248,11 @@ function App() {
 
           {featureToggles.errorRepair && (
             <TabsContent value="errors" className="h-full m-0">
-              <ErrorPanel files={files} onFileChange={handleFileChange} onFileSelect={setActiveFileId} />
+              <ErrorPanel
+                files={files}
+                onFileChange={handleFileChange}
+                onFileSelect={setActiveFileId}
+              />
             </TabsContent>
           )}
 
@@ -290,8 +283,8 @@ function App() {
       </Tabs>
 
       <GlobalSearch
-        open={searchOpen}
-        onOpenChange={setSearchOpen}
+        open={searchDialogOpen}
+        onOpenChange={setSearchDialogOpen}
         files={files}
         models={models}
         components={components}
@@ -301,11 +294,11 @@ function App() {
         playwrightTests={playwrightTests}
         storybookStories={storybookStories}
         unitTests={unitTests}
-        onNavigate={setActiveTab}
+        onNavigate={(tab) => setActiveTab(tab)}
         onFileSelect={setActiveFileId}
       />
 
-      <KeyboardShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
+      <KeyboardShortcutsDialog open={shortcutsDialogOpen} onOpenChange={setShortcutsDialogOpen} />
       <PWAInstallPrompt />
     </div>
   )
