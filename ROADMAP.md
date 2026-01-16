@@ -111,9 +111,53 @@ Improved export and comprehensive documentation:
 - ✅ Keyboard shortcuts for power users
 - ✅ Search functionality in documentation
 
+### v5.0 - Workflows, Lambdas & Feature Toggles (Completed)
+**Release Date:** Week 10
+
+Advanced automation and customization:
+- ✅ n8n-style workflow designer with visual node editor
+- ✅ Workflow nodes: triggers, actions, conditions, transforms, lambdas, API calls, database queries
+- ✅ Visual workflow connections and data flow
+- ✅ Lambda function designer with Monaco editor
+- ✅ Multi-runtime lambda support (JavaScript, TypeScript, Python)
+- ✅ Lambda triggers (HTTP, schedule, event, queue)
+- ✅ Environment variable management for lambdas
+- ✅ Multiple Component Trees management system
+- ✅ Feature toggle system to enable/disable designers
+- ✅ Customizable workspace based on user needs
+
+### v5.1 - CI/CD Integration (Completed)
+**Release Date:** Week 11
+
+Comprehensive DevOps pipeline configuration:
+- ✅ GitHub Actions workflow generator
+- ✅ GitLab CI/CD pipeline configuration
+- ✅ Jenkins pipeline (Jenkinsfile) generation
+- ✅ CircleCI configuration
+- ✅ Multi-stage builds and deployments
+- ✅ Environment-specific configurations
+- ✅ Automated testing in pipelines
+- ✅ Docker integration in CI/CD
+- ✅ Deployment strategies configuration
+
+### v5.2 - Project Persistence (Completed)
+**Release Date:** Week 12
+
+Complete project management system:
+- ✅ Save projects to Spark KV database
+- ✅ Load projects from database
+- ✅ Project listing with metadata (name, description, timestamps)
+- ✅ Duplicate existing projects
+- ✅ Delete projects from database
+- ✅ Export projects as JSON files
+- ✅ Import projects from JSON
+- ✅ New project creation with state reset
+- ✅ Current project indicator
+- ✅ Complete state persistence (files, models, components, trees, workflows, lambdas, themes, tests, settings)
+
 ## Upcoming Releases
 
-### v4.2 - Real-Time Preview (In Planning)
+### v5.3 - Real-Time Preview (In Planning)
 **Estimated:** Q2 2024
 
 Live application preview:
@@ -164,7 +208,7 @@ Visual form design:
 - Zod schema validation
 - Material UI form components
 
-### v5.0 - Authentication & Security (In Planning)
+### v4.5 - Authentication & Security (In Planning)
 **Estimated:** Q3 2024
 
 Complete authentication system:

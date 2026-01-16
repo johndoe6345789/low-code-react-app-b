@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play, Wrench, Gear, Cube, FileText, ChartBar, Keyboard, FlowArrow, Faders } from '@phosphor-icons/react'
-import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles } from '@/types/project'
+import { ProjectFile, PrismaModel, ComponentNode, ComponentTree, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig, NpmSettings, Workflow, Lambda, FeatureToggles, Project } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
@@ -27,6 +27,7 @@ import { SassStylesShowcase } from '@/components/SassStylesShowcase'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
 import { KeyboardShortcutsDialog } from '@/components/KeyboardShortcutsDialog'
 import { FeatureToggleSettings } from '@/components/FeatureToggleSettings'
+import { ProjectManager } from '@/components/ProjectManager'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests, generateFlaskApp } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
@@ -454,6 +455,43 @@ Navigate to the backend directory and follow the setup instructions.
     }
   }
 
+  const handleLoadProject = (project: Project) => {
+    if (project.files) setFiles(project.files)
+    if (project.models) setModels(project.models)
+    if (project.components) setComponents(project.components)
+    if (project.componentTrees) setComponentTrees(project.componentTrees)
+    if (project.workflows) setWorkflows(project.workflows)
+    if (project.lambdas) setLambdas(project.lambdas)
+    if (project.theme) setTheme(project.theme)
+    if (project.playwrightTests) setPlaywrightTests(project.playwrightTests)
+    if (project.storybookStories) setStorybookStories(project.storybookStories)
+    if (project.unitTests) setUnitTests(project.unitTests)
+    if (project.flaskConfig) setFlaskConfig(project.flaskConfig)
+    if (project.nextjsConfig) setNextjsConfig(project.nextjsConfig)
+    if (project.npmSettings) setNpmSettings(project.npmSettings)
+    if (project.featureToggles) setFeatureToggles(project.featureToggles)
+  }
+
+  const getCurrentProject = (): Project => {
+    return {
+      name: safeNextjsConfig.appName,
+      files: safeFiles,
+      models: safeModels,
+      components: safeComponents,
+      componentTrees: safeComponentTrees,
+      workflows: safeWorkflows,
+      lambdas: safeLambdas,
+      theme: safeTheme,
+      playwrightTests: safePlaywrightTests,
+      storybookStories: safeStorybookStories,
+      unitTests: safeUnitTests,
+      flaskConfig: safeFlaskConfig,
+      nextjsConfig: safeNextjsConfig,
+      npmSettings: safeNpmSettings,
+      featureToggles: safeFeatureToggles,
+    }
+  }
+
   return (
     <div className="h-screen flex flex-col bg-background text-foreground">
       <header className="border-b border-border bg-card px-6 py-4">
@@ -470,6 +508,10 @@ Navigate to the backend directory and follow the setup instructions.
             </div>
           </div>
           <div className="flex gap-2">
+            <ProjectManager
+              currentProject={getCurrentProject()}
+              onProjectLoad={handleLoadProject}
+            />
             {safeFeatureToggles.errorRepair && autoDetectedErrors.length > 0 && (
               <Button 
                 variant="outline" 

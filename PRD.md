@@ -1,6 +1,6 @@
 # Planning Guide
 
-A visual low-code platform for generating Next.js applications with Material UI styling, integrated Monaco code editor, and Prisma schema designer.
+A visual low-code platform for generating Next.js applications with Material UI styling, integrated Monaco code editor, Prisma schema designer, and persistent project management.
 
 **Experience Qualities**: 
 1. **Empowering** - Users feel in control with both visual and code-level editing capabilities
@@ -8,9 +8,16 @@ A visual low-code platform for generating Next.js applications with Material UI 
 3. **Professional** - Output-ready code that follows modern best practices and conventions
 
 **Complexity Level**: Complex Application (advanced functionality, likely with multiple views)
-This is a full-featured low-code IDE with multiple integrated tools (code editor, visual designers, schema builder), state management across views, and code generation capabilities that require sophisticated UI organization.
+This is a full-featured low-code IDE with multiple integrated tools (code editor, visual designers, schema builder), state management across views, persistent project storage, and code generation capabilities that require sophisticated UI organization.
 
 ## Essential Features
+
+### Project Save/Load Management
+- **Functionality**: Complete project persistence system using Spark KV database with save, load, duplicate, export, import, and delete operations
+- **Purpose**: Allow users to work on multiple projects over time without losing progress, share projects via JSON export, and maintain a library of saved work
+- **Trigger**: Save/Load/New Project buttons in the header toolbar
+- **Progression**: Click Save → Enter project name and description → Project saved to database → View saved projects list → Load any project → All state restored including files, models, components, trees, workflows, lambdas, themes, tests, and settings
+- **Success criteria**: Projects persist between sessions; all application state is saved and restored correctly; can duplicate, export (JSON), import, and delete projects; project list shows metadata (name, description, dates); smooth loading experience with no data loss
 
 ### Monaco Code Editor Integration
 - **Functionality**: Full-featured code editor with syntax highlighting, autocomplete, multi-file editing, and AI-powered code improvement and explanation
