@@ -11,9 +11,12 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 
 ## ✨ Features
 
-### 🏗️ Architecture (Phase 4: Refactored ✨)
+### 🏗️ Architecture (Phase 4: Declarative System ✨)
+- **Declarative JSON-Driven Pages** - Add new pages by editing a JSON file, no code changes needed
+- **Dynamic Component Loading** - All pages are lazy-loaded based on configuration for optimal performance
+- **Automatic Keyboard Shortcuts** - Shortcuts defined in JSON and automatically wired up
+- **Feature Toggle Integration** - Pages show/hide based on feature flags without conditional rendering
 - **Comprehensive Hook Library** - 12+ custom hooks for data, UI, and form management (all <150 LOC)
-- **JSON Orchestration Engine** - Build entire pages using JSON schemas without writing React code
 - **Atomic Component Library** - All components under 150 LOC for maximum maintainability
 - **Type-Safe Everything** - Full TypeScript + Zod validation for hooks, components, and JSON schemas
 - **Centralized Configuration** - Navigation, pages, and features configured via JSON
@@ -194,10 +197,17 @@ Build entire pages using JSON schemas without writing React code:
 - ✅ **Easy testing** - Small, focused units
 - ✅ **Rapid prototyping** - Create pages by editing JSON
 
-## 🏗️ Atomic Component Architecture
+## 🏗️ Architecture Documentation
 
-CodeForge also uses **Atomic Design** methodology for legacy components:
+CodeForge uses modern patterns for maintainability and extensibility:
 
+### Declarative System (Primary)
+- **[DECLARATIVE_SYSTEM.md](./DECLARATIVE_SYSTEM.md)** - **⭐ START HERE** Complete guide to the JSON-driven architecture
+- Learn how to add pages by editing JSON instead of writing React code
+- Understand the component registry, keyboard shortcuts, and feature toggles
+- Includes migration guide and best practices
+
+### Atomic Component Architecture (Legacy)
 - **[ATOMIC_README.md](./ATOMIC_README.md)** - Quick start guide
 - **[ATOMIC_REFACTOR_SUMMARY.md](./ATOMIC_REFACTOR_SUMMARY.md)** - Overview of the atomic structure
 - **[ATOMIC_COMPONENTS.md](./ATOMIC_COMPONENTS.md)** - Complete architecture guide

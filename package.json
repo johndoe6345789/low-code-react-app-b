@@ -15,7 +15,10 @@
         "test:e2e:headed": "playwright test --headed",
         "test:e2e:smoke": "playwright test smoke.spec.ts",
         "test:e2e:debug": "playwright test --debug",
-        "test:e2e:report": "playwright show-report"
+        "test:e2e:report": "playwright show-report",
+        "pages:list": "node scripts/list-pages.js",
+        "pages:validate": "tsx src/config/validate-config.ts",
+        "pages:generate": "node scripts/generate-page.js"
     },
     "dependencies": {
         "@github/spark": ">=0.43.1 <1",

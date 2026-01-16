@@ -1,4 +1,5 @@
 import pagesConfig from './pages.json'
+import { FeatureToggles } from '@/types/project'
 
 export interface PageConfig {
   id: string
@@ -24,15 +25,15 @@ export function getPageById(id: string): PageConfig | undefined {
   return pagesConfig.pages.find(page => page.id === id)
 }
 
-export function getEnabledPages(featureToggles?: Record<string, boolean>): PageConfig[] {
+export function getEnabledPages(featureToggles?: FeatureToggles): PageConfig[] {
   return pagesConfig.pages.filter(page => {
     if (!page.enabled) return false
     if (!page.toggleKey) return true
-    return featureToggles?.[page.toggleKey] !== false
+    return featureToggles?.[page.toggleKey as keyof FeatureToggles] !== false
   }).sort((a, b) => a.order - b.order)
 }
 
-export function getPageShortcuts(featureToggles?: Record<string, boolean>): Array<{
+export function getPageShortcuts(featureToggles?: FeatureToggles): Array<{
   key: string
   ctrl?: boolean
   shift?: boolean
