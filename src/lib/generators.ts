@@ -1,4 +1,4 @@
-import { PrismaModel, ComponentNode, ThemeConfig } from '@/types/project'
+import { PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest } from '@/types/project'
 
 export function generatePrismaSchema(models: PrismaModel[]): string {
   let schema = `generator client {\n  provider = "prisma-client-js"\n}\n\n`
@@ -238,6 +238,160 @@ npm run dev
 \`\`\`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser.`
+
+  return files
+}
+
+export function generatePlaywrightTests(tests: PlaywrightTest[]): string {
+  if (tests.length === 0) {
+    return `import { test, expect } from '@playwright/test'
+
+test('example test', async ({ page }) => {
+  await page.goto('/')
+  await expect(page).toHaveTitle(/.*/)
+})`
+  }
+
+  let code = `import { test, expect } from '@playwright/test'\n\n`
+
+  tests.forEach(testSuite => {
+    code += `test.describe('${testSuite.name}', () => {\n`
+    if (testSuite.description) {
+      code += `  // ${testSuite.description}\n`
+    }
+    code += `  test('${testSuite.name}', async ({ page }) => {\n`
+    
+    testSuite.steps.forEach(step => {
+      switch (step.action) {
+        case 'navigate':
+          code += `    await page.goto('${testSuite.pageUrl}')\n`
+          break
+        case 'click':
+          code += `    await page.click('${step.selector}')\n`
+          break
+        case 'fill':
+          code += `    await page.fill('${step.selector}', '${step.value}')\n`
+          break
+        case 'expect':
+          code += `    await expect(page.locator('${step.selector}')).${step.assertion}\n`
+          break
+        case 'wait':
+          code += `    await page.waitForTimeout(${step.timeout || 1000})\n`
+          break
+        case 'select':
+          code += `    await page.selectOption('${step.selector}', '${step.value}')\n`
+          break
+        case 'check':
+          code += `    await page.check('${step.selector}')\n`
+          break
+        case 'uncheck':
+          code += `    await page.uncheck('${step.selector}')\n`
+          break
+      }
+    })
+    
+    code += `  })\n`
+    code += `})\n\n`
+  })
+
+  return code
+}
+
+export function generateStorybookStories(stories: StorybookStory[]): Record<string, string> {
+  const fileMap: Record<string, StorybookStory[]> = {}
+  
+  stories.forEach(story => {
+    const key = `${story.category}/${story.componentName}`
+    if (!fileMap[key]) {
+      fileMap[key] = []
+    }
+    fileMap[key].push(story)
+  })
+
+  const files: Record<string, string> = {}
+
+  Object.entries(fileMap).forEach(([path, storyList]) => {
+    const componentName = storyList[0].componentName
+    let code = `import type { Meta, StoryObj } from '@storybook/react'\nimport { ${componentName} } from '@/components/${componentName}'\n\n`
+    
+    code += `const meta: Meta<typeof ${componentName}> = {\n`
+    code += `  title: '${path}',\n`
+    code += `  component: ${componentName},\n`
+    code += `  tags: ['autodocs'],\n`
+    code += `}\n\n`
+    code += `export default meta\n`
+    code += `type Story = StoryObj<typeof ${componentName}>\n\n`
+
+    storyList.forEach(story => {
+      code += `export const ${story.storyName.replace(/\s+/g, '')}: Story = {\n`
+      if (Object.keys(story.args).length > 0) {
+        code += `  args: ${JSON.stringify(story.args, null, 4).replace(/"/g, "'")},\n`
+      }
+      code += `}\n\n`
+    })
+
+    files[`src/stories/${componentName}.stories.tsx`] = code
+  })
+
+  return files
+}
+
+export function generateUnitTests(tests: UnitTest[]): Record<string, string> {
+  const files: Record<string, string> = {}
+
+  tests.forEach(testSuite => {
+    const fileName = testSuite.targetFile 
+      ? testSuite.targetFile.replace(/\.(tsx|ts|jsx|js)$/, '.test.$1')
+      : `src/__tests__/${testSuite.name.replace(/\s+/g, '')}.test.tsx`
+
+    let code = ''
+    
+    if (testSuite.testType === 'component') {
+      code += `import { render, screen } from '@testing-library/react'\nimport { describe, it, expect } from 'vitest'\n`
+      if (testSuite.targetFile) {
+        const componentName = testSuite.targetFile.split('/').pop()?.replace(/\.(tsx|ts|jsx|js)$/, '')
+        code += `import { ${componentName} } from '${testSuite.targetFile.replace('.tsx', '').replace('.ts', '')}'\n\n`
+      }
+    } else if (testSuite.testType === 'hook') {
+      code += `import { renderHook } from '@testing-library/react'\nimport { describe, it, expect } from 'vitest'\n`
+      if (testSuite.targetFile) {
+        const hookName = testSuite.targetFile.split('/').pop()?.replace(/\.(tsx|ts|jsx|js)$/, '')
+        code += `import { ${hookName} } from '${testSuite.targetFile.replace('.tsx', '').replace('.ts', '')}'\n\n`
+      }
+    } else {
+      code += `import { describe, it, expect } from 'vitest'\n`
+      if (testSuite.targetFile) {
+        code += `import * as module from '${testSuite.targetFile.replace('.tsx', '').replace('.ts', '')}'\n\n`
+      }
+    }
+
+    code += `describe('${testSuite.name}', () => {\n`
+    if (testSuite.description) {
+      code += `  // ${testSuite.description}\n\n`
+    }
+
+    testSuite.testCases.forEach(testCase => {
+      code += `  it('${testCase.description}', () => {\n`
+      
+      if (testCase.setup) {
+        code += `    ${testCase.setup}\n\n`
+      }
+
+      testCase.assertions.forEach(assertion => {
+        code += `    ${assertion}\n`
+      })
+
+      if (testCase.teardown) {
+        code += `\n    ${testCase.teardown}\n`
+      }
+
+      code += `  })\n\n`
+    })
+
+    code += `})\n`
+
+    files[fileName] = code
+  })
 
   return files
 }

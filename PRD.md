@@ -47,6 +47,27 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **Progression**: Select or create theme variant → Adjust standard colors or add custom colors → Configure typography and spacing → Preview updates live across all variants → Switch between variants → Export theme configuration with all variants
 - **Success criteria**: Color pickers work; custom colors can be added/removed; multiple theme variants persist; AI themes match descriptions and have good contrast; generates valid MUI theme code for all variants including light and dark modes
 
+### Playwright E2E Test Designer
+- **Functionality**: Visual designer for Playwright end-to-end tests with step-by-step action configuration and AI-powered test generation
+- **Purpose**: Create comprehensive E2E tests without writing Playwright code manually
+- **Trigger**: Opening the Playwright tab
+- **Progression**: Create test suite manually or with AI → Add test steps (navigate, click, fill, expect) → Configure selectors and assertions → AI can generate complete test flows → Export Playwright test files
+- **Success criteria**: Can create tests with multiple steps; selectors and assertions are properly configured; AI-generated tests are executable; generates valid Playwright test code
+
+### Storybook Story Designer
+- **Functionality**: Visual designer for Storybook stories with component args/props configuration and AI story generation
+- **Purpose**: Document component variations and states without manually writing story files
+- **Trigger**: Opening the Storybook tab
+- **Progression**: Create story manually or with AI → Configure component name and story name → Add args/props → Organize by category → AI can suggest appropriate variations → Export Storybook story files
+- **Success criteria**: Can create stories for any component; args can be added/edited with type detection; organized by categories; AI stories showcase meaningful variations; generates valid Storybook CSF3 format
+
+### Unit Test Designer
+- **Functionality**: Visual designer for unit tests with test case and assertion management, supports component/function/hook/integration tests, and AI test generation
+- **Purpose**: Create comprehensive test suites with proper setup, assertions, and teardown without writing test code manually
+- **Trigger**: Opening the Unit Tests tab
+- **Progression**: Create test suite manually or with AI → Select test type (component/function/hook/integration) → Add test cases → Configure setup, assertions, and teardown → AI can generate complete test suites → Export test files for Vitest/React Testing Library
+- **Success criteria**: Can create test suites for different types; test cases have multiple assertions; setup/teardown code is optional; AI tests are comprehensive; generates valid Vitest test code
+
 ### Project Generator
 - **Functionality**: Exports complete Next.js project with all configurations
 - **Purpose**: Converts visual designs into downloadable, runnable applications
@@ -63,6 +84,10 @@ This is a full-featured low-code IDE with multiple integrated tools (code editor
 - **AI Generation Failures**: Provide clear error messages and fallback to manual editing when AI requests fail
 - **Rate Limiting**: Handle OpenAI API rate limits gracefully with user-friendly messages
 - **Invalid AI Responses**: Validate and sanitize AI-generated code before insertion
+- **Empty Test Suites**: Show helpful empty states with guidance for creating first test/story
+- **Invalid Test Selectors**: Warn when Playwright selectors might be problematic
+- **Missing Test Assertions**: Highlight test cases without assertions as incomplete
+- **Storybook Args Type Mismatch**: Auto-detect arg types and provide appropriate input controls
 
 ## Design Direction
 The design should evoke a professional IDE environment while remaining approachable - think Visual Studio Code meets Figma. Clean panels, clear hierarchy, and purposeful use of space to avoid overwhelming users with options.
@@ -121,9 +146,13 @@ Animations should feel responsive and purposeful - quick panel transitions (200m
   - Database (database icon) for models
   - Tree (tree-structure icon) for components  
   - PaintBrush (paint-brush icon) for styling
+  - Play (play icon) for Playwright E2E tests
+  - BookOpen (book-open icon) for Storybook stories
+  - Flask (flask icon) for unit tests
   - FileCode (file-code icon) for individual files
   - Plus (plus icon) for create actions
   - Download (download icon) for export
+  - Sparkle (sparkle icon) for AI generation
   
 - **Spacing**: 
   - Panel padding: p-6 (24px) for main content areas

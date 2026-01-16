@@ -64,10 +64,56 @@ export interface ThemeConfig {
   borderRadius: number
 }
 
+export interface PlaywrightTest {
+  id: string
+  name: string
+  description: string
+  pageUrl: string
+  steps: PlaywrightStep[]
+}
+
+export interface PlaywrightStep {
+  id: string
+  action: 'navigate' | 'click' | 'fill' | 'expect' | 'wait' | 'select' | 'check' | 'uncheck'
+  selector?: string
+  value?: string
+  assertion?: string
+  timeout?: number
+}
+
+export interface StorybookStory {
+  id: string
+  componentName: string
+  storyName: string
+  args: Record<string, any>
+  description: string
+  category: string
+}
+
+export interface UnitTest {
+  id: string
+  name: string
+  description: string
+  testType: 'component' | 'function' | 'hook' | 'integration'
+  targetFile: string
+  testCases: TestCase[]
+}
+
+export interface TestCase {
+  id: string
+  description: string
+  assertions: string[]
+  setup?: string
+  teardown?: string
+}
+
 export interface Project {
   name: string
   files: ProjectFile[]
   models: PrismaModel[]
   components: ComponentNode[]
   theme: ThemeConfig
+  playwrightTests?: PlaywrightTest[]
+  storybookStories?: StorybookStory[]
+  unitTests?: UnitTest[]
 }

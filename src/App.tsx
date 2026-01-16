@@ -4,14 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
-import { Code, Database, Tree, PaintBrush, Download, Sparkle } from '@phosphor-icons/react'
-import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig } from '@/types/project'
+import { Code, Database, Tree, PaintBrush, Download, Sparkle, Flask, BookOpen, Play } from '@phosphor-icons/react'
+import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest } from '@/types/project'
 import { CodeEditor } from '@/components/CodeEditor'
 import { ModelDesigner } from '@/components/ModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
 import { StyleDesigner } from '@/components/StyleDesigner'
 import { FileExplorer } from '@/components/FileExplorer'
-import { generateNextJSProject, generatePrismaSchema, generateMUITheme } from '@/lib/generators'
+import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
+import { StorybookDesigner } from '@/components/StorybookDesigner'
+import { UnitTestDesigner } from '@/components/UnitTestDesigner'
+import { generateNextJSProject, generatePrismaSchema, generateMUITheme, generatePlaywrightTests, generateStorybookStories, generateUnitTests } from '@/lib/generators'
 import { AIService } from '@/lib/ai-service'
 import { toast } from 'sonner'
 import {
@@ -90,6 +93,9 @@ function App() {
   const [models, setModels] = useKV<PrismaModel[]>('project-models', [])
   const [components, setComponents] = useKV<ComponentNode[]>('project-components', [])
   const [theme, setTheme] = useKV<ThemeConfig>('project-theme', DEFAULT_THEME)
+  const [playwrightTests, setPlaywrightTests] = useKV<PlaywrightTest[]>('project-playwright-tests', [])
+  const [storybookStories, setStorybookStories] = useKV<StorybookStory[]>('project-storybook-stories', [])
+  const [unitTests, setUnitTests] = useKV<UnitTest[]>('project-unit-tests', [])
   const [activeFileId, setActiveFileId] = useState<string | null>((files || [])[0]?.id || null)
   const [activeTab, setActiveTab] = useState('code')
   const [exportDialogOpen, setExportDialogOpen] = useState(false)
@@ -99,6 +105,9 @@ function App() {
   const safeModels = models || []
   const safeComponents = components || []
   const safeTheme = theme || DEFAULT_THEME
+  const safePlaywrightTests = playwrightTests || []
+  const safeStorybookStories = storybookStories || []
+  const safeUnitTests = unitTests || []
 
   const handleFileChange = (fileId: string, content: string) => {
     setFiles((currentFiles) =>
@@ -124,11 +133,17 @@ function App() {
     
     const prismaSchema = generatePrismaSchema(safeModels)
     const themeCode = generateMUITheme(safeTheme)
+    const playwrightTestCode = generatePlaywrightTests(safePlaywrightTests)
+    const storybookFiles = generateStorybookStories(safeStorybookStories)
+    const unitTestFiles = generateUnitTests(safeUnitTests)
     
     const allFiles = {
       ...projectFiles,
       'prisma/schema.prisma': prismaSchema,
       'src/theme.ts': themeCode,
+      'e2e/tests.spec.ts': playwrightTestCode,
+      ...storybookFiles,
+      ...unitTestFiles,
       ...safeFiles.reduce((acc, file) => {
         acc[file.path] = file.content
         return acc
@@ -216,6 +231,18 @@ function App() {
               <PaintBrush size={18} />
               Styling
             </TabsTrigger>
+            <TabsTrigger value="playwright" className="gap-2">
+              <Play size={18} />
+              Playwright
+            </TabsTrigger>
+            <TabsTrigger value="storybook" className="gap-2">
+              <BookOpen size={18} />
+              Storybook
+            </TabsTrigger>
+            <TabsTrigger value="unit-tests" className="gap-2">
+              <Flask size={18} />
+              Unit Tests
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -256,6 +283,18 @@ function App() {
 
           <TabsContent value="styling" className="h-full m-0">
             <StyleDesigner theme={safeTheme} onThemeChange={setTheme} />
+          </TabsContent>
+
+          <TabsContent value="playwright" className="h-full m-0">
+            <PlaywrightDesigner tests={safePlaywrightTests} onTestsChange={setPlaywrightTests} />
+          </TabsContent>
+
+          <TabsContent value="storybook" className="h-full m-0">
+            <StorybookDesigner stories={safeStorybookStories} onStoriesChange={setStorybookStories} />
+          </TabsContent>
+
+          <TabsContent value="unit-tests" className="h-full m-0">
+            <UnitTestDesigner tests={safeUnitTests} onTestsChange={setUnitTests} />
           </TabsContent>
         </div>
       </Tabs>
