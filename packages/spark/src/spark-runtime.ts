@@ -62,7 +62,11 @@ export const sparkRuntime = {
     },
     clear: () => {
       try {
+        // Get keys before clearing
+        const keysToRemove = Array.from(kvStorage.keys())
         kvStorage.clear()
+        // Clear corresponding keys from localStorage
+        keysToRemove.forEach(key => localStorage.removeItem(key))
       } catch (error) {
         console.error('Error clearing KV storage:', error)
       }
