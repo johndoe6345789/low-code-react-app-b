@@ -334,8 +334,10 @@ async function detectStorageBackend(): Promise<'flask' | 'indexeddb'> {
 
 class AutoStorageAdapter implements StorageAdapter {
   private adapter: StorageAdapter | null = null
+  private fallbackAdapter: IndexedDBAdapter | null = null
   private backendType: 'flask' | 'indexeddb' | null = null
   private initPromise: Promise<void> | null = null
+  private hasWarnedAboutFallback = false
 
   private async initialize(): Promise<void> {
     if (this.adapter) {
@@ -348,7 +350,8 @@ class AutoStorageAdapter implements StorageAdapter {
         
         if (this.backendType === 'flask' && FLASK_BACKEND_URL) {
           this.adapter = new FlaskBackendAdapter(FLASK_BACKEND_URL)
-          console.log(`[StorageAdapter] Initialized with Flask backend: ${FLASK_BACKEND_URL}`)
+          this.fallbackAdapter = new IndexedDBAdapter()
+          console.log(`[StorageAdapter] Initialized with Flask backend: ${FLASK_BACKEND_URL} (with IndexedDB fallback)`)
         } else {
           this.adapter = new IndexedDBAdapter()
           console.log('[StorageAdapter] Initialized with IndexedDB')
@@ -359,33 +362,71 @@ class AutoStorageAdapter implements StorageAdapter {
     await this.initPromise
   }
 
+  private async executeWithFallback<T>(
+    operation: () => Promise<T>,
+    fallbackOperation?: () => Promise<T>
+  ): Promise<T> {
+    try {
+      return await operation()
+    } catch (error) {
+      if (this.backendType === 'flask' && this.fallbackAdapter && fallbackOperation) {
+        if (!this.hasWarnedAboutFallback) {
+          console.warn('[StorageAdapter] Flask backend operation failed, falling back to IndexedDB:', error)
+          this.hasWarnedAboutFallback = true
+        }
+        try {
+          return await fallbackOperation()
+        } catch (fallbackError) {
+          console.error('[StorageAdapter] Fallback to IndexedDB also failed:', fallbackError)
+          throw fallbackError
+        }
+      }
+      throw error
+    }
+  }
+
   getBackendType(): 'flask' | 'indexeddb' | null {
     return this.backendType
   }
 
   async get<T>(key: string): Promise<T | undefined> {
     await this.initialize()
-    return this.adapter!.get<T>(key)
+    return this.executeWithFallback(
+      () => this.adapter!.get<T>(key),
+      this.fallbackAdapter ? () => this.fallbackAdapter!.get<T>(key) : undefined
+    )
   }
 
   async set<T>(key: string, value: T): Promise<void> {
     await this.initialize()
-    return this.adapter!.set(key, value)
+    return this.executeWithFallback(
+      () => this.adapter!.set(key, value),
+      this.fallbackAdapter ? () => this.fallbackAdapter!.set(key, value) : undefined
+    )
   }
 
   async delete(key: string): Promise<void> {
     await this.initialize()
-    return this.adapter!.delete(key)
+    return this.executeWithFallback(
+      () => this.adapter!.delete(key),
+      this.fallbackAdapter ? () => this.fallbackAdapter!.delete(key) : undefined
+    )
   }
 
   async keys(): Promise<string[]> {
     await this.initialize()
-    return this.adapter!.keys()
+    return this.executeWithFallback(
+      () => this.adapter!.keys(),
+      this.fallbackAdapter ? () => this.fallbackAdapter!.keys() : undefined
+    )
   }
 
   async clear(): Promise<void> {
     await this.initialize()
-    return this.adapter!.clear()
+    return this.executeWithFallback(
+      () => this.adapter!.clear(),
+      this.fallbackAdapter ? () => this.fallbackAdapter!.clear() : undefined
+    )
   }
 
   async migrateToFlask(flaskUrl: string): Promise<number> {

@@ -100,9 +100,24 @@ Updated `README.md` with:
    ↓
    If true → Test Flask backend availability
    ↓
-   Success → Use FlaskBackendAdapter
+   Success → Use FlaskBackendAdapter (with IndexedDB fallback ready)
    ↓
-   Failure → Fallback to IndexedDBAdapter (with warning)
+   Failure → Use IndexedDBAdapter (with warning)
+   ```
+
+2. **Runtime Fallback** (NEW)
+   ```
+   Operation called (get/set/delete/keys/clear)
+   ↓
+   Try Flask backend operation
+   ↓
+   Success → Return result
+   ↓
+   Failure → Automatically retry with IndexedDB fallback
+   ↓
+   Log warning on first fallback (once per session)
+   ↓
+   Return result from IndexedDB
    ```
 
 2. **Runtime Configuration**
