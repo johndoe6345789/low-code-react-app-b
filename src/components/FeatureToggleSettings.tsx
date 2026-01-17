@@ -1,5 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { FeatureToggles } from '@/types/project'
 import { Code, Database, Tree, PaintBrush, Flask, Play, BookOpen, Cube, Wrench, FileText, FlowArrow, Image, Lightbulb } from '@phosphor-icons/react'

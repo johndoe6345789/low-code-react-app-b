@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
@@ -87,6 +87,7 @@ function App() {
     featureToggles,
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const loadProject = (project: any) => {
     if (project.files) setFiles(project.files)
     if (project.models) setModels(project.models)
@@ -113,7 +114,7 @@ function App() {
     handleFileClose,
   } = useFileOperations(files, setFiles)
 
-  const { handleExportProject, exportDialogOpen, setExportDialogOpen, generatedCode, handleDownloadZip } = useProjectExport(
+  const { handleExportProject } = useProjectExport(
     files,
     models,
     components,
