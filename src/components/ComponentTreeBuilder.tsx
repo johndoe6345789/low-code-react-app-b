@@ -274,8 +274,8 @@ export function ComponentTreeBuilder({
                     try {
                       const props = JSON.parse(e.target.value)
                       updateNode(selectedNode.id, { props })
-                    } catch {
-                      // Ignore invalid JSON during typing
+                    } catch (error) {
+                      console.debug('Invalid JSON during typing:', error)
                     }
                   }}
                   className="font-mono text-sm h-64"
