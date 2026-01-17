@@ -151,6 +151,11 @@ export const ComponentRegistry = {
     () => import('@/components/DataBindingDesigner').then(m => ({ default: m.DataBindingDesigner })),
     'DataBindingDesigner'
   ),
+  
+  DockerBuildDebugger: lazyWithPreload(
+    () => import('@/components/DockerBuildDebugger').then(m => ({ default: m.DockerBuildDebugger })),
+    'DockerBuildDebugger'
+  ),
 } as const
 
 export const DialogRegistry = {

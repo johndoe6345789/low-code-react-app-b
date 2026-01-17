@@ -355,6 +355,16 @@
       "shortcut": "ctrl+shift+d",
       "order": 24,
       "props": {}
+    },
+    {
+      "id": "docker-debugger",
+      "title": "Docker Debugger",
+      "icon": "Wrench",
+      "component": "DockerBuildDebugger",
+      "enabled": true,
+      "toggleKey": "dockerDebugger",
+      "order": 25,
+      "props": {}
     }
   ]
 }
