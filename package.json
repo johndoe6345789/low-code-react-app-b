@@ -106,23 +106,11 @@
         "typescript-eslint": "^8.38.0",
         "vite": "^7.3.1"
     },
-    "workspaces": {
-        "packages": [
-            "packages/*"
-        ]
-    },
     "overrides": {
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "@types/react": "^19.0.10",
         "@types/react-dom": "^19.0.4",
-        "vite": "^7.3.1",
-        "@github/spark": {
-            "react": "^19.0.0",
-            "vite": "^7.3.1"
-        },
-        "@local/spark-wrapper": {
-            "react": "^19.0.0"
-        }
+        "vite": "^7.3.1"
     }
 }
