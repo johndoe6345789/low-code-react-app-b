@@ -40,6 +40,14 @@ import {
   IconButton,
   ActionButton,
   StatusBadge,
+  NumberInput,
+  TextGradient,
+  Pulse,
+  QuickActionButton,
+  PanelHeader,
+  LiveIndicator,
+  Sparkle,
+  GlowCard,
 } from '@/components/atoms'
 import { 
   Heart, 
@@ -54,6 +62,8 @@ import {
   Info,
   WarningCircle,
   XCircle,
+  Rocket,
+  Code as CodeIcon,
 } from '@phosphor-icons/react'
 
 export function AtomicLibraryShowcase() {
@@ -62,6 +72,7 @@ export function AtomicLibraryShowcase() {
   const [rangeValue, setRangeValue] = useState<[number, number]>([20, 80])
   const [filterValue, setFilterValue] = useState('')
   const [rating, setRating] = useState(3)
+  const [numberValue, setNumberValue] = useState(10)
 
   return (
     <Container size="xl" className="py-8">
@@ -481,15 +492,132 @@ export function AtomicLibraryShowcase() {
           </Stack>
         </Section>
 
+        <Section spacing="lg">
+          <Heading level={2}>Enhanced Components</Heading>
+          <Separator />
+          <Stack direction="vertical" spacing="lg">
+            <div>
+              <PanelHeader
+                title="Panel Header Component"
+                subtitle="A reusable header with optional icon and actions"
+                icon={<Rocket size={24} weight="duotone" />}
+                actions={
+                  <Button size="sm" variant="outline">Action</Button>
+                }
+              />
+            </div>
+
+            <div>
+              <Text variant="muted" className="mb-2">Number Input</Text>
+              <NumberInput
+                label="Quantity"
+                value={numberValue}
+                onChange={setNumberValue}
+                min={0}
+                max={100}
+                step={5}
+              />
+            </div>
+
+            <div>
+              <Text variant="muted" className="mb-2">Text Gradient</Text>
+              <Heading level={2}>
+                <TextGradient from="from-primary" to="to-accent">
+                  Beautiful Gradient Text
+                </TextGradient>
+              </Heading>
+            </div>
+
+            <div>
+              <Text variant="muted" className="mb-2">Status Indicators</Text>
+              <Flex gap="lg" align="center">
+                <Flex gap="sm" align="center">
+                  <Pulse variant="success" />
+                  <Text variant="small">Active</Text>
+                </Flex>
+                <LiveIndicator />
+                <Flex gap="sm" align="center">
+                  <Sparkle variant="gold" />
+                  <Text variant="small">Featured</Text>
+                </Flex>
+              </Flex>
+            </div>
+
+            <div>
+              <Text variant="muted" className="mb-2">Quick Action Buttons</Text>
+              <ResponsiveGrid columns={4} gap="md">
+                <QuickActionButton
+                  icon={<CodeIcon size={32} weight="duotone" />}
+                  label="Code"
+                  description="Edit files"
+                  variant="primary"
+                  onClick={() => alert('Code clicked')}
+                />
+                <QuickActionButton
+                  icon={<Rocket size={32} weight="duotone" />}
+                  label="Deploy"
+                  description="Launch app"
+                  variant="accent"
+                  onClick={() => alert('Deploy clicked')}
+                />
+                <QuickActionButton
+                  icon={<Star size={32} weight="duotone" />}
+                  label="Favorite"
+                  description="Save for later"
+                  variant="default"
+                  onClick={() => alert('Favorite clicked')}
+                />
+                <QuickActionButton
+                  icon={<ShoppingCart size={32} weight="duotone" />}
+                  label="Shop"
+                  description="Browse items"
+                  variant="muted"
+                  onClick={() => alert('Shop clicked')}
+                />
+              </ResponsiveGrid>
+            </div>
+
+            <div>
+              <Text variant="muted" className="mb-2">Glow Cards</Text>
+              <ResponsiveGrid columns={3} gap="md">
+                <GlowCard glowColor="primary" intensity="medium">
+                  <div className="p-4">
+                    <Heading level={4}>Primary Glow</Heading>
+                    <Text variant="muted" className="mt-2">
+                      Card with primary glow effect
+                    </Text>
+                  </div>
+                </GlowCard>
+                <GlowCard glowColor="accent" intensity="high">
+                  <div className="p-4">
+                    <Heading level={4}>Accent Glow</Heading>
+                    <Text variant="muted" className="mt-2">
+                      Card with accent glow effect
+                    </Text>
+                  </div>
+                </GlowCard>
+                <GlowCard glowColor="success" intensity="medium">
+                  <div className="p-4">
+                    <Heading level={4}>Success Glow</Heading>
+                    <Text variant="muted" className="mt-2">
+                      Card with success glow effect
+                    </Text>
+                  </div>
+                </GlowCard>
+              </ResponsiveGrid>
+            </div>
+          </Stack>
+        </Section>
+
         <Section spacing="lg" className="pb-12">
           <Heading level={2}>Summary</Heading>
           <Separator />
           <InfoPanel variant="success" icon={<CheckCircle />}>
             <Heading level={5} className="mb-2">Atomic Component Library Complete!</Heading>
             <Text>
-              The atomic component library includes 50+ production-ready components covering buttons, 
-              badges, typography, forms, progress indicators, feedback, avatars, cards, and layout utilities. 
-              All components are fully typed, accessible, and follow the design system.
+              The atomic component library includes 60+ production-ready components covering buttons, 
+              badges, typography, forms, progress indicators, feedback, avatars, cards, enhanced inputs,
+              gradient effects, and layout utilities. All components are fully typed, accessible, and follow the design system.
             </Text>
           </InfoPanel>
         </Section>

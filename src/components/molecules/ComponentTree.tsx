@@ -1,5 +1,6 @@
 import { UIComponent } from '@/types/json-ui'
 import { ComponentTreeNode } from '@/components/atoms/ComponentTreeNode'
+import { PanelHeader } from '@/components/atoms'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { Tree, Plus } from '@phosphor-icons/react'
@@ -60,11 +61,12 @@ export function ComponentTree({
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-border flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Tree className="w-5 h-5 text-primary" weight="duotone" />
-          <h2 className="text-lg font-semibold">Component Tree</h2>
-        </div>
+      <div className="p-4">
+        <PanelHeader
+          title="Component Tree"
+          subtitle={`${components.length} component${components.length !== 1 ? 's' : ''}`}
+          icon={<Tree size={20} weight="duotone" />}
+        />
       </div>
       
       <ScrollArea className="flex-1">

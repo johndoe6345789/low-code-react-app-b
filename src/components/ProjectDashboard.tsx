@@ -8,9 +8,20 @@ import {
   Play, 
   Cube, 
   FileText,
+  Rocket,
+  GitBranch,
+  Package,
 } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig } from '@/types/project'
-import { SeedDataStatus, DetailRow, CompletionCard, TipsCard, StatCard } from '@/components/atoms'
+import { 
+  SeedDataStatus, 
+  DetailRow, 
+  CompletionCard, 
+  TipsCard, 
+  StatCard,
+  QuickActionButton,
+  PanelHeader,
+} from '@/components/atoms'
 import { GitHubBuildStatus } from '@/components/molecules/GitHubBuildStatus'
 import { useDashboardMetrics } from '@/hooks/ui/use-dashboard-metrics'
 import { useDashboardTips } from '@/hooks/ui/use-dashboard-tips'
@@ -25,6 +36,7 @@ interface ProjectDashboardProps {
   unitTests: UnitTest[]
   flaskConfig: FlaskConfig
   nextjsConfig: NextJsConfig
+  onNavigate?: (page: string) => void
 }
 
 export function ProjectDashboard(props: ProjectDashboardProps) {
@@ -38,6 +50,7 @@ export function ProjectDashboard(props: ProjectDashboardProps) {
     unitTests,
     flaskConfig,
     nextjsConfig,
+    onNavigate,
   } = props
 
   const metrics = useDashboardMetrics({
@@ -133,9 +146,50 @@ export function ProjectDashboard(props: ProjectDashboardProps) {
         />
       )}
 
+      <div>
+        <PanelHeader
+          title="Quick Actions"
+          subtitle="Jump to commonly used tools"
+          icon={<Rocket size={24} weight="duotone" />}
+        />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mt-4">
+          <QuickActionButton
+            icon={<Code size={32} weight="duotone" />}
+            label="Code Editor"
+            description="Edit files"
+            variant="primary"
+            onClick={() => onNavigate?.('code')}
+          />
+          <QuickActionButton
+            icon={<Database size={32} weight="duotone" />}
+            label="Models"
+            description="Design schema"
+            variant="primary"
+            onClick={() => onNavigate?.('models')}
+          />
+          <QuickActionButton
+            icon={<Tree size={32} weight="duotone" />}
+            label="Components"
+            description="Build UI"
+            variant="accent"
+            onClick={() => onNavigate?.('components')}
+          />
+          <QuickActionButton
+            icon={<Package size={32} weight="duotone" />}
+            label="Deploy"
+            description="Export project"
+            variant="accent"
+            onClick={() => onNavigate?.('export')}
+          />
+        </div>
+      </div>
+
       <Card>
         <CardHeader>
-          <CardTitle>Project Details</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <GitBranch size={20} />
+            Project Details
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <DetailRow

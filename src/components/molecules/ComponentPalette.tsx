@@ -1,7 +1,9 @@
 import { ComponentDefinition, getCategoryComponents } from '@/lib/component-definitions'
 import { ComponentPaletteItem } from '@/components/atoms/ComponentPaletteItem'
+import { PanelHeader } from '@/components/atoms'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Package } from '@phosphor-icons/react'
 
 interface ComponentPaletteProps {
   onDragStart: (component: ComponentDefinition, e: React.DragEvent) => void
@@ -17,14 +19,16 @@ export function ComponentPalette({ onDragStart }: ComponentPaletteProps) {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-border">
-        <h2 className="text-lg font-semibold">Components</h2>
-        <p className="text-xs text-muted-foreground mt-1">
-          Drag components to the canvas
-        </p>
+      <div className="p-4">
+        <PanelHeader
+          title="Components"
+          subtitle="Drag components to the canvas"
+          icon={<Package size={20} weight="duotone" />}
+          showSeparator={false}
+        />
       </div>
       
-      <Tabs defaultValue="layout" className="flex-1 flex flex-col">
+      <Tabs defaultValue="layout" className="flex-1 flex flex-col border-t border-border">
         <TabsList className="w-full justify-start px-4 pt-2">
           {categories.map((cat) => (
             <TabsTrigger key={cat.id} value={cat.id} className="text-xs">

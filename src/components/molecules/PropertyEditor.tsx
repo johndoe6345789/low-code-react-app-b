@@ -1,8 +1,10 @@
 import { UIComponent } from '@/types/json-ui'
 import { PropertyEditorField } from '@/components/atoms/PropertyEditorField'
+import { PanelHeader } from '@/components/atoms'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
 import { Sliders, Trash, Code } from '@phosphor-icons/react'
 import { getComponentDef } from '@/lib/component-definitions'
 
@@ -100,26 +102,29 @@ export function PropertyEditor({ component, onUpdate, onDelete }: PropertyEditor
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-primary" weight="duotone" />
-            <h2 className="text-lg font-semibold">Properties</h2>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onDelete}
-            className="text-destructive hover:text-destructive hover:bg-destructive/10"
-          >
-            <Trash className="w-4 h-4" />
-          </Button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Code className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm font-medium">{def?.label || component.type}</span>
-          <span className="text-xs text-muted-foreground">#{component.id}</span>
-        </div>
+      <div className="p-4">
+        <PanelHeader
+          title="Properties"
+          subtitle={
+            <div className="flex items-center gap-2 mt-1">
+              <Badge variant="outline" className="text-xs font-mono">
+                {def?.label || component.type}
+              </Badge>
+              <span className="text-xs text-muted-foreground">#{component.id}</span>
+            </div>
+          }
+          icon={<Sliders size={20} weight="duotone" />}
+          actions={
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onDelete}
+              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+            >
+              <Trash className="w-4 h-4" />
+            </Button>
+          }
+        />
       </div>
       
       <ScrollArea className="flex-1 p-4">
