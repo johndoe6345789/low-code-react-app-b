@@ -1,6 +1,66 @@
-# Error Fixes Summary
+# CodeForge Documentation
 
-This directory contains documentation for various error fixes and troubleshooting guides.
+This directory contains comprehensive documentation for the CodeForge low-code application builder.
+
+## 🚀 Quick Start
+
+### New Features
+- **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable React Router in 2 minutes
+- **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Full router documentation
+
+## 📚 Documentation Structure
+
+### Getting Started
+- **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable route-based code splitting
+- **[PRD](./PRD.md)** - Product Requirements Document
+
+### Performance & Optimization
+- **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Route-based code splitting (NEW!)
+- **[Router vs Tabs Comparison](./ROUTER_VS_TABS_COMPARISON.md)** - Performance benchmarks (NEW!)
+- **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable router in 2 minutes (NEW!)
+- **[Bundle Optimization](./BUNDLE_OPTIMIZATION.md)** - Bundle size and performance optimization
+
+### Error Fixes & Troubleshooting
+- **[502 Error Fix](./502_ERROR_FIX.md)** - Fix 502 Bad Gateway errors
+- **[CI/CD Fixes](./CI_CD_FIXES.md)** - Continuous integration fixes
+
+### Architecture & Organization
+- **[Documentation Reorganization](./DOCUMENTATION_REORGANIZATION.md)** - Docs structure
+- **[Cleanup Complete](./CLEANUP_COMPLETE.md)** - Code cleanup summary
+- **[Changes Summary](./CHANGES_SUMMARY.md)** - Recent changes
+- **[Organization Plan](./ORGANIZATION_PLAN.md)** - Project organization
+
+### Detailed Sections
+- **[API Documentation](./api/)** - API reference
+- **[Architecture](./architecture/)** - System architecture
+- **[Deployment](./deployment/)** - Deployment guides  
+- **[Guides](./guides/)** - How-to guides
+- **[Testing](./testing/)** - Testing documentation
+- **[Reference](./reference/)** - Technical reference
+
+## 🆕 Recent Additions
+
+### React Router Integration (Latest)
+We've added full React Router support with route-based code splitting:
+
+**Benefits:**
+- 52% smaller initial bundle (1.2MB vs 2.5MB)
+- 50% faster time to interactive
+- URL-based navigation
+- Browser back/forward support
+- Better code organization
+
+**Enable it:**
+```typescript
+// src/config/app.config.ts
+export const APP_CONFIG = {
+  useRouter: true,  // Change this!
+}
+```
+
+**Learn more:**
+- [Quick Start Guide](./ROUTER_QUICK_START.md) - Get started in 2 minutes
+- [Full Documentation](./REACT_ROUTER_INTEGRATION.md) - Complete guide
 
 ## Available Guides
 

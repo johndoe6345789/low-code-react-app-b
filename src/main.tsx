@@ -14,8 +14,12 @@ import "@github/spark/spark"
 console.log('[INIT] ✅ Spark SDK imported')
 
 console.log('[INIT] 📦 Importing App component')
-import App from './App.tsx'
-console.log('[INIT] ✅ App component imported')
+import { APP_CONFIG } from './config/app.config.ts'
+import AppTabs from './App.tsx'
+import AppRouter from './App.router.tsx'
+
+const App = APP_CONFIG.useRouter ? AppRouter : AppTabs
+console.log('[INIT] ✅ App component imported - Mode:', APP_CONFIG.useRouter ? 'Router' : 'Tabs')
 
 console.log('[INIT] 📦 Importing ErrorFallback')
 import { ErrorFallback } from './ErrorFallback.tsx'
