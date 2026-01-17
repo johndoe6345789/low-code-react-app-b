@@ -27,6 +27,13 @@ commands:
             - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
 
+  install-dependencies:
+    description: 'Install npm dependencies'
+    steps:
+      - run:
+          name: Install dependencies
+          command: npm install --legacy-peer-deps
+
   save-dependencies:
     description: 'Save npm dependencies to cache'
     steps:
@@ -55,9 +62,7 @@ jobs:
     steps:
       - checkout
       - restore-dependencies
-      - run:
-          name: Install dependencies
-          command: npm ci
+      - install-dependencies
       - save-dependencies
       - run:
           name: Run ESLint
@@ -72,9 +77,7 @@ jobs:
     steps:
       - checkout
       - restore-dependencies
-      - run:
-          name: Install dependencies
-          command: npm ci
+      - install-dependencies
       - save-dependencies
       - run:
           name: Run unit tests
@@ -91,9 +94,7 @@ jobs:
     steps:
       - checkout
       - restore-dependencies
-      - run:
-          name: Install dependencies
-          command: npm ci
+      - install-dependencies
       - save-dependencies
       - run:
           name: Build application
@@ -112,9 +113,7 @@ jobs:
     steps:
       - checkout
       - restore-dependencies
-      - run:
-          name: Install dependencies
-          command: npm ci
+      - install-dependencies
       - save-dependencies
       - attach_workspace:
           at: .
@@ -139,9 +138,7 @@ jobs:
     steps:
       - checkout
       - restore-dependencies
-      - run:
-          name: Install dependencies
-          command: npm ci
+      - install-dependencies
       - save-dependencies
       - run:
           name: Run npm audit
