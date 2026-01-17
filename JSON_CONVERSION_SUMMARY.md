@@ -1,8 +1,11 @@
 # JSON-Driven Page Conversion - Summary
 
-## ✅ Completed
+## ✅ Completed - Phase 1 & 2
 
-### Three Pages Converted to JSON Configuration
+> **Note**: This document covers Phase 1 (Models, Component Trees, Workflows).  
+> For Phase 2 (Lambdas, Styling, Flask API), see [JSON_CONVERSION_PHASE_2.md](./JSON_CONVERSION_PHASE_2.md)
+
+### Phase 1: Three Pages Converted to JSON Configuration
 
 1. **Models Designer**
    - JSON Schema: `src/config/pages/model-designer.json`
