@@ -1,4 +1,4 @@
-FROM node:20-slim AS builder
+FROM node:lts-trixie AS builder
 
 WORKDIR /app
 
