@@ -1,42 +1,71 @@
 # Removed Duplicate Components
 
-The following components were replaced in favor of their JSON-based versions as part of the JSON Component Tree architecture migration.
+The following components were removed in favor of their JSON-based versions as part of the JSON Component Tree architecture migration.
 
-## Replaced Files (Now Export JSON Versions)
-1. `ModelDesigner.tsx` → Now exports `JSONModelDesigner`
-2. `ComponentTreeManager.tsx` → Now exports `JSONComponentTreeManager`
-3. `WorkflowDesigner.tsx` → Now exports `JSONWorkflowDesigner`
-4. `LambdaDesigner.tsx` → Now exports `JSONLambdaDesigner`
-5. `FlaskDesigner.tsx` → Now exports `JSONFlaskDesigner`
-6. `StyleDesigner.tsx` → Now exports `JSONStyleDesigner`
-7. `ProjectDashboard.tsx` → Replaced with JSON-driven implementation from `ProjectDashboard.new.tsx`
+## Files Removed (Iteration 6 - Final Cleanup)
 
-## Registry Updates
-The `component-registry.json` was updated to point all component references to their JSON-based implementations:
-- All designer components now use JSON-based PageRenderer
-- Removed "experimental" tags from JSON implementations
-- Updated descriptions to reflect JSON-driven architecture
+### Stub Files Deleted
+These files were simple re-export stubs that are no longer needed since the component registry points directly to JSON versions:
 
-## Implementation Strategy
-Instead of deleting the old files, they now re-export the JSON versions. This maintains backward compatibility while ensuring all code paths use the JSON-driven architecture.
+1. ❌ **DELETED**: `src/components/ModelDesigner.tsx` 
+   - Was: `export { JSONModelDesigner as ModelDesigner } from './JSONModelDesigner'`
+   - Now: Use `JSONModelDesigner` directly (via component registry)
 
-**Example:**
-```tsx
-// ModelDesigner.tsx
-export { JSONModelDesigner as ModelDesigner } from './JSONModelDesigner'
+2. ❌ **DELETED**: `src/components/ComponentTreeManager.tsx`
+   - Was: `export { JSONComponentTreeManager as ComponentTreeManager } from './JSONComponentTreeManager'`
+   - Now: Use `JSONComponentTreeManager` directly (via component registry)
+
+3. ❌ **DELETED**: `src/components/WorkflowDesigner.tsx`
+   - Was: `export { JSONWorkflowDesigner as WorkflowDesigner } from './JSONWorkflowDesigner'`
+   - Now: Use `JSONWorkflowDesigner` directly (via component registry)
+
+4. ❌ **DELETED**: `src/components/LambdaDesigner.tsx`
+   - Was: `export { JSONLambdaDesigner as LambdaDesigner } from './JSONLambdaDesigner'`
+   - Now: Use `JSONLambdaDesigner` directly (via component registry)
+
+5. ❌ **DELETED**: `src/components/FlaskDesigner.tsx`
+   - Was: `export { JSONFlaskDesigner as FlaskDesigner } from './JSONFlaskDesigner'`
+   - Now: Use `JSONFlaskDesigner` directly (via component registry)
+
+6. ❌ **DELETED**: `src/components/StyleDesigner.tsx`
+   - Was: `export { JSONStyleDesigner as StyleDesigner } from './JSONStyleDesigner'`
+   - Now: Use `JSONStyleDesigner` directly (via component registry)
+
+### Duplicate Files Deleted
+7. ❌ **DELETED**: `src/components/ProjectDashboard.new.tsx`
+   - Was: Identical copy of `ProjectDashboard.tsx`
+   - Now: Single source `ProjectDashboard.tsx` (JSON-driven)
+
+## Registry Configuration
+The `component-registry.json` already points to JSON versions, making stub files unnecessary:
+
+```json
+{
+  "name": "ModelDesigner",
+  "path": "@/components/JSONModelDesigner",
+  "export": "JSONModelDesigner"
+}
 ```
+
+## Migration Impact
+- ✅ **No breaking changes** - Component registry handles all routing
+- ✅ **Cleaner codebase** - Removed 7 unnecessary files
+- ✅ **Single source of truth** - All designer components use JSON architecture
+- ✅ **Improved maintainability** - No stub files to keep in sync
 
 ## Benefits
 - ✅ Single source of truth using JSON-driven component trees
 - ✅ More maintainable and configurable components
 - ✅ Aligns with Redux + IndexedDB integration strategy
-- ✅ Backward compatible with existing imports
-- ✅ Reduced code duplication by ~6 components
+- ✅ Eliminated unnecessary file indirection
+- ✅ Reduced code duplication by 7 files
 
 ## Files Kept (Not Duplicates)
 The following similarly-named files serve different purposes and were kept:
-- `ConflictResolutionDemo.tsx` vs `ConflictResolutionPage.tsx` (demo vs UI)
-- `PersistenceExample.tsx` vs `PersistenceDashboard.tsx` (example vs dashboard)
-- `StorageExample.tsx` vs `StorageSettings.tsx` (different features)
-- `AtomicComponentDemo.tsx` vs `AtomicComponentShowcase.tsx` vs `AtomicLibraryShowcase.tsx` (different demos)
+- `ConflictResolutionDemo.tsx` vs `ConflictResolutionPage.tsx` (demo component vs full page UI)
+- `PersistenceExample.tsx` vs `PersistenceDashboard.tsx` (interactive example vs monitoring dashboard)
+- `StorageExample.tsx` vs `StorageSettings.tsx` vs `StorageSettingsPanel.tsx` (different storage features)
+- `AtomicComponentDemo.tsx` vs `AtomicComponentShowcase.tsx` vs `AtomicLibraryShowcase.tsx` (different demo showcases)
 - `JSONUIShowcase.tsx` vs `JSONUIShowcasePage.tsx` (component vs page wrapper)
+- `DashboardDemoPage.tsx` vs `ComprehensiveDemoPage.tsx` vs `ComponentTreeDemoPage.tsx` vs `JSONDemoPage.tsx` (different demo pages)
+- `ReduxIntegrationDemo.tsx` (Redux demo, not duplicate)
