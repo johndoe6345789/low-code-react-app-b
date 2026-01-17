@@ -57,36 +57,27 @@ npm run test:e2e:report
 
 ### `e2e/smoke.spec.ts`
 Quick smoke tests that validate core functionality:
-- App loads
-- Main tabs work
-- Code export works
-- Monaco editor loads
-- No critical console errors
+- App loads without critical errors
+- Navigation between dashboard tabs
+- Monaco editor loads properly
+- Console error monitoring
 
-**Use this for quick validation before commits.**
+**Use this for quick validation before commits. Run time: ~30-60 seconds**
 
 ### `e2e/codeforge.spec.ts`
-Comprehensive test suite covering:
-- **Core Functionality**: Navigation, tabs, export
-- **Code Editor**: File explorer, Monaco integration, file management
-- **Model Designer**: Prisma model creation and management
-- **Component Designer**: Component tree building
-- **Style Designer**: Theme editing, color pickers
-- **Export Functionality**: ZIP download, code generation
-- **Settings**: Next.js config, NPM packages
-- **Feature Toggles**: Enable/disable features
-- **Workflows**: n8n-style workflow system
-- **Flask API**: Backend designer
-- **Testing Tools**: Playwright, Storybook, Unit tests
-- **PWA Features**: Progressive web app settings
-- **Favicon Designer**: Icon generation
-- **Documentation**: Built-in docs
-- **Dashboard**: Project overview
-- **Keyboard Shortcuts**: Hotkey validation
-- **Project Management**: Save/load functionality
-- **Error Handling**: Error repair and console validation
-- **Responsive Design**: Mobile/tablet viewports
-- **Code Generation Quality**: Valid JSON, Prisma schemas, theme configs
+Focused test suite covering:
+- **Core Functionality**: App loads, navigation, tab switching
+- **Code Editor**: Monaco editor integration
+- **Responsive Design**: Mobile and tablet viewports
+
+**Run time: ~45-90 seconds**
+
+### Test Timeouts
+All tests now have individual timeouts configured:
+- Standard tests: 30 seconds
+- Monaco/heavy component tests: 45 seconds
+- Global test timeout: 60 seconds
+- Web server startup: 180 seconds (3 minutes)
 
 ## Test Coverage
 
@@ -219,9 +210,21 @@ Traces are captured on first retry: `playwright show-trace trace.zip`
 ## Performance Benchmarks
 
 Expected test durations:
-- **Smoke tests**: ~30 seconds
-- **Full test suite**: ~5-8 minutes
-- **Single feature test**: ~20-60 seconds
+- **Smoke tests**: ~30-60 seconds (4 focused tests)
+- **Full test suite**: ~2-3 minutes (7 total tests)
+- **Single feature test**: ~15-45 seconds
+
+## Test Configuration
+
+### Playwright Config Highlights
+- **Test timeout**: 60 seconds per test
+- **Expect timeout**: 15 seconds for assertions
+- **Action timeout**: 15 seconds for interactions
+- **Navigation timeout**: 30 seconds for page loads
+- **Web server timeout**: 180 seconds (3 minutes to start dev server)
+- **Retries in CI**: 2 retries for flaky tests
+- **Browser**: Chromium only (for speed and consistency)
+- **Output**: Pipe stdout/stderr for better debugging
 
 ## Coverage Goals
 
