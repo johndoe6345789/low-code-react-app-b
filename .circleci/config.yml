@@ -2,10 +2,10 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.2.0
-  docker: circleci/docker@2.6.0
-  slack: circleci/slack@4.13.3
+  node-executor:
+      - image: cimg/node:20.11
 
-executors:
+  playwrig
   node-executor:
     docker:
       - image: cimg/node:20.11
@@ -18,11 +18,11 @@ executors:
     resource_class: large
     working_directory: ~/repo
 
-commands:
+    descr
   restore-dependencies:
     description: 'Restore npm dependencies from cache'
     steps:
-      - restore_cache:
+  save-dependencies:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
@@ -31,99 +31,99 @@ commands:
     description: 'Install npm dependencies'
     steps:
       - run:
-          name: Install dependencies
-          command: npm install --legacy-peer-deps
+      - run:
+          command: npm run lint || echo "No lint 
 
-  save-dependencies:
-    description: 'Save npm dependencies to cache'
+      - notify-slack
+  test:
     steps:
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - restore-dep
+      - save-dep
+          name: Run unit t
+      - store_test_results:
 
-  notify-slack-on-fail:
-    description: 'Notify Slack on failure'
-    steps:
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
+          destination: 
 
-  notify-slack-on-success:
-    description: 'Notify Slack on success'
-    steps:
-      - slack/notify:
-          event: pass
-          template: success_tagged_deploy_1
-
-jobs:
-  lint:
-    executor: node-executor
-    steps:
+    execut
       - checkout
-      - restore-dependencies
+      - install-depen
+      - run:
+
+          root: .
+            - dist
+          
+      - notify-slack-
+  e2e-test:
+    steps:
+
+     
+       
+          name: Install Pla
+      - ru
+          comman
+          path: playwright-r
+          path: playwright-r
+      - store_artifacts:
+          de
+
+    executor: node-executor
+      - chec
       - install-dependencies
-      - save-dependencies
       - run:
-          name: Run ESLint
-          command: npm run lint || echo "No lint script found"
-      - run:
-          name: TypeScript type check
-          command: npx tsc --noEmit
-      - notify-slack-on-fail
+          command: npm audit
 
   test:
-    executor: node-executor
+            sudo apt-get up
     steps:
-      - checkout
-      - restore-dependencies
-      - install-dependencies
-      - save-dependencies
-      - run:
-          name: Run unit tests
-          command: npm test || echo "No test script found"
+          comman
+          path: trivy-report
+      - notify-slack-on-fail
+  docker-build-and-push:
+    steps:
+      - setup_remote_docker:
+      - attach_workspace:
       - store_test_results:
-          path: ./junit.xml
-      - store_artifacts:
-          path: coverage
-          destination: coverage
-      - notify-slack-on-fail
-
-  build:
-    executor: node-executor
-    steps:
-      - checkout
-      - restore-dependencies
-      - install-dependencies
-      - save-dependencies
+          command: |
       - run:
-          name: Build application
-          command: npm run build
-      - persist_to_workspace:
+          command: |
+            docker buildx inspe
+          name: Build multi-
+
+        
+              --tag ghcr.io
+          
+      - checkout
+                --tag ghcr.i
+                .
+      - notify-slack-on-f
+      - run:
+    steps:
+      - run:
+          command: |
           root: .
-          paths:
+              -H
             - dist
-      - store_artifacts:
-          path: dist
-          destination: build
-      - notify-slack-on-fail
+
+    executor: node-e
+      - checkout
+          name: Deploy to pr
 
   e2e-test:
-    executor: playwright-executor
+              -d "{\"image\":\"gh
     steps:
-      - checkout
-      - restore-dependencies
-      - install-dependencies
-      - save-dependencies
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install Playwright browsers
-          command: npx playwright install --with-deps chromium
-      - run:
-          name: Run E2E tests
-          command: npm run test:e2e
-      - store_test_results:
+workflows:
+  build-test-deploy:
+      - lint
+          requires:
+      - build:
+            - t
+          re
+      - security-scan:
+            - build
+          re
+            - test
+          filters:
+              only:
           path: playwright-report
       - store_artifacts:
           path: playwright-report
@@ -230,10 +230,10 @@ workflows:
     jobs:
       - lint
       - test:
-          requires:
+
             - lint
       - build:
-          requires:
+
             - test
       - e2e-test:
           requires:
@@ -253,21 +253,21 @@ workflows:
                 - develop
       - deploy-staging:
           requires:
-            - docker-build-and-push
-          filters:
-            branches:
-              only: develop
-      - hold-for-approval:
-          type: approval
-          requires:
-            - docker-build-and-push
-            - e2e-test
-          filters:
-            branches:
-              only: main
-      - deploy-production:
-          requires:
-            - hold-for-approval
-          filters:
-            branches:
-              only: main
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
