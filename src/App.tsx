@@ -313,12 +313,18 @@ function AppLayout() {
 
 function App() {
   console.log('[APP] 🚀 App component initializing')
+  console.log('[APP] 🌐 Current URL:', window.location.href)
+  console.log('[APP] 📍 Current pathname:', window.location.pathname)
+  console.log('[APP] 🔍 Current search:', window.location.search)
+  console.log('[APP] 🏷️ Current hash:', window.location.hash)
+  
   console.log('[APP] 🌱 Initializing seed data hook')
   const { loadSeedData } = useSeedData()
   const [appReady, setAppReady] = useState(false)
   
   useEffect(() => {
     console.log('[APP] 🚀 Initialization effect triggered')
+    console.log('[APP] ⏰ Timestamp:', new Date().toISOString())
     console.time('[APP] Seed data loading')
     
     const timer = setTimeout(() => {
@@ -356,7 +362,7 @@ function App() {
     }
   }, [loadSeedData])
 
-  console.log('[APP] 🎨 Rendering App component')
+  console.log('[APP] 🎨 Rendering App component, appReady:', appReady)
   
   return (
     <>

@@ -72,12 +72,19 @@ export function createRoutes(
   stateContext: any,
   actionContext: any
 ): RouteObject[] {
-  console.log('[ROUTES] 🏗️ Creating routes with feature toggles')
+  console.log('[ROUTES] 🏗️ Creating routes with feature toggles:', featureToggles)
   const enabledPages = getEnabledPages(featureToggles)
-  console.log('[ROUTES] 📄 Enabled pages:', enabledPages.map(p => p.id).join(', '))
+  console.log('[ROUTES] 📄 Enabled pages count:', enabledPages.length)
+  console.log('[ROUTES] 📄 Enabled page IDs:', enabledPages.map(p => p.id).join(', '))
+  console.log('[ROUTES] 📄 Enabled pages details:', JSON.stringify(enabledPages.map(p => ({ 
+    id: p.id, 
+    component: p.component, 
+    isRoot: p.isRoot,
+    enabled: p.enabled 
+  })), null, 2))
 
   const rootPage = enabledPages.find(p => p.isRoot)
-  console.log('[ROUTES] 🏠 Root page:', rootPage?.id || 'none (will use dashboard)')
+  console.log('[ROUTES] 🏠 Root page search result:', rootPage ? `Found: ${rootPage.id} (${rootPage.component})` : 'NOT FOUND - will redirect to /dashboard')
 
   const routes: RouteObject[] = enabledPages
     .filter(p => !p.isRoot)
