@@ -3,10 +3,12 @@ import { ReactNode } from 'react'
 export type ComponentType = 
   | 'div' | 'section' | 'article' | 'header' | 'footer' | 'main'
   | 'Button' | 'Card' | 'CardHeader' | 'CardTitle' | 'CardDescription' | 'CardContent' | 'CardFooter'
-  | 'Input' | 'Select' | 'Checkbox' | 'Switch'
+  | 'Input' | 'TextArea' | 'Select' | 'Checkbox' | 'Radio' | 'Switch' | 'Slider' | 'NumberInput'
   | 'Badge' | 'Progress' | 'Separator' | 'Tabs' | 'Dialog'
-  | 'Text' | 'Heading' | 'Label' | 'List' | 'Grid'
-  | 'StatusBadge' | 'DataCard' | 'SearchInput' | 'ActionBar'
+  | 'Text' | 'Heading' | 'Label' | 'List' | 'Grid' | 'Stack' | 'Flex' | 'Container'
+  | 'Link' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
+  | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
+  | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
 
 export type ActionType =
   | 'create' | 'update' | 'delete' | 'navigate'

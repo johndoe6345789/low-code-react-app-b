@@ -83,7 +83,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "Flexible box layout container",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Stack",
@@ -91,7 +91,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "Vertical or horizontal stack layout",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Container",
@@ -99,7 +99,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "Centered container with max-width",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Button",
@@ -123,7 +123,7 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Multi-line text input",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Select",
@@ -147,7 +147,7 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Radio button selection",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Switch",
@@ -163,7 +163,7 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Numeric range slider",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "NumberInput",
@@ -171,7 +171,7 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Numeric input with increment/decrement",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "DatePicker",
@@ -227,7 +227,7 @@
       "category": "display",
       "canHaveChildren": true,
       "description": "Removable tag or chip",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Code",
@@ -235,7 +235,7 @@
       "category": "display",
       "canHaveChildren": true,
       "description": "Inline or block code display",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Image",
@@ -243,7 +243,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Image element with loading states",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Avatar",
@@ -251,7 +251,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "User avatar image",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Icon",
@@ -307,7 +307,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Loading spinner",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Skeleton",
@@ -315,7 +315,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Loading skeleton placeholder",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Link",
@@ -323,7 +323,7 @@
       "category": "navigation",
       "canHaveChildren": true,
       "description": "Hyperlink element",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Breadcrumb",
@@ -348,7 +348,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Alert notification message",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "InfoBox",
@@ -356,7 +356,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Information box with icon",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Notification",
@@ -388,7 +388,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Empty state placeholder",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "ErrorBadge",
@@ -420,7 +420,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Data table",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "DataTable",
@@ -436,7 +436,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Key-value pair display",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "Timeline",
@@ -452,7 +452,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Statistic card display",
-      "status": "planned"
+      "status": "supported"
     },
     {
       "type": "MetricCard",
@@ -496,13 +496,13 @@
     }
   ],
   "statistics": {
-    "total": 68,
-    "supported": 23,
-    "planned": 45,
+    "total": 60,
+    "supported": 43,
+    "planned": 17,
     "byCategory": {
-      "layout": 11,
+      "layout": 12,
       "input": 11,
-      "display": 17,
+      "display": 16,
       "navigation": 3,
       "feedback": 7,
       "data": 8,
