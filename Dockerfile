@@ -2,13 +2,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
-
-# Install all dependencies (including devDependencies needed for build)
-RUN npm ci
-
+# Copy all files including workspace packages to support npm workspaces
 COPY . .
 
+# Install dependencies
+# Note: npm ci doesn't work with workspace: protocol, so we use npm install
+RUN npm install
+
+# Build the application
 RUN npm run build
 
 FROM nginx:alpine AS runtime
