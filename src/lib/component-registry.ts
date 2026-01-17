@@ -26,6 +26,11 @@ export const ComponentRegistry = {
     'ModelDesigner'
   ),
   
+  JSONModelDesigner: lazyWithPreload(
+    () => import('@/components/JSONModelDesigner').then(m => ({ default: m.JSONModelDesigner })),
+    'JSONModelDesigner'
+  ),
+  
   ComponentTreeBuilder: lazyWithPreload(
     () => import('@/components/ComponentTreeBuilder').then(m => ({ default: m.ComponentTreeBuilder })),
     'ComponentTreeBuilder'
@@ -36,12 +41,22 @@ export const ComponentRegistry = {
     'ComponentTreeManager'
   ),
   
+  JSONComponentTreeManager: lazyWithPreload(
+    () => import('@/components/JSONComponentTreeManager').then(m => ({ default: m.JSONComponentTreeManager })),
+    'JSONComponentTreeManager'
+  ),
+  
   WorkflowDesigner: lazyWithPreload(
     () => {
       preloadMonacoEditor()
       return import('@/components/WorkflowDesigner').then(m => ({ default: m.WorkflowDesigner }))
     },
     'WorkflowDesigner'
+  ),
+  
+  JSONWorkflowDesigner: lazyWithPreload(
+    () => import('@/components/JSONWorkflowDesigner').then(m => ({ default: m.JSONWorkflowDesigner })),
+    'JSONWorkflowDesigner'
   ),
   
   LambdaDesigner: lazyWithPreload(

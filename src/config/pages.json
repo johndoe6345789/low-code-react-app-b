@@ -57,6 +57,19 @@
       }
     },
     {
+      "id": "models-json",
+      "title": "Models (JSON)",
+      "icon": "Database",
+      "component": "JSONModelDesigner",
+      "enabled": true,
+      "toggleKey": "modelsJSON",
+      "order": 3.5,
+      "props": {
+        "state": ["models"],
+        "actions": ["onModelsChange:setModels"]
+      }
+    },
+    {
       "id": "components",
       "title": "Components",
       "icon": "Cube",
@@ -85,6 +98,19 @@
       }
     },
     {
+      "id": "component-trees-json",
+      "title": "Component Trees (JSON)",
+      "icon": "Tree",
+      "component": "JSONComponentTreeManager",
+      "enabled": true,
+      "toggleKey": "componentTreesJSON",
+      "order": 5.5,
+      "props": {
+        "state": ["trees:componentTrees"],
+        "actions": ["onTreesChange:setComponentTrees"]
+      }
+    },
+    {
       "id": "workflows",
       "title": "Workflows",
       "icon": "GitBranch",
@@ -93,6 +119,19 @@
       "toggleKey": "workflows",
       "shortcut": "ctrl+6",
       "order": 6,
+      "props": {
+        "state": ["workflows"],
+        "actions": ["onWorkflowsChange:setWorkflows"]
+      }
+    },
+    {
+      "id": "workflows-json",
+      "title": "Workflows (JSON)",
+      "icon": "GitBranch",
+      "component": "JSONWorkflowDesigner",
+      "enabled": true,
+      "toggleKey": "workflowsJSON",
+      "order": 6.5,
       "props": {
         "state": ["workflows"],
         "actions": ["onWorkflowsChange:setWorkflows"]

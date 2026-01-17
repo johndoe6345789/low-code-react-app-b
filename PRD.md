@@ -2,6 +2,12 @@
 
 Build a comprehensive JSON-driven UI system that allows building entire user interfaces from declarative JSON schemas, including a visual drag-and-drop schema editor for creating JSON UI configs, breaking down complex components into atomic pieces, and extracting reusable logic into custom hooks for maximum maintainability and rapid development.
 
+**Recent Updates:**
+- ✅ Converted Models, Component Trees, and Workflows pages to JSON-driven configuration
+- ✅ Created JSON schema definitions for each page with data sources, computed values, and bindings
+- ✅ Added JSON-based versions of pages alongside traditional implementations for comparison
+- ✅ Implemented seed data for all three converted pages with realistic examples
+
 **Experience Qualities**:
 1. **Modular** - Every component under 150 LOC, highly composable and reusable
 2. **Declarative** - Define UIs through configuration rather than imperative code

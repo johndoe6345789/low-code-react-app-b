@@ -1,77 +1,30 @@
-import { useState, useEffect, useCallback } from 'react'
-
+import { useKV } from '@github/spark/hooks'
 
 export type DataSourceType = 'kv' | 'static' | 'computed'
 
 export interface DataSourceConfig<T = any> {
-  defaultVal
-  dependencies?: strin
+  type: DataSourceType
+  key?: string
+  defaultValue?: T
+  compute?: (allData: Record<string, any>) => T
+  dependencies?: string[]
+}
 
-  const [value, se
-  return {
-    setData: setValue,
- 
+export function useKVDataSource<T = any>(key: string, defaultValue?: T) {
+  return useKV(key, defaultValue)
+}
 
+export function useStaticDataSource<T = any>(defaultValue: T) {
+  return [defaultValue, () => {}, () => {}] as const
+}
 
-  compute: (allData: Record<st
-  dependencies: string[],
+export function useComputedDataSource<T = any>(
+  compute: (allData: Record<string, any>) => T,
+  dependencies: Record<string, any>
 ) {
+  return compute(dependencies)
+}
 
-    try {
-    
-      consol
-  }, dependencies.
-  return {
-      deleteData: deleteValue,
-      isLoading: false,
-      error: null,
-    }
-  }
-
-  if (config.type === 'computed' && config.compute) {
-    const [computed, setComputed] = useState<T>(() => config.compute(allData))
-
-    useEffect(() => {
-      const newValue = config.compute!(allData)
-      setComputed(newValue)
-    }, config.dependencies?.map(dep => allData[dep]) || [allData])
-
-    return {
-      data: computed,
-      setData: () => {},
-      deleteData: () => {},
-      isLoading: false,
-      error: null,
-    }
-  }
-
-  const [staticData] = useState<T>(config.defaultValue as T)
-
-      onUp
-    })
-
-    allData,
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export function useMultipleDataSources(_sources: DataSourceConfig[]) {
+  return {}
+}

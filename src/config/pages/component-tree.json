@@ -1,18 +1,18 @@
 {
-  "id": "model-designer",
-  "name": "Model Designer",
+  "id": "component-tree",
+  "name": "Component Tree Manager",
   "layout": {
     "type": "single"
   },
   "dataSources": [
     {
-      "id": "models",
+      "id": "trees",
       "type": "kv",
-      "key": "app-models",
+      "key": "app-component-trees",
       "defaultValue": []
     },
     {
-      "id": "selectedModelId",
+      "id": "selectedTreeId",
       "type": "static",
       "defaultValue": null
     },
@@ -22,21 +22,26 @@
       "defaultValue": false
     },
     {
-      "id": "newModelName",
+      "id": "newTreeName",
       "type": "static",
       "defaultValue": ""
     },
     {
-      "id": "selectedModel",
-      "type": "computed",
-      "compute": "(data) => data.models?.find(m => m.id === data.selectedModelId) || null",
-      "dependencies": ["models", "selectedModelId"]
+      "id": "newTreeDescription",
+      "type": "static",
+      "defaultValue": ""
     },
     {
-      "id": "modelCount",
+      "id": "selectedTree",
       "type": "computed",
-      "compute": "(data) => (data.models || []).length",
-      "dependencies": ["models"]
+      "compute": "(data) => data.trees?.find(t => t.id === data.selectedTreeId) || null",
+      "dependencies": ["trees", "selectedTreeId"]
+    },
+    {
+      "id": "treeCount",
+      "type": "computed",
+      "compute": "(data) => (data.trees || []).length",
+      "dependencies": ["trees"]
     }
   ],
   "components": [
@@ -44,7 +49,7 @@
       "id": "root",
       "type": "div",
       "props": {
-        "className": "h-full flex bg-gradient-to-br from-background via-background to-primary/5"
+        "className": "h-full flex bg-gradient-to-br from-background via-background to-accent/5"
       },
       "children": [
         {
@@ -73,18 +78,18 @@
                       "type": "Heading",
                       "props": {
                         "className": "text-xl font-bold",
-                        "children": "Data Models"
+                        "children": "Component Trees"
                       }
                     },
                     {
-                      "id": "model-count-badge",
+                      "id": "tree-count-badge",
                       "type": "Badge",
                       "props": {
                         "variant": "secondary"
                       },
                       "bindings": {
                         "children": {
-                          "source": "modelCount"
+                          "source": "treeCount"
                         }
                       }
                     }
@@ -95,7 +100,7 @@
                   "type": "Button",
                   "props": {
                     "className": "w-full",
-                    "children": "Create Model"
+                    "children": "Create Tree"
                   },
                   "events": [
                     {
@@ -114,7 +119,7 @@
               ]
             },
             {
-              "id": "model-list",
+              "id": "tree-list",
               "type": "div",
               "props": {
                 "className": "flex-1 overflow-auto p-4 space-y-2"
@@ -137,7 +142,7 @@
                 "className": "flex-1 flex items-center justify-center"
               },
               "condition": {
-                "source": "selectedModel",
+                "source": "selectedTree",
                 "transform": "(val) => !val"
               },
               "children": [
@@ -153,7 +158,7 @@
                       "type": "Heading",
                       "props": {
                         "className": "text-2xl font-bold text-muted-foreground",
-                        "children": "No Model Selected"
+                        "children": "No Tree Selected"
                       }
                     },
                     {
@@ -161,7 +166,7 @@
                       "type": "Text",
                       "props": {
                         "className": "text-muted-foreground",
-                        "children": "Select a model from the sidebar or create a new one"
+                        "children": "Select a component tree from the sidebar or create a new one"
                       }
                     },
                     {
@@ -169,7 +174,7 @@
                       "type": "Button",
                       "props": {
                         "variant": "default",
-                        "children": "Create Your First Model"
+                        "children": "Create Your First Tree"
                       },
                       "events": [
                         {
@@ -190,45 +195,45 @@
               ]
             },
             {
-              "id": "model-editor",
+              "id": "tree-editor",
               "type": "div",
               "props": {
                 "className": "flex-1 p-6 overflow-auto"
               },
               "condition": {
-                "source": "selectedModel",
+                "source": "selectedTree",
                 "transform": "(val) => !!val"
               },
               "children": [
                 {
-                  "id": "model-header",
+                  "id": "tree-header",
                   "type": "div",
                   "props": {
                     "className": "mb-6"
                   },
                   "children": [
                     {
-                      "id": "model-name",
+                      "id": "tree-name",
                       "type": "Heading",
                       "props": {
                         "className": "text-3xl font-bold mb-2"
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedModel",
+                          "source": "selectedTree",
                           "path": "name"
                         }
                       }
                     },
                     {
-                      "id": "model-description",
+                      "id": "tree-description",
                       "type": "Text",
                       "props": {
                         "className": "text-muted-foreground"
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedModel",
+                          "source": "selectedTree",
                           "path": "description"
                         }
                       }
@@ -236,39 +241,42 @@
                   ]
                 },
                 {
-                  "id": "fields-card",
+                  "id": "tree-canvas",
                   "type": "Card",
+                  "props": {
+                    "className": "min-h-[500px]"
+                  },
                   "children": [
                     {
-                      "id": "fields-header",
+                      "id": "canvas-header",
                       "type": "CardHeader",
                       "children": [
                         {
-                          "id": "fields-title",
+                          "id": "canvas-title",
                           "type": "CardTitle",
                           "props": {
-                            "children": "Model Fields"
+                            "children": "Component Hierarchy"
                           }
                         },
                         {
-                          "id": "fields-description",
+                          "id": "canvas-description",
                           "type": "CardDescription",
                           "props": {
-                            "children": "Define the fields and their types for this model"
+                            "children": "Build your component tree structure"
                           }
                         }
                       ]
                     },
                     {
-                      "id": "fields-content",
+                      "id": "canvas-content",
                       "type": "CardContent",
                       "children": [
                         {
-                          "id": "fields-placeholder",
+                          "id": "canvas-placeholder",
                           "type": "div",
                           "props": {
-                            "className": "text-center text-muted-foreground py-8 border-2 border-dashed border-border rounded-lg",
-                            "children": "Add fields to define your data model"
+                            "className": "text-center text-muted-foreground py-12 border-2 border-dashed border-border rounded-lg",
+                            "children": "Component tree builder - Add components to build your hierarchy"
                           }
                         }
                       ]
