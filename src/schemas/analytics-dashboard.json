@@ -221,7 +221,7 @@
                       "props": { "placeholder": "Search users by name or email..." },
                       "events": [
                         {
-                          "event": "onChange",
+                          "event": "change",
                           "actions": [
                             {
                               "id": "update-filter",
