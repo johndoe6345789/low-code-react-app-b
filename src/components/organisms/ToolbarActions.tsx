@@ -6,6 +6,7 @@ import {
   Sparkle,
   Download,
   Wrench,
+  Eye,
 } from '@phosphor-icons/react'
 
 interface ToolbarActionsProps {
@@ -13,6 +14,7 @@ interface ToolbarActionsProps {
   onShowShortcuts: () => void
   onGenerateAI: () => void
   onExport: () => void
+  onPreview?: () => void
   onShowErrors?: () => void
   errorCount?: number
   showErrorButton?: boolean
@@ -23,6 +25,7 @@ export function ToolbarActions({
   onShowShortcuts,
   onGenerateAI,
   onExport,
+  onPreview,
   onShowErrors,
   errorCount = 0,
   showErrorButton = false,
@@ -46,6 +49,15 @@ export function ToolbarActions({
           />
           <ErrorBadge count={errorCount} size="sm" />
         </div>
+      )}
+
+      {onPreview && (
+        <ToolbarButton
+          icon={<Eye size={18} />}
+          label="Preview (Ctrl+P)"
+          onClick={onPreview}
+          variant="outline"
+        />
       )}
 
       <ToolbarButton

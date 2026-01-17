@@ -16,6 +16,7 @@ interface AppHeaderProps {
   onShowShortcuts: () => void
   onGenerateAI: () => void
   onExport: () => void
+  onPreview?: () => void
   onShowErrors: () => void
 }
 
@@ -31,6 +32,7 @@ export function AppHeader({
   onShowShortcuts,
   onGenerateAI,
   onExport,
+  onPreview,
   onShowErrors,
 }: AppHeaderProps) {
   return (
@@ -56,6 +58,7 @@ export function AppHeader({
             onShowShortcuts={onShowShortcuts}
             onGenerateAI={onGenerateAI}
             onExport={onExport}
+            onPreview={onPreview}
             onShowErrors={onShowErrors}
             errorCount={errorCount}
             showErrorButton={featureToggles.errorRepair && errorCount > 0}

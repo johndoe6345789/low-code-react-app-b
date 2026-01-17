@@ -37,6 +37,7 @@ const componentMap: Record<string, React.LazyExoticComponent<any>> = {
 
 const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })))
 const KeyboardShortcutsDialog = lazy(() => import('@/components/KeyboardShortcutsDialog').then(m => ({ default: m.KeyboardShortcutsDialog })))
+const PreviewDialog = lazy(() => import('@/components/PreviewDialog').then(m => ({ default: m.PreviewDialog })))
 const PWAInstallPrompt = lazy(() => import('@/components/PWAInstallPrompt').then(m => ({ default: m.PWAInstallPrompt })))
 const PWAUpdatePrompt = lazy(() => import('@/components/PWAUpdatePrompt').then(m => ({ default: m.PWAUpdatePrompt })))
 const PWAStatusBar = lazy(() => import('@/components/PWAStatusBar').then(m => ({ default: m.PWAStatusBar })))
@@ -81,6 +82,7 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchOpen, setSearchOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [previewOpen, setPreviewOpen] = useState(false)
   const [lastSaved] = useState<number | null>(Date.now())
   const [errorCount] = useState(0)
   const [appReady, setAppReady] = useState(false)
@@ -116,6 +118,7 @@ function App() {
     })),
     { key: 'k', ctrl: true, description: 'Search', action: () => setSearchOpen(true) },
     { key: '/', ctrl: true, description: 'Shortcuts', action: () => setShortcutsOpen(true) },
+    { key: 'p', ctrl: true, description: 'Preview', action: () => setPreviewOpen(true) },
   ])
 
   const getCurrentProject = () => ({
@@ -324,6 +327,7 @@ function App() {
         onShowShortcuts={() => setShortcutsOpen(true)}
         onGenerateAI={() => toast.info('AI generation coming soon')}
         onExport={() => toast.info('Export coming soon')}
+        onPreview={() => setPreviewOpen(true)}
         onShowErrors={() => setActiveTab('errors')}
       />
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
@@ -357,6 +361,9 @@ function App() {
 
       <Suspense fallback={null}>
         <KeyboardShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <PreviewDialog open={previewOpen} onOpenChange={setPreviewOpen} />
       </Suspense>
       <Suspense fallback={null}>
         <PWAInstallPrompt />
