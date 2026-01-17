@@ -188,7 +188,7 @@
                       },
                       "events": [
                         {
-                          "event": "change",
+                          "event": "onChange",
                           "actions": [
                             {
                               "id": "update-input",
