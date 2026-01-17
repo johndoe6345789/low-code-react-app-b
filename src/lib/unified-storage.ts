@@ -1,4 +1,4 @@
-export type StorageBackend = 'sqlite' | 'indexeddb' | 'sparkkv'
+export type StorageBackend = 'flask' | 'indexeddb' | 'sqlite' | 'sparkkv'
 
 export interface StorageAdapter {
   get<T>(key: string): Promise<T | undefined>
@@ -7,6 +7,67 @@ export interface StorageAdapter {
   keys(): Promise<string[]>
   clear(): Promise<void>
   close?(): Promise<void>
+}
+
+class FlaskBackendAdapter implements StorageAdapter {
+  private baseUrl: string
+
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl || localStorage.getItem('codeforge-flask-url') || 'http://localhost:5001'
+  }
+
+  private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+    })
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: response.statusText }))
+      throw new Error(error.error || `HTTP ${response.status}`)
+    }
+
+    return response.json()
+  }
+
+  async get<T>(key: string): Promise<T | undefined> {
+    try {
+      const result = await this.request<{ value: T }>(`/api/storage/${encodeURIComponent(key)}`)
+      return result.value
+    } catch (error: any) {
+      if (error.message?.includes('404') || error.message?.includes('not found')) {
+        return undefined
+      }
+      throw error
+    }
+  }
+
+  async set<T>(key: string, value: T): Promise<void> {
+    await this.request(`/api/storage/${encodeURIComponent(key)}`, {
+      method: 'PUT',
+      body: JSON.stringify({ value }),
+    })
+  }
+
+  async delete(key: string): Promise<void> {
+    await this.request(`/api/storage/${encodeURIComponent(key)}`, {
+      method: 'DELETE',
+    })
+  }
+
+  async keys(): Promise<string[]> {
+    const result = await this.request<{ keys: string[] }>('/api/storage/keys')
+    return result.keys
+  }
+
+  async clear(): Promise<void> {
+    await this.request('/api/storage/clear', {
+      method: 'POST',
+    })
+  }
 }
 
 class IndexedDBAdapter implements StorageAdapter {
@@ -278,19 +339,20 @@ class UnifiedStorage {
     if (this.initPromise) return this.initPromise
 
     this.initPromise = (async () => {
+      const preferFlask = localStorage.getItem('codeforge-prefer-flask') === 'true'
       const preferSQLite = localStorage.getItem('codeforge-prefer-sqlite') === 'true'
 
-      if (preferSQLite) {
+      if (preferFlask) {
         try {
-          console.log('[Storage] Attempting to initialize SQLite...')
-          const sqliteAdapter = new SQLiteAdapter()
-          await sqliteAdapter.get('_health_check')
-          this.adapter = sqliteAdapter
-          this.backend = 'sqlite'
-          console.log('[Storage] ✓ Using SQLite')
+          console.log('[Storage] Attempting to initialize Flask backend...')
+          const flaskAdapter = new FlaskBackendAdapter()
+          await flaskAdapter.get('_health_check')
+          this.adapter = flaskAdapter
+          this.backend = 'flask'
+          console.log('[Storage] ✓ Using Flask backend')
           return
         } catch (error) {
-          console.warn('[Storage] SQLite not available:', error)
+          console.warn('[Storage] Flask backend not available:', error)
         }
       }
 
@@ -305,6 +367,20 @@ class UnifiedStorage {
           return
         } catch (error) {
           console.warn('[Storage] IndexedDB not available:', error)
+        }
+      }
+
+      if (preferSQLite) {
+        try {
+          console.log('[Storage] Attempting to initialize SQLite...')
+          const sqliteAdapter = new SQLiteAdapter()
+          await sqliteAdapter.get('_health_check')
+          this.adapter = sqliteAdapter
+          this.backend = 'sqlite'
+          console.log('[Storage] ✓ Using SQLite')
+          return
+        } catch (error) {
+          console.warn('[Storage] SQLite not available:', error)
         }
       }
 
@@ -408,6 +484,7 @@ class UnifiedStorage {
     this.initPromise = null
 
     localStorage.removeItem('codeforge-prefer-sqlite')
+    localStorage.removeItem('codeforge-prefer-flask')
 
     await this.detectAndInitialize()
 
@@ -416,6 +493,39 @@ class UnifiedStorage {
     }
 
     console.log('[Storage] ✓ Migrated to IndexedDB')
+  }
+
+  async switchToFlask(backendUrl?: string): Promise<void> {
+    if (this.backend === 'flask') return
+
+    console.log('[Storage] Switching to Flask backend...')
+    const oldKeys = await this.keys()
+    const data: Record<string, any> = {}
+
+    for (const key of oldKeys) {
+      data[key] = await this.get(key)
+    }
+
+    if (this.adapter?.close) {
+      await this.adapter.close()
+    }
+
+    this.adapter = null
+    this.backend = null
+    this.initPromise = null
+
+    localStorage.setItem('codeforge-prefer-flask', 'true')
+    if (backendUrl) {
+      localStorage.setItem('codeforge-flask-url', backendUrl)
+    }
+
+    await this.detectAndInitialize()
+
+    for (const [key, value] of Object.entries(data)) {
+      await this.set(key, value)
+    }
+
+    console.log('[Storage] ✓ Migrated to Flask backend')
   }
 
   async exportData(): Promise<Record<string, any>> {

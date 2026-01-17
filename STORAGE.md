@@ -4,21 +4,22 @@ CodeForge now features a unified storage system that automatically selects the b
 
 ## Storage Backends
 
-The system supports three storage backends in order of preference:
+The system supports four storage backends in order of preference:
 
-### 1. **SQLite (Preferred)**
-- **Type**: On-disk database via WASM
-- **Persistence**: Data stored in browser localStorage as serialized SQLite database
+### 1. **Flask Backend (Optional)**
+- **Type**: Remote HTTP API with SQLite database
+- **Persistence**: Data stored on Flask server with SQLite
 - **Pros**: 
-  - SQL query support
-  - Better performance for complex queries
-  - More robust data integrity
-  - Works offline
+  - Cross-device synchronization
+  - Centralized data management
+  - SQL query support on server
+  - Scalable storage capacity
+  - Works with Docker
 - **Cons**: 
-  - Requires sql.js library (optional dependency)
-  - Slightly larger bundle size
-  - localStorage size limits (~5-10MB)
-- **Installation**: `npm install sql.js`
+  - Requires running backend server
+  - Network latency
+  - Requires configuration
+- **Setup**: See backend/README.md for installation
 
 ### 2. **IndexedDB (Default)**
 - **Type**: Browser-native key-value store
@@ -34,7 +35,21 @@ The system supports three storage backends in order of preference:
   - More complex API
   - Asynchronous only
 
-### 3. **Spark KV (Fallback)**
+### 3. **SQLite (Optional)**
+- **Type**: On-disk database via WASM
+- **Persistence**: Data stored in browser localStorage as serialized SQLite database
+- **Pros**: 
+  - SQL query support
+  - Better performance for complex queries
+  - More robust data integrity
+  - Works offline
+- **Cons**: 
+  - Requires sql.js library (optional dependency)
+  - Slightly larger bundle size
+  - localStorage size limits (~5-10MB)
+- **Installation**: `npm install sql.js`
+
+### 4. **Spark KV (Fallback)**
 - **Type**: Cloud key-value store
 - **Persistence**: Data stored in Spark runtime
 - **Pros**:
@@ -110,8 +125,9 @@ function StorageManager() {
   const {
     backend,
     isLoading,
-    switchToSQLite,
+    switchToFlask,
     switchToIndexedDB,
+    switchToSQLite,
     exportData,
     importData,
   } = useStorageBackend()
@@ -119,8 +135,11 @@ function StorageManager() {
   return (
     <div>
       <p>Current backend: {backend}</p>
-      <button onClick={switchToSQLite}>Switch to SQLite</button>
+      <button onClick={() => switchToFlask('http://localhost:5001')}>
+        Switch to Flask
+      </button>
       <button onClick={switchToIndexedDB}>Switch to IndexedDB</button>
+      <button onClick={switchToSQLite}>Switch to SQLite</button>
       <button onClick={async () => {
         const data = await exportData()
         console.log('Exported:', data)
@@ -137,11 +156,14 @@ function StorageManager() {
 The system supports seamless migration between storage backends:
 
 ```typescript
-// Migrate from IndexedDB to SQLite (preserves all data)
-await unifiedStorage.switchToSQLite()
+// Migrate to Flask backend
+await unifiedStorage.switchToFlask('http://localhost:5001')
 
-// Migrate from SQLite to IndexedDB (preserves all data)
+// Migrate to IndexedDB (preserves all data)
 await unifiedStorage.switchToIndexedDB()
+
+// Migrate to SQLite (preserves all data)
+await unifiedStorage.switchToSQLite()
 ```
 
 When switching backends:
@@ -176,30 +198,37 @@ await unifiedStorage.importData(imported)
 
 The system automatically detects and selects the best available backend on initialization:
 
-1. **SQLite** is attempted first if `localStorage.getItem('codeforge-prefer-sqlite') === 'true'`
+1. **Flask** is attempted first if `localStorage.getItem('codeforge-prefer-flask') === 'true'`
 2. **IndexedDB** is attempted next if available in the browser
-3. **Spark KV** is used as a last resort fallback
+3. **SQLite** is attempted if `localStorage.getItem('codeforge-prefer-sqlite') === 'true'`
+4. **Spark KV** is used as a last resort fallback
 
 You can check which backend is in use:
 
 ```typescript
 const backend = await unifiedStorage.getBackend()
-// Returns: 'sqlite' | 'indexeddb' | 'sparkkv' | null
+// Returns: 'flask' | 'indexeddb' | 'sqlite' | 'sparkkv' | null
 ```
 
 ## Performance Considerations
 
-### SQLite
-- Best for: Complex queries, relational data, large datasets
-- Read: Fast (in-memory queries)
-- Write: Moderate (requires serialization to localStorage)
-- Capacity: Limited by localStorage (~5-10MB)
+### Flask Backend
+- Best for: Cross-device sync, centralized data, team collaboration
+- Read: Moderate (network latency)
+- Write: Moderate (network latency)
+- Capacity: Large (server disk space)
 
 ### IndexedDB
-- Best for: Simple key-value storage, large data volumes
+- Best for: Simple key-value storage, large data volumes, offline-first
 - Read: Very fast (optimized for key lookups)
 - Write: Very fast (optimized browser API)
 - Capacity: Large (typically 50MB+, can scale to GBs)
+
+### SQLite
+- Best for: Complex queries, relational data, SQL support
+- Read: Fast (in-memory queries)
+- Write: Moderate (requires serialization to localStorage)
+- Capacity: Limited by localStorage (~5-10MB)
 
 ### Spark KV
 - Best for: Cross-device sync, cloud persistence
@@ -208,6 +237,15 @@ const backend = await unifiedStorage.getBackend()
 - Capacity: Unlimited
 
 ## Troubleshooting
+
+### Flask Backend Not Available
+
+If Flask backend fails to connect:
+1. Check backend is running: `curl http://localhost:5001/health`
+2. Verify CORS is enabled on backend
+3. Check the Flask URL is correct in settings
+4. System will automatically fallback to IndexedDB
+5. See backend/README.md for backend setup
 
 ### SQLite Not Available
 
@@ -221,7 +259,7 @@ If SQLite fails to initialize:
 If IndexedDB storage is full:
 1. Clear old data: `await unifiedStorage.clear()`
 2. Export important data first
-3. Consider switching to Spark KV for unlimited storage
+3. Consider switching to Flask backend for unlimited storage
 
 ### Data Not Persisting
 
@@ -258,28 +296,30 @@ If IndexedDB storage is full:
    ```
 
 4. **Use Appropriate Backend**: Choose based on your needs:
+   - Team collaboration, cross-device → Flask backend
    - Local-only, small data → IndexedDB
    - Local-only, needs SQL → SQLite (install sql.js)
    - Cloud sync needed → Spark KV
 
 ## UI Component
 
-The app includes a `StorageSettingsPanel` component that provides a user-friendly interface for:
+The app includes a `StorageSettings` component that provides a user-friendly interface for:
 - Viewing current storage backend
-- Switching between backends
+- Switching between backends (Flask, IndexedDB, SQLite)
+- Configuring Flask backend URL
 - Exporting/importing data
 - Viewing storage statistics
 
 Add it to your settings page:
 
 ```typescript
-import { StorageSettingsPanel } from '@/components/StorageSettingsPanel'
+import { StorageSettings } from '@/components/molecules'
 
 function SettingsPage() {
   return (
     <div>
       <h1>Settings</h1>
-      <StorageSettingsPanel />
+      <StorageSettings />
     </div>
   )
 }
@@ -295,18 +335,19 @@ function SettingsPage() {
                │
                ├─ Automatic Backend Detection
                │
-       ┌───────┴───────┬─────────────┬────────┐
+       ┌───────┴───────┬─────────────┬────────┬────────┐
+       │               │             │        │        │
+       ▼               ▼             ▼        ▼        ▼
+┌────────────┐ ┌─────────────┐ ┌─────────┐ ┌────┐ ┌────┐
+│   Flask    │ │  IndexedDB  │ │ SQLite  │ │ KV │ │ ?  │
+│  (optional)│ │  (default)  │ │(optional│ │    │ │Next│
+└────────────┘ └─────────────┘ └─────────┘ └────┘ └────┘
        │               │             │        │
-       ▼               ▼             ▼        ▼
-┌─────────────┐ ┌────────────┐ ┌─────────┐ ┌────┐
-│   SQLite    │ │ IndexedDB  │ │Spark KV │ │ ?  │
-│  (optional) │ │ (default)  │ │(fallback│ │Next│
-└─────────────┘ └────────────┘ └─────────┘ └────┘
-       │               │             │
-       └───────┬───────┴─────────────┘
-               │
-               ▼
-        Browser Storage
+       │               └─────┬───────┴────────┘
+       │                     │
+       ▼                     ▼
+  HTTP Server          Browser Storage
+   (SQLite)
 ```
 
 ## Future Enhancements
@@ -318,3 +359,6 @@ function SettingsPage() {
 - [ ] Encrypted storage option
 - [ ] Storage analytics and usage metrics
 - [ ] Automatic data migration on version changes
+- [ ] Flask backend authentication/authorization
+- [ ] Multi-user support with Flask backend
+- [ ] Real-time sync with WebSockets

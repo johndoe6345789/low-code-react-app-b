@@ -95,13 +95,13 @@ export function useStorageBackend() {
     }
   }, [])
 
-  const switchToSQLite = useCallback(async () => {
+  const switchToFlask = useCallback(async (backendUrl?: string) => {
     setIsLoading(true)
     try {
-      await unifiedStorage.switchToSQLite()
-      setBackend('sqlite')
+      await unifiedStorage.switchToFlask(backendUrl)
+      setBackend('flask')
     } catch (error) {
-      console.error('Failed to switch to SQLite:', error)
+      console.error('Failed to switch to Flask:', error)
       throw error
     } finally {
       setIsLoading(false)
@@ -115,6 +115,19 @@ export function useStorageBackend() {
       setBackend('indexeddb')
     } catch (error) {
       console.error('Failed to switch to IndexedDB:', error)
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  const switchToSQLite = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      await unifiedStorage.switchToSQLite()
+      setBackend('sqlite')
+    } catch (error) {
+      console.error('Failed to switch to SQLite:', error)
       throw error
     } finally {
       setIsLoading(false)
@@ -145,8 +158,9 @@ export function useStorageBackend() {
   return {
     backend,
     isLoading,
-    switchToSQLite,
+    switchToFlask,
     switchToIndexedDB,
+    switchToSQLite,
     exportData,
     importData,
   }
