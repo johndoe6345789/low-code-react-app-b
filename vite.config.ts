@@ -1,10 +1,10 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, PluginOption } from "vite";
-
-import sparkPlugin from "@github/spark/spark-vite-plugin";
-import createIconImportProxy from "@github/spark/vitePhosphorIconProxyPlugin";
 import { resolve } from 'path'
+
+import sparkPlugin from "./src/lib/spark-vite-plugin";
+import createIconImportProxy from "./src/lib/vite-phosphor-icon-proxy-plugin";
 
 const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
 
@@ -87,6 +87,5 @@ export default defineConfig({
       '@radix-ui/react-dialog',
       '@radix-ui/react-tabs',
     ],
-    exclude: ['@github/spark'],
   },
 });

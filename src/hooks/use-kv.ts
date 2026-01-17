@@ -1,28 +1,32 @@
 import { useState, useEffect, useCallback } from 'react'
+import { getStorage } from '@/lib/storage-service'
 
 export function useKV<T>(
   key: string,
   defaultValue: T
 ): [T, (value: T | ((prev: T) => T)) => void, () => void] {
-  const [value, setValueInternal] = useState<T>(() => {
-    try {
-      if (typeof window !== 'undefined' && window.spark?.kv) {
-        const sparkValue = window.spark.kv.get(key)
-        if (sparkValue !== undefined) {
-          return sparkValue as T
-        }
-      }
+  const [value, setValueInternal] = useState<T>(defaultValue)
+  const [initialized, setInitialized] = useState(false)
 
-      const item = localStorage.getItem(key)
-      return item ? JSON.parse(item) : defaultValue
-    } catch (error) {
-      console.error('Error reading from storage:', error)
-      return defaultValue
+  useEffect(() => {
+    const initValue = async () => {
+      try {
+        const storage = getStorage()
+        const storedValue = await storage.get<T>(key)
+        if (storedValue !== undefined) {
+          setValueInternal(storedValue)
+        }
+      } catch (error) {
+        console.error('Error reading from storage:', error)
+      } finally {
+        setInitialized(true)
+      }
     }
-  })
+    initValue()
+  }, [key])
 
   const setValue = useCallback(
-    (newValue: T | ((prev: T) => T)) => {
+    async (newValue: T | ((prev: T) => T)) => {
       try {
         setValueInternal((prevValue) => {
           const valueToStore =
@@ -30,11 +34,10 @@ export function useKV<T>(
               ? (newValue as (prev: T) => T)(prevValue)
               : newValue
 
-          localStorage.setItem(key, JSON.stringify(valueToStore))
-
-          if (typeof window !== 'undefined' && window.spark?.kv) {
-            window.spark.kv.set(key, valueToStore)
-          }
+          const storage = getStorage()
+          storage.set(key, valueToStore).catch(error => {
+            console.error('Error writing to storage:', error)
+          })
 
           return valueToStore
         })
@@ -45,32 +48,15 @@ export function useKV<T>(
     [key]
   )
 
-  const deleteValue = useCallback(() => {
+  const deleteValue = useCallback(async () => {
     try {
-      localStorage.removeItem(key)
-      if (typeof window !== 'undefined' && window.spark?.kv) {
-        window.spark.kv.delete(key)
-      }
+      const storage = getStorage()
+      await storage.delete(key)
       setValueInternal(defaultValue)
     } catch (error) {
       console.error('Error deleting from storage:', error)
     }
   }, [key, defaultValue])
 
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === key && e.newValue !== null) {
-        try {
-          setValueInternal(JSON.parse(e.newValue))
-        } catch (error) {
-          console.error('Error parsing storage event:', error)
-        }
-      }
-    }
-
-    window.addEventListener('storage', handleStorageChange)
-    return () => window.removeEventListener('storage', handleStorageChange)
-  }, [key])
-
-  return [value, setValue, deleteValue]
+  return [initialized ? value : defaultValue, setValue, deleteValue]
 }

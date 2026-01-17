@@ -10,7 +10,7 @@ import { ErrorBoundary } from "react-error-boundary";
 console.log('[INIT] ✅ ErrorBoundary imported')
 
 console.log('[INIT] 📦 Importing Spark SDK')
-import "@github/spark/spark"
+import '@/lib/spark-runtime'
 console.log('[INIT] ✅ Spark SDK imported')
 
 console.log('[INIT] 📦 Importing App component')

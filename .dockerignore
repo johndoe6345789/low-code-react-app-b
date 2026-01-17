@@ -1,5 +1,4 @@
 node_modules
-packages
 npm-debug.log
 .git
 .github
@@ -20,3 +19,4 @@ test-results
 .DS_Store
 pids
 e2e
+backend
