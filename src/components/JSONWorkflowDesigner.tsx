@@ -8,7 +8,7 @@ interface JSONWorkflowDesignerProps {
 }
 
 export function JSONWorkflowDesigner({ workflows, onWorkflowsChange }: JSONWorkflowDesignerProps) {
-  const schema = workflowDesignerSchema as PageSchema
+  const schema = workflowDesignerSchema as unknown as PageSchema
 
   const handleCustomAction = async (action: any, event?: any) => {
     console.log('[JSONWorkflowDesigner] Custom action:', action, event)

@@ -1,160 +1,165 @@
-# Refactoring Documentation Index
+# CodeForge Documentation
 
-## Overview Documents
-- [REFACTOR_SUMMARY.md](../REFACTOR_SUMMARY.md) - High-level overview of the refactor
-- [COMPONENT_SIZE_GUIDE.md](./COMPONENT_SIZE_GUIDE.md) - Guidelines for keeping components under 150 LOC
-- [architecture.json](../architecture.json) - System architecture configuration
+Welcome to the CodeForge documentation. This directory contains comprehensive guides, references, and troubleshooting resources.
 
-## Hook Library
-- [HOOKS_REFERENCE.md](./HOOKS_REFERENCE.md) - Complete hook library reference
+## 📚 Documentation Structure
 
-### Available Hooks
+### Getting Started
+- **[../README.md](../README.md)** - Main project README with features and quick start
+- **[../PRD.md](../PRD.md)** - Product Requirements Document
 
-#### Data Management (`@/hooks/data`)
-- `useDataSource` - Unified data source (KV, static, computed)
-- `useCRUD` - Create, Read, Update, Delete operations
-- `useSearchFilter` - Search and filter with multiple fields
-- `useSort` - Sortable lists with direction toggle
-- `usePagination` - Page navigation and item slicing
-- `useSelection` - Multi/single selection management
+### Architecture & Design
+- **[../ARCHITECTURE.md](../ARCHITECTURE.md)** - System architecture overview
+- **[JSON_UI_REFACTOR_PRD.md](../JSON_UI_REFACTOR_PRD.md)** - JSON-driven UI system design
+- **[architecture.json](../architecture.json)** - Machine-readable architecture definition
 
-#### Form Management (`@/hooks/forms`)
-- `useFormField` - Individual field validation and state
-- `useForm` - Form submission with async support
+### Development Guides
 
-#### UI State (`@/hooks/ui`)
-- `useDialog` - Dialog open/close state
-- `useToggle` - Boolean toggle with callbacks
-- `useKeyboardShortcuts` - Global keyboard shortcuts
+#### JSON-Driven System
+- **[JSON_UI_GUIDE.md](../JSON_UI_GUIDE.md)** - Complete guide to JSON-driven pages
+- **[JSON_QUICK_REFERENCE.md](../JSON_QUICK_REFERENCE.md)** - Quick syntax reference
+- **[DATA_BINDING_GUIDE.md](../DATA_BINDING_GUIDE.md)** - Data binding patterns and examples
 
-## JSON-Driven UI
-- [JSON_PAGES_GUIDE.md](./JSON_PAGES_GUIDE.md) - Building pages from JSON configuration
-- [json-routing.md](./json-routing.md) - **JSON-based routing and root route configuration**
-- [JSON_UI_GUIDE.md](../JSON_UI_GUIDE.md) - Original JSON UI documentation
+#### Implementation
+- **[IMPLEMENTATION_CHECKLIST.md](../IMPLEMENTATION_CHECKLIST.md)** - Feature implementation tracking
+- **[REFACTOR_SUMMARY.md](../REFACTOR_SUMMARY.md)** - Refactoring history and patterns
+- **[JSON_CONVERSION_SUMMARY.md](../JSON_CONVERSION_SUMMARY.md)** - Page migration progress
 
-### Page Schemas
-- `/src/config/pages.json` - **Master routing configuration (includes root `/` route)**
-- `/src/config/pages/dashboard.json` - Dashboard page configuration
-- More schemas can be added for other pages
+### Troubleshooting & Fixes
 
-## Component Library
+#### Quick Help
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - ⚡ **START HERE** for common issues
+  - Build errors
+  - Dev server issues
+  - TypeScript problems
+  - Runtime errors
+  - Quick command reference
 
-### Atomic Components (`@/components/atoms`)
-All under 50 LOC:
-- `DataList` - List rendering with empty states
-- `StatCard` - Metric display cards
-- `ActionButton` - Buttons with tooltips
-- `LoadingState` - Loading spinners
-- `EmptyState` - Empty state displays
-- `StatusBadge` - Status indicators
-- Plus 15+ more existing atoms
+#### Detailed Error Documentation
+- **[ERROR_FIXES.md](ERROR_FIXES.md)** - Comprehensive error analysis
+  - Root cause explanations
+  - Step-by-step fixes
+  - Prevention strategies
+  - CI/CD and browser issues
 
-### Molecules (`@/components/molecules`)
-50-100 LOC components combining atoms
+#### Session Notes
+- **[SESSION_SUMMARY.md](SESSION_SUMMARY.md)** - Latest fix session summary
+- **[CI_CD_QUICK_FIX_GUIDE.md](../CI_CD_QUICK_FIX_GUIDE.md)** - CI/CD specific issues
 
-### Organisms (`@/components/organisms`)
-100-150 LOC complex components
+### Reference Summaries
+- **[IMPLEMENTATION_SUMMARY.md](../IMPLEMENTATION_SUMMARY.md)** - Feature implementation status
+- **[JSON_UI_ENHANCEMENT_SUMMARY.md](../JSON_UI_ENHANCEMENT_SUMMARY.md)** - UI system enhancements
+- **[REFACTORING_COMPLETE_SUMMARY.md](../REFACTORING_COMPLETE_SUMMARY.md)** - Refactoring achievements
 
-### Page Renderers
-- `JSONPageRenderer` - Renders pages from JSON schemas
+### Security & CI/CD
+- **[SECURITY.md](../SECURITY.md)** - Security policies and reporting
+- **[CI_CD_SIMULATION_RESULTS.md](../CI_CD_SIMULATION_RESULTS.md)** - CI/CD testing results
 
-## Migration Examples
+---
 
-### Before: Traditional React Component (200+ LOC)
-```typescript
-function ProjectDashboard({ files, models, ...rest }) {
-  // State management
-  const [filter, setFilter] = useState('')
-  const [sort, setSort] = useState('name')
-  
-  // Calculations
-  const totalFiles = files.length
-  const completionScore = calculateScore(...)
-  
-  // Render
-  return (
-    <div className="space-y-6">
-      {/* 150+ lines of JSX */}
-    </div>
-  )
-}
+## 🚨 Having Issues?
+
+### Quick Troubleshooting Path
+
+1. **Build Error?** → Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) first
+2. **Need Details?** → See [ERROR_FIXES.md](ERROR_FIXES.md) for root causes
+3. **CI/CD Failing?** → Check [CI_CD_QUICK_FIX_GUIDE.md](../CI_CD_QUICK_FIX_GUIDE.md)
+4. **Still Stuck?** → Look at [SESSION_SUMMARY.md](SESSION_SUMMARY.md) for latest fixes
+
+### Common Quick Fixes
+
+```bash
+# Clear everything and rebuild
+rm -rf node_modules dist package-lock.json
+npm install
+npm run build
+
+# Just restart TypeScript
+# In VS Code: Cmd/Ctrl + Shift + P → "TypeScript: Restart TS Server"
+
+# Fix package lock for CI/CD
+npm install
+git add package-lock.json
+git commit -m "fix: sync package lock"
 ```
 
-### After: JSON-Driven (< 50 LOC)
-```typescript
-function ProjectDashboard(props) {
-  return (
-    <JSONPageRenderer
-      schema={dashboardSchema}
-      data={props}
-      functions={{ calculateCompletionScore }}
-    />
-  )
-}
-```
+---
 
-## Best Practices
+## 📖 Learning the System
 
-1. **Extract Logic to Hooks**
-   - Keep components focused on rendering
-   - Move state management to custom hooks
-   - Use data hooks for CRUD operations
+### If You're New
+1. Read the main [README.md](../README.md)
+2. Check [ARCHITECTURE.md](../ARCHITECTURE.md)
+3. Try the [JSON_QUICK_REFERENCE.md](../JSON_QUICK_REFERENCE.md)
+4. Build something with [JSON_UI_GUIDE.md](../JSON_UI_GUIDE.md)
 
-2. **Use JSON for Data-Heavy Pages**
-   - Dashboards with multiple metrics
-   - Settings pages
-   - Status displays
+### If You're Contributing
+1. Review [IMPLEMENTATION_CHECKLIST.md](../IMPLEMENTATION_CHECKLIST.md)
+2. Follow patterns in [REFACTOR_SUMMARY.md](../REFACTOR_SUMMARY.md)
+3. Check [JSON_CONVERSION_SUMMARY.md](../JSON_CONVERSION_SUMMARY.md) for migration status
 
-3. **Compose Small Components**
-   - Build complex UIs from atomic pieces
-   - Each component has single responsibility
-   - Maximum 150 LOC per component
+### If You're Debugging
+1. Start with [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+2. Deep dive with [ERROR_FIXES.md](ERROR_FIXES.md)
+3. Check recent changes in [SESSION_SUMMARY.md](SESSION_SUMMARY.md)
 
-4. **Always Use Functional Updates**
-   ```typescript
-   // ✅ CORRECT
-   setItems(current => [...current, newItem])
-   
-   // ❌ WRONG - Can cause data loss
-   setItems([...items, newItem])
-   ```
+---
 
-## Quick Start
+## 📝 Document Conventions
 
-1. **Use existing hooks:**
-   ```typescript
-   import { useCRUD, useSearchFilter } from '@/hooks/data'
-   ```
+### File Naming
+- `*.md` - Markdown documentation
+- `*_GUIDE.md` - Tutorial/how-to guides
+- `*_SUMMARY.md` - Status/progress summaries
+- `*_REFERENCE.md` - Quick reference sheets
 
-2. **Create JSON page schema:**
-   ```json
-   {
-     "id": "my-page",
-     "layout": { ... },
-     "statCards": [ ... ]
-   }
-   ```
+### Update Frequency
+- **Static**: Architecture, guides (update on major changes)
+- **Living**: Summaries, checklists (update regularly)
+- **Session**: Troubleshooting, fixes (update after each debug session)
 
-3. **Render with JSONPageRenderer:**
-   ```typescript
-   <JSONPageRenderer schema={mySchema} data={props} />
-   ```
+---
 
-## Future Enhancements
+## 🔗 Quick Links
 
-- [ ] Visual JSON schema editor
-- [ ] Action handlers in JSON
-- [ ] Form definitions in JSON
-- [ ] Conditional rendering support
-- [ ] Animation configurations
-- [ ] More atomic components
-- [ ] Component library storybook
+### Most Used Docs
+- [Troubleshooting Guide](TROUBLESHOOTING.md) 🔥
+- [JSON UI Guide](../JSON_UI_GUIDE.md)
+- [Main README](../README.md)
 
-## Contributing
+### Most Useful References
+- [JSON Quick Reference](../JSON_QUICK_REFERENCE.md)
+- [Data Binding Guide](../DATA_BINDING_GUIDE.md)
+- [Error Fixes](ERROR_FIXES.md)
 
-When adding new features:
-1. Keep components under 150 LOC
-2. Extract logic to hooks
-3. Document new hooks in HOOKS_REFERENCE.md
-4. Add examples to guides
-5. Update this index
+### Project Status
+- [Implementation Checklist](../IMPLEMENTATION_CHECKLIST.md)
+- [Latest Session](SESSION_SUMMARY.md)
+- [Conversion Progress](../JSON_CONVERSION_SUMMARY.md)
+
+---
+
+## 💡 Tips
+
+- **Use Cmd/Ctrl + F** to search within docs
+- **Check git history** for context: `git log --grep="feature"`
+- **Look at code** when docs unclear: Documentation references actual files
+- **Update docs** when you fix something: Help the next person!
+
+---
+
+## 📬 Documentation Updates
+
+If you find:
+- Missing information
+- Outdated instructions
+- Confusing explanations
+- New error patterns
+
+Please update the relevant doc and include clear examples!
+
+---
+
+**Last Updated**: Latest error fix session  
+**Maintained By**: CodeForge Team  
+**Status**: Active Development

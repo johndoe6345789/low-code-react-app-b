@@ -33,7 +33,7 @@ export interface PageSchema {
 }
 
 export interface ComponentRendererProps {
-  config?: PageSchema
+  config?: PageSchema | any
   schema?: PageSchema
   data?: Record<string, any>
   functions?: Record<string, (...args: any[]) => any>
