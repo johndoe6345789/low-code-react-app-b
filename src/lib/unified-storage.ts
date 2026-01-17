@@ -230,7 +230,7 @@ class SQLiteAdapter implements StorageAdapter {
   private async loadSQLiteWASM(): Promise<any> {
     const moduleName = 'sql.js'
     try {
-      return await import(moduleName)
+      return await import(/* @vite-ignore */ moduleName)
     } catch {
       throw new Error(`${moduleName} not installed. Run: npm install ${moduleName}`)
     }

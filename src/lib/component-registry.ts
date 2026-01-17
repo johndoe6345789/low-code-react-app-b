@@ -51,7 +51,7 @@ function createLazyComponent(componentConfig: ComponentConfig) {
     let lastError: Error | null = null
     for (const path of pathVariants) {
       try {
-        const module = await import(path)
+        const module = await import(/* @vite-ignore */ path)
         const exportName = componentConfig.export || 'default'
         
         if (module[exportName]) {
