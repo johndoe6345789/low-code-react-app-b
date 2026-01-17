@@ -140,6 +140,32 @@ npm run test:e2e:report
 
 **See [docs/testing/RUN_TESTS.md](./docs/testing/RUN_TESTS.md) for detailed test execution guide.**
 
+### Code Quality & Linting
+```bash
+# Check linting status (no auto-fix)
+npm run lint:check
+
+# Auto-fix all fixable issues
+npm run lint
+
+# TypeScript type checking
+npx tsc --noEmit
+
+# Quick lint status check
+./quick-lint-check.sh
+
+# Full procedural linting analysis
+./procedural-lint-fix.sh
+
+# Full verification (lint + types)
+npm run lint:check && npx tsc --noEmit
+```
+
+**Linting Status**: ✅ All checks passing (exit code 0)
+- ~500 non-blocking warnings (expected for JSON-driven architecture)
+- See [LINT_PROCEDURAL_FIX_REPORT.md](./LINT_PROCEDURAL_FIX_REPORT.md) for detailed analysis
+- Auto-fix removes unused imports and fixes formatting issues
+
 ### Project Management
 - **Save Project** - Save current work with name and description to database
 - **Load Project** - Browse and load any saved project
