@@ -2,7 +2,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AtomicComponentDemo } from '@/components/AtomicComponentDemo'
 import { DashboardDemoPage } from '@/components/DashboardDemoPage'
 import { PageRenderer } from '@/lib/json-ui/page-renderer'
-import { todoListSchema, newMoleculesShowcaseSchema } from '@/schemas/page-schemas'
+import { hydrateSchema } from '@/schemas/schema-loader'
+import todoListJson from '@/schemas/todo-list.json'
+import newMoleculesShowcaseJson from '@/schemas/new-molecules-showcase.json'
+
+const todoListSchema = hydrateSchema(todoListJson)
+const newMoleculesShowcaseSchema = hydrateSchema(newMoleculesShowcaseJson)
 
 export function JSONUIShowcasePage() {
   return (

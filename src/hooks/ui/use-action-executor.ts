@@ -1,24 +1,53 @@
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { Action, JSONUIContext } from '@/types/json-ui'
+import { evaluateExpression, evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 
 export function useActionExecutor(context: JSONUIContext) {
   const { data, updateData, executeAction: contextExecute } = context
 
   const executeAction = useCallback(async (action: Action, event?: any) => {
     try {
+      const evaluationContext = { data, event }
+
       switch (action.type) {
         case 'create': {
           if (!action.target) return
           const currentData = data[action.target] || []
-          const newValue = action.compute ? action.compute(data, event) : action.value
+          
+          let newValue
+          if (action.compute) {
+            // Legacy: compute function
+            newValue = action.compute(data, event)
+          } else if (action.expression) {
+            // New: JSON expression
+            newValue = evaluateExpression(action.expression, evaluationContext)
+          } else if (action.valueTemplate) {
+            // New: JSON template with dynamic values
+            newValue = evaluateTemplate(action.valueTemplate, evaluationContext)
+          } else {
+            // Fallback: static value
+            newValue = action.value
+          }
+          
           updateData(action.target, [...currentData, newValue])
           break
         }
 
         case 'update': {
           if (!action.target) return
-          const newValue = action.compute ? action.compute(data, event) : action.value
+          
+          let newValue
+          if (action.compute) {
+            newValue = action.compute(data, event)
+          } else if (action.expression) {
+            newValue = evaluateExpression(action.expression, evaluationContext)
+          } else if (action.valueTemplate) {
+            newValue = evaluateTemplate(action.valueTemplate, evaluationContext)
+          } else {
+            newValue = action.value
+          }
+          
           updateData(action.target, newValue)
           break
         }
@@ -38,7 +67,18 @@ export function useActionExecutor(context: JSONUIContext) {
 
         case 'set-value': {
           if (!action.target) return
-          const newValue = action.compute ? action.compute(data, event) : action.value
+          
+          let newValue
+          if (action.compute) {
+            newValue = action.compute(data, event)
+          } else if (action.expression) {
+            newValue = evaluateExpression(action.expression, evaluationContext)
+          } else if (action.valueTemplate) {
+            newValue = evaluateTemplate(action.valueTemplate, evaluationContext)
+          } else {
+            newValue = action.value
+          }
+          
           updateData(action.target, newValue)
           break
         }

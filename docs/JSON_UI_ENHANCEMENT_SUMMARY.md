@@ -59,7 +59,7 @@ Enhanced the JSON-driven UI system by creating additional custom hooks, atomic c
 
 ## JSON Page Schema Created
 
-### Analytics Dashboard Schema (/src/schemas/dashboard-schema.ts)
+### Analytics Dashboard Schema (/src/schemas/analytics-dashboard.json)
 Comprehensive JSON-driven page demonstrating:
 
 - **Data Sources**:
