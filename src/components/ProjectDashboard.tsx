@@ -13,8 +13,9 @@ import {
   CheckCircle,
   Warning
 } from '@phosphor-icons/react'
-import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig } from '@/types/project'
+import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig } from '@/types/project'
 import { SeedDataStatus } from '@/components/atoms'
+import { GitHubBuildStatus } from '@/components/molecules/GitHubBuildStatus'
 
 interface ProjectDashboardProps {
   files: ProjectFile[]
@@ -25,6 +26,7 @@ interface ProjectDashboardProps {
   storybookStories: StorybookStory[]
   unitTests: UnitTest[]
   flaskConfig: FlaskConfig
+  nextjsConfig: NextJsConfig
 }
 
 export function ProjectDashboard({
@@ -36,6 +38,7 @@ export function ProjectDashboard({
   storybookStories,
   unitTests,
   flaskConfig,
+  nextjsConfig,
 }: ProjectDashboardProps) {
   const totalFiles = files.length
   const totalModels = models.length
@@ -133,6 +136,13 @@ export function ProjectDashboard({
       </div>
 
       <SeedDataStatus />
+
+      {nextjsConfig?.githubRepo && (
+        <GitHubBuildStatus 
+          owner={nextjsConfig.githubRepo.owner} 
+          repo={nextjsConfig.githubRepo.repo} 
+        />
+      )}
 
       <Card>
         <CardHeader>

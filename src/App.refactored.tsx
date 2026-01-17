@@ -116,7 +116,7 @@ function App() {
         <PageHeader activeTab={activeTab} />
         <div className="flex-1 overflow-hidden">
           <TabsContent value="dashboard" className="h-full m-0">
-            <ProjectDashboard files={files} models={models} components={components} theme={theme} playwrightTests={playwrightTests} storybookStories={storybookStories} unitTests={unitTests} flaskConfig={flaskConfig} />
+            <ProjectDashboard files={files} models={models} components={components} theme={theme} playwrightTests={playwrightTests} storybookStories={storybookStories} unitTests={unitTests} flaskConfig={flaskConfig} nextjsConfig={nextjsConfig} />
           </TabsContent>
           {featureToggles.codeEditor && (
             <TabsContent value="code" className="h-full m-0">

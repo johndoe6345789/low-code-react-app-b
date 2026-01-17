@@ -176,6 +176,7 @@ function App() {
               storybookStories={storybookStories}
               unitTests={unitTests}
               flaskConfig={flaskConfig}
+              nextjsConfig={nextjsConfig}
             />
           </TabsContent>
 

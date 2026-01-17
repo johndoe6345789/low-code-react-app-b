@@ -169,6 +169,10 @@ export interface NextJsConfig {
   appRouter: boolean
   importAlias: string
   turbopack?: boolean
+  githubRepo?: {
+    owner: string
+    repo: string
+  }
 }
 
 export interface NpmPackage {

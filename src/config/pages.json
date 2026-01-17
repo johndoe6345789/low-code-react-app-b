@@ -9,7 +9,7 @@
       "shortcut": "ctrl+1",
       "order": 1,
       "props": {
-        "state": ["files", "models", "components", "theme", "playwrightTests", "storybookStories", "unitTests", "flaskConfig"]
+        "state": ["files", "models", "components", "theme", "playwrightTests", "storybookStories", "unitTests", "flaskConfig", "nextjsConfig"]
       }
     },
     {

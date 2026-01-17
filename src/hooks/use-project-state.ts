@@ -33,6 +33,10 @@ const DEFAULT_NEXTJS_CONFIG: NextJsConfig = {
   appRouter: true,
   importAlias: '@/*',
   turbopack: false,
+  githubRepo: {
+    owner: 'johndoe6345789',
+    repo: 'low-code-react-app-b',
+  },
 }
 
 const DEFAULT_NPM_SETTINGS: NpmSettings = {
