@@ -130,6 +130,67 @@ if (loader.isLoaded('MyComponent')) {
 loader.reset()
 ```
 
+### `library-loader.ts`
+
+Lazy loading utilities for heavy chart and visualization libraries.
+
+**Supported Libraries:**
+- Recharts (~450KB)
+- D3 (~500KB)
+- Three.js (~600KB)
+- ReactFlow (~300KB)
+
+**Key Functions:**
+
+#### `loadRecharts()`, `loadD3()`, `loadThree()`, `loadReactFlow()`
+Load libraries with retry logic and caching.
+
+**Usage:**
+```typescript
+import { loadRecharts, loadD3 } from '@/lib/library-loader'
+
+async function loadChart() {
+  const recharts = await loadRecharts()
+  // Use recharts
+}
+```
+
+#### `preloadLibrary(libraryName)`
+Preload library before it's needed.
+
+**Usage:**
+```typescript
+import { preloadLibrary } from '@/lib/library-loader'
+
+// Preload on hover
+<button onMouseEnter={() => preloadLibrary('recharts')}>
+  View Charts
+</button>
+```
+
+#### `clearLibraryCache()`
+Clear all cached library imports.
+
+**React Hooks:**
+Use with hooks for automatic loading state management:
+
+```typescript
+import { useRecharts, useD3 } from '@/hooks'
+
+function Chart() {
+  const { library: recharts, loading, error } = useRecharts()
+  
+  if (loading) return <Skeleton />
+  if (error) return <Alert>Failed to load</Alert>
+  if (!recharts) return null
+  
+  const { LineChart } = recharts
+  return <LineChart />
+}
+```
+
+**See `/docs/LAZY_LOADING_CHARTS.md` for complete documentation.**
+
 ### `utils.ts`
 
 General utility functions (shadcn standard).

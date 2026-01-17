@@ -5,8 +5,9 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 ## 🚀 Quick Start
 
 ### New Features
-- **[Hover-Based Preloading](./hover-preloading.md)** - Instant page navigation (NEW!)
-- **[Preloading Quick Reference](./preloading-quick-reference.md)** - Quick start guide (NEW!)
+- **[Lazy Loading Charts](./LAZY_LOADING_CHARTS.md)** - Lazy-load recharts, d3, three.js (NEW!)
+- **[Hover-Based Preloading](./hover-preloading.md)** - Instant page navigation
+- **[Preloading Quick Reference](./preloading-quick-reference.md)** - Quick start guide
 - **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable React Router in 2 minutes
 - **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Full router documentation
 
@@ -17,7 +18,8 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 - **[PRD](./PRD.md)** - Product Requirements Document
 
 ### Performance & Optimization
-- **[Bundle Optimization (Monaco Editor)](./bundle-optimization.md)** - Lazy-load heavy components (NEW!)
+- **[Lazy Loading Charts](./LAZY_LOADING_CHARTS.md)** - Lazy-load recharts, d3, three.js (NEW!)
+- **[Bundle Optimization (Monaco Editor)](./bundle-optimization.md)** - Lazy-load heavy components
 - **[Hover-Based Preloading](./hover-preloading.md)** - Instant navigation with preloading
 - **[Preloading Quick Reference](./preloading-quick-reference.md)** - Quick start
 - **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Route-based code splitting
@@ -45,7 +47,26 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 
 ## 🆕 Recent Additions
 
-### Monaco Editor Lazy Loading (Latest)
+### Chart Library Lazy Loading (Latest)
+Optimized bundle size by lazy-loading heavy chart libraries:
+
+**Benefits:**
+- ~1.5MB+ reduction in initial bundle size
+- Charts load only when needed
+- Automatic preloading with hover support
+- Retry logic for network failures
+
+**Libraries optimized:**
+- Recharts (~450KB)
+- D3 (~500KB)
+- Three.js (~600KB)
+- ReactFlow (~300KB)
+
+**Learn more:**
+- [Full Documentation](./LAZY_LOADING_CHARTS.md) - Complete guide
+- [Library Loader API](../src/lib/README.md#library-loaderts) - Technical reference
+
+### Monaco Editor Lazy Loading
 Optimized bundle size by lazy-loading Monaco Editor (2.5MB+):
 
 **Benefits:**

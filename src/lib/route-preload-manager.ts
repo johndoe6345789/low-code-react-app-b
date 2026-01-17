@@ -1,6 +1,7 @@
 import { getEnabledPages } from '@/config/page-loader'
 import { preloadComponentByName, ComponentName } from '@/lib/component-registry'
 import { FeatureToggles } from '@/types/project'
+import { preloadLibrary } from '@/lib/library-loader'
 
 interface PreloadStrategy {
   preloadAdjacent: boolean
@@ -145,6 +146,13 @@ export class RoutePreloadManager {
       if (!this.preloadedRoutes.has(route)) {
         this.preloadRoute(route, 'low')
       }
+    })
+  }
+
+  preloadLibraries(libraries: Array<'recharts' | 'd3' | 'three' | 'reactflow'>) {
+    console.log('[PRELOAD_MGR] 📚 Preloading libraries:', libraries)
+    libraries.forEach(lib => {
+      preloadLibrary(lib)
     })
   }
 
