@@ -25,9 +25,9 @@ export const computeAddTodo = (data: any) => ({
   completed: false,
 })
 
-export const updateFilterQuery = (_: any, event: any) => event.target.value
+export const updateFilterQuery = (_: any, event: any) => event?.target?.value || ''
 
-export const updateNewTodo = (data: any, event: any) => event.target.value
+export const updateNewTodo = (data: any, event: any) => event?.target?.value || ''
 
 export const checkCanAddTodo = (data: any) => data.newTodo?.trim().length > 0
 

@@ -4,6 +4,15 @@ import * as computeFunctions from './compute-functions'
 type ComputeFunctionMap = typeof computeFunctions
 
 export function hydrateSchema(jsonSchema: any): PageSchema {
+  // Validate basic schema structure
+  if (!jsonSchema || typeof jsonSchema !== 'object') {
+    throw new Error('Invalid schema: expected an object')
+  }
+  
+  if (!jsonSchema.id || !jsonSchema.name) {
+    console.warn('Schema missing required fields: id and name')
+  }
+
   const schema = { ...jsonSchema }
 
   if (schema.dataSources) {
