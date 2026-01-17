@@ -191,13 +191,6 @@ function AppLayout() {
   
   return (
     <SidebarProvider defaultOpen={true}>
-      <Suspense fallback={<div className="h-1 bg-primary animate-pulse" />}>
-        <PWAStatusBar />
-      </Suspense>
-      <Suspense fallback={null}>
-        <PWAUpdatePrompt />
-      </Suspense>
-      
       <NavigationMenu
         activeTab={currentPage}
         onTabChange={navigateToPage}
@@ -206,6 +199,13 @@ function AppLayout() {
       />
       
       <SidebarInset>
+        <Suspense fallback={<div className="h-1 bg-primary animate-pulse" />}>
+          <PWAStatusBar />
+        </Suspense>
+        <Suspense fallback={null}>
+          <PWAUpdatePrompt />
+        </Suspense>
+        
         <div className="h-screen flex flex-col bg-background">
           <AppHeader
             activeTab={currentPage}
