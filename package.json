@@ -20,7 +20,8 @@
         "test:e2e:report": "playwright show-report",
         "pages:list": "node scripts/list-pages.js",
         "pages:validate": "tsx src/config/validate-config.ts",
-        "pages:generate": "node scripts/generate-page.js"
+        "pages:generate": "node scripts/generate-page.js",
+        "components:list": "node scripts/list-json-components.cjs"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
