@@ -73,14 +73,20 @@ categories.forEach(category => {
   
   categoryComps.forEach(comp => {
     const children = comp.canHaveChildren ? '👶 Can have children' : '➖ No children'
-    const statusIcon = comp.status === 'supported' ? '✅' : '📋'
-    const subComps = comp.subComponents ? ` (includes: ${comp.subComponents.join(', ')})` : ''
+    let statusIcon = comp.status === 'supported' ? '✅' : '📋'
+    if (comp.status === 'json-compatible') statusIcon = '🔥'
+    if (comp.status === 'maybe-json-compatible') statusIcon = '⚠️ '
     
-    console.log(`  ${statusIcon} ${comp.name} (${comp.type})`)
+    const source = comp.source ? ` [${comp.source}]` : ''
+    
+    console.log(`  ${statusIcon} ${comp.name} (${comp.type})${source}`)
     console.log(`    ${comp.description}`)
     console.log(`    ${children}`)
     if (comp.subComponents) {
       console.log(`    Sub-components: ${comp.subComponents.join(', ')}`)
+    }
+    if (comp.jsonCompatible !== undefined && !comp.jsonCompatible) {
+      console.log(`    ⚠️  Not JSON-powered (${comp.jsonReason || 'complex state/logic'})`)
     }
     console.log('')
   })
@@ -92,9 +98,24 @@ console.log(`\nTotal Components: ${componentsList.length}`)
 if (statusFilter === 'all') {
   const supported = componentsList.filter(c => c.status === 'supported').length
   const planned = componentsList.filter(c => c.status === 'planned').length
+  const jsonCompatible = componentsList.filter(c => c.status === 'json-compatible').length
+  const maybeCompatible = componentsList.filter(c => c.status === 'maybe-json-compatible').length
+  const atoms = componentsList.filter(c => c.source === 'atoms').length
+  const molecules = componentsList.filter(c => c.source === 'molecules').length
+  const organisms = componentsList.filter(c => c.source === 'organisms').length
+  const ui = componentsList.filter(c => c.source === 'ui').length
+  
   console.log(`\nBy Status:`)
   console.log(`  ✅ Supported: ${supported}`)
+  console.log(`  🔥 JSON-Compatible: ${jsonCompatible}`)
+  console.log(`  ⚠️  Maybe JSON-Compatible: ${maybeCompatible}`)
   console.log(`  📋 Planned: ${planned}`)
+  
+  console.log(`\nBy Source:`)
+  if (atoms > 0) console.log(`  🧱 Atoms: ${atoms}`)
+  if (molecules > 0) console.log(`  🧪 Molecules: ${molecules}`)
+  if (organisms > 0) console.log(`  🦠 Organisms: ${organisms}`)
+  if (ui > 0) console.log(`  🎨 UI: ${ui}`)
 }
 
 console.log(`\nBy Category:`)
