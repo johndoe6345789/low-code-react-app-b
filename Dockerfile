@@ -6,16 +6,14 @@ WORKDIR /app
 COPY package*.json ./
 
 # Copy spark-tools package (the actual @github/spark implementation)
-COPY packages/spark-tools/package.json ./packages/spark-tools/package.json
-COPY packages/spark-tools/dist ./packages/spark-tools/dist
+COPY packages/spark-tools ./packages/spark-tools
 
 # Copy spark wrapper package
-COPY packages/spark/package.json ./packages/spark/package.json
-COPY packages/spark/src ./packages/spark/src
-COPY packages/spark/tsconfig.json ./packages/spark/tsconfig.json
+COPY packages/spark ./packages/spark
 
-# Install dependencies using npm ci for reproducible builds
-RUN npm ci
+# Install dependencies - npm ci doesn't fully support workspace protocol in all versions
+# So we use npm install which resolves workspaces correctly
+RUN npm install --legacy-peer-deps
 
 # Copy remaining application files
 COPY . .

@@ -233,12 +233,12 @@ jobs:
 
       - name: Notify deployment
         uses: 8398a7/action-slack@v3
-        if: always() && secrets.SLACK_WEBHOOK != ''
+        if: always() && secrets.SLACK_WEBHOOK_URL != ''
         with:
           status: ${{ job.status }}
           text: 'Staging deployment ${{ job.status }}'
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   deploy-production:
     name: Deploy to Production
@@ -258,9 +258,9 @@ jobs:
 
       - name: Notify deployment
         uses: 8398a7/action-slack@v3
-        if: always() && secrets.SLACK_WEBHOOK != ''
+        if: always() && secrets.SLACK_WEBHOOK_URL != ''
         with:
           status: ${{ job.status }}
           text: 'Production deployment ${{ job.status }}'
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

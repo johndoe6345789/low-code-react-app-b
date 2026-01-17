@@ -24,7 +24,7 @@ export interface PageSectionConfig {
   [key: string]: any
 }
 
-export interface PageSchema {
+export interface LegacyPageSchema {
   id: string
   layout: PageLayoutConfig
   dashboardCards?: any[]
@@ -33,8 +33,8 @@ export interface PageSchema {
 }
 
 export interface ComponentRendererProps {
-  config?: PageSchema | any
-  schema?: PageSchema
+  config?: Record<string, any>
+  schema?: LegacyPageSchema
   data?: Record<string, any>
   functions?: Record<string, (...args: any[]) => any>
 }
