@@ -276,7 +276,7 @@ function ModelForm() {
 ## Next Steps
 
 1. **Learn more about hooks**: Read [HOOK_LIBRARY_REFERENCE.md](./HOOK_LIBRARY_REFERENCE.md)
-2. **Learn JSON orchestration**: Read [JSON_ORCHESTRATION_GUIDE.md](./JSON_ORCHESTRATION_GUIDE.md)
+2. **Learn JSON orchestration**: Read [JSON_ORCHESTRATION_GUIDE.md](../architecture/JSON_ORCHESTRATION_GUIDE.md)
 3. **See refactoring examples**: Read [REFACTORING_EXAMPLE.md](./REFACTORING_EXAMPLE.md)
 4. **Understand architecture**: Read [REFACTOR_PHASE3.md](./REFACTOR_PHASE3.md)
 

@@ -301,9 +301,9 @@ if (!result.success) {
 
 ## 📚 Full Documentation
 
-- **Hooks**: `COMPLETE_HOOK_LIBRARY.md`
-- **JSON**: `JSON_ORCHESTRATION_COMPLETE.md`
-- **Summary**: `PHASE4_IMPLEMENTATION_COMPLETE.md`
+- **Hooks**: `../api/COMPLETE_HOOK_LIBRARY.md`
+- **JSON**: `../architecture/JSON_ORCHESTRATION_COMPLETE.md`
+- **Summary**: `../history/PHASE4_IMPLEMENTATION_COMPLETE.md`
 
 ## 🆘 Need Help?
 
@@ -318,4 +318,4 @@ if (!result.success) {
 - Hooks: `/src/hooks/`
 - Orchestration: `/src/config/orchestration/`
 - Examples: `/src/config/pages/`
-- Docs: `/COMPLETE_HOOK_LIBRARY.md`
+- Docs: `../api/COMPLETE_HOOK_LIBRARY.md`
