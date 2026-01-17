@@ -27,7 +27,7 @@
   padding-left: $container-padding;
   padding-right: $container-padding;
   
-  @media (min-width: 1024px) {
+  @include respond-to('lg') {
     padding-left: calc($container-padding * 2);
     padding-right: calc($container-padding * 2);
   }
@@ -236,7 +236,7 @@
   border-bottom: 1px solid $border-color;
   padding: spacing('4') spacing('6');
   
-  @media (max-width: 767px) {
+  @include respond-below('md') {
     padding: spacing('3') spacing('4');
   }
 }
@@ -252,7 +252,7 @@
   overflow-y: auto;
   z-index: z-index('fixed');
   
-  @media (max-width: 1023px) {
+  @include respond-below('lg') {
     transform: translateX(-100%);
     transition: transform $transition-base;
     
@@ -268,7 +268,7 @@
   padding: spacing('8') spacing('6');
   margin-top: auto;
   
-  @media (max-width: 767px) {
+  @include respond-below('md') {
     padding: spacing('6') spacing('4');
   }
 }
