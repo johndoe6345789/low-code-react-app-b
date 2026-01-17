@@ -308,7 +308,7 @@ export function FaviconDesigner() {
         ctx.drawImage(canvas, 0, 0)
         ctx.filter = 'none'
         break
-      case 'pixelate':
+      case 'pixelate': {
         const pixelSize = Math.max(1, Math.floor(intensity / 10))
         const tempCanvas = document.createElement('canvas')
         tempCanvas.width = canvas.width / pixelSize
@@ -322,6 +322,7 @@ export function FaviconDesigner() {
           ctx.imageSmoothingEnabled = true
         }
         break
+      }
     }
   }
 

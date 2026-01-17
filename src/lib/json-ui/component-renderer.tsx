@@ -31,14 +31,7 @@ function resolveBinding(binding: Binding, data: Record<string, any>): any {
 }
 
 export function ComponentRenderer({ component, data, onEvent }: ComponentRendererProps) {
-  const Component = getUIComponent(component.type)
-  
-  if (!Component) {
-    console.warn(`Component type "${component.type}" not found`)
-    return null
-  }
-  
-  const props = useMemo(() => {
+  const resolvedProps = useMemo(() => {
     const resolved: Record<string, any> = { ...component.props }
     
     if (component.bindings) {
@@ -60,6 +53,13 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
     return resolved
   }, [component, data, onEvent])
   
+  const Component = getUIComponent(component.type)
+  
+  if (!Component) {
+    console.warn(`Component type "${component.type}" not found`)
+    return null
+  }
+  
   if (component.condition) {
     const conditionValue = resolveBinding(component.condition, data)
     if (!conditionValue) {
@@ -76,5 +76,5 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
     />
   ))
   
-  return createElement(Component, props, children)
+  return createElement(Component, resolvedProps, children)
 }

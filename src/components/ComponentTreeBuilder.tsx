@@ -274,7 +274,7 @@ export function ComponentTreeBuilder({
                     try {
                       const props = JSON.parse(e.target.value)
                       updateNode(selectedNode.id, { props })
-                    } catch (err) {
+                    } catch {
                       
                     }
                   }}

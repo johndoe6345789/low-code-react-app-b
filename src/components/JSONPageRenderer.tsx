@@ -72,15 +72,16 @@ export function JSONPageRenderer({ config, schema, data = {}, functions = {} }: 
           </div>
         )
 
-      case 'cards':
+      case 'cards': {
         const cards = pageSchema[section.items as string] || []
         return (
           <div key={index} className={cn('space-y-' + (section.spacing || '4'))}>
             {cards.map((card: any) => renderCard(card))}
           </div>
         )
+      }
 
-      case 'grid':
+      case 'grid': {
         const gridItems = pageSchema[section.items as string] || []
         const { sm = 1, md = 2, lg = 3 } = section.columns || {}
         return (
@@ -94,6 +95,7 @@ export function JSONPageRenderer({ config, schema, data = {}, functions = {} }: 
             {gridItems.map((item: any) => renderStatCard(item))}
           </div>
         )
+      }
 
       default:
         return null
@@ -159,13 +161,14 @@ export function JSONPageRenderer({ config, schema, data = {}, functions = {} }: 
           </div>
         )
 
-      case 'badge':
+      case 'badge': {
         const variant = value === 'ready' ? comp.variants?.ready : comp.variants?.inProgress
         return (
           <Badge key={key} variant={variant?.variant as any}>
             {variant?.label}
           </Badge>
         )
+      }
 
       case 'progress':
         return <Progress key={key} value={value} className="h-3" />
