@@ -2,12 +2,13 @@
 
 Build a comprehensive JSON-driven UI system that allows building entire user interfaces from declarative JSON schemas, breaking down complex components into atomic pieces, and extracting reusable logic into custom hooks for maximum maintainability and rapid development.
 
-2. **Modular** - Every co
-
-This is an advanced system that interprets JSON schemas, manages state across multiple data sources, executes actions d
-## Essential Features
+**Experience Qualities**:
+1. **Modular** - Every component under 150 LOC, highly composable and reusable
+2. **Declarative** - Define UIs through configuration rather than imperative code
+3. **Maintainable** - Clear separation of concerns between data, logic, and presentation
 
 **Complexity Level**: Complex Application (advanced functionality with multiple views)
+
 This is an advanced system that interprets JSON schemas, manages state across multiple data sources, executes actions dynamically, and renders complex component hierarchies - requiring sophisticated architecture with component registries, action executors, and data source managers.
 
 ## Essential Features
@@ -16,63 +17,55 @@ This is an advanced system that interprets JSON schemas, manages state across mu
 - **Functionality**: Parse and validate JSON UI schemas with full TypeScript type safety
 - **Purpose**: Enable building UIs from configuration rather than code
 - **Trigger**: User loads a page defined by JSON schema
-- **Progression**: Look up type → Resolve component → Pass props → Render with children
+- **Progression**: Load schema → Validate structure → Initialize data sources → Render component tree → Bind events
+- **Success criteria**: Schemas render correctly with all data bindings and event handlers working
 
+### Data Source Management
+- **Functionality**: Manage multiple data sources (KV store, computed values, static data) with automatic dependency tracking
+- **Purpose**: Centralize data management and enable reactive updates
+- **Trigger**: Component needs data or data changes
+- **Progression**: Request data → Check source type → Load/compute value → Update dependents → Re-render
+- **Success criteria**: Data flows correctly between sources, components, and persistence layer
 
-- **Trigger**: Component need
-- **Success criteria**: Data flows correctly between sources, components, and
 ### Action Executor
-- **Purpose**: Handle all user interactions declarativel
-- **Progression**: Parse action → Validate params → Execute handler → Update data → Sho
+- **Functionality**: Execute user actions declaratively (CRUD, navigation, toasts, custom actions)
+- **Purpose**: Handle all user interactions declaratively without component-specific code
+- **Trigger**: User interaction (click, change, submit, etc.)
+- **Progression**: Parse action → Validate params → Execute handler → Update data → Show feedback
+- **Success criteria**: All action types work correctly with proper error handling
 
+### Atomic Component Library  
+- **Functionality**: Library of small, focused, reusable components (atoms, molecules, organisms)
+- **Purpose**: Build complex UIs from simple, tested building blocks
+- **Trigger**: Developer needs a UI element
+- **Progression**: Select component → Configure props → Compose with other components → Render
+- **Success criteria**: No component exceeds 150 LOC, all components highly reusable
 
-- **Trigger**: Develope
-- **Success criteria**: No component exceeds 150 LOC, all components highly reus
 ### Custom Hooks Library  
-- **Purpose**: Separate concerns and enable logic reuse acr
+- **Functionality**: Extracted business logic in reusable hooks (useCRUD, useSearch, useFilter, useForm, etc.)
+- **Purpose**: Separate concerns and enable logic reuse across components
+- **Trigger**: Component needs common functionality (data management, search, form handling)
 - **Progression**: Call hook → Provide config → Receive state and handlers → Render UI
+- **Success criteria**: Hooks are testable, reusable, and follow React best practices
 
+## Edge Case Handling
 
-- **Missing Compone
-- **Data Source Errors** - Catch KV failures, show toast notifications, mai
-- **Concurrent Updates** - Use optimistic updates with ro
+- **Invalid Schemas** - Validate JSON structure, show helpful error messages, provide fallback UI
+- **Missing Components** - Log warnings, render fallback div, continue rendering other components
+- **Data Source Errors** - Catch KV failures, show toast notifications, maintain app stability
+- **Circular Dependencies** - Detect loops in computed data sources, break cycles, warn developer
+- **Concurrent Updates** - Use optimistic updates with rollback on failure
+- **Empty States** - Show helpful messages and actions when no data exists
 
+## Design Direction
 
+A **dark cyberpunk development theme** with electric accents and technical precision that feels like a high-powered code editor with visual design tools integrated.
 
+## Color Selection
 
+Convey technical sophistication with electric highlights against deep, professional backgrounds.
 
-- **Secondary Colors**: 
-  - Deep Navy `oklch(0.18 0.02 250)` for cards and elevated surfaces
-- **Foreground/Background Pairings**:
-  - Card (Darker Navy #252535) → Card Foreground (Light Gray #E8E8EC) - Ratio 11.2:1 ✓ 
-  - Accent (Cyan #5DD5F5) → Accent Foreground (Deep Navy #1E1E2E) - Ratio 9.2:1 ✓
-
-
-
-  - H1 (Page Titles): Space Grotesk Bold/32px/tight (-0.02em) - Geometric
-  - H3 (Component Headers): Space Grotesk Medium/18px/normal
-  - Code/Technical: JetBrains Mono Regular/13px/normal (1.5) - Monospace for code and 
-
-
-
-
-  - `Card` for containing feature sections and data panels
-  - `Input`, `Textarea`, `Select`, `Checkbox`, `Switch` for forms
-  - `Tabs` for organizing related content
-  - `Progress` for completion metrics
-  - `ScrollArea` for contained scrollable regions
-  
-  - Create `JSONRenderer` component to interpret schemas
-
-  
-
-  - Cards: subtle lift shadow on hover for interactive cards
-
-  - Code, Database
-
-A **dark cyberpunk development theme** with electric accents and technical precision.
-
-- **Primary Color**: Deep Purple `oklch(0.45 0.15 270)` - Commands attention for primary actions, evokes advanced technology and power
+- **Primary Color**: Deep Purple `oklch(0.45 0.15 270)` - Commands attention for primary actions, evokes advanced technology
 - **Secondary Colors**: 
   - Dark Slate `oklch(0.35 0.02 250)` for secondary surfaces
   - Deep Navy `oklch(0.18 0.02 250)` for cards and elevated surfaces
@@ -103,22 +96,18 @@ Animations should feel **snappy and purposeful** - fast micro-interactions (100-
 ## Component Selection
 
 - **Components**: 
-  - `Card` for containing feature sections and data panels
-  - `Button` with variants (default, outline, ghost) for all actions
-  - `Input`, `Textarea`, `Select`, `Checkbox`, `Switch` for forms
-  - `Dialog` for modals and confirmations
-  - `Tabs` for organizing related content
-  - `Badge` for status indicators and counts
-  - `Progress` for completion metrics
-  - `Separator` for visual dividers
+  - `Card`, `Button`, `Input`, `Select`, `Checkbox`, `Switch` for core UI
+  - `Dialog`, `Tabs`, `Badge`, `Progress`, `Separator` for layout and feedback
+  - `Heading`, `Text`, `List`, `Grid` for typography and layout primitives
   - `ScrollArea` for contained scrollable regions
   - `Tooltip` for contextual help
   
 - **Customizations**: 
-  - Create `JSONRenderer` component to interpret schemas
-  - Build `ActionButton` that executes JSON-defined actions
-  - Develop `DataBoundInput` that syncs with data sources
-  - Design `EmptyState` for zero-data scenarios
+  - `StatusBadge` - Status indicator with predefined styles
+  - `DataCard` - Stat card with icon, trend, and loading states
+  - `SearchInput` - Input with search icon and clear button
+  - `ActionBar` - Title with action buttons
+  - All new atomic components follow the 150 LOC limit
   
 - **States**: 
   - Buttons: subtle scale on press, glow effect on hover, disabled with opacity
@@ -126,7 +115,7 @@ Animations should feel **snappy and purposeful** - fast micro-interactions (100-
   - Cards: subtle lift shadow on hover for interactive cards
   
 - **Icon Selection**: 
-  - Phosphor Icons with duotone weight for primary actions
+  - Phosphor Icons throughout
   - Code, Database, Tree, Cube for feature areas
   - Plus, Pencil, Trash for CRUD operations
   - MagnifyingGlass, Gear, Download for utilities
@@ -139,23 +128,8 @@ Animations should feel **snappy and purposeful** - fast micro-interactions (100-
   - Tight elements: gap-1 (0.25rem)
   
 - **Mobile**: 
-  - Stack toolbar actions vertically on <640px
-  - Single column layouts on <768px
+  - Stack layouts vertically on <768px
   - Reduce padding to p-4 on mobile
-  - Bottom sheet dialogs instead of centered modals
-  - Hamburger menu for navigation on small screens
-  - MagnifyingGlass, Gear, Download for utilities
-  
-- **Spacing**: 
-  - Container padding: p-6 (1.5rem)
-  - Section gaps: gap-6 (1.5rem) 
-  - Card gaps: gap-4 (1rem)
-  - Button groups: gap-2 (0.5rem)
-  - Tight elements: gap-1 (0.25rem)
-  
-- **Mobile**: 
-  - Stack toolbar actions vertically on <640px
-  - Single column layouts on <768px
-  - Reduce padding to p-4 on mobile
-  - Bottom sheet dialogs instead of centered modals
-  - Hamburger menu for navigation on small screens
+  - Touch-friendly tap targets (min 44px)
+  - Responsive grid columns (1 → 2 → 3 → 4)
+  - Bottom sheet dialogs on small screens

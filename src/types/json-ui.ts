@@ -6,6 +6,7 @@ export type ComponentType =
   | 'Input' | 'Select' | 'Checkbox' | 'Switch'
   | 'Badge' | 'Progress' | 'Separator' | 'Tabs' | 'Dialog'
   | 'Text' | 'Heading' | 'Label' | 'List' | 'Grid'
+  | 'StatusBadge' | 'DataCard' | 'SearchInput' | 'ActionBar'
 
 export type ActionType =
   | 'create' | 'update' | 'delete' | 'navigate'

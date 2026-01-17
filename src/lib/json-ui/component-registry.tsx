@@ -10,6 +10,14 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Heading } from '@/components/atoms/Heading'
+import { Text } from '@/components/atoms/Text'
+import { List } from '@/components/atoms/List'
+import { Grid } from '@/components/atoms/Grid'
+import { StatusBadge } from '@/components/atoms/StatusBadge'
+import { DataCard } from '@/components/molecules/DataCard'
+import { SearchInput } from '@/components/molecules/SearchInput'
+import { ActionBar } from '@/components/molecules/ActionBar'
 
 export const componentRegistry: Record<ComponentType, any> = {
   'div': 'div',
@@ -29,11 +37,11 @@ export const componentRegistry: Record<ComponentType, any> = {
   'Separator': Separator,
   'Tabs': Tabs,
   'Dialog': 'div',
-  'Text': 'p',
-  'Heading': 'h2',
+  'Text': Text,
+  'Heading': Heading,
   'Label': Label,
-  'List': 'ul',
-  'Grid': 'div',
+  'List': List,
+  'Grid': Grid,
 }
 
 export const cardSubComponents = {
@@ -50,6 +58,13 @@ export const tabsSubComponents = {
   'TabsTrigger': TabsTrigger,
 }
 
+export const customComponents = {
+  'StatusBadge': StatusBadge,
+  'DataCard': DataCard,
+  'SearchInput': SearchInput,
+  'ActionBar': ActionBar,
+}
+
 export function getComponent(type: ComponentType | string): any {
   if (type in componentRegistry) {
     return componentRegistry[type as ComponentType]
@@ -63,5 +78,12 @@ export function getComponent(type: ComponentType | string): any {
     return tabsSubComponents[type as keyof typeof tabsSubComponents]
   }
   
+  if (type in customComponents) {
+    return customComponents[type as keyof typeof customComponents]
+  }
+  
   return 'div'
 }
+
+export const getUIComponent = getComponent
+

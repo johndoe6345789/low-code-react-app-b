@@ -17,13 +17,21 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Skeleton } from '@/components/ui/skeleton'
 import { Progress } from '@/components/ui/progress'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Heading } from '@/components/atoms/Heading'
+import { Text } from '@/components/atoms/Text'
+import { List as ListComponent } from '@/components/atoms/List'
+import { Grid } from '@/components/atoms/Grid'
+import { StatusBadge } from '@/components/atoms/StatusBadge'
+import { DataCard } from '@/components/molecules/DataCard'
+import { SearchInput } from '@/components/molecules/SearchInput'
+import { ActionBar } from '@/components/molecules/ActionBar'
 import { 
   ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
   Funnel, Download, Upload, PencilSimple, Trash, Eye, EyeClosed, 
   CaretUp, CaretDown, CaretLeft, CaretRight,
   Gear, User, Bell, Envelope, Calendar, Clock, Star,
   Heart, ShareNetwork, LinkSimple, Copy, FloppyDisk, ArrowClockwise, WarningCircle,
-  Info, Question, House, List, DotsThreeVertical, DotsThree
+  Info, Question, House, List as ListIcon, DotsThreeVertical, DotsThree
 } from '@phosphor-icons/react'
 
 export interface UIComponentRegistry {
@@ -97,6 +105,17 @@ export const shadcnComponents: UIComponentRegistry = {
   AvatarImage,
 }
 
+export const customComponents: UIComponentRegistry = {
+  Heading,
+  Text,
+  List: ListComponent,
+  Grid,
+  StatusBadge,
+  DataCard,
+  SearchInput,
+  ActionBar,
+}
+
 export const iconComponents: UIComponentRegistry = {
   ArrowLeft,
   ArrowRight,
@@ -133,7 +152,7 @@ export const iconComponents: UIComponentRegistry = {
   Info,
   HelpCircle: Question,
   Home: House,
-  Menu: List,
+  Menu: ListIcon,
   MoreVertical: DotsThreeVertical,
   MoreHorizontal: DotsThree,
 }
@@ -141,6 +160,7 @@ export const iconComponents: UIComponentRegistry = {
 export const uiComponentRegistry: UIComponentRegistry = {
   ...primitiveComponents,
   ...shadcnComponents,
+  ...customComponents,
   ...iconComponents,
 }
 
