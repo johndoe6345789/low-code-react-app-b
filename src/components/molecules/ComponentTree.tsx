@@ -4,6 +4,7 @@ import { ComponentTreeNode } from '@/components/atoms/ComponentTreeNode'
 import { PanelHeader } from '@/components/atoms'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Tree, CaretDown, CaretRight } from '@phosphor-icons/react'
 
 interface ComponentTreeProps {
@@ -116,24 +117,32 @@ export function ComponentTree({
           />
           {components.length > 0 && (
             <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleExpandAll}
-                className="h-7 w-7 p-0"
-                title="Expand All"
-              >
-                <CaretDown size={16} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleCollapseAll}
-                className="h-7 w-7 p-0"
-                title="Collapse All"
-              >
-                <CaretRight size={16} />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleExpandAll}
+                    className="h-7 w-7 p-0"
+                  >
+                    <CaretDown size={16} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Expand All</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleCollapseAll}
+                    className="h-7 w-7 p-0"
+                  >
+                    <CaretRight size={16} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Collapse All</TooltipContent>
+              </Tooltip>
             </div>
           )}
         </div>
