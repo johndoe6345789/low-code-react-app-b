@@ -41,6 +41,9 @@ function hydrateComponents(components: any[]): any[] {
         if (event.condition && typeof event.condition === 'string') {
           const functionName = event.condition as keyof ComputeFunctionMap
           const conditionFunction = computeFunctions[functionName]
+          if (!conditionFunction) {
+            console.warn(`Condition function "${functionName}" not found`)
+          }
           hydratedEvent.condition = conditionFunction || (() => false)
         }
 
@@ -49,6 +52,9 @@ function hydrateComponents(components: any[]): any[] {
             if (action.compute && typeof action.compute === 'string') {
               const functionName = action.compute as keyof ComputeFunctionMap
               const computeFunction = computeFunctions[functionName]
+              if (!computeFunction) {
+                console.warn(`Action compute function "${functionName}" not found`)
+              }
               return {
                 ...action,
                 compute: computeFunction || (() => null)
@@ -69,6 +75,9 @@ function hydrateComponents(components: any[]): any[] {
         if (b.transform && typeof b.transform === 'string') {
           const functionName = b.transform as keyof ComputeFunctionMap
           const transformFunction = computeFunctions[functionName]
+          if (!transformFunction) {
+            console.warn(`Transform function "${functionName}" not found`)
+          }
           hydratedBindings[key] = {
             ...b,
             transform: transformFunction || ((x: any) => x)
