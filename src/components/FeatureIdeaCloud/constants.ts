@@ -1,3 +1,103 @@
+import { FeatureIdea } from './types'
+
+export const SEED_IDEAS: FeatureIdea[] = [
+  {
+    id: 'idea-1',
+    title: 'AI Code Assistant',
+    description: 'Integrate an AI assistant that can suggest code improvements and answer questions',
+    category: 'AI/ML',
+    priority: 'high',
+    status: 'completed',
+    createdAt: Date.now() - 10000000,
+  },
+  {
+    id: 'idea-2',
+    title: 'Real-time Collaboration',
+    description: 'Allow multiple developers to work on the same project simultaneously',
+    category: 'Collaboration',
+    priority: 'high',
+    status: 'idea',
+    createdAt: Date.now() - 9000000,
+  },
+  {
+    id: 'idea-3',
+    title: 'Component Marketplace',
+    description: 'A marketplace where users can share and download pre-built components',
+    category: 'Community',
+    priority: 'medium',
+    status: 'idea',
+    createdAt: Date.now() - 8000000,
+  },
+  {
+    id: 'idea-4',
+    title: 'Visual Git Integration',
+    description: 'Git operations through a visual interface with branch visualization',
+    category: 'DevOps',
+    priority: 'high',
+    status: 'planned',
+    createdAt: Date.now() - 7000000,
+  },
+  {
+    id: 'idea-5',
+    title: 'API Mock Server',
+    description: 'Built-in mock server for testing API integrations',
+    category: 'Testing',
+    priority: 'medium',
+    status: 'idea',
+    createdAt: Date.now() - 6000000,
+  },
+  {
+    id: 'idea-6',
+    title: 'Performance Profiler',
+    description: 'Analyze and optimize application performance with visual metrics',
+    category: 'Performance',
+    priority: 'medium',
+    status: 'idea',
+    createdAt: Date.now() - 5000000,
+  },
+  {
+    id: 'idea-7',
+    title: 'Theme Presets',
+    description: 'Pre-designed theme templates for quick project setup',
+    category: 'Design',
+    priority: 'low',
+    status: 'completed',
+    createdAt: Date.now() - 4000000,
+  },
+  {
+    id: 'idea-8',
+    title: 'Database Schema Migrations',
+    description: 'Visual tool for creating and managing database migrations',
+    category: 'Database',
+    priority: 'high',
+    status: 'in-progress',
+    createdAt: Date.now() - 3000000,
+  },
+  {
+    id: 'idea-9',
+    title: 'Mobile App Preview',
+    description: 'Live preview on actual mobile devices or simulators',
+    category: 'Mobile',
+    priority: 'medium',
+    status: 'planned',
+    createdAt: Date.now() - 2000000,
+  },
+  {
+    id: 'idea-10',
+    title: 'Accessibility Checker',
+    description: 'Automated accessibility testing and suggestions',
+    category: 'Accessibility',
+    priority: 'high',
+    status: 'idea',
+    createdAt: Date.now() - 1000000,
+  },
+]
+
+export const CONNECTION_STYLE = { 
+  stroke: '#a78bfa', 
+  strokeWidth: 2.5
+}
+
 export const CATEGORIES = [
   'AI/ML',
   'Collaboration',
