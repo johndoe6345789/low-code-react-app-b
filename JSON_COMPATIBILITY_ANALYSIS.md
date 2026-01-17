@@ -6,30 +6,51 @@ This document identifies which molecules and organisms can be powered by the JSO
 
 - **Total Components**: 219 (117 atoms, 41 molecules, 15 organisms, 46 ui)
 - **Fully JSON-Compatible**: 14 (molecules: 13, organisms: 1)
+- **Added to Registry**: 6 molecules ✅ (AppBranding, LabelWithBadge, EmptyEditorState, LoadingFallback, LoadingState, NavigationGroupHeader)
 - **Maybe JSON-Compatible**: 41 (molecules: 27, organisms: 14)
 - **Not Compatible**: 1 (molecules: 1)
+
+**Implementation Status**: ✅ Low-hanging fruit completed! See `JSON_COMPATIBILITY_IMPLEMENTATION.md` for details.
+
+## ✅ Added to JSON Registry
+
+These components have been successfully integrated into the JSON UI component registry:
+
+### Molecules (6)
+- **AppBranding** ✅ ADDED - Title and subtitle branding
+- **LabelWithBadge** ✅ ADDED - Label with badge indicator
+- **EmptyEditorState** ✅ ADDED - Empty state for editor
+- **LoadingFallback** ✅ ADDED - Loading message display
+- **LoadingState** ✅ ADDED - Loading state indicator
+- **NavigationGroupHeader** ✅ ADDED - Navigation section header
+
+**Files Modified**:
+- `src/lib/json-ui/component-registry.tsx` - Added component imports and registrations
+- `src/types/json-ui.ts` - Added TypeScript type definitions
+- `src/schemas/page-schemas.ts` - Added showcase schema
+- `src/components/JSONUIShowcasePage.tsx` - Added "New Molecules" demo tab
 
 ## 🔥 Fully JSON-Compatible Components
 
 These components have simple, serializable props and no complex state/logic. They can be directly rendered from JSON.
 
 ### Molecules (13)
-- **AppBranding** - Title and subtitle branding
-- **Breadcrumb** - Navigation breadcrumb trail
-- **EmptyEditorState** - Empty state for editor
-- **LabelWithBadge** - Label with badge indicator
-- **LazyBarChart** - Bar chart visualization
-- **LazyD3BarChart** - D3-based bar chart
-- **LazyLineChart** - Line chart visualization
-- **LoadingFallback** - Loading message display
-- **LoadingState** - Loading state indicator
-- **NavigationGroupHeader** - Navigation section header
-- **SaveIndicator** - Last saved indicator
-- **SeedDataManager** - Seed data management
-- **StorageSettings** - Storage configuration
+- **AppBranding** ✅ ADDED - Title and subtitle branding
+- **Breadcrumb** ❌ SKIP - Uses hooks (useNavigationHistory) and complex routing logic
+- **EmptyEditorState** ✅ ADDED - Empty state for editor
+- **LabelWithBadge** ✅ ADDED - Label with badge indicator
+- **LazyBarChart** ❌ SKIP - Uses hooks (useRecharts) for dynamic loading
+- **LazyD3BarChart** ❌ SKIP - Uses hooks for dynamic loading
+- **LazyLineChart** ❌ SKIP - Uses hooks for dynamic loading
+- **LoadingFallback** ✅ ADDED - Loading message display
+- **LoadingState** ✅ ADDED - Loading state indicator
+- **NavigationGroupHeader** ✅ ADDED - Navigation section header (requires Collapsible wrapper)
+- **SaveIndicator** ❌ SKIP - Has internal state and useEffect for time updates
+- **SeedDataManager** ❌ SKIP - Uses hooks and has complex event handlers
+- **StorageSettings** ❌ SKIP - Complex state management and event handlers
 
 ### Organisms (1)
-- **PageHeader** - Page header component
+- **PageHeader** ❌ SKIP - Depends on navigation config lookup (tabInfo)
 
 ## ⚠️ Maybe JSON-Compatible Components
 

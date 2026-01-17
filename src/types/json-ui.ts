@@ -9,6 +9,7 @@ export type ComponentType =
   | 'Link' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
+  | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
 
 export type ActionType =
   | 'create' | 'update' | 'delete' | 'navigate'

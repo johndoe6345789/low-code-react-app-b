@@ -38,6 +38,12 @@ import { StatusBadge } from '@/components/atoms/StatusBadge'
 import { DataCard } from '@/components/molecules/DataCard'
 import { SearchInput } from '@/components/molecules/SearchInput'
 import { ActionBar } from '@/components/molecules/ActionBar'
+import { AppBranding } from '@/components/molecules/AppBranding'
+import { LabelWithBadge } from '@/components/molecules/LabelWithBadge'
+import { EmptyEditorState } from '@/components/molecules/EmptyEditorState'
+import { LoadingFallback } from '@/components/molecules/LoadingFallback'
+import { LoadingState } from '@/components/molecules/LoadingState'
+import { NavigationGroupHeader } from '@/components/molecules/NavigationGroupHeader'
 
 export const componentRegistry: Record<ComponentType, any> = {
   'div': 'div',
@@ -86,6 +92,12 @@ export const componentRegistry: Record<ComponentType, any> = {
   'DataCard': DataCard,
   'SearchInput': SearchInput,
   'ActionBar': ActionBar,
+  'AppBranding': AppBranding,
+  'LabelWithBadge': LabelWithBadge,
+  'EmptyEditorState': EmptyEditorState,
+  'LoadingFallback': LoadingFallback,
+  'LoadingState': LoadingState,
+  'NavigationGroupHeader': NavigationGroupHeader,
 }
 
 export const cardSubComponents = {
@@ -113,6 +125,12 @@ export const customComponents = {
   'Alert': Alert,
   'InfoBox': InfoBox,
   'EmptyState': EmptyState,
+  'AppBranding': AppBranding,
+  'LabelWithBadge': LabelWithBadge,
+  'EmptyEditorState': EmptyEditorState,
+  'LoadingFallback': LoadingFallback,
+  'LoadingState': LoadingState,
+  'NavigationGroupHeader': NavigationGroupHeader,
 }
 
 export function getComponent(type: ComponentType | string): any {

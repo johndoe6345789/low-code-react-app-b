@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AtomicComponentDemo } from '@/components/AtomicComponentDemo'
 import { DashboardDemoPage } from '@/components/DashboardDemoPage'
 import { PageRenderer } from '@/lib/json-ui/page-renderer'
-import { todoListSchema } from '@/schemas/page-schemas'
+import { todoListSchema, newMoleculesShowcaseSchema } from '@/schemas/page-schemas'
 
 export function JSONUIShowcasePage() {
   return (
@@ -19,6 +19,7 @@ export function JSONUIShowcasePage() {
           </div>
           <TabsList className="w-full justify-start">
             <TabsTrigger value="atomic">Atomic Components</TabsTrigger>
+            <TabsTrigger value="molecules">New Molecules</TabsTrigger>
             <TabsTrigger value="dashboard">JSON Dashboard</TabsTrigger>
             <TabsTrigger value="todos">JSON Todo List</TabsTrigger>
           </TabsList>
@@ -27,6 +28,10 @@ export function JSONUIShowcasePage() {
         <div className="flex-1 overflow-hidden">
           <TabsContent value="atomic" className="h-full m-0 data-[state=active]:block">
             <AtomicComponentDemo />
+          </TabsContent>
+          
+          <TabsContent value="molecules" className="h-full m-0 data-[state=active]:block">
+            <PageRenderer schema={newMoleculesShowcaseSchema} />
           </TabsContent>
           
           <TabsContent value="dashboard" className="h-full m-0 data-[state=active]:block">
