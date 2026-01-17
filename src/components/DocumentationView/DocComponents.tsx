@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { FileCode, CheckCircle, Sparkle } from '@phosphor-icons/react'
+import { FileCode, CheckCircle, Sparkle, GitBranch } from '@phosphor-icons/react'
 
 export function FeatureItem({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
   return (
@@ -115,7 +115,7 @@ export function CICDPlatformItem({ name, file, description, features }: {
     <div className="space-y-3 border-l-2 border-accent pl-4">
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <FileCode size={18} className="text-accent" />
+          <GitBranch size={18} className="text-accent" />
           <h3 className="text-base font-semibold">{name}</h3>
         </div>
         <code className="text-xs text-muted-foreground font-mono">{file}</code>
