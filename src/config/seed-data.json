@@ -188,8 +188,210 @@
         }
       ],
       "isActive": true,
+      "status": "success",
+      "lastRun": 1704153600000,
       "createdAt": 1704067200000,
       "updatedAt": 1704067200000
+    },
+    {
+      "id": "workflow-2",
+      "name": "Email Notification Pipeline",
+      "description": "Send automated email notifications to users",
+      "nodes": [
+        {
+          "id": "node-4",
+          "type": "trigger",
+          "name": "Schedule Trigger",
+          "position": { "x": 100, "y": 100 },
+          "data": {
+            "label": "Daily at 9 AM"
+          },
+          "config": {
+            "triggerType": "schedule",
+            "scheduleExpression": "0 9 * * *"
+          }
+        },
+        {
+          "id": "node-5",
+          "type": "database",
+          "name": "Fetch Users",
+          "position": { "x": 300, "y": 100 },
+          "data": {
+            "label": "Get Active Users"
+          },
+          "config": {
+            "databaseQuery": "SELECT * FROM users WHERE active = true"
+          }
+        },
+        {
+          "id": "node-6",
+          "type": "lambda",
+          "name": "Send Emails",
+          "position": { "x": 500, "y": 100 },
+          "data": {
+            "label": "Process Email Queue"
+          },
+          "config": {
+            "lambdaCode": "// Send email logic"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn-3",
+          "source": "node-4",
+          "target": "node-5"
+        },
+        {
+          "id": "conn-4",
+          "source": "node-5",
+          "target": "node-6"
+        }
+      ],
+      "isActive": true,
+      "status": "running",
+      "lastRun": 1704240000000,
+      "createdAt": 1704067200000,
+      "updatedAt": 1704240000000
+    },
+    {
+      "id": "workflow-3",
+      "name": "Payment Processing",
+      "description": "Handle payment transactions and update order status",
+      "nodes": [
+        {
+          "id": "node-7",
+          "type": "trigger",
+          "name": "Payment Event",
+          "position": { "x": 100, "y": 100 },
+          "data": {
+            "label": "Payment Received"
+          },
+          "config": {
+            "triggerType": "webhook"
+          }
+        },
+        {
+          "id": "node-8",
+          "type": "api",
+          "name": "Validate Payment",
+          "position": { "x": 300, "y": 100 },
+          "data": {
+            "label": "Check Payment Gateway"
+          },
+          "config": {
+            "httpMethod": "POST",
+            "apiEndpoint": "https://api.stripe.com/v1/charges"
+          }
+        },
+        {
+          "id": "node-9",
+          "type": "condition",
+          "name": "Payment Valid?",
+          "position": { "x": 500, "y": 100 },
+          "data": {
+            "label": "Check Status"
+          },
+          "config": {
+            "condition": "payment.status === 'succeeded'"
+          }
+        },
+        {
+          "id": "node-10",
+          "type": "database",
+          "name": "Update Order",
+          "position": { "x": 700, "y": 100 },
+          "data": {
+            "label": "Mark as Paid"
+          },
+          "config": {
+            "databaseQuery": "UPDATE orders SET status = 'paid'"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn-5",
+          "source": "node-7",
+          "target": "node-8"
+        },
+        {
+          "id": "conn-6",
+          "source": "node-8",
+          "target": "node-9"
+        },
+        {
+          "id": "conn-7",
+          "source": "node-9",
+          "target": "node-10"
+        }
+      ],
+      "isActive": true,
+      "status": "failed",
+      "lastRun": 1704226800000,
+      "createdAt": 1704067200000,
+      "updatedAt": 1704226800000
+    },
+    {
+      "id": "workflow-4",
+      "name": "Data Backup Task",
+      "description": "Automated database backup and archival",
+      "nodes": [
+        {
+          "id": "node-11",
+          "type": "trigger",
+          "name": "Nightly Backup",
+          "position": { "x": 100, "y": 100 },
+          "data": {
+            "label": "Every Night at 2 AM"
+          },
+          "config": {
+            "triggerType": "schedule",
+            "scheduleExpression": "0 2 * * *"
+          }
+        },
+        {
+          "id": "node-12",
+          "type": "database",
+          "name": "Export Data",
+          "position": { "x": 300, "y": 100 },
+          "data": {
+            "label": "Create Backup"
+          },
+          "config": {
+            "databaseQuery": "pg_dump database"
+          }
+        },
+        {
+          "id": "node-13",
+          "type": "lambda",
+          "name": "Upload to S3",
+          "position": { "x": 500, "y": 100 },
+          "data": {
+            "label": "Store Backup"
+          },
+          "config": {
+            "lambdaCode": "// S3 upload logic"
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "conn-8",
+          "source": "node-11",
+          "target": "node-12"
+        },
+        {
+          "id": "conn-9",
+          "source": "node-12",
+          "target": "node-13"
+        }
+      ],
+      "isActive": false,
+      "status": "success",
+      "lastRun": 1704171600000,
+      "createdAt": 1704067200000,
+      "updatedAt": 1704171600000
     }
   ],
   "project-lambdas": [

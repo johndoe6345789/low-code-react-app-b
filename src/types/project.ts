@@ -237,6 +237,8 @@ export interface Workflow {
   nodes: WorkflowNode[]
   connections: WorkflowConnection[]
   isActive: boolean
+  status?: 'success' | 'failed' | 'running'
+  lastRun?: number
   createdAt: number
   updatedAt: number
 }

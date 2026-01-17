@@ -32,6 +32,9 @@ import {
   Copy,
   Pencil,
   Link,
+  CheckCircle,
+  XCircle,
+  ArrowsClockwise,
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { LazyInlineMonacoEditor } from '@/components/molecules/LazyInlineMonacoEditor'
@@ -65,10 +68,23 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
   const [isDragging, setIsDragging] = useState(false)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const [connectingFrom, setConnectingFrom] = useState<string | null>(null)
+  const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'failed' | 'running'>('all')
   const canvasRef = useRef<HTMLDivElement>(null)
 
   const selectedWorkflow = workflows.find((w) => w.id === selectedWorkflowId)
   const selectedNode = selectedWorkflow?.nodes.find((n) => n.id === selectedNodeId)
+
+  const filteredWorkflows = workflows.filter((workflow) => {
+    if (statusFilter === 'all') return true
+    return workflow.status === statusFilter
+  })
+
+  const statusCounts = {
+    all: workflows.length,
+    success: workflows.filter((w) => w.status === 'success').length,
+    failed: workflows.filter((w) => w.status === 'failed').length,
+    running: workflows.filter((w) => w.status === 'running').length,
+  }
 
   const handleCreateWorkflow = () => {
     if (!newWorkflowName.trim()) {
@@ -325,9 +341,61 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
           </Button>
         </div>
 
+        <div>
+          <Label className="text-xs text-muted-foreground mb-2 block">Filter by Status</Label>
+          <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
+            <SelectTrigger className="h-9">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <span>All Statuses</span>
+                  <Badge variant="secondary" className="text-xs">
+                    {statusCounts.all}
+                  </Badge>
+                </div>
+              </SelectItem>
+              <SelectItem value="success">
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle size={14} weight="fill" className="text-green-500" />
+                    Success
+                  </span>
+                  <Badge variant="secondary" className="text-xs">
+                    {statusCounts.success}
+                  </Badge>
+                </div>
+              </SelectItem>
+              <SelectItem value="failed">
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <span className="flex items-center gap-1.5">
+                    <XCircle size={14} weight="fill" className="text-red-500" />
+                    Failed
+                  </span>
+                  <Badge variant="secondary" className="text-xs">
+                    {statusCounts.failed}
+                  </Badge>
+                </div>
+              </SelectItem>
+              <SelectItem value="running">
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <span className="flex items-center gap-1.5">
+                    <ArrowsClockwise size={14} weight="bold" className="text-blue-500" />
+                    Running
+                  </span>
+                  <Badge variant="secondary" className="text-xs">
+                    {statusCounts.running}
+                  </Badge>
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <ScrollArea className="flex-1">
           <div className="space-y-2">
-            {workflows.map((workflow) => (
+            {filteredWorkflows.map((workflow) => (
               <Card
                 key={workflow.id}
                 className={`cursor-pointer transition-all ${
@@ -340,7 +408,7 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                 <CardHeader className="p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <CardTitle className="text-sm truncate">{workflow.name}</CardTitle>
                         <Badge
                           variant={workflow.isActive ? 'default' : 'outline'}
@@ -348,19 +416,55 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                         >
                           {workflow.isActive ? 'Active' : 'Inactive'}
                         </Badge>
+                        {workflow.status && (
+                          <Badge
+                            variant="outline"
+                            className={`text-xs flex items-center gap-1 ${
+                              workflow.status === 'success'
+                                ? 'border-green-500 text-green-500'
+                                : workflow.status === 'failed'
+                                ? 'border-red-500 text-red-500'
+                                : 'border-blue-500 text-blue-500'
+                            }`}
+                          >
+                            {workflow.status === 'success' && (
+                              <>
+                                <CheckCircle size={12} weight="fill" />
+                                Success
+                              </>
+                            )}
+                            {workflow.status === 'failed' && (
+                              <>
+                                <XCircle size={12} weight="fill" />
+                                Failed
+                              </>
+                            )}
+                            {workflow.status === 'running' && (
+                              <>
+                                <ArrowsClockwise size={12} weight="bold" className="animate-spin" />
+                                Running
+                              </>
+                            )}
+                          </Badge>
+                        )}
                       </div>
                       {workflow.description && (
                         <CardDescription className="text-xs mt-1 line-clamp-2">
                           {workflow.description}
                         </CardDescription>
                       )}
-                      <div className="flex gap-2 mt-2">
+                      <div className="flex gap-2 mt-2 flex-wrap">
                         <Badge variant="outline" className="text-xs">
                           {workflow.nodes.length} nodes
                         </Badge>
                         <Badge variant="outline" className="text-xs">
                           {workflow.connections.length} connections
                         </Badge>
+                        {workflow.lastRun && (
+                          <Badge variant="outline" className="text-xs">
+                            Last run: {new Date(workflow.lastRun).toLocaleDateString()}
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -395,6 +499,18 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
             ))}
           </div>
         </ScrollArea>
+
+        {filteredWorkflows.length === 0 && workflows.length > 0 && (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center text-muted-foreground">
+              <FlowArrow size={48} className="mx-auto mb-2 opacity-50" weight="duotone" />
+              <p className="text-sm">No workflows match this filter</p>
+              <Button size="sm" className="mt-2" onClick={() => setStatusFilter('all')}>
+                Clear Filter
+              </Button>
+            </div>
+          </div>
+        )}
 
         {workflows.length === 0 && (
           <div className="flex-1 flex items-center justify-center">
