@@ -1,19 +1,17 @@
 {
-  "name": "Lambda Designer
   "name": "Lambda Designer",
   "layout": {
     "type": "single"
   },
   "dataSources": [
     {
-      "key": "app-lamb
+      "id": "lambdas",
+      "key": "app-lambdas",
+      "type": "kv"
     },
-      "id": "selectedLambda
-      "defaultValue": nu
     {
-     
-    },
-      "id": "editDialog
+      "id": "selectedLambdaId",
+      "type": "static",
       "defaultValue": null
     },
     {
@@ -37,12 +35,6 @@
       "type": "computed",
       "compute": "(data) => (data.lambdas || []).length",
       "dependencies": ["lambdas"]
-    },
-    {
-      "id": "runtimeStats",
-      "type": "computed",
-      "compute": "(data) => { const lambdas = data.lambdas || []; return { nodejs: lambdas.filter(l => l.runtime?.startsWith('nodejs')).length, python: lambdas.filter(l => l.runtime?.startsWith('python')).length, total: lambdas.length }; }",
-      "dependencies": ["lambdas"]
     }
   ],
   "components": [
@@ -62,79 +54,77 @@
           "children": [
             {
               "id": "sidebar-header",
-                  "children"
-                      "t
-                        "className": "text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-cli
-                
-                    {
-                 
-                        "classNa
-                      "bindi
-                          "source": "lambdaCount"
-                    
-                  ]
-                {
-                  "props": {
-                  },
-                    {
-                      "a
-                          "type": "setState
-                      
-                     
-                  ],
-                    {
-                      "props": {
-                        "className": "mr-2 h-4 w-4"
-                    },
-                  ]
-              ]
-            {
-              "type": "Sc
-                "classN
-              "childr
-                  "
-                  
-                 
-                    "operator": "gt
-                  },
-                    {
-                    
-                      "itemCo
-                     
-                        },
-                          "conditi
-                         
-                          },
-                          "falseClass": "border-transpa
-                        "events": [
-                         
-                       
-                     
-                    
-                          }
-                     
-                            "type": "
-                              "c
-                            "children":
-                                "type": "div",
-                       
-                      
-                                
-                   
-                 
-               
-              
-             
-                                  
-              "type": "ScrollArea",
+              "type": "div",
               "props": {
-                "className": "flex-1"
+                "className": "p-4 border-b border-border space-y-3"
               },
               "children": [
                 {
                   "type": "div",
                   "props": {
-                    "className": "p-4 space-y-2"
+                    "className": "flex items-center justify-between"
+                  },
+                  "children": [
+                    {
+                      "type": "h2",
+                      "props": {
+                        "className": "text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+                      },
+                      "children": ["Lambdas"]
+                    },
+                    {
+                      "type": "Badge",
+                      "props": {
+                        "className": "text-xs"
+                      },
+                      "bindings": {
+                        "children": {
+                          "source": "lambdaCount"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Button",
+                  "props": {
+                    "className": "w-full"
+                  },
+                  "events": [
+                    {
+                      "event": "onClick",
+                      "actions": [
+                        {
+                          "type": "setState",
+                          "target": "createDialogOpen",
+                          "value": true
+                        }
+                      ]
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "icon",
+                      "props": {
+                        "name": "Plus",
+                        "className": "mr-2 h-4 w-4"
+                      }
+                    },
+                    "Create Lambda"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "div",
+              "props": {
+                "className": "flex-1 overflow-auto p-4"
+              },
+              "children": [
+                {
+                  "type": "div",
+                  "props": {
+                    "className": "space-y-2"
                   },
                   "conditional": {
                     "source": "lambdaCount",
@@ -143,596 +133,105 @@
                   },
                   "children": [
                     {
-                      "type": "list",
-                      "dataSource": "lambdas",
-                      "itemKey": "id",
-                      "itemComponent": {
-                        "type": "Card",
-                        "props": {
-                          "className": "group cursor-pointer hover:bg-accent/10 transition-all duration-200 hover:shadow-lg hover:shadow-accent/20 border-2 hover:border-accent/50"
-                        },
-                        "conditionalClass": {
-                          "condition": {
-                            "source": "selectedLambdaId",
-                            "operator": "eq",
-                            "valueFrom": "item.id"
-                          },
-                          "trueClass": "bg-accent/20 border-accent shadow-md shadow-accent/30",
-                          "falseClass": "border-transparent"
-                        },
-                        "events": [
-                          {
-                            "event": "onClick",
-                            "actions": [
-                              {
-                                "type": "setState",
-                                "target": "selectedLambdaId",
-                                "valueFrom": "item.id"
-                              }
-                            ]
-                          }
-                        ],
-                        "children": [
-                          {
-                            "type": "CardHeader",
-                            "props": {
-                              "className": "p-4"
-                            },
-                            "children": [
-                              {
-                                "type": "div",
-                                "props": {
-                                  "className": "flex items-start justify-between"
-                                },
-                                "children": [
-                                  {
-                                    "type": "div",
-                                    "props": {
-                                      "className": "flex-1"
-                                    },
-                                    "children": [
-                                      {
-                                        "type": "div",
-                                        "props": {
-                                          "className": "flex items-center gap-2 mb-1"
-                                        },
-                                        "children": [
-                                          {
-                                            "type": "icon",
-                                            "props": {
-                                              "name": "Lightning",
-                                              "className": "h-4 w-4 text-accent",
-                                              "weight": "duotone"
-                                            }
-                                          },
-                                          {
-                                            "type": "CardTitle",
-                                            "props": {
-                                              "className": "text-sm font-semibold"
-                                            },
-                                            "bindings": {
-                                              "children": {
-                                                "valueFrom": "item.name"
-                                              }
-                                            }
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "type": "CardDescription",
-                                        "props": {
-                                          "className": "text-xs line-clamp-2"
-                                        },
-                                        "bindings": {
-                                          "children": {
-                                            "valueFrom": "item.description",
-                                            "default": "No description"
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "type": "div",
-                                    "props": {
-                                      "className": "flex gap-1"
-                                    },
-                                    "children": [
-                                      {
-                                        "type": "Button",
-                                        "props": {
-                                          "variant": "ghost",
-                                          "size": "icon",
-                                          "className": "h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
-                                        },
-                                        "events": [
-                                          {
-                                            "event": "onClick",
-                                            "stopPropagation": true,
-                                            "actions": [
-                                              {
-                                                "type": "custom",
-                                                "handler": "handleDuplicateLambda",
-                                                "params": {
-                                      "className": "text-xs"
-                                    "children": [
-                                        "type":
-                                          "va
-                                           
-                                        }
-                                    ]
-                                ]
-                            ]
-                        ]
+                      "type": "text",
+                      "children": ["Lambda list will be rendered here"]
                     }
+                  ]
                 },
-                  "type": "div",
-                    "className": "flex flex
-                  "conditional": {
-                    "operator": "eq",
-                  },
-                    {
-                      "props": {
-                        "className": "h-16 w-16 text-muted-fo
-                      }
-                    {
-                      "props": {
-                      },
-                    },
-                      "type": "p",
-                        "className": "text-sm text-muted-foreground 
-                      "children": "Create your first ser
-                    {
-                      "props": {
-                      },
-                        {
-                          "actions": [
-                              "type": "setState",
-                              "value": true
-                          ]
-                      ],
-                        {
-                          "props": {
-                            "className": "m
-                        },
-                      ]
-                  ]
-              ]
-          ]
-        {
-          "type": "div",
-            "className": "flex-1 flex f
-          "children": [
-              "type": "div",
-                "className": "fle
-              "conditional": {
-                "operator": "tr
-              "children": [
-                  "type": "div",
-                    "className": "max-w-6xl mx-auto space-y-6"
-                  "children": [
-                      "type": "div",
-                        "className"
-                      "children": [
-                          "type": "div",
-                            {
-                              "props": {
-                              },
-                                "children": {
-                                  "path": "name"
-                              }
-                            {
-                              "props"
-                              },
-                                "ch
-                                  "path": "descripti
-                                }
-                            }
-                        },
-                          "type": "div
-                            "className": "flex ga
-                          "children": [
-                              "type": "Button",
-                                "variant": "outline",
-                              },
-                                {
-                                  "actions": [
-                                      "type
-                                      "va
-                                  ]
-                              ],
-                                {
-                                 
-                               
-                             
-                           
-                         
-                       
-                     
-                   
-                  
-                 
-                                
-                            
-                                }
-                    
-                                  
-                                    "name": 
-                                  }
-                              
-                    
-                        }
-                    }
-                      "type": "Card",
-                        "classNa
-                      "children": [
-                          "type": "CardHeader",
-                            {
-                       
-                      
-                     
-                          ]
-                        {
-                          "props": {
-                        
-                            {
-                      
-                     
-                                  
-                                
-                                {
-                        
-                                  },
-                      
-                     
-                                  }
-                              ]
-                            {
-                        
-                                 
-                         
-                                  "children":
-                                {
-                             
-                                  },
-                                    "children": {
-                                      "path
-                             
-                           
-                         
-                        
-                                  "
-                         
-                                  "childr
-                                {
-                                  "props": 
-                                  },
-                           
-                          
-                                    }
-                       
-                     
-                   
-                 
-               
-             
-           
-          
-         
-                               
-                        
-                    
-                                  }
-            
-                       
-             
-                    {
-                      "p
-                      },
-                
-                          "chi
-                              "type": "div"
-                                "cla
-                
-                           
-                 
-                                
-                            
-                                      "children": "Edit your l
-                    
-                               
-                     
-                                  },
-                                
-                                      "path": "language"
-                        
-                              ]
-                         
-                        {
-                          "children": [
-                             
-                                "className"
-                              "children"
-                                  "type": "p",
-                                
-                                  "children
-                              ]
-                          ]
-                      ]
-                  ]
-              ]
-            {
-              "props": {
-              },
-                "source": "selectedLambd
-              },
                 {
+                  "type": "div",
                   "props": {
+                    "className": "flex flex-col items-center justify-center py-12 px-4 text-center"
                   },
+                  "conditional": {
+                    "source": "lambdaCount",
+                    "operator": "eq",
+                    "value": 0
+                  },
+                  "children": [
                     {
+                      "type": "icon",
                       "props": {
-                        "className": "h-20 w-20 text-muted-foreground/
+                        "name": "Lightning",
+                        "className": "h-16 w-16 text-muted-foreground/30 mb-4",
+                        "weight": "duotone"
                       }
-                    {
-                      "props"
-                      },
                     },
-                      "ty
-                        "className": "te
-                      "children": "S
+                    {
+                      "type": "h3",
+                      "props": {
+                        "className": "text-lg font-semibold mb-2"
+                      },
+                      "children": ["No Lambdas Yet"]
+                    },
+                    {
+                      "type": "p",
+                      "props": {
+                        "className": "text-sm text-muted-foreground mb-4"
+                      },
+                      "children": ["Create your first serverless function"]
+                    }
                   ]
+                }
               ]
+            }
           ]
-      ]
-  ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                              ]
-                            },
-                            {
-                              "type": "Button",
-                              "props": {
-                                "variant": "outline",
-                                "size": "sm"
-                              },
-                              "events": [
-                                {
-                                  "event": "onClick",
-                                  "actions": [
-                                    {
-                                      "type": "toast",
-                                      "message": "Test execution coming soon",
-                                      "variant": "info"
-                                    }
-                                  ]
-                                }
-                              ],
-                              "children": [
-                                {
-                                  "type": "icon",
-                                  "props": {
-                                    "name": "Play",
-                                    "className": "mr-2 h-4 w-4"
-                                  }
-                                },
-                                "Test"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
+        },
+        {
+          "id": "main-content",
+          "type": "div",
+          "props": {
+            "className": "flex-1 flex flex-col"
+          },
+          "children": [
+            {
+              "type": "div",
+              "props": {
+                "className": "flex-1 flex items-center justify-center p-8"
+              },
+              "conditional": {
+                "source": "selectedLambda",
+                "operator": "truthy"
+              },
+              "children": [
+                {
+                  "type": "div",
+                  "props": {
+                    "className": "max-w-6xl mx-auto w-full space-y-6"
+                  },
+                  "children": [
                     {
-                      "type": "Card",
+                      "type": "div",
                       "props": {
-                        "className": "border-2"
+                        "className": "flex items-center justify-between"
                       },
                       "children": [
                         {
-                          "type": "CardHeader",
+                          "type": "div",
                           "children": [
                             {
-                              "type": "CardTitle",
-                              "children": "Configuration"
-                            },
-                            {
-                              "type": "CardDescription",
-                              "children": "Runtime settings and environment configuration"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "CardContent",
-                          "props": {
-                            "className": "grid grid-cols-2 gap-4"
-                          },
-                          "children": [
-                            {
-                              "type": "div",
-                              "children": [
-                                {
-                                  "type": "Label",
-                                  "props": {
-                                    "className": "text-sm font-medium mb-2 block"
-                                  },
-                                  "children": "Runtime"
-                                },
-                                {
-                                  "type": "p",
-                                  "props": {
-                                    "className": "text-sm"
-                                  },
-                                  "bindings": {
-                                    "children": {
-                                      "source": "selectedLambda",
-                                      "path": "runtime"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "type": "div",
-                              "children": [
-                                {
-                                  "type": "Label",
-                                  "props": {
-                                    "className": "text-sm font-medium mb-2 block"
-                                  },
-                                  "children": "Handler"
-                                },
-                                {
-                                  "type": "p",
-                                  "props": {
-                                    "className": "text-sm font-mono"
-                                  },
-                                  "bindings": {
-                                    "children": {
-                                      "source": "selectedLambda",
-                                      "path": "handler"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "type": "div",
-                              "children": [
-                                {
-                                  "type": "Label",
-                                  "props": {
-                                    "className": "text-sm font-medium mb-2 block"
-                                  },
-                                  "children": "Timeout"
-                                },
-                                {
-                                  "type": "p",
-                                  "props": {
-                                    "className": "text-sm"
-                                  },
-                                  "bindings": {
-                                    "children": {
-                                      "source": "selectedLambda",
-                                      "path": "timeout",
-                                      "transform": "val => val + ' seconds'"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "type": "div",
-                              "children": [
-                                {
-                                  "type": "Label",
-                                  "props": {
-                                    "className": "text-sm font-medium mb-2 block"
-                                  },
-                                  "children": "Memory"
-                                },
-                                {
-                                  "type": "p",
-                                  "props": {
-                                    "className": "text-sm"
-                                  },
-                                  "bindings": {
-                                    "children": {
-                                      "source": "selectedLambda",
-                                      "path": "memory",
-                                      "transform": "val => val + ' MB'"
-                                    }
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "Card",
-                      "props": {
-                        "className": "border-2"
-                      },
-                      "children": [
-                        {
-                          "type": "CardHeader",
-                          "children": [
-                            {
-                              "type": "div",
+                              "type": "h1",
                               "props": {
-                                "className": "flex items-center justify-between"
+                                "className": "text-3xl font-bold"
                               },
-                              "children": [
-                                {
-                                  "type": "div",
-                                  "children": [
-                                    {
-                                      "type": "CardTitle",
-                                      "children": "Function Code"
-                                    },
-                                    {
-                                      "type": "CardDescription",
-                                      "children": "Edit your lambda function code"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "Badge",
-                                  "props": {
-                                    "variant": "outline"
-                                  },
-                                  "bindings": {
-                                    "children": {
-                                      "source": "selectedLambda",
-                                      "path": "language"
-                                    }
-                                  }
+                              "bindings": {
+                                "children": {
+                                  "source": "selectedLambda",
+                                  "path": "name"
                                 }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "CardContent",
-                          "children": [
+                              }
+                            },
                             {
-                              "type": "div",
+                              "type": "p",
                               "props": {
-                                "className": "border rounded-lg overflow-hidden bg-muted/50"
+                                "className": "text-muted-foreground"
                               },
-                              "children": [
-                                {
-                                  "type": "p",
-                                  "props": {
-                                    "className": "p-4 text-sm text-muted-foreground"
-                                  },
-                                  "children": "Code editor integration would go here"
+                              "bindings": {
+                                "children": {
+                                  "source": "selectedLambda",
+                                  "path": "description"
                                 }
-                              ]
+                              }
                             }
                           ]
                         }
@@ -771,14 +270,14 @@
                       "props": {
                         "className": "text-xl font-semibold mb-2"
                       },
-                      "children": "No Lambda Selected"
+                      "children": ["No Lambda Selected"]
                     },
                     {
                       "type": "p",
                       "props": {
                         "className": "text-muted-foreground"
                       },
-                      "children": "Select a lambda from the sidebar or create a new one"
+                      "children": ["Select a lambda from the sidebar or create a new one"]
                     }
                   ]
                 }
