@@ -1,21 +1,21 @@
 {
-  "id": "workflow-designer",
+  "name": "Workflow Designer
   "name": "Workflow Designer",
   "layout": {
-    "type": "single"
-  },
   "dataSources": [
+    
+      "key": "app-
+    }
+      "id": "selectedWor
+      "defaultValue
     {
-      "id": "workflows",
-      "type": "kv",
-      "key": "app-workflows",
-      "defaultValue": []
-    },
-    {
-      "id": "selectedWorkflowId",
       "type": "static",
-      "defaultValue": null
     },
+     
+      "defaultValue": "all"
+    {
+      "defaultValue": null
+      
     {
       "id": "selectedNodeId",
       "type": "static",
@@ -32,36 +32,36 @@
       "defaultValue": false
     },
     {
-      "id": "newWorkflowName",
-      "type": "static",
-      "defaultValue": ""
+      "id": "filteredWorkflows
+      "compute": "(data
     },
-    {
-      "id": "newWorkflowDescription",
-      "type": "static",
-      "defaultValue": ""
-    },
-    {
-      "id": "selectedWorkflow",
-      "type": "computed",
-      "compute": "(data) => data.workflows?.find(w => w.id === data.selectedWorkflowId) || null",
-      "dependencies": ["workflows", "selectedWorkflowId"]
-    },
-    {
-      "id": "filteredWorkflows",
-      "type": "computed",
-      "compute": "(data) => { if (data.statusFilter === 'all') return data.workflows || []; return (data.workflows || []).filter(w => w.status === data.statusFilter); }",
-      "dependencies": ["workflows", "statusFilter"]
-    },
-    {
-      "id": "statusCounts",
-      "type": "computed",
-      "compute": "(data) => ({ all: (data.workflows || []).length, success: (data.workflows || []).filter(w => w.status === 'success').length, failed: (data.workflows || []).filter(w => w.status === 'failed').length, running: (data.workflows || []).filter(w => w.status === 'running').length })",
-      "dependencies": ["workflows"]
+      
+     
     }
-  ],
   "components": [
-    {
+      "id": "root",
+      
+     
+        {
+          "type": "div",
+            "className": "w-80 border-r border-border bg-card/50 backdrop-blur flex flex-col"
+          "children": [
+      
+     
+              },
+                {
+                  "type": "Heading",
+                    "className": "text-xl font-bold
+      
+     
+                  "type": "
+                    "clas
+                  },
+                    {
+     
+    
+                 
+     
       "id": "root",
       "type": "div",
       "props": {
@@ -107,6 +107,234 @@
                           "target": "createDialogOpen",
                           "value": true
                         }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "filter-tabs",
+              "type": "div",
+              "props": {
+                "className": "p-4 space-y-2"
+              },
+              "children": [
+                {
+                  "id": "filter-label",
+                  "type": "Label",
+                  "props": {
+                    "className": "text-sm text-muted-foreground",
+                    "children": "Status Filter"
+                  }
+                },
+                {
+                  "id": "filter-buttons",
+                  "type": "div",
+                  "props": {
+                    "className": "grid grid-cols-2 gap-2"
+                  },
+                  "children": [
+                    {
+                      "id": "filter-all",
+                      "type": "Button",
+                      "props": {
+                        "variant": "outline",
+                        "size": "sm",
+                        "className": "justify-between"
+                      },
+                      "bindings": {
+                        "className": {
+                          "source": "statusFilter",
+                          "transform": "(val) => val === 'all' ? 'justify-between bg-primary text-primary-foreground' : 'justify-between'"
+                        }
+                      },
+                      "events": [
+                        {
+                          "event": "click",
+                          "actions": [
+                            {
+                              "id": "set-filter-all",
+                              "type": "set-value",
+                              "target": "statusFilter",
+                              "value": "all"
+                            }
+                          ]
+                        }
+                      ],
+                      "children": [
+                        {
+                          "id": "filter-all-content",
+                          "type": "div",
+                          "props": {
+                            "className": "flex items-center justify-between w-full"
+                          },
+                          "children": [
+                            {
+                              "id": "filter-all-label",
+                              "type": "Text",
+                              "props": {
+                                "children": "All"
+                              }
+                            },
+                            {
+                              "id": "filter-all-count",
+                              "type": "Badge",
+                              "props": {
+                                "variant": "secondary",
+                                "className": "ml-auto"
+                              },
+                              "bindings": {
+                                "children": {
+                                  "source": "statusCounts",
+                                  "path": "all"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "workflow-list",
+              "type": "div",
+              "props": {
+                "className": "flex-1 overflow-auto p-4 space-y-2"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "main-content",
+          "type": "div",
+          "props": {
+            "className": "flex-1 flex flex-col"
+          },
+          "children": [
+            {
+              "id": "empty-state",
+              "type": "div",
+              "props": {
+                "className": "flex-1 flex items-center justify-center"
+              },
+              "condition": {
+                "source": "selectedWorkflow",
+                "transform": "(val) => !val"
+              },
+              "children": [
+                {
+                  "id": "empty-state-content",
+                  "type": "div",
+                  "props": {
+                    "className": "text-center space-y-4"
+                  },
+                  "children": [
+                    {
+                      "id": "empty-state-title",
+                      "type": "Heading",
+                      "props": {
+                        "className": "text-2xl font-bold text-muted-foreground",
+                        "children": "No Workflow Selected"
+                      }
+                    },
+                    {
+                      "id": "empty-state-description",
+                      "type": "Text",
+                      "props": {
+                        "className": "text-muted-foreground",
+                        "children": "Select a workflow from the sidebar or create a new one"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "workflow-editor",
+              "type": "div",
+              "props": {
+                "className": "flex-1 p-6 overflow-auto"
+              },
+              "condition": {
+                "source": "selectedWorkflow",
+                "transform": "(val) => !!val"
+              },
+              "children": [
+                {
+                  "id": "workflow-header",
+                  "type": "div",
+                  "props": {
+                    "className": "mb-6"
+                  },
+                  "children": [
+                    {
+                      "id": "workflow-name",
+                      "type": "Heading",
+                      "props": {
+                        "className": "text-3xl font-bold mb-2"
+                      },
+                      "bindings": {
+                        "children": {
+                          "source": "selectedWorkflow",
+                          "path": "name"
+                        }
+                      }
+                    },
+                    {
+                      "id": "workflow-description",
+                      "type": "Text",
+                      "props": {
+                        "className": "text-muted-foreground"
+                      },
+                      "bindings": {
+                        "children": {
+                          "source": "selectedWorkflow",
+                          "path": "description"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "workflow-canvas",
+                  "type": "Card",
+                  "props": {
+                    "className": "min-h-[400px] bg-muted/20"
+                  },
+                  "children": [
+                    {
+                      "id": "canvas-content",
+                      "type": "CardContent",
+                      "props": {
+                        "className": "p-6"
+                      },
+                      "children": [
+                        {
+                          "id": "canvas-placeholder",
+                          "type": "div",
+                          "props": {
+                            "className": "text-center text-muted-foreground py-12",
+                            "children": "Workflow canvas - Add nodes to build your workflow"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "globalActions": []
+}
                       ]
                     }
                   ]
