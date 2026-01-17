@@ -45,7 +45,10 @@ This project demonstrates a comprehensive JSON-driven UI architecture with atomi
 
 ```typescript
 import { PageRenderer } from '@/lib/json-ui/page-renderer'
-import { dashboardSchema } from '@/schemas/dashboard-schema'
+import { hydrateSchema } from '@/schemas/schema-loader'
+import analyticsDashboardJson from '@/schemas/analytics-dashboard.json'
+
+const dashboardSchema = hydrateSchema(analyticsDashboardJson)
 
 export function DashboardPage() {
   return <PageRenderer schema={dashboardSchema} />
@@ -439,8 +442,12 @@ src/
 │       ├── component-renderer.tsx
 │       └── component-registry.tsx
 ├── schemas/             # JSON page schemas
-│   ├── dashboard-schema.ts
-│   └── page-schemas.ts
+│   ├── analytics-dashboard.json
+│   ├── todo-list.json
+│   ├── dashboard-simple.json
+│   ├── new-molecules-showcase.json
+│   ├── compute-functions.ts
+│   └── schema-loader.ts
 └── types/
     └── json-ui.ts       # TypeScript types
 ```

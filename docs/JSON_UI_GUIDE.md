@@ -524,7 +524,7 @@ events: [{
 
 ## Example: Complete Todo App
 
-See `/src/schemas/page-schemas.ts` for a full working example with:
+See `/src/schemas/todo-list.json` for a full working example with:
 - KV persistence
 - Computed statistics
 - CRUD operations
@@ -577,7 +577,9 @@ See `/src/schemas/page-schemas.ts` for a full working example with:
 ## Resources
 
 - **Type Definitions**: `/src/types/json-ui.ts`
-- **Page Schemas**: `/src/schemas/page-schemas.ts`
+- **JSON Schemas**: `/src/schemas/*.json`
+- **Compute Functions**: `/src/schemas/compute-functions.ts`
+- **Schema Loader**: `/src/schemas/schema-loader.ts`
 - **Custom Hooks**: `/src/hooks/data/` and `/src/hooks/ui/`
 - **Atomic Components**: `/src/components/atoms/`
 - **Component Registry**: `/src/lib/json-ui/component-registry.ts`

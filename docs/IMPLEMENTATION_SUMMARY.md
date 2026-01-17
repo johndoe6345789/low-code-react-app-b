@@ -163,7 +163,12 @@ src/
 │   └── json-ui/
 │       └── component-registry.tsx    [MODIFIED]
 ├── schemas/
-│   └── dashboard-schema.ts          [NEW]
+│   ├── analytics-dashboard.json    [NEW]
+│   ├── todo-list.json              [NEW]
+│   ├── dashboard-simple.json       [NEW]
+│   ├── new-molecules-showcase.json [NEW]
+│   ├── compute-functions.ts        [NEW]
+│   └── schema-loader.ts            [NEW]
 ├── types/
 │   └── json-ui.ts                   [MODIFIED]
 ├── App.simple-json-demo.tsx         [NEW]
