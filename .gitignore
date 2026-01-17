@@ -13,6 +13,9 @@ dist-ssr
 *-dist
 *.local
 
+# Exception: Include dist folder for workspace packages
+!packages/*/dist
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
