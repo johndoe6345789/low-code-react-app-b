@@ -1,11 +1,9 @@
 import { UIComponent } from '@/types/json-ui'
 import { PropertyEditorField } from '@/components/atoms/PropertyEditorField'
-import { PanelHeader } from '@/components/atoms'
+import { PanelHeader, Badge, IconButton, Stack, Text, EmptyStateIcon } from '@/components/atoms'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Badge } from '@/components/ui/badge'
-import { Sliders, Trash, Code } from '@phosphor-icons/react'
+import { Sliders, Trash } from '@phosphor-icons/react'
 import { getComponentDef } from '@/lib/component-definitions'
 
 interface PropertyEditorProps {
@@ -17,10 +15,14 @@ interface PropertyEditorProps {
 export function PropertyEditor({ component, onUpdate, onDelete }: PropertyEditorProps) {
   if (!component) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-muted-foreground p-8 text-center">
-        <Sliders className="w-12 h-12 mb-4 opacity-50" />
-        <p className="text-sm">No component selected</p>
-        <p className="text-xs mt-1">Select a component to edit its properties</p>
+      <div className="h-full flex flex-col items-center justify-center p-8">
+        <Stack direction="vertical" align="center" spacing="md">
+          <EmptyStateIcon icon={<Sliders className="w-12 h-12" />} />
+          <Stack direction="vertical" align="center" spacing="xs">
+            <Text variant="small">No component selected</Text>
+            <Text variant="caption">Select a component to edit its properties</Text>
+          </Stack>
+        </Stack>
       </div>
     )
   }
@@ -106,33 +108,32 @@ export function PropertyEditor({ component, onUpdate, onDelete }: PropertyEditor
         <PanelHeader
           title="Properties"
           subtitle={
-            <div className="flex items-center gap-2 mt-1">
+            <Stack direction="horizontal" align="center" spacing="sm" className="mt-1">
               <Badge variant="outline" className="text-xs font-mono">
                 {def?.label || component.type}
               </Badge>
-              <span className="text-xs text-muted-foreground">#{component.id}</span>
-            </div>
+              <Text variant="caption">#{component.id}</Text>
+            </Stack>
           }
           icon={<Sliders size={20} weight="duotone" />}
           actions={
-            <Button
+            <IconButton
+              icon={<Trash className="w-4 h-4" />}
               variant="ghost"
               size="sm"
               onClick={onDelete}
               className="text-destructive hover:text-destructive hover:bg-destructive/10"
-            >
-              <Trash className="w-4 h-4" />
-            </Button>
+            />
           }
         />
       </div>
       
       <ScrollArea className="flex-1 p-4">
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        <Stack spacing="lg">
+          <Stack spacing="md">
+            <Text variant="caption" className="font-semibold uppercase tracking-wide">
               Component Properties
-            </h3>
+            </Text>
             {props.map((prop) => (
               <PropertyEditorField
                 key={prop.name}
@@ -144,14 +145,14 @@ export function PropertyEditor({ component, onUpdate, onDelete }: PropertyEditor
                 onChange={handlePropChange}
               />
             ))}
-          </div>
+          </Stack>
 
           <Separator />
 
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          <Stack spacing="md">
+            <Text variant="caption" className="font-semibold uppercase tracking-wide">
               Common Properties
-            </h3>
+            </Text>
             {commonProps.map((prop) => (
               <PropertyEditorField
                 key={prop.name}
@@ -162,8 +163,8 @@ export function PropertyEditor({ component, onUpdate, onDelete }: PropertyEditor
                 onChange={handlePropChange}
               />
             ))}
-          </div>
-        </div>
+          </Stack>
+        </Stack>
       </ScrollArea>
     </div>
   )

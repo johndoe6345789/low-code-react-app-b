@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge'
+import { Badge, Flex, Text } from '@/components/atoms'
 
 interface LabelWithBadgeProps {
   label: string
@@ -12,13 +12,13 @@ export function LabelWithBadge({
   badgeVariant = 'secondary' 
 }: LabelWithBadgeProps) {
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm font-medium">{label}</span>
+    <Flex align="center" gap="sm">
+      <Text variant="small" className="font-medium">{label}</Text>
       {badge !== undefined && (
         <Badge variant={badgeVariant} className="text-xs">
           {badge}
         </Badge>
       )}
-    </div>
+    </Flex>
   )
 }

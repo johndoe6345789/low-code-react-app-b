@@ -1,7 +1,5 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Input, IconButton, Flex } from '@/components/atoms'
 import { MagnifyingGlass, X } from '@phosphor-icons/react'
-import { cn } from '@/lib/utils'
 
 interface SearchBarProps {
   value: string
@@ -12,7 +10,7 @@ interface SearchBarProps {
 
 export function SearchBar({ value, onChange, placeholder = 'Search...', className }: SearchBarProps) {
   return (
-    <div className={cn('flex gap-2', className)}>
+    <Flex gap="sm" className={className}>
       <div className="relative flex-1">
         <MagnifyingGlass 
           className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" 
@@ -26,15 +24,13 @@ export function SearchBar({ value, onChange, placeholder = 'Search...', classNam
         />
       </div>
       {value && (
-        <Button
+        <IconButton
+          icon={<X size={16} />}
           variant="ghost"
-          size="icon"
           onClick={() => onChange('')}
           title="Clear search"
-        >
-          <X size={16} />
-        </Button>
+        />
       )}
-    </div>
+    </Flex>
   )
 }

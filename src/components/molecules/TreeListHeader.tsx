@@ -1,5 +1,4 @@
-import { Button } from '@/components/ui/button'
-import { TreeIcon, ActionIcon } from '@/components/atoms'
+import { Button, TreeIcon, ActionIcon, Flex, Heading, Stack, IconButton } from '@/components/atoms'
 
 interface TreeListHeaderProps {
   onCreateNew: () => void
@@ -15,25 +14,27 @@ export function TreeListHeader({
   hasSelectedTree = false,
 }: TreeListHeaderProps) {
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold flex items-center gap-2">
+    <Stack spacing="sm">
+      <Flex justify="between" align="center">
+        <Flex align="center" gap="sm">
           <TreeIcon size={20} />
-          Component Trees
-        </h2>
-        <Button size="sm" onClick={onCreateNew}>
-          <ActionIcon action="add" size={16} />
-        </Button>
-      </div>
+          <Heading level={2} className="text-lg font-semibold">Component Trees</Heading>
+        </Flex>
+        <IconButton 
+          icon={<ActionIcon action="add" size={16} />}
+          size="sm" 
+          onClick={onCreateNew}
+        />
+      </Flex>
       
-      <div className="flex gap-2">
+      <Flex gap="sm">
         <Button
           size="sm"
           variant="outline"
           onClick={onImportJson}
           className="flex-1 text-xs"
+          leftIcon={<ActionIcon action="upload" size={14} />}
         >
-          <ActionIcon action="upload" size={14} className="mr-1.5" />
           Import JSON
         </Button>
         <Button
@@ -42,11 +43,11 @@ export function TreeListHeader({
           onClick={onExportJson}
           disabled={!hasSelectedTree}
           className="flex-1 text-xs"
+          leftIcon={<ActionIcon action="download" size={14} />}
         >
-          <ActionIcon action="download" size={14} className="mr-1.5" />
           Export JSON
         </Button>
-      </div>
-    </div>
+      </Flex>
+    </Stack>
   )
 }

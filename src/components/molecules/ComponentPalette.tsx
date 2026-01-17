@@ -1,6 +1,6 @@
 import { ComponentDefinition, getCategoryComponents } from '@/lib/component-definitions'
 import { ComponentPaletteItem } from '@/components/atoms/ComponentPaletteItem'
-import { PanelHeader } from '@/components/atoms'
+import { PanelHeader, Stack } from '@/components/atoms'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Package } from '@phosphor-icons/react'
@@ -18,7 +18,7 @@ export function ComponentPalette({ onDragStart }: ComponentPaletteProps) {
   ]
 
   return (
-    <div className="h-full flex flex-col">
+    <Stack direction="vertical" className="h-full">
       <div className="p-4">
         <PanelHeader
           title="Components"
@@ -53,6 +53,6 @@ export function ComponentPalette({ onDragStart }: ComponentPaletteProps) {
           </TabsContent>
         ))}
       </Tabs>
-    </div>
+    </Stack>
   )
 }

@@ -1,4 +1,4 @@
-import { AppLogo } from '@/components/atoms'
+import { AppLogo, Stack, Heading, Text } from '@/components/atoms'
 
 interface AppBrandingProps {
   title?: string
@@ -10,14 +10,14 @@ export function AppBranding({
   subtitle = 'Low-Code Next.js App Builder' 
 }: AppBrandingProps) {
   return (
-    <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+    <Stack direction="horizontal" align="center" spacing="sm" className="flex-1 min-w-0">
       <AppLogo />
-      <div className="flex flex-col min-w-[100px]">
-        <h1 className="text-base sm:text-xl font-bold whitespace-nowrap">{title}</h1>
-        <p className="text-xs text-muted-foreground hidden sm:block whitespace-nowrap">
+      <Stack direction="vertical" spacing="none" className="min-w-[100px]">
+        <Heading level={1} className="text-base sm:text-xl font-bold whitespace-nowrap">{title}</Heading>
+        <Text variant="caption" className="hidden sm:block whitespace-nowrap">
           {subtitle}
-        </p>
-      </div>
-    </div>
+        </Text>
+      </Stack>
+    </Stack>
   )
 }

@@ -1,7 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { ActionIcon } from '@/components/atoms'
+import { Card, Badge, ActionIcon, IconButton, Stack, Flex, Text, Heading } from '@/components/atoms'
 import { ComponentTree } from '@/types/project'
 
 interface TreeCardProps {
@@ -25,45 +22,54 @@ export function TreeCard({
 }: TreeCardProps) {
   return (
     <Card
-      className={`cursor-pointer transition-all ${
+      className={`cursor-pointer transition-all p-4 ${
         isSelected ? 'ring-2 ring-primary bg-accent' : 'hover:bg-accent/50'
       }`}
       onClick={onSelect}
     >
-      <CardHeader className="p-4">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1 min-w-0">
-            <CardTitle className="text-sm truncate">{tree.name}</CardTitle>
+      <Stack spacing="sm">
+        <Flex justify="between" align="start" gap="sm">
+          <Stack spacing="xs" className="flex-1 min-w-0">
+            <Heading level={4} className="text-sm truncate">{tree.name}</Heading>
             {tree.description && (
-              <CardDescription className="text-xs mt-1 line-clamp-2">
+              <Text variant="caption" className="line-clamp-2">
                 {tree.description}
-              </CardDescription>
+              </Text>
             )}
-            <div className="flex gap-2 mt-2">
+            <div>
               <Badge variant="outline" className="text-xs">
                 {tree.rootNodes.length} components
               </Badge>
             </div>
-          </div>
+          </Stack>
+        </Flex>
+        <div onClick={(e) => e.stopPropagation()}>
+          <Flex gap="xs" className="mt-1">
+            <IconButton
+              icon={<ActionIcon action="edit" size={14} />}
+              variant="ghost"
+              size="sm"
+              onClick={onEdit}
+              title="Edit tree"
+            />
+            <IconButton
+              icon={<ActionIcon action="copy" size={14} />}
+              variant="ghost"
+              size="sm"
+              onClick={onDuplicate}
+              title="Duplicate tree"
+            />
+            <IconButton
+              icon={<ActionIcon action="delete" size={14} />}
+              variant="ghost"
+              size="sm"
+              onClick={onDelete}
+              disabled={disableDelete}
+              title="Delete tree"
+            />
+          </Flex>
         </div>
-        <div className="flex gap-1 mt-2" onClick={(e) => e.stopPropagation()}>
-          <Button size="sm" variant="ghost" onClick={onEdit} title="Edit tree">
-            <ActionIcon action="edit" size={14} />
-          </Button>
-          <Button size="sm" variant="ghost" onClick={onDuplicate} title="Duplicate tree">
-            <ActionIcon action="copy" size={14} />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={onDelete}
-            disabled={disableDelete}
-            title="Delete tree"
-          >
-            <ActionIcon action="delete" size={14} />
-          </Button>
-        </div>
-      </CardHeader>
+      </Stack>
     </Card>
   )
 }

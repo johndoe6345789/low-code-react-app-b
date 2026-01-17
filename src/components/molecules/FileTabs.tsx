@@ -1,5 +1,6 @@
 import { ProjectFile } from '@/types/project'
 import { FileCode, X } from '@phosphor-icons/react'
+import { Flex } from '@/components/atoms'
 
 interface FileTabsProps {
   files: ProjectFile[]
@@ -10,7 +11,7 @@ interface FileTabsProps {
 
 export function FileTabs({ files, activeFileId, onFileSelect, onFileClose }: FileTabsProps) {
   return (
-    <div className="flex items-center gap-1">
+    <Flex align="center" gap="xs">
       {files.map((file) => (
         <button
           key={file.id}
@@ -34,6 +35,6 @@ export function FileTabs({ files, activeFileId, onFileSelect, onFileClose }: Fil
           </button>
         </button>
       ))}
-    </div>
+    </Flex>
   )
 }

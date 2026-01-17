@@ -1,5 +1,4 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Card, Stack, Text, Heading, Skeleton, Flex, IconWrapper } from '@/components/atoms'
 
 interface DataCardProps {
   title?: string
@@ -27,46 +26,49 @@ export function DataCard({
   if (isLoading) {
     return (
       <Card className={className}>
-        <CardContent className="pt-6">
-          <Skeleton className="h-4 w-20 mb-2" />
-          <Skeleton className="h-8 w-16 mb-1" />
-          <Skeleton className="h-3 w-24" />
-        </CardContent>
+        <div className="pt-6 px-6 pb-6">
+          <Stack spacing="sm">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-8 w-16" />
+            <Skeleton className="h-3 w-24" />
+          </Stack>
+        </div>
       </Card>
     )
   }
 
   return (
     <Card className={className}>
-      <CardContent className="pt-6">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
+      <div className="pt-6 px-6 pb-6">
+        <Flex justify="between" align="start" gap="md">
+          <Stack spacing="xs" className="flex-1">
             {title && (
-              <div className="text-sm font-medium text-muted-foreground mb-1">
+              <Text variant="muted" className="font-medium">
                 {title}
-              </div>
+              </Text>
             )}
-            <div className="text-3xl font-bold">
+            <Heading level={1} className="text-3xl font-bold">
               {value}
-            </div>
+            </Heading>
             {description && (
-              <div className="text-xs text-muted-foreground mt-1">
+              <Text variant="caption">
                 {description}
-              </div>
+              </Text>
             )}
             {trend && (
-              <div className={`text-xs mt-2 ${trend.positive ? 'text-green-500' : 'text-red-500'}`}>
+              <Text 
+                variant="small" 
+                className={trend.positive ? 'text-green-500' : 'text-red-500'}
+              >
                 {trend.positive ? '↑' : '↓'} {trend.value} {trend.label}
-              </div>
+              </Text>
             )}
-          </div>
+          </Stack>
           {icon && (
-            <div className="text-muted-foreground">
-              {icon}
-            </div>
+            <IconWrapper icon={icon} size="lg" variant="muted" />
           )}
-        </div>
-      </CardContent>
+        </Flex>
+      </div>
     </Card>
   )
 }

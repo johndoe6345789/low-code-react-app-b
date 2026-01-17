@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge'
+import { Badge, Flex, Text, IconWrapper } from '@/components/atoms'
 
 interface NavigationItemProps {
   icon: React.ReactNode
@@ -24,12 +24,14 @@ export function NavigationItem({
           : 'hover:bg-muted text-foreground'
       }`}
     >
-      <span className={isActive ? 'text-primary-foreground' : 'text-muted-foreground'}>
-        {icon}
-      </span>
-      <span className="flex-1 text-left text-sm font-medium">
+      <IconWrapper
+        icon={icon}
+        size="md"
+        variant={isActive ? 'default' : 'muted'}
+      />
+      <Text className="flex-1 text-left font-medium" variant="small">
         {label}
-      </span>
+      </Text>
       {badge !== undefined && badge > 0 && (
         <Badge
           variant={isActive ? 'secondary' : 'destructive'}

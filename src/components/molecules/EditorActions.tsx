@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button, Flex } from '@/components/atoms'
 import { Info, Sparkle } from '@phosphor-icons/react'
 
 interface EditorActionsProps {
@@ -8,14 +8,14 @@ interface EditorActionsProps {
 
 export function EditorActions({ onExplain, onImprove }: EditorActionsProps) {
   return (
-    <div className="flex gap-2">
+    <Flex gap="sm">
       <Button
         size="sm"
         variant="ghost"
         onClick={onExplain}
         className="h-7 text-xs"
+        leftIcon={<Info size={14} />}
       >
-        <Info size={14} className="mr-1" />
         Explain
       </Button>
       <Button
@@ -23,10 +23,10 @@ export function EditorActions({ onExplain, onImprove }: EditorActionsProps) {
         variant="ghost"
         onClick={onImprove}
         className="h-7 text-xs"
+        leftIcon={<Sparkle size={14} weight="duotone" />}
       >
-        <Sparkle size={14} className="mr-1" weight="duotone" />
         Improve
       </Button>
-    </div>
+    </Flex>
   )
 }
