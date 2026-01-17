@@ -1,81 +1,77 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useKV } from '@github/spark/hooks'
+
 
 export type DataSourceType = 'kv' | 'static' | 'computed'
 
 export interface DataSourceConfig<T = any> {
-  id: string
-  type: DataSourceType
-  key?: string
-  defaultValue?: T
-  compute?: (allData: Record<string, any>) => T
-  dependencies?: string[]
-}
+  defaultVal
+  dependencies?: strin
 
-export function useKVDataSource<T>(key: string, defaultValue: T) {
-  const [value, setValue, deleteValue] = useKV<T>(key, defaultValue)
-  
+  const [value, se
   return {
-    data: value,
     setData: setValue,
-    deleteData: deleteValue,
-    isLoading: false,
-    error: null,
-  }
-}
+ 
 
-export function useComputedDataSource<T>(
-  compute: (allData: Record<string, any>) => T,
-  allData: Record<string, any>,
+
+  compute: (allData: Record<st
   dependencies: string[],
-  defaultValue?: T
 ) {
-  const [computed, setComputed] = useState<T>(defaultValue as T)
 
-  useEffect(() => {
     try {
-      const newValue = compute(allData)
-      setComputed(newValue)
-    } catch (error) {
-      console.error('Error computing data source:', error)
+    
+      consol
+  }, dependencies.
+  return {
+      deleteData: deleteValue,
+      isLoading: false,
+      error: null,
     }
-  }, dependencies.map(dep => allData[dep]))
-
-  return {
-    data: computed,
-    setData: () => {},
-    deleteData: () => {},
-    isLoading: false,
-    error: null,
   }
-}
 
-export function useStaticDataSource<T>(value: T) {
-  return {
-    data: value,
-    setData: () => {},
-    deleteData: () => {},
-    isLoading: false,
-    error: null,
+  if (config.type === 'computed' && config.compute) {
+    const [computed, setComputed] = useState<T>(() => config.compute(allData))
+
+    useEffect(() => {
+      const newValue = config.compute!(allData)
+      setComputed(newValue)
+    }, config.dependencies?.map(dep => allData[dep]) || [allData])
+
+    return {
+      data: computed,
+      setData: () => {},
+      deleteData: () => {},
+      isLoading: false,
+      error: null,
+    }
   }
-}
 
-export function useMultipleDataSources(
-  configs: DataSourceConfig[],
-  onUpdate?: (data: Record<string, any>) => void
-) {
-  const [allData, setAllData] = useState<Record<string, any>>({})
-  
-  const updateData = useCallback((id: string, value: any) => {
-    setAllData(prev => {
-      const next = { ...prev, [id]: value }
-      onUpdate?.(next)
-      return next
+  const [staticData] = useState<T>(config.defaultValue as T)
+
+      onUp
     })
-  }, [onUpdate])
 
-  return {
     allData,
-    updateData,
   }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
