@@ -438,6 +438,127 @@ Formatted date/time display.
 
 ---
 
+### Advanced Form Components
+
+#### Input
+Enhanced input field with icon support and validation states.
+
+```tsx
+<Input
+  label="Email"
+  placeholder="you@example.com"
+  leftIcon={<Envelope />}
+  error={false}
+  helperText="Enter a valid email"
+/>
+```
+
+**Props:**
+- `label`: string
+- `leftIcon`: ReactNode
+- `rightIcon`: ReactNode
+- `error`: boolean
+- `helperText`: string
+- `className`: string
+- All native input props
+
+#### TextArea
+Multi-line text input with validation.
+
+```tsx
+<TextArea
+  label="Description"
+  placeholder="Enter details..."
+  error={false}
+  helperText="Max 500 characters"
+  rows={4}
+/>
+```
+
+**Props:**
+- `label`: string
+- `error`: boolean
+- `helperText`: string
+- `className`: string
+- All native textarea props
+
+#### PasswordInput
+Password input with visibility toggle.
+
+```tsx
+<PasswordInput
+  value={password}
+  onChange={setPassword}
+  label="Password"
+  helperText="At least 8 characters"
+/>
+```
+
+**Props:**
+- `value`: string
+- `onChange`: (value: string) => void
+- `label`: string
+- `error`: boolean
+- `helperText`: string
+
+#### BasicSearchInput
+Search input with clear button.
+
+```tsx
+<BasicSearchInput
+  value={query}
+  onChange={setQuery}
+  placeholder="Search items..."
+/>
+```
+
+**Props:**
+- `value`: string
+- `onChange`: (value: string) => void
+- `placeholder`: string
+
+#### Select
+Dropdown selection component.
+
+```tsx
+<Select
+  value={value}
+  onChange={setValue}
+  options={[
+    { value: 'react', label: 'React' }
+  ]}
+  label="Framework"
+/>
+```
+
+**Props:**
+- `value`: string
+- `onChange`: (value: string) => void
+- `options`: SelectOption[]
+
+---
+
+### Interactive Components
+
+#### Tag, Tabs, Accordion, Menu, Popover, Modal, Drawer
+See full documentation in component files.
+
+---
+
+### Display Components
+
+#### Card, Table, Timeline, Stepper, Rating, ColorSwatch
+See full documentation in component files.
+
+---
+
+### Utility Components
+
+#### Notification, CopyButton, FileUpload, BreadcrumbNav, IconText
+See full documentation in component files.
+
+---
+
 ## Design Principles
 
 1. **Consistency**: All components use the same design tokens and styling patterns
