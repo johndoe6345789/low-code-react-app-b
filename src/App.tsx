@@ -8,6 +8,7 @@ import { BrowserRouter, useLocation } from 'react-router-dom'
 console.log('[APP_ROUTER] ✅ React Router imported')
 
 import { AppHeader } from '@/components/organisms'
+import { NavigationMenu } from '@/components/organisms/NavigationMenu'
 console.log('[APP_ROUTER] ✅ Header components imported')
 
 import { LoadingFallback } from '@/components/molecules'
@@ -32,6 +33,9 @@ console.log('[APP_ROUTER] ✅ Component registry imported')
 
 import { RouterProvider } from '@/router'
 console.log('[APP_ROUTER] ✅ Router provider imported')
+
+import { SidebarProvider, SidebarInset, Sidebar, SidebarContent, SidebarHeader } from '@/components/ui/sidebar'
+console.log('[APP_ROUTER] ✅ Sidebar provider imported')
 
 const { GlobalSearch, KeyboardShortcutsDialog, PreviewDialog } = DialogRegistry
 const { PWAInstallPrompt, PWAUpdatePrompt, PWAStatusBar } = PWARegistry
@@ -186,87 +190,99 @@ function AppLayout() {
   console.log('[APP_ROUTER] 🎨 Rendering AppLayout UI')
   
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <SidebarProvider defaultOpen={true}>
       <Suspense fallback={<div className="h-1 bg-primary animate-pulse" />}>
         <PWAStatusBar />
       </Suspense>
       <Suspense fallback={null}>
         <PWAUpdatePrompt />
       </Suspense>
-      <AppHeader
+      
+      <NavigationMenu
         activeTab={currentPage}
         onTabChange={navigateToPage}
         featureToggles={featureToggles}
         errorCount={errorCount}
-        lastSaved={lastSaved}
-        currentProject={getCurrentProject()}
-        onProjectLoad={handleProjectLoad}
-        onSearch={() => {
-          console.log('[APP_ROUTER] 🔍 Search opened')
-          setSearchOpen(true)
-        }}
-        onShowShortcuts={() => {
-          console.log('[APP_ROUTER] ⌨️ Shortcuts dialog opened')
-          setShortcutsOpen(true)
-        }}
-        onGenerateAI={() => {
-          console.log('[APP_ROUTER] 🤖 AI generation requested')
-          toast.info('AI generation coming soon')
-        }}
-        onExport={() => {
-          console.log('[APP_ROUTER] 📤 Export requested')
-          toast.info('Export coming soon')
-        }}
-        onPreview={() => {
-          console.log('[APP_ROUTER] 👁️ Preview opened')
-          setPreviewOpen(true)
-        }}
-        onShowErrors={() => {
-          console.log('[APP_ROUTER] ⚠️ Navigating to errors page')
-          navigateToPage('errors')
-        }}
       />
-      <div className="flex-1 overflow-hidden">
-        <RouterProvider 
-          featureToggles={featureToggles}
-          stateContext={{
-            files,
-            models,
-            components,
-            componentTrees,
-            workflows,
-            lambdas,
-            theme,
-            playwrightTests,
-            storybookStories,
-            unitTests,
-            flaskConfig,
-            nextjsConfig,
-            npmSettings,
-            featureToggles,
-            activeFileId,
-          }}
-          actionContext={{
-            handleFileChange,
-            setActiveFileId,
-            handleFileClose,
-            handleFileAdd,
-            setModels,
-            setComponents,
-            setComponentTrees,
-            setWorkflows,
-            setLambdas,
-            setTheme,
-            setPlaywrightTests,
-            setStorybookStories,
-            setUnitTests,
-            setFlaskConfig,
-            setNextjsConfig,
-            setNpmSettings,
-            setFeatureToggles,
-          }}
-        />
-      </div>
+      
+      <SidebarInset>
+        <div className="h-screen flex flex-col bg-background">
+          <AppHeader
+            activeTab={currentPage}
+            onTabChange={navigateToPage}
+            featureToggles={featureToggles}
+            errorCount={errorCount}
+            lastSaved={lastSaved}
+            currentProject={getCurrentProject()}
+            onProjectLoad={handleProjectLoad}
+            onSearch={() => {
+              console.log('[APP_ROUTER] 🔍 Search opened')
+              setSearchOpen(true)
+            }}
+            onShowShortcuts={() => {
+              console.log('[APP_ROUTER] ⌨️ Shortcuts dialog opened')
+              setShortcutsOpen(true)
+            }}
+            onGenerateAI={() => {
+              console.log('[APP_ROUTER] 🤖 AI generation requested')
+              toast.info('AI generation coming soon')
+            }}
+            onExport={() => {
+              console.log('[APP_ROUTER] 📤 Export requested')
+              toast.info('Export coming soon')
+            }}
+            onPreview={() => {
+              console.log('[APP_ROUTER] 👁️ Preview opened')
+              setPreviewOpen(true)
+            }}
+            onShowErrors={() => {
+              console.log('[APP_ROUTER] ⚠️ Navigating to errors page')
+              navigateToPage('errors')
+            }}
+          />
+          <div className="flex-1 overflow-hidden">
+            <RouterProvider 
+              featureToggles={featureToggles}
+              stateContext={{
+                files,
+                models,
+                components,
+                componentTrees,
+                workflows,
+                lambdas,
+                theme,
+                playwrightTests,
+                storybookStories,
+                unitTests,
+                flaskConfig,
+                nextjsConfig,
+                npmSettings,
+                featureToggles,
+                activeFileId,
+              }}
+              actionContext={{
+                handleFileChange,
+                setActiveFileId,
+                handleFileClose,
+                handleFileAdd,
+                setModels,
+                setComponents,
+                setComponentTrees,
+                setWorkflows,
+                setLambdas,
+                setTheme,
+                setPlaywrightTests,
+                setStorybookStories,
+                setUnitTests,
+                setFlaskConfig,
+                setNextjsConfig,
+                setNpmSettings,
+                setFeatureToggles,
+              }}
+            />
+          </div>
+        </div>
+      </SidebarInset>
 
       <Suspense fallback={null}>
         <GlobalSearch
@@ -302,7 +318,7 @@ function AppLayout() {
       <Suspense fallback={null}>
         <PWAInstallPrompt />
       </Suspense>
-    </div>
+    </SidebarProvider>
   )
 }
 

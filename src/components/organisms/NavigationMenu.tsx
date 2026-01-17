@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Sidebar, SidebarContent, SidebarHeader } from '@/components/ui/sidebar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
-import { List, CaretDoubleDown, CaretDoubleUp } from '@phosphor-icons/react'
+import { CaretDoubleDown, CaretDoubleUp } from '@phosphor-icons/react'
 import { NavigationItem, NavigationGroupHeader } from '@/components/molecules'
 import { navigationGroups, NavigationItemData } from '@/lib/navigation-config'
 import { FeatureToggles } from '@/types/project'
@@ -22,7 +22,6 @@ export function NavigationMenu({
   featureToggles,
   errorCount = 0,
 }: NavigationMenuProps) {
-  const [open, setOpen] = useState(false)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(['overview', 'development', 'automation', 'design', 'backend', 'testing', 'tools'])
   )
@@ -31,7 +30,6 @@ export function NavigationMenu({
 
   const handleItemClick = (value: string) => {
     onTabChange(value)
-    setOpen(false)
   }
   
   const handleItemHover = (value: string) => {
@@ -84,16 +82,9 @@ export function NavigationMenu({
   }
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="shrink-0">
-          <List size={20} weight="bold" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-80">
-        <SheetHeader>
-          <SheetTitle>Navigation</SheetTitle>
-        </SheetHeader>
+    <Sidebar side="left" collapsible="offcanvas">
+      <SidebarHeader className="px-4 py-4 border-b">
+        <h2 className="text-lg font-semibold">Navigation</h2>
         <div className="flex gap-2 mt-4">
           <Button
             variant="outline"
@@ -114,8 +105,10 @@ export function NavigationMenu({
             Collapse All
           </Button>
         </div>
-        <ScrollArea className="h-[calc(100vh-12rem)] mt-4">
-          <div className="space-y-2">
+      </SidebarHeader>
+      <SidebarContent>
+        <ScrollArea className="h-full px-4">
+          <div className="space-y-2 py-4">
             {navigationGroups.map((group) => {
               const visibleItemsCount = getVisibleItemsCount(group.id)
               if (visibleItemsCount === 0) return null
@@ -161,7 +154,7 @@ export function NavigationMenu({
             })}
           </div>
         </ScrollArea>
-      </SheetContent>
-    </Sheet>
+      </SidebarContent>
+    </Sidebar>
   )
 }

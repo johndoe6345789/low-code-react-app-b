@@ -1,5 +1,5 @@
 import { AppBranding, Breadcrumb, SaveIndicator } from '@/components/molecules'
-import { NavigationMenu } from '@/components/organisms/NavigationMenu'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { ToolbarActions } from '@/components/organisms/ToolbarActions'
 import { ProjectManager } from '@/components/ProjectManager'
 import { FeatureToggles, Project } from '@/types/project'
@@ -42,12 +42,7 @@ export function AppHeader({
         <div className="px-4 sm:px-6 py-3 sm:py-4">
           <Flex justify="between" align="center" gap="sm">
             <Flex align="center" gap="sm" className="flex-1 min-w-0">
-              <NavigationMenu
-                activeTab={activeTab}
-                onTabChange={onTabChange}
-                featureToggles={featureToggles}
-                errorCount={errorCount}
-              />
+              <SidebarTrigger />
               <AppBranding />
               <SaveIndicator lastSaved={lastSaved} />
             </Flex>
