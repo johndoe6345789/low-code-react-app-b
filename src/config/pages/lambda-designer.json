@@ -1,4 +1,5 @@
 {
+  "id": "lambda-designer",
   "name": "Lambda Designer",
   "layout": {
     "type": "single"

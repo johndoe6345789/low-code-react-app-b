@@ -1,7 +1,7 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { TreeCard, TreeListHeader } from '@/components/molecules'
-import { EmptyState } from '@/components/molecules'
+import { EmptyState } from '@/components/atoms'
 import { ComponentTree } from '@/types/project'
 import { FolderOpen } from '@phosphor-icons/react'
 
@@ -43,11 +43,10 @@ export function TreeListPanel({
             icon={<FolderOpen size={48} weight="duotone" />}
             title="No component trees yet"
             description="Create your first tree to get started"
-            action={
-              <Button size="sm" onClick={onCreateNew}>
-                Create First Tree
-              </Button>
-            }
+            action={{
+              label: 'Create First Tree',
+              onClick: onCreateNew
+            }}
           />
         </div>
       ) : (

@@ -10,9 +10,8 @@ import {
   FileText,
 } from '@phosphor-icons/react'
 import { ProjectFile, PrismaModel, ComponentNode, ThemeConfig, PlaywrightTest, StorybookStory, UnitTest, FlaskConfig, NextJsConfig } from '@/types/project'
-import { SeedDataStatus, DetailRow, CompletionCard, TipsCard } from '@/components/atoms'
+import { SeedDataStatus, DetailRow, CompletionCard, TipsCard, StatCard } from '@/components/atoms'
 import { GitHubBuildStatus } from '@/components/molecules/GitHubBuildStatus'
-import { StatCard } from '@/components/molecules'
 import { useDashboardMetrics } from '@/hooks/ui/use-dashboard-metrics'
 import { useDashboardTips } from '@/hooks/ui/use-dashboard-tips'
 

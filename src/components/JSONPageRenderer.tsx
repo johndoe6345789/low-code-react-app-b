@@ -32,9 +32,10 @@ export interface PageSchema {
   [key: string]: any
 }
 
-interface ComponentRendererProps {
-  schema: PageSchema
-  data: Record<string, any>
+export interface ComponentRendererProps {
+  config?: PageSchema
+  schema?: PageSchema
+  data?: Record<string, any>
   functions?: Record<string, (...args: any[]) => any>
 }
 
@@ -53,7 +54,12 @@ function getIcon(iconName: string, props?: any) {
   return <IconComponent size={24} weight="duotone" {...props} />
 }
 
-export function JSONPageRenderer({ schema, data, functions = {} }: ComponentRendererProps) {
+export function JSONPageRenderer({ config, schema, data = {}, functions = {} }: ComponentRendererProps) {
+  const pageSchema = config || schema
+  if (!pageSchema) {
+    return <div>No schema provided</div>
+  }
+
   const renderSection = (section: PageSectionConfig, index: number): ReactNode => {
     switch (section.type) {
       case 'header':
@@ -67,7 +73,7 @@ export function JSONPageRenderer({ schema, data, functions = {} }: ComponentRend
         )
 
       case 'cards':
-        const cards = schema[section.items as string] || []
+        const cards = pageSchema[section.items as string] || []
         return (
           <div key={index} className={cn('space-y-' + (section.spacing || '4'))}>
             {cards.map((card: any) => renderCard(card))}
@@ -75,7 +81,7 @@ export function JSONPageRenderer({ schema, data, functions = {} }: ComponentRend
         )
 
       case 'grid':
-        const gridItems = schema[section.items as string] || []
+        const gridItems = pageSchema[section.items as string] || []
         const { sm = 1, md = 2, lg = 3 } = section.columns || {}
         return (
           <div
@@ -199,7 +205,7 @@ export function JSONPageRenderer({ schema, data, functions = {} }: ComponentRend
 
   return (
     <div className="h-full overflow-auto p-6 space-y-6">
-      {schema.layout.sections?.map((section, index) => renderSection(section, index))}
+      {pageSchema.layout.sections?.map((section, index) => renderSection(section, index))}
     </div>
   )
 }

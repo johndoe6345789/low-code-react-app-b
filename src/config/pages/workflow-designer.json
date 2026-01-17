@@ -1,4 +1,5 @@
 {
+  "id": "workflow-designer",
   "name": "Workflow Designer",
   "layout": {
     "type": "single"
