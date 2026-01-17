@@ -13,7 +13,7 @@ class FlaskBackendAdapter implements StorageAdapter {
   private baseUrl: string
 
   constructor(baseUrl?: string) {
-    this.baseUrl = baseUrl || localStorage.getItem('codeforge-flask-url') || 'http://localhost:5001'
+    this.baseUrl = baseUrl || localStorage.getItem('codeforge-flask-url') || import.meta.env.VITE_FLASK_BACKEND_URL || 'http://localhost:5001'
   }
 
   private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -340,30 +340,31 @@ class UnifiedStorage {
 
     this.initPromise = (async () => {
       const preferFlask = localStorage.getItem('codeforge-prefer-flask') === 'true'
+      const flaskEnvUrl = import.meta.env.VITE_FLASK_BACKEND_URL
       const preferSQLite = localStorage.getItem('codeforge-prefer-sqlite') === 'true'
 
-      if (preferFlask) {
+      if (preferFlask || flaskEnvUrl) {
         try {
-          console.log('[Storage] Attempting to initialize Flask backend...')
-          const flaskAdapter = new FlaskBackendAdapter()
+          console.log('[Storage] Flask backend explicitly configured, attempting to initialize...')
+          const flaskAdapter = new FlaskBackendAdapter(flaskEnvUrl)
           await flaskAdapter.get('_health_check')
           this.adapter = flaskAdapter
           this.backend = 'flask'
           console.log('[Storage] ✓ Using Flask backend')
           return
         } catch (error) {
-          console.warn('[Storage] Flask backend not available:', error)
+          console.warn('[Storage] Flask backend not available, falling back to IndexedDB:', error)
         }
       }
 
       if (typeof indexedDB !== 'undefined') {
         try {
-          console.log('[Storage] Attempting to initialize IndexedDB...')
+          console.log('[Storage] Initializing default IndexedDB backend...')
           const idbAdapter = new IndexedDBAdapter()
           await idbAdapter.get('_health_check')
           this.adapter = idbAdapter
           this.backend = 'indexeddb'
-          console.log('[Storage] ✓ Using IndexedDB')
+          console.log('[Storage] ✓ Using IndexedDB (default)')
           return
         } catch (error) {
           console.warn('[Storage] IndexedDB not available:', error)
@@ -372,7 +373,7 @@ class UnifiedStorage {
 
       if (preferSQLite) {
         try {
-          console.log('[Storage] Attempting to initialize SQLite...')
+          console.log('[Storage] SQLite fallback, attempting to initialize...')
           const sqliteAdapter = new SQLiteAdapter()
           await sqliteAdapter.get('_health_check')
           this.adapter = sqliteAdapter
@@ -386,7 +387,7 @@ class UnifiedStorage {
 
       if (window.spark?.kv) {
         try {
-          console.log('[Storage] Attempting to initialize Spark KV...')
+          console.log('[Storage] Spark KV fallback, attempting to initialize...')
           const sparkAdapter = new SparkKVAdapter()
           await sparkAdapter.get('_health_check')
           this.adapter = sparkAdapter

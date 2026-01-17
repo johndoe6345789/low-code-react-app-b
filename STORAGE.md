@@ -1,14 +1,30 @@
 # Unified Storage System
 
-CodeForge now features a unified storage system that automatically selects the best available storage backend for your data persistence needs.
+CodeForge features a unified storage system that automatically selects the best available storage backend for your data persistence needs.
 
 ## Storage Backends
 
-The system supports four storage backends in order of preference:
+The system supports four storage backends:
 
-### 1. **Flask Backend (Optional)**
+### 1. **IndexedDB (Default)**
+- **Type**: Browser-native key-value store
+- **Persistence**: Data stored in browser IndexedDB
+- **Pros**:
+  - No additional dependencies
+  - Large storage capacity (usually >50MB, can be GBs)
+  - Fast for simple key-value operations
+  - Works offline
+  - Native browser support
+  - **Default behavior** - works out of the box
+- **Cons**:
+  - No SQL query support
+  - More complex API
+  - Asynchronous only
+
+### 2. **Flask Backend (Optional)**
 - **Type**: Remote HTTP API with SQLite database
 - **Persistence**: Data stored on Flask server with SQLite
+- **When Used**: Only when explicitly configured via UI settings or environment variable
 - **Pros**: 
   - Cross-device synchronization
   - Centralized data management
@@ -20,20 +36,9 @@ The system supports four storage backends in order of preference:
   - Network latency
   - Requires configuration
 - **Setup**: See backend/README.md for installation
-
-### 2. **IndexedDB (Default)**
-- **Type**: Browser-native key-value store
-- **Persistence**: Data stored in browser IndexedDB
-- **Pros**:
-  - No additional dependencies
-  - Large storage capacity (usually >50MB, can be GBs)
-  - Fast for simple key-value operations
-  - Works offline
-  - Native browser support
-- **Cons**:
-  - No SQL query support
-  - More complex API
-  - Asynchronous only
+- **Configuration**:
+  - **UI**: Go to Settings → Storage and enable Flask backend
+  - **Environment Variable**: Set `VITE_FLASK_BACKEND_URL=http://your-backend-url:5001` in `.env` file
 
 ### 3. **SQLite (Optional)**
 - **Type**: On-disk database via WASM
