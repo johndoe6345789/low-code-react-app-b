@@ -1,7 +1,7 @@
 import { JSONUIRenderer } from '@/lib/json-ui'
 import { UIComponent } from '@/lib/json-ui/schema'
 import { toast } from 'sonner'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { useState } from 'react'
 
 export function JSONDemoPage() {

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { DataSource } from '@/types/json-ui'
 
 export function useDataSources(dataSources: DataSource[]) {

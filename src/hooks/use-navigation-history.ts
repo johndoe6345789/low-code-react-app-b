@@ -1,4 +1,4 @@
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 

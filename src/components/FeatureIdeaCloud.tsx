@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, ReactElement } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import ReactFlow, {
   Node,
   Edge,

@@ -1,4 +1,4 @@
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { useCallback } from 'react'
 
 export function useArray<T>(key: string, defaultValue: T[] = []) {

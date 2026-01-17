@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { Edge, MarkerType } from 'reactflow'
 import { toast } from 'sonner'
 

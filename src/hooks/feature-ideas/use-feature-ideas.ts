@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 
 export interface FeatureIdea {
   id: string

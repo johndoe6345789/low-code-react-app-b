@@ -1,6 +1,6 @@
 import { PageRenderer } from '@/lib/schema-renderer'
 import lambdaDesignerSchema from '@/config/pages/lambda-designer.json'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { Component as ComponentSchema } from '@/schemas/ui-schema'
 
 export function JSONLambdaDesigner() {

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 
 export function useNodePositions() {
   const [positions, setPositions] = useKV<Record<string, { x: number; y: number }>>('feature-idea-node-positions', {})

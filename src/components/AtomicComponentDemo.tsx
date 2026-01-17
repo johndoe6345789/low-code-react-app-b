@@ -1,6 +1,6 @@
 import { useCRUD, useSearchFilter } from '@/hooks/data'
 import { useToggle, useDialog } from '@/hooks/ui'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { SearchInput, DataCard, ActionBar } from '@/components/molecules'

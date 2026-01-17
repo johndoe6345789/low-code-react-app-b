@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '@/hooks/use-kv'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
