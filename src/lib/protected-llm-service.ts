@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { aiRateLimiter, scanRateLimiter } from './rate-limiter'
 import { toast } from 'sonner'
 

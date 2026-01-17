@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { useCallback, useState } from 'react'
 import seedDataConfig from '@/config/seed-data.json'
 

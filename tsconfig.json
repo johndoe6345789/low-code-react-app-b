@@ -26,8 +26,11 @@
         "./src/*"
       ]
     },
+    "types": []
   },
   "include": [
-    "src"
+    "src",
+    "src/global.d.ts",
+    "src/vite-end.d.ts"
   ]
 }

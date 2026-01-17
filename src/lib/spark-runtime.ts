@@ -7,33 +7,52 @@
  * - User authentication
  */
 
+/// <reference path="../vite-end.d.ts" />
+
 import { getStorage } from './storage-service'
 
-const llmFunction = async (prompt: string, model?: string, jsonMode?: boolean): Promise<any> => {
-  console.log('Mock LLM called with prompt:', prompt, 'model:', model, 'jsonMode:', jsonMode)
-  return 'This is a mock response from the Spark LLM service.'
-}
-
-llmFunction.chat = async (messages: any[]) => {
-  console.log('Mock LLM chat called with messages:', messages)
-  return {
-    role: 'assistant',
-    content: 'This is a mock response from the Spark LLM service.'
-  }
-}
-
-llmFunction.complete = async (prompt: string) => {
-  console.log('Mock LLM complete called with prompt:', prompt)
-  return 'This is a mock completion from the Spark LLM service.'
-}
-
 export const sparkRuntime = {
+  llmPrompt: (strings: TemplateStringsArray, ...values: any[]): string => {
+    let result = strings[0]
+    for (let i = 0; i < values.length; i++) {
+      result += String(values[i]) + strings[i + 1]
+    }
+    return result
+  },
+
+  llm: async (prompt: string, modelName?: string, jsonMode?: boolean): Promise<string> => {
+    console.log('Mock LLM called with prompt:', prompt, 'model:', modelName, 'jsonMode:', jsonMode)
+    if (jsonMode) {
+      return JSON.stringify({ 
+        message: 'This is a mock response from the Spark LLM service.',
+        model: modelName || 'gpt-4o'
+      })
+    }
+    return 'This is a mock response from the Spark LLM service.'
+  },
+
+  user: async (): Promise<{
+    avatarUrl: string
+    email: string
+    id: string
+    isOwner: boolean
+    login: string
+  }> => {
+    return {
+      id: 'mock-user-id',
+      login: 'mockuser',
+      email: 'mock@example.com',
+      avatarUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mockuser',
+      isOwner: true
+    }
+  },
+  
   kv: {
     get: async <T = any>(key: string): Promise<T | undefined> => {
       const storage = getStorage()
       return storage.get<T>(key)
     },
-    set: async (key: string, value: any): Promise<void> => {
+    set: async <T = any>(key: string, value: T): Promise<void> => {
       const storage = getStorage()
       return storage.set(key, value)
     },
@@ -44,25 +63,11 @@ export const sparkRuntime = {
     keys: async (): Promise<string[]> => {
       const storage = getStorage()
       return storage.keys()
-    },
-    clear: async (): Promise<void> => {
-      const storage = getStorage()
-      return storage.clear()
     }
-  },
-  
-  llm: llmFunction,
-  
-  user: {
-    getCurrentUser: () => ({
-      id: 'mock-user-id',
-      name: 'Mock User',
-      email: 'mock@example.com'
-    }),
-    isAuthenticated: () => true
   }
 }
 
 if (typeof window !== 'undefined') {
-  (window as any).spark = sparkRuntime
+  (window as any).spark = sparkRuntime;
+  (globalThis as any).spark = sparkRuntime
 }

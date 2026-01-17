@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { useState, useEffect, useCallback, useRef, ReactElement } from 'react'
 import { useKV } from '@/hooks/use-kv'
 import ReactFlow, {

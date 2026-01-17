@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { Project } from '@/types/project'
 
 export interface SavedProject {

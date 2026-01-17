@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 export type StorageBackend = 'flask' | 'indexeddb' | 'sqlite' | 'sparkkv'
 
 export interface StorageAdapter {

@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { useState } from 'react'
 import { UnitTest, TestCase } from '@/types/project'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

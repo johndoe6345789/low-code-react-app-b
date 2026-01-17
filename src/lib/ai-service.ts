@@ -1,10 +1,11 @@
+/// <reference path="../global.d.ts" />
+
 import { PrismaModel, ComponentNode, ThemeConfig, ProjectFile } from '@/types/project'
 import { ProtectedLLMService } from './protected-llm-service'
 
 export class AIService {
   static async generateComponent(description: string): Promise<ComponentNode | null> {
     try {
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a React component generator. Generate a component tree structure based on this description: ${description}
 
 Return a valid JSON object with a single property "component" containing the component structure. The component should follow this format:
@@ -42,7 +43,6 @@ Make sure to use appropriate Material UI components and props. Keep the structur
     try {
       const existingModelNames = existingModels.map(m => m.name).join(', ')
 
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a Prisma schema expert. Create a Prisma model based on this description: ${description}
 
 Existing models in the schema: ${existingModelNames || 'none'}
@@ -102,7 +102,6 @@ Return a valid JSON object with a single property "model" containing the model s
         utility: "Create a utility function with TypeScript types and JSDoc comments."
       }
 
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a Next.js developer. ${fileTypeInstructions[fileType]}
 
 Description: ${description}
@@ -125,7 +124,6 @@ Return ONLY the code without any markdown formatting or explanations.`
 
   static async improveCode(code: string, instruction: string): Promise<string | null> {
     try {
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a code improvement assistant. Improve the following code based on this instruction: ${instruction}
 
 Original code:
@@ -147,7 +145,6 @@ Return ONLY the improved code without any markdown formatting or explanations.`
 
   static async generateThemeFromDescription(description: string): Promise<Partial<ThemeConfig> | null> {
     try {
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a UI/UX designer. Generate a Material UI theme configuration based on this description: ${description}
 
 Return a valid JSON object with a single property "theme" containing:
@@ -188,7 +185,6 @@ Return a valid JSON object with a single property "theme" containing:
   static async suggestFieldsForModel(modelName: string, existingFields: string[]): Promise<string[] | null> {
     try {
       const existingFieldsStr = existingFields.join(', ')
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a database architect. Suggest additional useful fields for a Prisma model named ${modelName}.
 
 Existing fields: ${existingFieldsStr}
@@ -218,7 +214,6 @@ Suggest 3-5 common fields that would be useful for this model type. Use camelCas
 
   static async explainCode(code: string): Promise<string | null> {
     try {
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a code teacher. Explain what this code does in simple terms:
 ${code}
 
@@ -238,7 +233,6 @@ Provide a clear, concise explanation suitable for developers.`
 
   static async generateCompleteApp(description: string): Promise<{ files: ProjectFile[], models: PrismaModel[], theme: Partial<ThemeConfig> } | null> {
     try {
-      // @ts-expect-error - spark.llmPrompt exists at runtime
       const prompt = window.spark.llmPrompt`You are a full-stack architect. Generate a complete Next.js application structure based on this description: ${description}
 
 Return a valid JSON object with properties "files", "models", and "theme":

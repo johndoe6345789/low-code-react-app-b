@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { CodeError, ErrorRepairResult } from '@/types/errors'
 import { ProjectFile } from '@/types/project'
 import { ProtectedLLMService } from './protected-llm-service'
@@ -178,7 +180,6 @@ export class ErrorRepairService {
         .join('\n')
 
       const result = await ProtectedLLMService.safeLLMCall(
-        // @ts-expect-error - spark.llmPrompt exists at runtime
         window.spark.llmPrompt`You are a code repair assistant. Fix the following errors in this code:
 
 File: ${file.name} (${file.language})
@@ -277,7 +278,6 @@ Rules:
         .join('\n\n')
 
       const result = await ProtectedLLMService.safeLLMCall(
-        // @ts-expect-error - spark.llmPrompt exists at runtime
         window.spark.llmPrompt`You are a code repair assistant. Fix the following errors in this code, considering the context of related files:
 
 File: ${file.name} (${file.language})

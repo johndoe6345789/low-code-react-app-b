@@ -1,3 +1,5 @@
+/// <reference path="../../global.d.ts" />
+
 import { useState, useCallback, useMemo } from 'react'
 import { PageSchema, ActionConfig } from '@/types/page-schema'
 import { toast } from 'sonner'

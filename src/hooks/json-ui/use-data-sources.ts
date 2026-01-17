@@ -1,3 +1,5 @@
+/// <reference path="../../global.d.ts" />
+
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { DataSource } from '@/types/json-ui'
 

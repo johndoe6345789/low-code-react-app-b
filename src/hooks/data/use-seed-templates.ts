@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { useState } from 'react'
 import { ecommerceTemplate, blogTemplate, dashboardTemplate } from '@/config/seed-templates'
 import defaultTemplate from '@/config/seed-data.json'

@@ -1,3 +1,5 @@
+/// <reference path="../global.d.ts" />
+
 import { useCallback, useState, useEffect } from 'react'
 import { ComponentTree } from '@/types/project'
 import componentTreesData from '@/config/component-trees'
