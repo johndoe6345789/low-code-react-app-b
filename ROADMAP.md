@@ -2,11 +2,13 @@
 
 ## Overview
 
-CodeForge is a comprehensive low-code development platform for building production-ready Next.js applications. This roadmap tracks completed work, current state, and future enhancements across 6 major development iterations.
+CodeForge is a comprehensive low-code development platform for building production-ready Next.js applications. This roadmap tracks completed work, current state, and future enhancements across 7 major development iterations.
 
-**Current Version:** 6.0  
+**Current Version:** 7.0  
 **Architecture:** JSON-driven, atomic design, multi-platform deployment  
 **Status:** Production-ready with PWA support
+
+**Iteration 7 Focus:** Component registry refactor, JSON page migration expansion
 
 ---
 
@@ -302,6 +304,33 @@ CodeForge is a comprehensive low-code development platform for building producti
 
 ---
 
+### Iteration 7: JSON-Driven Architecture Completion
+**Focus:** Component registry refactor, expanding JSON page system
+
+#### Completed
+- ✅ Component registry refactored to read from `component-registry.json`
+- ✅ Dynamic component loading system based on JSON metadata
+- ✅ Automatic dependency preloading (Monaco editor, etc.)
+- ✅ Component metadata query API (`getComponentMetadata`, `getComponentsByCategory`)
+- ✅ JSON-based Lambda Designer page created
+- ✅ Experimental flags support for components
+- ✅ Configurable preload strategies per component
+
+#### Benefits Achieved
+- **Zero code changes** needed to add new components to registry
+- **Centralized metadata** for all components in single JSON file
+- **Runtime flexibility** for enabling/disabling components
+- **Better performance** with configurable lazy loading
+- **Improved maintainability** with declarative component definitions
+
+#### Key Files
+- `component-registry.json` - Centralized component metadata
+- `src/lib/component-registry.ts` - Dynamic registry loader
+- `src/components/JSONLambdaDesigner.tsx` - New JSON-based Lambda page
+- `src/config/pages/lambda-designer.json` - Lambda page schema
+
+---
+
 ## 🚀 Current State
 
 ### Production-Ready Features
@@ -340,7 +369,14 @@ CodeForge is a comprehensive low-code development platform for building producti
 #### 1. Complete JSON Migration
 **Priority:** HIGH  
 **Effort:** MEDIUM
+**Status:** IN PROGRESS
 
+**Completed:**
+- ✅ Created JSON-based Lambda Designer page
+- ✅ Added Lambda Designer to component registry
+- ✅ Added Lambda Designer to pages.json configuration
+
+**In Progress:**
 - [ ] Convert remaining pages to JSON schemas
 - [ ] Add dialog implementations to JSON system
 - [ ] Implement list rendering for dynamic items
@@ -357,6 +393,7 @@ CodeForge is a comprehensive low-code development platform for building producti
 #### 2. Visual Schema Editor
 **Priority:** HIGH  
 **Effort:** HIGH
+**Status:** NOT STARTED
 
 - [ ] Drag-and-drop page builder
 - [ ] Component palette with preview
@@ -376,24 +413,31 @@ CodeForge is a comprehensive low-code development platform for building producti
 #### 3. Component Registry Refactor
 **Priority:** MEDIUM  
 **Effort:** LOW
+**Status:** ✅ COMPLETE
 
-- [ ] Move component registry to `component-registry.json`
-- [ ] Define component metadata structure
-- [ ] Update `component-registry.ts` to read from JSON
-- [ ] Add validation for component definitions
-- [ ] Configure preload strategy per component
-- [ ] Add retry logic configuration
+**Completed:**
+- ✅ Component registry now reads from `component-registry.json`
+- ✅ Dynamic component loading based on JSON configuration
+- ✅ Automatic preload dependency handling (Monaco editor, etc.)
+- ✅ Metadata query functions (`getComponentMetadata`, `getComponentsByCategory`, `getAllCategories`)
+- ✅ Type-safe registry with TypeScript support
+- ✅ Validation for component definitions through JSON structure
+- ✅ Preload strategy configurable per component via JSON
+- ✅ Support for experimental flags on components
 
 **Benefits:**
-- Add components without code changes
-- Runtime component enabling/disabling
-- Better lazy loading control
+- ✅ Add components without code changes
+- ✅ Runtime component enabling/disabling
+- ✅ Better lazy loading control
+- ✅ Centralized component metadata
+- ✅ Easier testing and debugging
 
 ---
 
 #### 4. Enhanced Testing
 **Priority:** MEDIUM  
 **Effort:** MEDIUM
+**Status:** NOT STARTED
 
 - [ ] Visual regression tests with screenshot comparison
 - [ ] API mocking for faster, more reliable tests
@@ -569,7 +613,9 @@ CodeForge is a comprehensive low-code development platform for building producti
 - **Smoke Test Runtime:** 30-60 seconds
 - **Component Count:** 50+ atomic components
 - **Hook Count:** 12+ custom hooks
-- **JSON Pages:** 3 converted
+- **JSON Pages:** 4 converted (Models, Component Trees, Workflows, Lambdas)
+- **Components in Registry:** 30+ feature components
+- **Registry Type:** JSON-driven (zero code changes to add components)
 
 ### Target Metrics (6 Months)
 - **Bundle Size:** < 150KB gzipped
@@ -658,8 +704,9 @@ CodeForge is a comprehensive low-code development platform for building producti
 
 ## 📅 Version History
 
-- **v6.0** (Current) - Configuration management, deployment optimization, testing improvements
-- **v5.3** - JSON-driven UI system with 3 converted pages
+- **v7.0** (Current) - Component registry refactor to JSON, Lambda JSON page, metadata query API
+- **v6.0** - Configuration management, deployment optimization, testing improvements
+- **v5.3** - JSON-driven UI system with 3 example pages
 - **v5.0** - Custom hook library and JSON page renderer
 - **v4.0** - Atomic design refactor with 50+ components
 - **v3.0** - CI/CD integration and multi-architecture support

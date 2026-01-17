@@ -114,6 +114,16 @@
       "description": "Serverless function designer with multi-runtime support"
     },
     {
+      "name": "JSONLambdaDesigner",
+      "path": "@/components/JSONLambdaDesigner",
+      "export": "JSONLambdaDesigner",
+      "type": "feature",
+      "preload": false,
+      "category": "designer",
+      "experimental": true,
+      "description": "JSON-based lambda designer (experimental)"
+    },
+    {
       "name": "StyleDesigner",
       "path": "@/components/StyleDesigner",
       "export": "StyleDesigner",

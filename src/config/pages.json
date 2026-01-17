@@ -164,6 +164,19 @@
       }
     },
     {
+      "id": "lambdas-json",
+      "title": "Lambdas (JSON)",
+      "icon": "Function",
+      "component": "JSONLambdaDesigner",
+      "enabled": true,
+      "toggleKey": "lambdasJSON",
+      "order": 7.5,
+      "props": {
+        "state": ["lambdas"],
+        "actions": ["onLambdasChange:setLambdas"]
+      }
+    },
+    {
       "id": "styling",
       "title": "Styling",
       "icon": "Palette",
