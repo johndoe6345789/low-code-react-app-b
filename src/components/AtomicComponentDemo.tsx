@@ -1,5 +1,6 @@
-import { useCRUD, useSearch, useFilter } from '@/hooks/data'
+import { useCRUD, useSearchFilter } from '@/hooks/data'
 import { useToggle, useDialog } from '@/hooks/ui'
+import { useKV } from '@github/spark/hooks'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { SearchInput, DataCard, ActionBar } from '@/components/molecules'
@@ -15,17 +16,15 @@ interface Task {
 }
 
 export function AtomicComponentDemo() {
-  const { items: tasks, create, remove } = useCRUD<Task>({
-    key: 'demo-tasks',
-    defaultValue: [
-      { id: 1, title: 'Build component library', status: 'active', priority: 'high' },
-      { id: 2, title: 'Write documentation', status: 'pending', priority: 'medium' },
-      { id: 3, title: 'Create examples', status: 'success', priority: 'low' },
-    ],
-    persist: true,
-  })
+  const [tasks, setTasks] = useKV<Task[]>('demo-tasks', [
+    { id: 1, title: 'Build component library', status: 'active', priority: 'high' },
+    { id: 2, title: 'Write documentation', status: 'pending', priority: 'medium' },
+    { id: 3, title: 'Create examples', status: 'success', priority: 'low' },
+  ])
 
-  const { query, setQuery, filtered } = useSearch({
+  const crud = useCRUD<Task>({ items: tasks, setItems: setTasks })
+
+  const { searchQuery: query, setSearchQuery: setQuery, filtered } = useSearchFilter({
     items: tasks,
     searchFields: ['title'],
   })

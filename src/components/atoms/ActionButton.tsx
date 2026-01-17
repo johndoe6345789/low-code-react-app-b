@@ -1,36 +1,51 @@
+import { ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
-import { forwardRef } from 'react'
-import { cn } from '@/lib/utils'
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip'
 
-interface ActionButtonProps {
-  icon?: React.ReactNode
-  label?: string
-  variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive'
+export interface ActionButtonProps {
+  icon?: ReactNode
+  label: string
+  onClick: () => void
+  variant?: 'default' | 'outline' | 'ghost' | 'destructive'
   size?: 'default' | 'sm' | 'lg' | 'icon'
-  onClick?: () => void
+  tooltip?: string
   disabled?: boolean
-  loading?: boolean
   className?: string
 }
 
-export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
-  ({ icon, label, variant = 'default', size = 'default', onClick, disabled, loading, className }, ref) => {
+export function ActionButton({
+  icon,
+  label,
+  onClick,
+  variant = 'default',
+  size = 'default',
+  tooltip,
+  disabled,
+  className,
+}: ActionButtonProps) {
+  const button = (
+    <Button
+      variant={variant}
+      size={size}
+      onClick={onClick}
+      disabled={disabled}
+      className={className}
+    >
+      {icon && <span className="mr-2">{icon}</span>}
+      {label}
+    </Button>
+  )
+
+  if (tooltip) {
     return (
-      <Button
-        ref={ref}
-        variant={variant}
-        size={size}
-        onClick={onClick}
-        disabled={disabled || loading}
-        className={cn(className)}
-      >
-        {loading ? (
-          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-        ) : icon}
-        {label && <span className={icon ? 'ml-2' : ''}>{label}</span>}
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent>{tooltip}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     )
   }
-)
 
-ActionButton.displayName = 'ActionButton'
+  return button
+}

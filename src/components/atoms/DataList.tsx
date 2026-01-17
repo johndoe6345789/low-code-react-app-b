@@ -1,23 +1,24 @@
+import { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-interface DataListProps<T> {
-  items: T[]
-  renderItem: (item: T, index: number) => React.ReactNode
+export interface DataListProps {
+  items: any[]
+  renderItem: (item: any, index: number) => ReactNode
   emptyMessage?: string
   className?: string
   itemClassName?: string
 }
 
-export function DataList<T>({ 
-  items, 
-  renderItem, 
-  emptyMessage = 'No items to display', 
+export function DataList({
+  items,
+  renderItem,
+  emptyMessage = 'No items',
   className,
-  itemClassName 
-}: DataListProps<T>) {
+  itemClassName,
+}: DataListProps) {
   if (items.length === 0) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
+      <div className="text-center py-8 text-muted-foreground">
         {emptyMessage}
       </div>
     )
@@ -26,7 +27,7 @@ export function DataList<T>({
   return (
     <div className={cn('space-y-2', className)}>
       {items.map((item, index) => (
-        <div key={index} className={itemClassName}>
+        <div key={index} className={cn('transition-colors', itemClassName)}>
           {renderItem(item, index)}
         </div>
       ))}

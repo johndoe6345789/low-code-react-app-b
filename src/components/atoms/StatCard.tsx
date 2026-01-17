@@ -1,37 +1,50 @@
+import { ReactNode } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
-interface StatCardProps {
-  label: string
+export interface StatCardProps {
+  icon?: ReactNode
+  title: string
   value: string | number
-  icon?: React.ReactNode
+  description?: string
+  color?: string
   trend?: {
     value: number
-    positive: boolean
+    direction: 'up' | 'down'
   }
   className?: string
 }
 
-export function StatCard({ label, value, icon, trend, className }: StatCardProps) {
+export function StatCard({
+  icon,
+  title,
+  value,
+  description,
+  color = 'text-primary',
+  trend,
+  className,
+}: StatCardProps) {
   return (
-    <Card className={cn('bg-card/50 backdrop-blur', className)}>
-      <CardContent className="pt-6">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">{label}</p>
-            <p className="text-3xl font-bold">{value}</p>
+    <Card className={cn('transition-all hover:shadow-lg', className)}>
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="text-3xl font-bold mt-2">{value}</p>
+            {description && (
+              <p className="text-sm text-muted-foreground mt-1">{description}</p>
+            )}
             {trend && (
-              <p className={cn(
-                'text-xs flex items-center gap-1',
-                trend.positive ? 'text-green-600' : 'text-red-600'
+              <div className={cn(
+                'text-sm font-medium mt-2',
+                trend.direction === 'up' ? 'text-green-600' : 'text-red-600'
               )}>
-                <span>{trend.positive ? '↑' : '↓'}</span>
-                <span>{Math.abs(trend.value)}%</span>
-              </p>
+                {trend.direction === 'up' ? '↑' : '↓'} {Math.abs(trend.value)}%
+              </div>
             )}
           </div>
           {icon && (
-            <div className="text-muted-foreground">
+            <div className={cn('text-2xl', color)}>
               {icon}
             </div>
           )}

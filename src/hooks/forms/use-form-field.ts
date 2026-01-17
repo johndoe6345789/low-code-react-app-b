@@ -1,33 +1,40 @@
 import { useState, useCallback } from 'react'
 
-export type ValidationRule<T> = {
+export interface ValidationRule<T = any> {
   validate: (value: T) => boolean
   message: string
 }
 
-export function useFormField<T>(
-  initialValue: T,
-  rules: ValidationRule<T>[] = []
-) {
-  const [value, setValue] = useState<T>(initialValue)
+export interface FieldConfig<T = any> {
+  name: string
+  defaultValue?: T
+  rules?: ValidationRule<T>[]
+}
+
+export function useFormField<T = any>(config: FieldConfig<T>) {
+  const [value, setValue] = useState<T | undefined>(config.defaultValue)
   const [error, setError] = useState<string | null>(null)
   const [touched, setTouched] = useState(false)
 
   const validate = useCallback(() => {
-    for (const rule of rules) {
-      if (!rule.validate(value)) {
+    if (!config.rules || !touched) return true
+
+    for (const rule of config.rules) {
+      if (!rule.validate(value as T)) {
         setError(rule.message)
         return false
       }
     }
     setError(null)
     return true
-  }, [value, rules])
+  }, [value, config.rules, touched])
 
   const onChange = useCallback((newValue: T) => {
     setValue(newValue)
-    setTouched(true)
-  }, [])
+    if (touched) {
+      setError(null)
+    }
+  }, [touched])
 
   const onBlur = useCallback(() => {
     setTouched(true)
@@ -35,20 +42,43 @@ export function useFormField<T>(
   }, [validate])
 
   const reset = useCallback(() => {
-    setValue(initialValue)
+    setValue(config.defaultValue)
     setError(null)
     setTouched(false)
-  }, [initialValue])
+  }, [config.defaultValue])
 
   return {
     value,
-    setValue,
-    onChange,
-    onBlur,
     error,
     touched,
-    isValid: error === null && touched,
-    validate,
+    onChange,
+    onBlur,
     reset,
+    validate,
+    isValid: error === null,
+    isDirty: value !== config.defaultValue,
+  }
+}
+
+export interface FormConfig {
+  fields: Record<string, FieldConfig>
+  onSubmit?: (values: Record<string, any>) => void | Promise<void>
+}
+
+export function useForm(config: FormConfig) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const submit = useCallback(async (values: Record<string, any>) => {
+    setIsSubmitting(true)
+    try {
+      await config.onSubmit?.(values)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [config])
+
+  return {
+    submit,
+    isSubmitting,
   }
 }

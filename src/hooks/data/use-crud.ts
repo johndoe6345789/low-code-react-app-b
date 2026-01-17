@@ -1,55 +1,51 @@
-import { useState, useCallback } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { useCallback } from 'react'
 
-export interface UseCRUDOptions<T> {
-  key: string
-  defaultValue?: T[]
-  persist?: boolean
-  getId?: (item: T) => string | number
+export interface CRUDOperations<T> {
+  create: (item: T) => void
+  read: (id: string | number) => T | undefined
+  update: (id: string | number, updates: Partial<T>) => void
+  delete: (id: string | number) => void
+  list: () => T[]
 }
 
-export function useCRUD<T>(options: UseCRUDOptions<T>) {
-  const { key, defaultValue = [], persist = true, getId = (item: any) => item.id } = options
+export interface CRUDConfig<T> {
+  items: T[]
+  setItems: (updater: (items: T[]) => T[]) => void
+  idField?: keyof T
+}
 
-  const [persistedItems, setPersistedItems] = useKV<T[]>(key, defaultValue)
-  const [localItems, setLocalItems] = useState<T[]>(defaultValue)
-
-  const items = persist ? persistedItems : localItems
-  const setItems = persist ? setPersistedItems : setLocalItems
-
+export function useCRUD<T extends Record<string, any>>({
+  items,
+  setItems,
+  idField = 'id' as keyof T,
+}: CRUDConfig<T>): CRUDOperations<T> {
   const create = useCallback((item: T) => {
-    setItems((current: T[]) => [...current, item])
+    setItems(current => [...current, item])
   }, [setItems])
 
-  const read = useCallback((id: string | number): T | undefined => {
-    return items.find(item => getId(item) === id)
-  }, [items, getId])
+  const read = useCallback((id: string | number) => {
+    return items.find(item => item[idField] === id)
+  }, [items, idField])
 
   const update = useCallback((id: string | number, updates: Partial<T>) => {
-    setItems((current: T[]) =>
+    setItems(current =>
       current.map(item =>
-        getId(item) === id ? { ...item, ...updates } : item
+        item[idField] === id ? { ...item, ...updates } : item
       )
     )
-  }, [setItems, getId])
+  }, [setItems, idField])
 
-  const remove = useCallback((id: string | number) => {
-    setItems((current: T[]) =>
-      current.filter(item => getId(item) !== id)
-    )
-  }, [setItems, getId])
+  const deleteItem = useCallback((id: string | number) => {
+    setItems(current => current.filter(item => item[idField] !== id))
+  }, [setItems, idField])
 
-  const clear = useCallback(() => {
-    setItems([])
-  }, [setItems])
+  const list = useCallback(() => items, [items])
 
   return {
-    items,
     create,
     read,
     update,
-    remove,
-    clear,
-    setItems,
+    delete: deleteItem,
+    list,
   }
 }

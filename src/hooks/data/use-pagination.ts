@@ -1,52 +1,55 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
 export interface PaginationConfig {
-  page: number
-  pageSize: number
-  total: number
+  items: any[]
+  pageSize?: number
+  initialPage?: number
 }
 
-export function usePagination<T>(items: T[], initialPageSize: number = 10) {
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(initialPageSize)
+export function usePagination<T>({
+  items,
+  pageSize = 10,
+  initialPage = 1,
+}: PaginationConfig) {
+  const [currentPage, setCurrentPage] = useState(initialPage)
 
-  const total = items.length
-  const totalPages = Math.ceil(total / pageSize)
+  const totalPages = Math.ceil(items.length / pageSize)
 
   const paginatedItems = useMemo(() => {
-    const start = (page - 1) * pageSize
+    const start = (currentPage - 1) * pageSize
     const end = start + pageSize
     return items.slice(start, end)
-  }, [items, page, pageSize])
+  }, [items, currentPage, pageSize])
 
-  const goToPage = useCallback((newPage: number) => {
-    setPage(Math.max(1, Math.min(newPage, totalPages)))
+  const goToPage = useCallback((page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)))
   }, [totalPages])
 
   const nextPage = useCallback(() => {
-    goToPage(page + 1)
-  }, [page, goToPage])
+    goToPage(currentPage + 1)
+  }, [currentPage, goToPage])
 
   const prevPage = useCallback(() => {
-    goToPage(page - 1)
-  }, [page, goToPage])
+    goToPage(currentPage - 1)
+  }, [currentPage, goToPage])
 
-  const changePageSize = useCallback((newSize: number) => {
-    setPageSize(newSize)
-    setPage(1)
-  }, [])
+  const reset = useCallback(() => {
+    setCurrentPage(initialPage)
+  }, [initialPage])
 
   return {
     items: paginatedItems,
-    page,
-    pageSize,
-    total,
+    currentPage,
     totalPages,
+    pageSize,
     goToPage,
     nextPage,
     prevPage,
-    changePageSize,
-    hasNext: page < totalPages,
-    hasPrev: page > 1,
+    reset,
+    hasNext: currentPage < totalPages,
+    hasPrev: currentPage > 1,
+    startIndex: (currentPage - 1) * pageSize + 1,
+    endIndex: Math.min(currentPage * pageSize, items.length),
+    totalItems: items.length,
   }
 }

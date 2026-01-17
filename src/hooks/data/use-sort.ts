@@ -1,61 +1,54 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 
-export type SortDirection = 'asc' | 'desc' | null
+export type SortDirection = 'asc' | 'desc'
 
-export interface UseSortOptions<T> {
+export interface SortConfig<T> {
   items: T[]
-  initialField?: keyof T
-  initialDirection?: SortDirection
+  defaultField?: keyof T
+  defaultDirection?: SortDirection
 }
 
-export function useSort<T>(options: UseSortOptions<T>) {
-  const { items, initialField, initialDirection = 'asc' } = options
-  const [field, setField] = useState<keyof T | null>(initialField || null)
-  const [direction, setDirection] = useState<SortDirection>(initialDirection)
+export function useSort<T extends Record<string, any>>({
+  items,
+  defaultField,
+  defaultDirection = 'asc',
+}: SortConfig<T>) {
+  const [sortField, setSortField] = useState<keyof T | undefined>(defaultField)
+  const [sortDirection, setSortDirection] = useState<SortDirection>(defaultDirection)
 
   const sorted = useMemo(() => {
-    if (!field || !direction) return items
+    if (!sortField) return items
 
     return [...items].sort((a, b) => {
-      const aVal = a[field]
-      const bVal = b[field]
+      const aVal = a[sortField]
+      const bVal = b[sortField]
 
-      if (aVal == null && bVal == null) return 0
-      if (aVal == null) return 1
-      if (bVal == null) return -1
+      if (aVal === bVal) return 0
 
-      if (aVal < bVal) return direction === 'asc' ? -1 : 1
-      if (aVal > bVal) return direction === 'asc' ? 1 : -1
-      return 0
+      const comparison = aVal < bVal ? -1 : 1
+      return sortDirection === 'asc' ? comparison : -comparison
     })
-  }, [items, field, direction])
+  }, [items, sortField, sortDirection])
 
-  const toggleSort = (newField: keyof T) => {
-    if (field === newField) {
-      setDirection(prev =>
-        prev === 'asc' ? 'desc' : prev === 'desc' ? null : 'asc'
-      )
-      if (direction === 'desc') {
-        setField(null)
-      }
+  const toggleSort = useCallback((field: keyof T) => {
+    if (sortField === field) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
     } else {
-      setField(newField)
-      setDirection('asc')
+      setSortField(field)
+      setSortDirection('asc')
     }
-  }
+  }, [sortField])
 
-  const reset = () => {
-    setField(null)
-    setDirection(null)
-  }
+  const resetSort = useCallback(() => {
+    setSortField(defaultField)
+    setSortDirection(defaultDirection)
+  }, [defaultField, defaultDirection])
 
   return {
     sorted,
-    field,
-    direction,
+    sortField,
+    sortDirection,
     toggleSort,
-    setField,
-    setDirection,
-    reset,
+    resetSort,
   }
 }
