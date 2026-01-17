@@ -2,14 +2,20 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files and workspace packages for dependency installation
+# Copy workspace configuration and all package files
 COPY package*.json ./
+
+# Copy spark-tools package (the actual @github/spark implementation)
+COPY packages/spark-tools/package.json ./packages/spark-tools/package.json
+COPY packages/spark-tools/dist ./packages/spark-tools/dist
+
+# Copy spark wrapper package
 COPY packages/spark/package.json ./packages/spark/package.json
 COPY packages/spark/src ./packages/spark/src
+COPY packages/spark/tsconfig.json ./packages/spark/tsconfig.json
 
-# Install dependencies
-# Note: npm ci doesn't work reliably with workspace: protocol, so we use npm install  
-RUN npm install
+# Install dependencies using npm workspaces
+RUN npm install --workspaces --include-workspace-root
 
 # Copy remaining application files
 COPY . .

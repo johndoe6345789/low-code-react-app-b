@@ -1,13 +1,12 @@
 node_modules
 npm-debug.log
-dist
 .git
 .github
 .gitignore
 .dockerignore
-Dockerfile
 docker-compose.yml
 *.md
+!README.md
 coverage
 .env
 .env.local
@@ -18,3 +17,8 @@ test-results
 .idea
 *.log
 .DS_Store
+pids
+e2e
+
+# Keep the dist folder in packages/spark-tools (needed for build)
+!packages/spark-tools/dist
