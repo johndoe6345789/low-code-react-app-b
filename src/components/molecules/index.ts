@@ -1,4 +1,5 @@
 export { AppBranding } from './AppBranding'
+export { Breadcrumb } from './Breadcrumb'
 export { CodeExplanationDialog } from './CodeExplanationDialog'
 export { EditorActions } from './EditorActions'
 export { EditorToolbar } from './EditorToolbar'

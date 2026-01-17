@@ -25,3 +25,4 @@ export { useSelection as useDataSelection } from './data/use-selection'
 export { useFormField, useForm } from './forms/use-form-field'
 
 export * from './use-route-preload'
+export * from './use-navigation-history'
