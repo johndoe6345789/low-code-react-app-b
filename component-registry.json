@@ -250,6 +250,24 @@
       "description": "Project template selection and preview"
     },
     {
+      "name": "PersistenceDashboard",
+      "path": "@/components/PersistenceDashboard",
+      "export": "PersistenceDashboard",
+      "type": "feature",
+      "preload": false,
+      "category": "database",
+      "description": "Redux persistence middleware monitoring and control dashboard"
+    },
+    {
+      "name": "PersistenceExample",
+      "path": "@/components/PersistenceExample",
+      "export": "PersistenceExample",
+      "type": "feature",
+      "preload": false,
+      "category": "database",
+      "description": "Interactive example demonstrating automatic persistence"
+    },
+    {
       "name": "JSONUIShowcase",
       "path": "@/components/JSONUIShowcasePage",
       "export": "JSONUIShowcasePage",

@@ -318,6 +318,24 @@
       "props": {}
     },
     {
+      "id": "persistence",
+      "title": "Persistence",
+      "icon": "Database",
+      "component": "PersistenceDashboard",
+      "enabled": true,
+      "order": 20,
+      "props": {}
+    },
+    {
+      "id": "persistence-demo",
+      "title": "Persistence Demo",
+      "icon": "Lightning",
+      "component": "PersistenceExample",
+      "enabled": true,
+      "order": 21,
+      "props": {}
+    },
+    {
       "id": "templates",
       "title": "Templates",
       "icon": "Package",

@@ -11,6 +11,9 @@ import themeReducer from './slices/themeSlice'
 import settingsReducer from './slices/settingsSlice'
 import syncReducer from './slices/syncSlice'
 import conflictsReducer from './slices/conflictsSlice'
+import { createPersistenceMiddleware } from './middleware/persistenceMiddleware'
+import { createSyncMonitorMiddleware } from './middleware/syncMonitorMiddleware'
+import { createAutoSyncMiddleware } from './middleware/autoSyncMiddleware'
 
 export const store = configureStore({
   reducer: {
@@ -31,7 +34,10 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }),
+    })
+      .concat(createPersistenceMiddleware())
+      .concat(createSyncMonitorMiddleware())
+      .concat(createAutoSyncMiddleware()),
 })
 
 export type RootState = ReturnType<typeof store.getState>

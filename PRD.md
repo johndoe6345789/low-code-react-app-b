@@ -43,6 +43,20 @@ A comprehensive state management system built with Redux Toolkit, seamlessly int
 - **Progression**: Sync attempt → Conflict detected → User notified → User reviews conflict details → User selects resolution strategy → Conflict resolved → Data synced
 - **Success criteria**: All conflicts detected accurately, side-by-side comparison of versions, multiple resolution strategies available, resolved data persists correctly
 
+### Redux Persistence Middleware
+- **Functionality**: Automatic synchronization between Redux state and storage systems (IndexedDB + Flask API)
+- **Purpose**: Eliminate manual sync calls, ensure data consistency, provide seamless offline-first experience
+- **Trigger**: Any Redux action that modifies persistable state (files, models, components, etc.)
+- **Progression**: Redux action dispatched → Middleware intercepts → Debounced queue → Batch persist to IndexedDB → Optional Flask sync → Metrics updated
+- **Success criteria**: All state changes automatically persisted within 300ms, zero data loss, transparent operation
+
+### Sync Monitoring System
+- **Functionality**: Real-time tracking of all persistence and sync operations with comprehensive metrics
+- **Purpose**: Provide visibility into system health, performance diagnostics, and debugging capabilities
+- **Trigger**: Every persistence operation (successful or failed)
+- **Progression**: Operation starts → Timestamp recorded → Operation completes → Duration calculated → Metrics updated → Listeners notified
+- **Success criteria**: Sub-millisecond overhead, accurate metrics, real-time updates, 100-operation history
+
 ### Auto-Sync System
 - **Functionality**: Configurable automatic synchronization at set intervals
 - **Purpose**: Reduce manual sync burden and ensure data is regularly backed up
