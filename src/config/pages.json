@@ -282,6 +282,17 @@
       "enabled": true,
       "order": 22,
       "props": {}
+    },
+    {
+      "id": "schema-editor",
+      "title": "Schema Editor",
+      "icon": "PencilRuler",
+      "component": "SchemaEditor",
+      "enabled": true,
+      "toggleKey": "schemaEditor",
+      "shortcut": "ctrl+shift+s",
+      "order": 23,
+      "props": {}
     }
   ]
 }

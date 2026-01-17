@@ -16,6 +16,7 @@ import {
   Image,
   Faders,
   Lightbulb,
+  PencilRuler,
 } from '@phosphor-icons/react'
 import { FeatureToggles } from '@/types/project'
 
@@ -141,6 +142,16 @@ export const tabInfo: Record<string, TabInfo> = {
     icon: <Lightbulb size={24} weight="duotone" />,
     description: 'Brainstorm and organize feature ideas',
   },
+  'schema-editor': {
+    title: 'Schema Editor',
+    icon: <PencilRuler size={24} weight="duotone" />,
+    description: 'Visual JSON schema builder',
+  },
+  'json-ui': {
+    title: 'JSON UI Showcase',
+    icon: <Code size={24} weight="duotone" />,
+    description: 'JSON-driven UI examples',
+  },
 }
 
 export const navigationGroups: NavigationGroup[] = [
@@ -241,6 +252,19 @@ export const navigationGroups: NavigationGroup[] = [
         icon: <Lightbulb size={18} />,
         value: 'ideas',
         featureKey: 'ideaCloud',
+      },
+      {
+        id: 'schema-editor',
+        label: 'Schema Editor',
+        icon: <PencilRuler size={18} />,
+        value: 'schema-editor',
+        featureKey: 'schemaEditor',
+      },
+      {
+        id: 'json-ui',
+        label: 'JSON UI',
+        icon: <Code size={18} />,
+        value: 'json-ui',
       },
     ],
   },

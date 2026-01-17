@@ -121,6 +121,16 @@ export const ComponentRegistry = {
     () => import('@/components/TemplateSelector').then(m => ({ default: m.TemplateSelector })),
     'TemplateSelector'
   ),
+  
+  JSONUIShowcase: lazyWithPreload(
+    () => import('@/components/JSONUIShowcasePage').then(m => ({ default: m.JSONUIShowcasePage })),
+    'JSONUIShowcase'
+  ),
+  
+  SchemaEditor: lazyWithPreload(
+    () => import('@/components/SchemaEditorPage').then(m => ({ default: m.SchemaEditorPage })),
+    'SchemaEditor'
+  ),
 } as const
 
 export const DialogRegistry = {

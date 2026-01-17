@@ -1,6 +1,6 @@
 # JSON-Driven UI Architecture Enhancement
 
-Build a comprehensive JSON-driven UI system that allows building entire user interfaces from declarative JSON schemas, breaking down complex components into atomic pieces, and extracting reusable logic into custom hooks for maximum maintainability and rapid development.
+Build a comprehensive JSON-driven UI system that allows building entire user interfaces from declarative JSON schemas, including a visual drag-and-drop schema editor for creating JSON UI configs, breaking down complex components into atomic pieces, and extracting reusable logic into custom hooks for maximum maintainability and rapid development.
 
 **Experience Qualities**:
 1. **Modular** - Every component under 150 LOC, highly composable and reusable
@@ -9,9 +9,16 @@ Build a comprehensive JSON-driven UI system that allows building entire user int
 
 **Complexity Level**: Complex Application (advanced functionality with multiple views)
 
-This is an advanced system that interprets JSON schemas, manages state across multiple data sources, executes actions dynamically, and renders complex component hierarchies - requiring sophisticated architecture with component registries, action executors, and data source managers.
+This is an advanced system that interprets JSON schemas, manages state across multiple data sources, executes actions dynamically, renders complex component hierarchies, and provides a visual editor for creating schemas through drag-and-drop - requiring sophisticated architecture with component registries, action executors, data source managers, and interactive canvas rendering.
 
 ## Essential Features
+
+### Visual Schema Editor
+- **Functionality**: Drag-and-drop interface for building JSON UI schemas with real-time preview
+- **Purpose**: Enable non-technical users to create complex UIs without writing JSON
+- **Trigger**: User opens the schema editor page
+- **Progression**: Select component from palette → Drag to canvas → Drop at position → Configure properties → Preview result → Export JSON
+- **Success criteria**: Users can create complete page schemas visually, with property editing, component tree view, and JSON export
 
 ### JSON Schema Parser
 - **Functionality**: Parse and validate JSON UI schemas with full TypeScript type safety

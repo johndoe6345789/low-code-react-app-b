@@ -282,6 +282,7 @@ export interface FeatureToggles {
   sassStyles: boolean
   faviconDesigner: boolean
   ideaCloud: boolean
+  schemaEditor: boolean
 }
 
 export interface Project {

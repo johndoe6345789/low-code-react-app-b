@@ -74,6 +74,7 @@ const DEFAULT_FEATURE_TOGGLES: FeatureToggles = {
   sassStyles: true,
   faviconDesigner: true,
   ideaCloud: true,
+  schemaEditor: true,
 }
 
 const DEFAULT_THEME: ThemeConfig = {
