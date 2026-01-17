@@ -57,7 +57,7 @@ export function PreviewDialog({ open, onOpenChange }: PreviewDialogProps) {
               src={previewUrl}
               className="w-full h-full border-0"
               title="Preview"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+              sandbox="allow-scripts allow-forms allow-popups allow-modals"
             />
           )}
         </div>
