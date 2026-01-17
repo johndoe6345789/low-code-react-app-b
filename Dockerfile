@@ -11,9 +11,9 @@ COPY packages/spark-tools ./packages/spark-tools
 # Copy spark wrapper package
 COPY packages/spark ./packages/spark
 
-# Install dependencies - npm ci doesn't fully support workspace protocol in all versions
-# So we use npm install which resolves workspaces correctly
-RUN npm install --legacy-peer-deps
+# Install dependencies with npm ci for consistent, reproducible builds
+# Include optional dependencies to ensure platform-specific binaries (like @rollup/rollup-linux-arm64-musl) are installed
+RUN npm ci --include=optional
 
 # Copy remaining application files
 COPY . .
