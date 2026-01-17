@@ -7,17 +7,17 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { ProjectDashboard } from '@/components/ProjectDashboard'
 import { CodeEditor } from '@/components/CodeEditor'
-import { ModelDesigner } from '@/components/ModelDesigner'
+import { JSONModelDesigner } from '@/components/JSONModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
-import { ComponentTreeManager } from '@/components/ComponentTreeManager'
-import { WorkflowDesigner } from '@/components/WorkflowDesigner'
-import { LambdaDesigner } from '@/components/LambdaDesigner'
-import { StyleDesigner } from '@/components/StyleDesigner'
+import { JSONComponentTreeManager } from '@/components/JSONComponentTreeManager'
+import { JSONWorkflowDesigner } from '@/components/JSONWorkflowDesigner'
+import { JSONLambdaDesigner } from '@/components/JSONLambdaDesigner'
+import { JSONStyleDesigner } from '@/components/JSONStyleDesigner'
 import { FileExplorer } from '@/components/FileExplorer'
 import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
 import { StorybookDesigner } from '@/components/StorybookDesigner'
 import { UnitTestDesigner } from '@/components/UnitTestDesigner'
-import { FlaskDesigner } from '@/components/FlaskDesigner'
+import { JSONFlaskDesigner } from '@/components/JSONFlaskDesigner'
 import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
 import { ErrorPanel } from '@/components/ErrorPanel'
 import { DocumentationView } from '@/components/DocumentationView'
@@ -41,17 +41,17 @@ export const ComponentRegistry: Record<string, ComponentType<any>> = {
   
   ProjectDashboard,
   CodeEditor,
-  ModelDesigner,
+  JSONModelDesigner,
   ComponentTreeBuilder,
-  ComponentTreeManager,
-  WorkflowDesigner,
-  LambdaDesigner,
-  StyleDesigner,
+  JSONComponentTreeManager,
+  JSONWorkflowDesigner,
+  JSONLambdaDesigner,
+  JSONStyleDesigner,
   FileExplorer,
   PlaywrightDesigner,
   StorybookDesigner,
   UnitTestDesigner,
-  FlaskDesigner,
+  JSONFlaskDesigner,
   ProjectSettingsDesigner,
   ErrorPanel,
   DocumentationView,
