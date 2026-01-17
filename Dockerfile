@@ -2,12 +2,17 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy all files including workspace packages to support npm workspaces
-COPY . .
+# Copy package files and workspace packages for dependency installation
+COPY package*.json ./
+COPY packages/spark/package.json ./packages/spark/package.json
+COPY packages/spark/src ./packages/spark/src
 
 # Install dependencies
-# Note: npm ci doesn't work with workspace: protocol, so we use npm install
+# Note: npm ci doesn't work reliably with workspace: protocol, so we use npm install  
 RUN npm install
+
+# Copy remaining application files
+COPY . .
 
 # Build the application
 RUN npm run build
