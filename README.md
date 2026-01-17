@@ -73,6 +73,25 @@ npx playwright install
 npm run dev
 ```
 
+### Troubleshooting
+
+**Getting 502 Bad Gateway errors?**
+
+The dev server must run on port 5000 for Codespaces forwarding:
+
+```bash
+# Run diagnostics
+bash scripts/diagnose-502.sh
+
+# Kill any existing server
+npm run kill
+
+# Start fresh
+npm run dev
+```
+
+For detailed troubleshooting, see [docs/502_ERROR_FIX.md](./docs/502_ERROR_FIX.md)
+
 ### Quick Start
 1. **Save Your Work** - Use **Save Project** button to persist your work to the database
 2. **Load Projects** - Click **Load Project** to view and switch between saved projects

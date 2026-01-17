@@ -1,96 +1,146 @@
-# 📚 CodeForge Documentation
+# Error Fixes Summary
 
-Welcome to the CodeForge documentation center. This folder contains all technical documentation, guides, and references for the project.
+This directory contains documentation for various error fixes and troubleshooting guides.
 
-## 🗂️ Documentation Structure
+## Available Guides
 
-### 📖 Getting Started
-- **[../README.md](../README.md)** - Main project README with quick start guide
-- **[PRD.md](./PRD.md)** - Complete Product Requirements Document
-- **[QUICKSTART_HOOKS.md](./guides/QUICKSTART_HOOKS.md)** - Quick start for using hooks
-- **[QUICK_REFERENCE.md](./guides/QUICK_REFERENCE.md)** - Fast lookup guide
+### [502 Bad Gateway Error Fix](./502_ERROR_FIX.md)
+Comprehensive guide for fixing 502 Bad Gateway errors in Codespaces/local development.
 
-### 🏗️ Architecture
-- **[DECLARATIVE_SYSTEM.md](./architecture/DECLARATIVE_SYSTEM.md)** - ⭐ JSON-driven page orchestration
-- **[ARCHITECTURE_VISUAL_GUIDE.md](./architecture/ARCHITECTURE_VISUAL_GUIDE.md)** - Visual architecture diagrams
-- **[CONFIG_ARCHITECTURE.md](./architecture/CONFIG_ARCHITECTURE.md)** - Configuration system overview
-- **[JSON_ORCHESTRATION_COMPLETE.md](./architecture/JSON_ORCHESTRATION_COMPLETE.md)** - Complete JSON orchestration guide
-- **[JSON_ORCHESTRATION_GUIDE.md](./architecture/JSON_ORCHESTRATION_GUIDE.md)** - JSON page building guide
+**Quick Fix:**
+```bash
+# Run the diagnostic script
+bash scripts/diagnose-502.sh
 
-#### Atomic Design (Legacy)
-- **[ATOMIC_README.md](./architecture/atomic/ATOMIC_README.md)** - Atomic design quick start
-- **[ATOMIC_COMPONENTS.md](./architecture/atomic/ATOMIC_COMPONENTS.md)** - Complete atomic architecture
-- **[ATOMIC_REFACTOR_SUMMARY.md](./architecture/atomic/ATOMIC_REFACTOR_SUMMARY.md)** - Refactor overview
-- **[ATOMIC_USAGE_EXAMPLES.md](./architecture/atomic/ATOMIC_USAGE_EXAMPLES.md)** - Code examples
-- **[ATOMIC_VISUAL_OVERVIEW.md](./architecture/atomic/ATOMIC_VISUAL_OVERVIEW.md)** - Visual component maps
-- **[COMPONENT_MAP.md](./architecture/atomic/COMPONENT_MAP.md)** - Component dependency maps
+# Then restart the dev server
+npm run kill
+npm run dev
+```
 
-### 🎣 Hooks & API Reference
-- **[COMPLETE_HOOK_LIBRARY.md](./api/COMPLETE_HOOK_LIBRARY.md)** - Complete hook API reference
-- **[HOOK_LIBRARY_DOCS.md](./api/HOOK_LIBRARY_DOCS.md)** - Hook library documentation
-- **[HOOK_LIBRARY_REFERENCE.md](./api/HOOK_LIBRARY_REFERENCE.md)** - Hook reference guide
+**Key Changes Made:**
+- ✅ Updated `vite.config.ts` to use port 5000 (was 5173)
+- ✅ Server already configured to bind to `0.0.0.0`
+- ✅ Updated CI/CD workflows to use `npm install` instead of `npm ci`
 
-### 📘 Guides
-- **[PWA_GUIDE.md](./guides/PWA_GUIDE.md)** - Progressive Web App features
-- **[CI_CD_GUIDE.md](./guides/CI_CD_GUIDE.md)** - CI/CD setup and configuration
-- **[ERROR_REPAIR_GUIDE.md](./guides/ERROR_REPAIR_GUIDE.md)** - Error detection and repair
-- **[SEED_DATA_GUIDE.md](./guides/SEED_DATA_GUIDE.md)** - Seed data templates
-- **[PROPS_CONFIG_GUIDE.md](./guides/PROPS_CONFIG_GUIDE.md)** - Props configuration
-- **[MIGRATION_GUIDE.md](./guides/MIGRATION_GUIDE.md)** - Migration between versions
-- **[FAVICON_DESIGNER_ACCESS.md](./guides/FAVICON_DESIGNER_ACCESS.md)** - Favicon designer usage
+## Common Issues
 
-### 🧪 Testing
-- **[RUN_TESTS.md](./testing/RUN_TESTS.md)** - Test execution guide
-- **[E2E_TEST_SUMMARY.md](./testing/E2E_TEST_SUMMARY.md)** - E2E test coverage
-- **[SMOKE_TEST_REPORT.md](./testing/SMOKE_TEST_REPORT.md)** - Smoke test report
-- **[SMOKE_TEST_QUICK_REF.md](./testing/SMOKE_TEST_QUICK_REF.md)** - Quick smoke test reference
-- **[CONNECTION_TEST_PLAN.md](./testing/CONNECTION_TEST_PLAN.md)** - Connection testing plan
+### 1. Port Mismatch
+**Symptom**: 502 errors when accessing Codespaces URL
+**Cause**: Vite running on different port than forwarded
+**Fix**: Ensure vite.config.ts uses port 5000
 
-### 🚀 Deployment & Operations
-- **[CI_FIX_SUMMARY.md](./deployment/CI_FIX_SUMMARY.md)** - CI/CD fixes
-- **[BAD_GATEWAY_FIX.md](./deployment/BAD_GATEWAY_FIX.md)** - Bad gateway troubleshooting
+### 2. Workspace Dependencies
+**Symptom**: CI/CD fails with `EUNSUPPORTEDPROTOCOL`
+**Cause**: `npm ci` doesn't support workspace protocol
+**Fix**: Use `npm install` or switch to pnpm
 
-### 📝 Development History
-- **[REFACTORING_PLAN.md](./history/REFACTORING_PLAN.md)** - Initial refactoring plan
-- **[REFACTORING_LOG.md](./history/REFACTORING_LOG.md)** - Refactoring activity log
-- **[REFACTORING_SUMMARY.md](./history/REFACTORING_SUMMARY.md)** - Refactoring summary
-- **[REFACTORING_EXAMPLE.md](./history/REFACTORING_EXAMPLE.md)** - Example refactors
-- **[REFACTOR_PHASE2.md](./history/REFACTOR_PHASE2.md)** - Phase 2 refactor
-- **[REFACTOR_PHASE3.md](./history/REFACTOR_PHASE3.md)** - Phase 3 refactor
-- **[PHASE2_REFACTORING_SUMMARY.md](./history/PHASE2_REFACTORING_SUMMARY.md)** - Phase 2 summary
-- **[PHASE3_COMPLETE.md](./history/PHASE3_COMPLETE.md)** - Phase 3 completion
-- **[PHASE4_IMPLEMENTATION_COMPLETE.md](./history/PHASE4_IMPLEMENTATION_COMPLETE.md)** - Phase 4 completion
-- **[REFACTOR_PHASE4_COMPLETE.md](./history/REFACTOR_PHASE4_COMPLETE.md)** - Phase 4 refactor
-- **[DELIVERY_COMPLETE.md](./history/DELIVERY_COMPLETE.md)** - Delivery milestones
+### 3. Server Not Accessible
+**Symptom**: 502 errors even when server is running
+**Cause**: Server bound to localhost only
+**Fix**: Use `host: '0.0.0.0'` in vite.config.ts (already done)
 
-### 📋 Reference
-- **[INDEX.md](./reference/INDEX.md)** - Documentation index
-- **[ATOMIC_DOCS_INDEX.md](./reference/ATOMIC_DOCS_INDEX.md)** - Atomic design index
-- **[EXAMPLE_NEW_PAGE.md](./reference/EXAMPLE_NEW_PAGE.md)** - New page examples
-- **[AGENTS.md](./reference/AGENTS.md)** - AI agent architecture
-- **[APP_STATUS.md](./reference/APP_STATUS.md)** - Application status
-- **[ROADMAP.md](./reference/ROADMAP.md)** - Product roadmap
-- **[SECURITY.md](./reference/SECURITY.md)** - Security guidelines
+### 4. MIME Type Errors
+**Symptom**: Resources refused as wrong content type
+**Cause**: Usually secondary to 502 errors
+**Fix**: Fix 502 errors first, MIME issues resolve automatically
 
-## 🔍 Quick Navigation
+## Quick Commands
 
-### I want to...
-- **Add a new page** → [DECLARATIVE_SYSTEM.md](./architecture/DECLARATIVE_SYSTEM.md)
-- **Use hooks in my components** → [COMPLETE_HOOK_LIBRARY.md](./api/COMPLETE_HOOK_LIBRARY.md)
-- **Understand the architecture** → [ARCHITECTURE_VISUAL_GUIDE.md](./architecture/ARCHITECTURE_VISUAL_GUIDE.md)
-- **Set up CI/CD** → [CI_CD_GUIDE.md](./guides/CI_CD_GUIDE.md)
-- **Run tests** → [RUN_TESTS.md](./testing/RUN_TESTS.md)
-- **Enable PWA features** → [PWA_GUIDE.md](./guides/PWA_GUIDE.md)
-- **Fix errors** → [ERROR_REPAIR_GUIDE.md](./guides/ERROR_REPAIR_GUIDE.md)
+```bash
+# Check if server is running
+lsof -i :5000
 
-## 📞 Need Help?
+# Kill server on port 5000
+npm run kill
 
-1. Check the relevant guide in this documentation
-2. Review the [Quick Reference](./guides/QUICK_REFERENCE.md)
-3. Look at [Example implementations](./reference/EXAMPLE_NEW_PAGE.md)
-4. Check the [Roadmap](./reference/ROADMAP.md) for planned features
+# Start dev server
+npm run dev
 
----
+# Run diagnostics
+bash scripts/diagnose-502.sh
 
-**Last Updated**: January 2026  
-**Documentation Version**: 6.0
+# Check Codespaces ports
+gh codespace ports
+
+# Install dependencies (with workspace support)
+npm install
+```
+
+## File Changes Made
+
+| File | Change | Status |
+|------|--------|--------|
+| `vite.config.ts` | Port 5173 → 5000 | ✅ Fixed |
+| `.github/workflows/ci.yml` | `npm ci` → `npm install` (4 places) | ✅ Fixed |
+| `.github/workflows/e2e-tests.yml` | `npm ci` → `npm install` | ✅ Fixed |
+| `scripts/diagnose-502.sh` | Created diagnostic script | ✅ New |
+| `docs/502_ERROR_FIX.md` | Created comprehensive guide | ✅ New |
+
+## Next Steps After Fixes
+
+1. **Restart Development Server**
+   ```bash
+   npm run kill  # Kill existing processes
+   npm run dev   # Start fresh
+   ```
+
+2. **Verify in Browser**
+   - Open Codespaces forwarded URL for port 5000
+   - Should see React app load without errors
+   - Check browser console - no 502s
+
+3. **Test CI/CD**
+   - Push changes to trigger workflow
+   - Verify `npm install` succeeds
+   - Build should complete successfully
+
+4. **Long-term Improvements**
+   - Consider migrating to pnpm for better workspace support
+   - Add health check endpoint for monitoring
+   - Document port configuration for team
+
+## Troubleshooting
+
+If issues persist after applying fixes:
+
+1. **Check the diagnostic output**:
+   ```bash
+   bash scripts/diagnose-502.sh
+   ```
+
+2. **Verify Codespaces port forwarding**:
+   - Open Ports panel in VS Code
+   - Ensure port 5000 is forwarded
+   - Set visibility to Public or Private to Org
+
+3. **Check server logs**:
+   - Look for errors in terminal where dev server runs
+   - Common issues: missing deps, syntax errors, port conflicts
+
+4. **Clear Vite cache**:
+   ```bash
+   rm -rf node_modules/.vite
+   npm run dev
+   ```
+
+5. **Rebuild dependencies**:
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm install
+   npm run dev
+   ```
+
+## Additional Resources
+
+- [Vite Configuration Guide](https://vitejs.dev/config/)
+- [GitHub Codespaces Docs](https://docs.github.com/en/codespaces)
+- [pnpm Workspace Guide](https://pnpm.io/workspaces)
+
+## Support
+
+If you continue experiencing issues:
+
+1. Check existing documentation in `docs/` directory
+2. Review browser console for specific error messages
+3. Check server terminal logs for backend errors
+4. Verify all file changes were applied correctly
