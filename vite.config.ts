@@ -28,6 +28,8 @@ export default defineConfig({
     strictPort: false,
   },
   build: {
+    outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks: {

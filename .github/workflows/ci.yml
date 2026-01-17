@@ -77,8 +77,22 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Prepare build directories
+        run: |
+          mkdir -p /tmp/dist
+          mkdir -p dist
+
       - name: Build application
         run: npm run build
+
+      - name: Verify build output
+        run: |
+          if [ ! -f "dist/index.html" ]; then
+            echo "Error: Build failed - index.html not found"
+            exit 1
+          fi
+          echo "Build successful - all artifacts generated"
+          ls -lah dist/
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

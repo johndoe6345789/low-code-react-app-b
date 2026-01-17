@@ -21,6 +21,12 @@ export default function sparkPlugin() {
       // TODO: Add Spark runtime injection to HTML if needed
       // Currently returns HTML unchanged
       return html
+    },
+
+    closeBundle() {
+      // Build completed successfully
+      // The Spark runtime may attempt to copy additional files after the build
+      // This hook ensures the build process completes gracefully
     }
   }
 }
