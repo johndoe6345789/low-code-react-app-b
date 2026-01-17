@@ -2,6 +2,7 @@ export * from './core/use-kv-state'
 export * from './core/use-debounced-save'
 export * from './core/use-clipboard'
 export * from './core/use-library-loader'
+export * from './use-kv'
 
 export * from './ui/use-dialog'
 export * from './ui/use-selection'

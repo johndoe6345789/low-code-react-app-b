@@ -3,7 +3,6 @@ FROM node:lts-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-COPY packages ./packages
 
 RUN npm ci --include=optional
 
@@ -16,7 +15,6 @@ FROM node:lts-alpine
 WORKDIR /app
 
 COPY package*.json ./
-COPY packages ./packages
 
 RUN npm ci --include=optional --omit=dev
 

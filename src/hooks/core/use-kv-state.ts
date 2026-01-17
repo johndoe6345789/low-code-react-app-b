@@ -1,4 +1,4 @@
-import { useKV } from '@github/spark/hooks'
+import { useKV } from '../use-kv'
 import { useCallback } from 'react'
 import { z } from 'zod'
 
