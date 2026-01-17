@@ -1,3 +1,7 @@
+import { mkdir } from 'fs/promises'
+import { existsSync } from 'fs'
+import { resolve } from 'path'
+
 /**
  * Spark Vite Plugin
  * 
@@ -21,6 +25,17 @@ export default function sparkPlugin() {
       // TODO: Add Spark runtime injection to HTML if needed
       // Currently returns HTML unchanged
       return html
+    },
+
+    async buildStart() {
+      const tmpDist = '/tmp/dist'
+      if (!existsSync(tmpDist)) {
+        try {
+          await mkdir(tmpDist, { recursive: true })
+        } catch (err) {
+          console.warn('[spark-vite-plugin] Could not create /tmp/dist:', err)
+        }
+      }
     },
 
     closeBundle() {
