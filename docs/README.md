@@ -5,6 +5,8 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 ## 🚀 Quick Start
 
 ### New Features
+- **[Hover-Based Preloading](./hover-preloading.md)** - Instant page navigation (NEW!)
+- **[Preloading Quick Reference](./preloading-quick-reference.md)** - Quick start guide (NEW!)
 - **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable React Router in 2 minutes
 - **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Full router documentation
 
@@ -15,9 +17,11 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 - **[PRD](./PRD.md)** - Product Requirements Document
 
 ### Performance & Optimization
-- **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Route-based code splitting (NEW!)
-- **[Router vs Tabs Comparison](./ROUTER_VS_TABS_COMPARISON.md)** - Performance benchmarks (NEW!)
-- **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable router in 2 minutes (NEW!)
+- **[Hover-Based Preloading](./hover-preloading.md)** - Instant navigation with preloading (NEW!)
+- **[Preloading Quick Reference](./preloading-quick-reference.md)** - Quick start (NEW!)
+- **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Route-based code splitting
+- **[Router vs Tabs Comparison](./ROUTER_VS_TABS_COMPARISON.md)** - Performance benchmarks
+- **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable router in 2 minutes
 - **[Bundle Optimization](./BUNDLE_OPTIMIZATION.md)** - Bundle size and performance optimization
 
 ### Error Fixes & Troubleshooting
@@ -40,7 +44,26 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 
 ## 🆕 Recent Additions
 
-### React Router Integration (Latest)
+### Hover-Based Route Preloading (Latest)
+Instant page navigation with intelligent preloading:
+
+**Benefits:**
+- Instant navigation on hover-preloaded routes
+- Adjacent route preloading for smooth sequential navigation
+- Popular routes preloaded in background
+- Visual feedback with preload indicator
+
+**Features:**
+- Hover detection with 100ms delay
+- Smart concurrency control (max 3 concurrent)
+- Automatic adjacent and popular route preloading
+- Cache management and status tracking
+
+**Learn more:**
+- [Full Documentation](./hover-preloading.md) - Complete guide
+- [Quick Reference](./preloading-quick-reference.md) - Quick start
+
+### React Router Integration
 We've added full React Router support with route-based code splitting:
 
 **Benefits:**

@@ -30,6 +30,8 @@ import { DialogRegistry, PWARegistry, preloadCriticalComponents } from '@/lib/co
 console.log('[APP] ✅ Component registry imported')
 
 import { RouterProvider } from '@/router'
+import { routePreloadManager } from '@/lib/route-preload-manager'
+import { PreloadIndicator } from '@/components/PreloadIndicator'
 console.log('[APP] ✅ Router provider imported')
 
 const { GlobalSearch, KeyboardShortcutsDialog, PreviewDialog } = DialogRegistry
@@ -80,6 +82,11 @@ function AppLayout() {
     setNpmSettings,
     setFeatureToggles,
   } = projectState
+
+  useEffect(() => {
+    console.log('[APP] 🎯 Setting feature toggles in preload manager')
+    routePreloadManager.setFeatureToggles(featureToggles)
+  }, [featureToggles])
 
   console.log('[APP] 📁 Initializing file operations')
   const fileOps = useFileOperations(files, setFiles)
@@ -180,6 +187,10 @@ function AppLayout() {
 
   useEffect(() => {
     console.log('[APP] 📍 Route changed to:', location.pathname, '- Page:', currentPage)
+    routePreloadManager.setCurrentRoute(currentPage)
+    
+    const stats = routePreloadManager.getStats()
+    console.log('[APP] 📊 Preload stats:', stats)
   }, [location, currentPage])
 
   console.log('[APP] 🎨 Rendering AppLayout UI')
@@ -294,6 +305,8 @@ function AppLayout() {
       <Suspense fallback={null}>
         <PWAInstallPrompt />
       </Suspense>
+      
+      <PreloadIndicator />
     </div>
   )
 }
@@ -330,6 +343,11 @@ function App() {
         
         console.log('[APP] 🚀 Preloading critical components')
         preloadCriticalComponents()
+        
+        console.log('[APP] ⭐ Preloading popular routes')
+        setTimeout(() => {
+          routePreloadManager.preloadPopularRoutes()
+        }, 1000)
       })
 
     return () => {

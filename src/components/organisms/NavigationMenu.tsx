@@ -7,6 +7,7 @@ import { List, CaretDoubleDown, CaretDoubleUp } from '@phosphor-icons/react'
 import { NavigationItem, NavigationGroupHeader } from '@/components/molecules'
 import { navigationGroups, NavigationItemData } from '@/lib/navigation-config'
 import { FeatureToggles } from '@/types/project'
+import { useRoutePreload } from '@/hooks/use-route-preload'
 
 interface NavigationMenuProps {
   activeTab: string
@@ -25,10 +26,22 @@ export function NavigationMenu({
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
     new Set(['overview', 'development', 'automation', 'design', 'backend', 'testing', 'tools'])
   )
+  
+  const { preloadRoute, cancelPreload } = useRoutePreload({ delay: 100 })
 
   const handleItemClick = (value: string) => {
     onTabChange(value)
     setOpen(false)
+  }
+  
+  const handleItemHover = (value: string) => {
+    console.log(`[NAV] 🖱️ Hover detected on: ${value}`)
+    preloadRoute(value)
+  }
+  
+  const handleItemLeave = (value: string) => {
+    console.log(`[NAV] 👋 Hover left: ${value}`)
+    cancelPreload(value)
   }
 
   const toggleGroup = (groupId: string) => {
@@ -126,14 +139,19 @@ export function NavigationMenu({
                         if (!isItemVisible(item)) return null
 
                         return (
-                          <NavigationItem
+                          <div
                             key={item.id}
-                            icon={item.icon}
-                            label={item.label}
-                            isActive={activeTab === item.value}
-                            badge={getItemBadge(item)}
-                            onClick={() => handleItemClick(item.value)}
-                          />
+                            onMouseEnter={() => handleItemHover(item.value)}
+                            onMouseLeave={() => handleItemLeave(item.value)}
+                          >
+                            <NavigationItem
+                              icon={item.icon}
+                              label={item.label}
+                              isActive={activeTab === item.value}
+                              badge={getItemBadge(item)}
+                              onClick={() => handleItemClick(item.value)}
+                            />
+                          </div>
                         )
                       })}
                     </div>

@@ -14,3 +14,5 @@ export * from './ai/use-ai-generation'
 
 export * from './data/use-seed-data'
 export * from './data/use-seed-templates'
+
+export * from './use-route-preload'

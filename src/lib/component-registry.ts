@@ -7,9 +7,9 @@ export const ComponentRegistry = {
     'ProjectDashboard'
   ),
   
-  CodeEditor: lazyWithRetry(
+  CodeEditor: lazyWithPreload(
     () => import('@/components/CodeEditor').then(m => ({ default: m.CodeEditor })),
-    { retries: 3, timeout: 15000 }
+    'CodeEditor'
   ),
   
   FileExplorer: lazyWithPreload(
@@ -17,81 +17,99 @@ export const ComponentRegistry = {
     'FileExplorer'
   ),
   
-  ModelDesigner: lazy(
-    () => import('@/components/ModelDesigner').then(m => ({ default: m.ModelDesigner }))
+  ModelDesigner: lazyWithPreload(
+    () => import('@/components/ModelDesigner').then(m => ({ default: m.ModelDesigner })),
+    'ModelDesigner'
   ),
   
-  ComponentTreeBuilder: lazy(
-    () => import('@/components/ComponentTreeBuilder').then(m => ({ default: m.ComponentTreeBuilder }))
+  ComponentTreeBuilder: lazyWithPreload(
+    () => import('@/components/ComponentTreeBuilder').then(m => ({ default: m.ComponentTreeBuilder })),
+    'ComponentTreeBuilder'
   ),
   
-  ComponentTreeManager: lazy(
-    () => import('@/components/ComponentTreeManager').then(m => ({ default: m.ComponentTreeManager }))
+  ComponentTreeManager: lazyWithPreload(
+    () => import('@/components/ComponentTreeManager').then(m => ({ default: m.ComponentTreeManager })),
+    'ComponentTreeManager'
   ),
   
-  WorkflowDesigner: lazyWithRetry(
+  WorkflowDesigner: lazyWithPreload(
     () => import('@/components/WorkflowDesigner').then(m => ({ default: m.WorkflowDesigner })),
-    { retries: 2, timeout: 12000 }
+    'WorkflowDesigner'
   ),
   
-  LambdaDesigner: lazy(
-    () => import('@/components/LambdaDesigner').then(m => ({ default: m.LambdaDesigner }))
+  LambdaDesigner: lazyWithPreload(
+    () => import('@/components/LambdaDesigner').then(m => ({ default: m.LambdaDesigner })),
+    'LambdaDesigner'
   ),
   
-  StyleDesigner: lazy(
-    () => import('@/components/StyleDesigner').then(m => ({ default: m.StyleDesigner }))
+  StyleDesigner: lazyWithPreload(
+    () => import('@/components/StyleDesigner').then(m => ({ default: m.StyleDesigner })),
+    'StyleDesigner'
   ),
   
-  PlaywrightDesigner: lazy(
-    () => import('@/components/PlaywrightDesigner').then(m => ({ default: m.PlaywrightDesigner }))
+  PlaywrightDesigner: lazyWithPreload(
+    () => import('@/components/PlaywrightDesigner').then(m => ({ default: m.PlaywrightDesigner })),
+    'PlaywrightDesigner'
   ),
   
-  StorybookDesigner: lazy(
-    () => import('@/components/StorybookDesigner').then(m => ({ default: m.StorybookDesigner }))
+  StorybookDesigner: lazyWithPreload(
+    () => import('@/components/StorybookDesigner').then(m => ({ default: m.StorybookDesigner })),
+    'StorybookDesigner'
   ),
   
-  UnitTestDesigner: lazy(
-    () => import('@/components/UnitTestDesigner').then(m => ({ default: m.UnitTestDesigner }))
+  UnitTestDesigner: lazyWithPreload(
+    () => import('@/components/UnitTestDesigner').then(m => ({ default: m.UnitTestDesigner })),
+    'UnitTestDesigner'
   ),
   
-  FlaskDesigner: lazy(
-    () => import('@/components/FlaskDesigner').then(m => ({ default: m.FlaskDesigner }))
+  FlaskDesigner: lazyWithPreload(
+    () => import('@/components/FlaskDesigner').then(m => ({ default: m.FlaskDesigner })),
+    'FlaskDesigner'
   ),
   
-  ProjectSettingsDesigner: lazy(
-    () => import('@/components/ProjectSettingsDesigner').then(m => ({ default: m.ProjectSettingsDesigner }))
+  ProjectSettingsDesigner: lazyWithPreload(
+    () => import('@/components/ProjectSettingsDesigner').then(m => ({ default: m.ProjectSettingsDesigner })),
+    'ProjectSettingsDesigner'
   ),
   
-  ErrorPanel: lazy(
-    () => import('@/components/ErrorPanel').then(m => ({ default: m.ErrorPanel }))
+  ErrorPanel: lazyWithPreload(
+    () => import('@/components/ErrorPanel').then(m => ({ default: m.ErrorPanel })),
+    'ErrorPanel'
   ),
   
-  DocumentationView: lazy(
-    () => import('@/components/DocumentationView').then(m => ({ default: m.DocumentationView }))
+  DocumentationView: lazyWithPreload(
+    () => import('@/components/DocumentationView').then(m => ({ default: m.DocumentationView })),
+    'DocumentationView'
   ),
   
-  SassStylesShowcase: lazy(
-    () => import('@/components/SassStylesShowcase').then(m => ({ default: m.SassStylesShowcase }))
+  SassStylesShowcase: lazyWithPreload(
+    () => import('@/components/SassStylesShowcase').then(m => ({ default: m.SassStylesShowcase })),
+    'SassStylesShowcase'
   ),
   
-  FeatureToggleSettings: lazy(
-    () => import('@/components/FeatureToggleSettings').then(m => ({ default: m.FeatureToggleSettings }))
+  FeatureToggleSettings: lazyWithPreload(
+    () => import('@/components/FeatureToggleSettings').then(m => ({ default: m.FeatureToggleSettings })),
+    'FeatureToggleSettings'
   ),
   
-  PWASettings: lazy(
-    () => import('@/components/PWASettings').then(m => ({ default: m.PWASettings }))
+  PWASettings: lazyWithPreload(
+    () => import('@/components/PWASettings').then(m => ({ default: m.PWASettings })),
+    'PWASettings'
   ),
   
-  FaviconDesigner: lazy(
-    () => import('@/components/FaviconDesigner').then(m => ({ default: m.FaviconDesigner }))
+  FaviconDesigner: lazyWithPreload(
+    () => import('@/components/FaviconDesigner').then(m => ({ default: m.FaviconDesigner })),
+    'FaviconDesigner'
   ),
   
-  FeatureIdeaCloud: lazy(
-    () => import('@/components/FeatureIdeaCloud').then(m => ({ default: m.FeatureIdeaCloud }))
+  FeatureIdeaCloud: lazyWithPreload(
+    () => import('@/components/FeatureIdeaCloud').then(m => ({ default: m.FeatureIdeaCloud })),
+    'FeatureIdeaCloud'
   ),
   
-  TemplateSelector: lazy(
-    () => import('@/components/TemplateSelector').then(m => ({ default: m.TemplateSelector }))
+  TemplateSelector: lazyWithPreload(
+    () => import('@/components/TemplateSelector').then(m => ({ default: m.TemplateSelector })),
+    'TemplateSelector'
   ),
 } as const
 
@@ -126,13 +144,9 @@ export const PWARegistry = {
 export function preloadCriticalComponents() {
   console.log('[REGISTRY] 🚀 Preloading critical components')
   
-  if ('preload' in ComponentRegistry.ProjectDashboard) {
-    ComponentRegistry.ProjectDashboard.preload()
-  }
-  
-  if ('preload' in ComponentRegistry.FileExplorer) {
-    ComponentRegistry.FileExplorer.preload()
-  }
+  ComponentRegistry.ProjectDashboard.preload()
+  ComponentRegistry.FileExplorer.preload()
+  ComponentRegistry.CodeEditor.preload()
   
   console.log('[REGISTRY] ✅ Critical components preload initiated')
 }
@@ -140,8 +154,11 @@ export function preloadCriticalComponents() {
 export function preloadComponentByName(name: keyof typeof ComponentRegistry) {
   console.log(`[REGISTRY] 🎯 Preloading component: ${name}`)
   const component = ComponentRegistry[name]
-  if (component && 'preload' in component) {
+  if (component && 'preload' in component && typeof component.preload === 'function') {
     component.preload()
+    console.log(`[REGISTRY] ✅ Preload initiated for: ${name}`)
+  } else {
+    console.warn(`[REGISTRY] ⚠️ Component ${name} does not support preloading`)
   }
 }
 
