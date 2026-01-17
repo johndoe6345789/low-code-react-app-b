@@ -7,6 +7,7 @@ import { Database, HardDrive, CloudArrowUp, CloudArrowDown, Trash, Info } from '
 import { storage } from '@/lib/storage'
 import { db } from '@/lib/db'
 import { toast } from 'sonner'
+import { StorageSettingsPanel } from './StorageSettingsPanel'
 
 export function StorageSettings() {
   const [isMigrating, setIsMigrating] = useState(false)
@@ -108,11 +109,13 @@ export function StorageSettings() {
         </p>
       </div>
 
+      <StorageSettingsPanel />
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Info size={20} />
-            Storage Information
+            Legacy Storage Information
           </CardTitle>
           <CardDescription>
             This application uses IndexedDB as the primary local database, with Spark KV as a
