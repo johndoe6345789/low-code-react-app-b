@@ -1,19 +1,19 @@
 {
-  "id": "lambda-designer",
+  "name": "Lambda Designer
   "name": "Lambda Designer",
   "layout": {
     "type": "single"
   },
   "dataSources": [
     {
-      "id": "lambdas",
-      "type": "kv",
-      "key": "app-lambdas",
-      "defaultValue": []
+      "key": "app-lamb
     },
+      "id": "selectedLambda
+      "defaultValue": nu
     {
-      "id": "selectedLambdaId",
-      "type": "static",
+     
+    },
+      "id": "editDialog
       "defaultValue": null
     },
     {
@@ -62,70 +62,70 @@
           "children": [
             {
               "id": "sidebar-header",
-              "type": "div",
-              "props": {
-                "className": "p-6 border-b border-border bg-gradient-to-br from-primary/10 to-accent/5"
-              },
-              "children": [
-                {
-                  "type": "div",
-                  "props": {
-                    "className": "flex items-center justify-between mb-4"
-                  },
-                  "children": [
+                  "children"
+                      "t
+                        "className": "text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-cli
+                
                     {
-                      "type": "h2",
-                      "props": {
-                        "className": "text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
-                      },
-                      "children": "Lambdas"
-                    },
-                    {
-                      "type": "Badge",
-                      "props": {
-                        "variant": "secondary",
-                        "className": "px-2.5 py-0.5"
-                      },
-                      "bindings": {
-                        "children": {
+                 
+                        "classNa
+                      "bindi
                           "source": "lambdaCount"
-                        }
-                      }
-                    }
+                    
                   ]
-                },
                 {
-                  "type": "Button",
                   "props": {
-                    "className": "w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
                   },
-                  "events": [
                     {
-                      "event": "onClick",
-                      "actions": [
-                        {
-                          "type": "setState",
-                          "target": "createDialogOpen",
-                          "value": true
-                        }
-                      ]
-                    }
+                      "a
+                          "type": "setState
+                      
+                     
                   ],
-                  "children": [
                     {
-                      "type": "icon",
                       "props": {
-                        "name": "Plus",
                         "className": "mr-2 h-4 w-4"
-                      }
                     },
-                    "New Lambda"
                   ]
-                }
               ]
-            },
             {
-              "id": "lambda-list",
+              "type": "Sc
+                "classN
+              "childr
+                  "
+                  
+                 
+                    "operator": "gt
+                  },
+                    {
+                    
+                      "itemCo
+                     
+                        },
+                          "conditi
+                         
+                          },
+                          "falseClass": "border-transpa
+                        "events": [
+                         
+                       
+                     
+                    
+                          }
+                     
+                            "type": "
+                              "c
+                            "children":
+                                "type": "div",
+                       
+                      
+                                
+                   
+                 
+               
+              
+             
+                                  
               "type": "ScrollArea",
               "props": {
                 "className": "flex-1"
@@ -254,262 +254,262 @@
                                                 "type": "custom",
                                                 "handler": "handleDuplicateLambda",
                                                 "params": {
-                                                  "lambda": "item"
-                                                }
-                                              }
-                                            ]
-                                          }
-                                        ],
-                                        "children": [
-                                          {
-                                            "type": "icon",
-                                            "props": {
-                                              "name": "Copy",
-                                              "className": "h-4 w-4"
-                                            }
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "type": "Button",
-                                        "props": {
-                                          "variant": "ghost",
-                                          "size": "icon",
-                                          "className": "h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity hover:text-destructive"
-                                        },
-                                        "events": [
-                                          {
-                                            "event": "onClick",
-                                            "stopPropagation": true,
-                                            "actions": [
-                                              {
-                                                "type": "custom",
-                                                "handler": "handleDeleteLambda",
-                                                "params": {
-                                                  "lambdaId": "item.id"
-                                                }
-                                              }
-                                            ]
-                                          }
-                                        ],
-                                        "children": [
-                                          {
-                                            "type": "icon",
-                                            "props": {
-                                              "name": "Trash",
-                                              "className": "h-4 w-4"
-                                            }
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              },
-                              {
-                                "type": "div",
-                                "props": {
-                                  "className": "flex gap-2 mt-2"
-                                },
-                                "children": [
-                                  {
-                                    "type": "Badge",
-                                    "props": {
-                                      "variant": "outline",
                                       "className": "text-xs"
-                                    },
-                                    "bindings": {
-                                      "children": {
-                                        "valueFrom": "item.runtime"
-                                      }
-                                    }
-                                  },
-                                  {
-                                    "type": "Badge",
-                                    "props": {
-                                      "variant": "outline",
-                                      "className": "text-xs"
-                                    },
                                     "children": [
-                                      {
-                                        "type": "text",
-                                        "bindings": {
-                                          "value": {
-                                            "valueFrom": "item.triggers.length",
-                                            "transform": "count => count + ' triggers'"
-                                          }
+                                        "type":
+                                          "va
+                                           
                                         }
-                                      }
                                     ]
-                                  }
                                 ]
-                              }
                             ]
-                          }
                         ]
-                      }
                     }
-                  ]
                 },
-                {
                   "type": "div",
-                  "props": {
-                    "className": "flex flex-col items-center justify-center h-full p-8 text-center"
-                  },
+                    "className": "flex flex
                   "conditional": {
-                    "source": "lambdaCount",
                     "operator": "eq",
-                    "value": 0
                   },
-                  "children": [
                     {
-                      "type": "icon",
                       "props": {
-                        "name": "Lightning",
-                        "className": "h-16 w-16 text-muted-foreground/50 mb-4",
-                        "weight": "duotone"
+                        "className": "h-16 w-16 text-muted-fo
                       }
-                    },
                     {
-                      "type": "h3",
                       "props": {
-                        "className": "text-lg font-semibold mb-2"
                       },
-                      "children": "No Lambdas Yet"
                     },
-                    {
                       "type": "p",
-                      "props": {
-                        "className": "text-sm text-muted-foreground mb-4"
-                      },
-                      "children": "Create your first serverless function to get started"
-                    },
+                        "className": "text-sm text-muted-foreground 
+                      "children": "Create your first ser
                     {
-                      "type": "Button",
                       "props": {
-                        "className": "bg-gradient-to-r from-primary to-accent"
                       },
-                      "events": [
                         {
-                          "event": "onClick",
                           "actions": [
-                            {
                               "type": "setState",
-                              "target": "createDialogOpen",
                               "value": true
-                            }
                           ]
-                        }
                       ],
-                      "children": [
                         {
-                          "type": "icon",
                           "props": {
-                            "name": "Plus",
-                            "className": "mr-2 h-4 w-4"
-                          }
+                            "className": "m
                         },
-                        "Create Lambda"
                       ]
-                    }
                   ]
-                }
               ]
-            }
           ]
-        },
         {
-          "id": "main-content",
           "type": "div",
-          "props": {
-            "className": "flex-1 flex flex-col"
-          },
+            "className": "flex-1 flex f
           "children": [
-            {
               "type": "div",
-              "props": {
-                "className": "flex-1 overflow-auto p-8"
-              },
+                "className": "fle
               "conditional": {
-                "source": "selectedLambda",
-                "operator": "truthy"
-              },
+                "operator": "tr
               "children": [
-                {
                   "type": "div",
-                  "props": {
                     "className": "max-w-6xl mx-auto space-y-6"
-                  },
                   "children": [
-                    {
                       "type": "div",
-                      "props": {
-                        "className": "flex items-center justify-between"
-                      },
+                        "className"
                       "children": [
-                        {
                           "type": "div",
-                          "children": [
                             {
-                              "type": "h1",
                               "props": {
-                                "className": "text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
                               },
-                              "bindings": {
                                 "children": {
-                                  "source": "selectedLambda",
                                   "path": "name"
-                                }
                               }
-                            },
                             {
-                              "type": "p",
-                              "props": {
-                                "className": "text-muted-foreground"
+                              "props"
                               },
-                              "bindings": {
-                                "children": {
-                                  "source": "selectedLambda",
-                                  "path": "description",
-                                  "default": "No description provided"
+                                "ch
+                                  "path": "descripti
                                 }
-                              }
                             }
-                          ]
                         },
-                        {
-                          "type": "div",
-                          "props": {
-                            "className": "flex gap-2"
-                          },
+                          "type": "div
+                            "className": "flex ga
                           "children": [
-                            {
                               "type": "Button",
-                              "props": {
                                 "variant": "outline",
-                                "size": "sm"
                               },
-                              "events": [
                                 {
-                                  "event": "onClick",
                                   "actions": [
-                                    {
-                                      "type": "setState",
-                                      "target": "editDialogOpen",
-                                      "value": true
-                                    }
+                                      "type
+                                      "va
                                   ]
-                                }
                               ],
-                              "children": [
                                 {
-                                  "type": "icon",
-                                  "props": {
-                                    "name": "Pencil",
-                                    "className": "mr-2 h-4 w-4"
+                                 
+                               
+                             
+                           
+                         
+                       
+                     
+                   
+                  
+                 
+                                
+                            
+                                }
+                    
+                                  
+                                    "name": 
                                   }
-                                },
-                                "Edit Details"
+                              
+                    
+                        }
+                    }
+                      "type": "Card",
+                        "classNa
+                      "children": [
+                          "type": "CardHeader",
+                            {
+                       
+                      
+                     
+                          ]
+                        {
+                          "props": {
+                        
+                            {
+                      
+                     
+                                  
+                                
+                                {
+                        
+                                  },
+                      
+                     
+                                  }
+                              ]
+                            {
+                        
+                                 
+                         
+                                  "children":
+                                {
+                             
+                                  },
+                                    "children": {
+                                      "path
+                             
+                           
+                         
+                        
+                                  "
+                         
+                                  "childr
+                                {
+                                  "props": 
+                                  },
+                           
+                          
+                                    }
+                       
+                     
+                   
+                 
+               
+             
+           
+          
+         
+                               
+                        
+                    
+                                  }
+            
+                       
+             
+                    {
+                      "p
+                      },
+                
+                          "chi
+                              "type": "div"
+                                "cla
+                
+                           
+                 
+                                
+                            
+                                      "children": "Edit your l
+                    
+                               
+                     
+                                  },
+                                
+                                      "path": "language"
+                        
+                              ]
+                         
+                        {
+                          "children": [
+                             
+                                "className"
+                              "children"
+                                  "type": "p",
+                                
+                                  "children
+                              ]
+                          ]
+                      ]
+                  ]
+              ]
+            {
+              "props": {
+              },
+                "source": "selectedLambd
+              },
+                {
+                  "props": {
+                  },
+                    {
+                      "props": {
+                        "className": "h-20 w-20 text-muted-foreground/
+                      }
+                    {
+                      "props"
+                      },
+                    },
+                      "ty
+                        "className": "te
+                      "children": "S
+                  ]
+              ]
+          ]
+      ]
+  ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                               ]
                             },
                             {
