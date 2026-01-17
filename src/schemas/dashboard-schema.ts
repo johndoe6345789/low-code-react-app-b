@@ -1,89 +1,49 @@
 import { PageSchema } from '@/types/json-ui'
 
 export const dashboardSchema: PageSchema = {
-  id: 'dashboard',
-  name: 'Dashboard',
+  id: 'analytics-dashboard',
+  name: 'Analytics Dashboard',
   layout: {
     type: 'single',
   },
   dataSources: [
     {
-      id: 'projects',
+      id: 'users',
       type: 'kv',
-      key: 'app-projects',
+      key: 'dashboard-users',
       defaultValue: [
-        { 
-          id: 1, 
-          name: 'E-Commerce Platform', 
-          status: 'active', 
-          progress: 75, 
-          team: 5,
-          dueDate: '2024-03-15',
-        },
-        { 
-          id: 2, 
-          name: 'Mobile App Redesign', 
-          status: 'pending', 
-          progress: 30, 
-          team: 3,
-          dueDate: '2024-04-01',
-        },
-        { 
-          id: 3, 
-          name: 'API Integration', 
-          status: 'active', 
-          progress: 90, 
-          team: 2,
-          dueDate: '2024-02-28',
-        },
+        { id: 1, name: 'Alice Johnson', email: 'alice@example.com', status: 'active', joined: '2024-01-15' },
+        { id: 2, name: 'Bob Smith', email: 'bob@example.com', status: 'active', joined: '2024-02-20' },
+        { id: 3, name: 'Charlie Brown', email: 'charlie@example.com', status: 'inactive', joined: '2023-12-10' },
       ],
     },
     {
-      id: 'searchQuery',
+      id: 'filterQuery',
       type: 'static',
       defaultValue: '',
     },
     {
-      id: 'filterStatus',
-      type: 'static',
-      defaultValue: 'all',
+      id: 'filteredUsers',
+      type: 'computed',
+      compute: (data) => {
+        const query = (data.filterQuery || '').toLowerCase()
+        if (!query) return data.users || []
+        return (data.users || []).filter((user: any) =>
+          user.name.toLowerCase().includes(query) ||
+          user.email.toLowerCase().includes(query)
+        )
+      },
+      dependencies: ['users', 'filterQuery'],
     },
     {
       id: 'stats',
       type: 'computed',
-      compute: (data) => {
-        const projects = data.projects || []
-        return {
-          total: projects.length,
-          active: projects.filter((p: any) => p.status === 'active').length,
-          pending: projects.filter((p: any) => p.status === 'pending').length,
-          avgProgress: projects.length > 0 
-            ? Math.round(projects.reduce((sum: number, p: any) => sum + p.progress, 0) / projects.length)
-            : 0,
-        }
-      },
-      dependencies: ['projects'],
-    },
-    {
-      id: 'filteredProjects',
-      type: 'computed',
-      compute: (data) => {
-        let filtered = data.projects || []
-        
-        if (data.searchQuery) {
-          const query = data.searchQuery.toLowerCase()
-          filtered = filtered.filter((p: any) => 
-            p.name.toLowerCase().includes(query)
-          )
-        }
-        
-        if (data.filterStatus && data.filterStatus !== 'all') {
-          filtered = filtered.filter((p: any) => p.status === data.filterStatus)
-        }
-        
-        return filtered
-      },
-      dependencies: ['projects', 'searchQuery', 'filterStatus'],
+      compute: (data) => ({
+        total: data.users?.length || 0,
+        active: data.users?.filter((u: any) => u.status === 'active').length || 0,
+        inactive: data.users?.filter((u: any) => u.status === 'inactive').length || 0,
+      }),
+      dependencies: ['users'],
     },
   ],
   components: [
@@ -91,123 +51,128 @@ export const dashboardSchema: PageSchema = {
       id: 'root',
       type: 'div',
       props: {
-        className: 'h-full overflow-auto p-6 space-y-6 bg-gradient-to-br from-background via-background to-accent/5',
+        className: 'h-full overflow-auto p-6 bg-gradient-to-br from-background via-background to-accent/5',
       },
       children: [
         {
-          id: 'page-header',
+          id: 'header',
           type: 'div',
           props: { className: 'mb-8' },
           children: [
             {
-              id: 'page-title',
+              id: 'title',
               type: 'Heading',
               props: {
-                level: 1,
-                className: 'bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2',
-                children: 'Project Dashboard',
+                className: 'text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent',
+                children: 'Analytics Dashboard',
               },
             },
             {
-              id: 'page-subtitle',
+              id: 'subtitle',
               type: 'Text',
               props: {
-                variant: 'muted',
-                children: 'Manage and track all your projects',
+                className: 'text-muted-foreground text-lg',
+                children: 'Monitor your user activity and key metrics',
               },
             },
           ],
         },
         {
-          id: 'stats-grid',
-          type: 'Grid',
-          props: {
-            cols: 4,
-            gap: 4,
-            className: 'mb-6',
-          },
-          children: [
-            {
-              id: 'stat-total',
-              type: 'DataCard',
-              props: {
-                title: 'Total Projects',
-              },
-              bindings: {
-                value: { source: 'stats', path: 'total' },
-              },
-            },
-            {
-              id: 'stat-active',
-              type: 'DataCard',
-              props: {
-                title: 'Active Projects',
-              },
-              bindings: {
-                value: { source: 'stats', path: 'active' },
-              },
-            },
-            {
-              id: 'stat-pending',
-              type: 'DataCard',
-              props: {
-                title: 'Pending Projects',
-              },
-              bindings: {
-                value: { source: 'stats', path: 'pending' },
-              },
-            },
-            {
-              id: 'stat-progress',
-              type: 'DataCard',
-              props: {
-                title: 'Avg Progress',
-                description: 'Across all projects',
-              },
-              bindings: {
-                value: { 
-                  source: 'stats', 
-                  path: 'avgProgress',
-                  transform: (v: number) => `${v}%`,
-                },
-              },
-            },
-          ],
-        },
-        {
-          id: 'action-bar',
-          type: 'ActionBar',
-          props: {
-            title: 'Projects',
-            className: 'mb-4',
-          },
-        },
-        {
-          id: 'filters-row',
+          id: 'metrics-row',
           type: 'div',
-          props: {
-            className: 'flex gap-4 mb-6',
-          },
+          props: { className: 'grid grid-cols-1 md:grid-cols-3 gap-6 mb-8' },
           children: [
             {
-              id: 'search-input',
-              type: 'SearchInput',
-              props: {
-                placeholder: 'Search projects...',
-                className: 'flex-1',
-              },
-              bindings: {
-                value: { source: 'searchQuery' },
-              },
-              events: [
+              id: 'metric-total',
+              type: 'Card',
+              props: { className: 'bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20' },
+              children: [
                 {
-                  event: 'change',
-                  actions: [
+                  id: 'metric-total-content',
+                  type: 'CardContent',
+                  props: { className: 'pt-6' },
+                  children: [
                     {
-                      id: 'update-search',
-                      type: 'set-value',
-                      target: 'searchQuery',
-                      compute: (_data, event) => event,
+                      id: 'metric-total-label',
+                      type: 'div',
+                      props: { className: 'text-sm font-medium text-muted-foreground mb-2', children: 'Total Users' },
+                    },
+                    {
+                      id: 'metric-total-value',
+                      type: 'div',
+                      props: { className: 'text-4xl font-bold text-primary' },
+                      bindings: {
+                        children: { source: 'stats', path: 'total' },
+                      },
+                    },
+                    {
+                      id: 'metric-total-description',
+                      type: 'div',
+                      props: { className: 'text-xs text-muted-foreground mt-2', children: 'Registered accounts' },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 'metric-active',
+              type: 'Card',
+              props: { className: 'bg-gradient-to-br from-green-500/10 to-green-500/5 border-green-500/20' },
+              children: [
+                {
+                  id: 'metric-active-content',
+                  type: 'CardContent',
+                  props: { className: 'pt-6' },
+                  children: [
+                    {
+                      id: 'metric-active-label',
+                      type: 'div',
+                      props: { className: 'text-sm font-medium text-muted-foreground mb-2', children: 'Active Users' },
+                    },
+                    {
+                      id: 'metric-active-value',
+                      type: 'div',
+                      props: { className: 'text-4xl font-bold text-green-600' },
+                      bindings: {
+                        children: { source: 'stats', path: 'active' },
+                      },
+                    },
+                    {
+                      id: 'metric-active-description',
+                      type: 'div',
+                      props: { className: 'text-xs text-muted-foreground mt-2', children: 'Currently engaged' },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 'metric-inactive',
+              type: 'Card',
+              props: { className: 'bg-gradient-to-br from-orange-500/10 to-orange-500/5 border-orange-500/20' },
+              children: [
+                {
+                  id: 'metric-inactive-content',
+                  type: 'CardContent',
+                  props: { className: 'pt-6' },
+                  children: [
+                    {
+                      id: 'metric-inactive-label',
+                      type: 'div',
+                      props: { className: 'text-sm font-medium text-muted-foreground mb-2', children: 'Inactive Users' },
+                    },
+                    {
+                      id: 'metric-inactive-value',
+                      type: 'div',
+                      props: { className: 'text-4xl font-bold text-orange-600' },
+                      bindings: {
+                        children: { source: 'stats', path: 'inactive' },
+                      },
+                    },
+                    {
+                      id: 'metric-inactive-description',
+                      type: 'div',
+                      props: { className: 'text-xs text-muted-foreground mt-2', children: 'Need re-engagement' },
                     },
                   ],
                 },
@@ -216,105 +181,125 @@ export const dashboardSchema: PageSchema = {
           ],
         },
         {
-          id: 'projects-list',
-          type: 'div',
-          props: {
-            className: 'space-y-4',
-          },
+          id: 'users-section',
+          type: 'Card',
+          props: { className: 'bg-card/50 backdrop-blur' },
           children: [
             {
-              id: 'projects-grid',
-              type: 'Grid',
-              props: {
-                cols: 2,
-                gap: 4,
-              },
-              bindings: {
-                children: {
-                  source: 'filteredProjects',
-                  transform: (projects: any[]) => projects.map((project: any) => ({
-                    id: `project-${project.id}`,
-                    type: 'Card',
-                    props: {
-                      className: 'hover:shadow-lg transition-shadow',
+              id: 'users-header',
+              type: 'CardHeader',
+              children: [
+                {
+                  id: 'users-title-row',
+                  type: 'div',
+                  props: { className: 'flex items-center justify-between' },
+                  children: [
+                    {
+                      id: 'users-title',
+                      type: 'CardTitle',
+                      props: { children: 'User Directory' },
                     },
-                    children: [
-                      {
-                        id: `project-${project.id}-header`,
-                        type: 'CardHeader',
-                        children: [
-                          {
-                            id: `project-${project.id}-title-row`,
-                            type: 'div',
-                            props: {
-                              className: 'flex items-center justify-between',
-                            },
-                            children: [
-                              {
-                                id: `project-${project.id}-title`,
-                                type: 'CardTitle',
-                                props: {
-                                  children: project.name,
-                                },
-                              },
-                              {
-                                id: `project-${project.id}-status`,
-                                type: 'StatusBadge',
-                                props: {
-                                  status: project.status,
-                                },
-                              },
-                            ],
-                          },
-                        ],
+                    {
+                      id: 'users-badge',
+                      type: 'Badge',
+                      props: { variant: 'secondary' },
+                      bindings: {
+                        children: {
+                          source: 'filteredUsers',
+                          transform: (users: any[]) => `${users.length} users`,
+                        },
                       },
-                      {
-                        id: `project-${project.id}-content`,
-                        type: 'CardContent',
+                    },
+                  ],
+                },
+                {
+                  id: 'users-description',
+                  type: 'CardDescription',
+                  props: { children: 'Manage and filter your user base' },
+                },
+              ],
+            },
+            {
+              id: 'users-content',
+              type: 'CardContent',
+              children: [
+                {
+                  id: 'filter-row',
+                  type: 'div',
+                  props: { className: 'mb-6' },
+                  children: [
+                    {
+                      id: 'filter-input',
+                      type: 'Input',
+                      props: { placeholder: 'Search users by name or email...' },
+                      events: [
+                        {
+                          event: 'onChange',
+                          actions: [
+                            {
+                              id: 'update-filter',
+                              type: 'set-value',
+                              target: 'filterQuery',
+                              compute: (_, event) => event.target.value,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  id: 'users-list',
+                  type: 'div',
+                  props: { className: 'space-y-4' },
+                  bindings: {
+                    children: {
+                      source: 'filteredUsers',
+                      transform: (users: any[]) => users.map((user: any) => ({
+                        type: 'Card',
+                        id: `user-${user.id}`,
+                        props: {
+                          className: 'bg-background/50 hover:bg-background/80 transition-colors border-l-4 border-l-primary',
+                        },
                         children: [
                           {
-                            id: `project-${project.id}-info`,
-                            type: 'div',
-                            props: {
-                              className: 'space-y-3',
-                            },
+                            type: 'CardContent',
+                            id: `user-content-${user.id}`,
+                            props: { className: 'pt-6' },
                             children: [
                               {
-                                id: `project-${project.id}-progress-label`,
-                                type: 'Text',
-                                props: {
-                                  variant: 'caption',
-                                  children: 'Progress',
-                                },
-                              },
-                              {
-                                id: `project-${project.id}-progress`,
-                                type: 'Progress',
-                                props: {
-                                  value: project.progress,
-                                },
-                              },
-                              {
-                                id: `project-${project.id}-meta`,
                                 type: 'div',
-                                props: {
-                                  className: 'flex justify-between text-sm text-muted-foreground mt-2',
-                                },
+                                id: `user-row-${user.id}`,
+                                props: { className: 'flex items-start justify-between' },
                                 children: [
                                   {
-                                    id: `project-${project.id}-team`,
-                                    type: 'Text',
-                                    props: {
-                                      variant: 'caption',
-                                      children: `Team: ${project.team} members`,
-                                    },
+                                    type: 'div',
+                                    id: `user-info-${user.id}`,
+                                    props: { className: 'flex-1' },
+                                    children: [
+                                      {
+                                        type: 'div',
+                                        id: `user-name-${user.id}`,
+                                        props: { className: 'font-semibold text-lg mb-1', children: user.name },
+                                      },
+                                      {
+                                        type: 'div',
+                                        id: `user-email-${user.id}`,
+                                        props: { className: 'text-sm text-muted-foreground', children: user.email },
+                                      },
+                                      {
+                                        type: 'div',
+                                        id: `user-joined-${user.id}`,
+                                        props: { className: 'text-xs text-muted-foreground mt-2', children: `Joined ${user.joined}` },
+                                      },
+                                    ],
                                   },
                                   {
-                                    id: `project-${project.id}-due`,
-                                    type: 'Text',
+                                    type: 'Badge',
+                                    id: `user-status-${user.id}`,
                                     props: {
-                                      variant: 'caption',
-                                      children: `Due: ${project.dueDate}`,
+                                      variant: user.status === 'active' ? 'default' : 'secondary',
+                                      children: user.status,
                                     },
                                   },
                                 ],
@@ -322,11 +307,11 @@ export const dashboardSchema: PageSchema = {
                             ],
                           },
                         ],
-                      },
-                    ],
-                  })),
+                      })),
+                    },
+                  },
                 },
-              },
+              ],
             },
           ],
         },
