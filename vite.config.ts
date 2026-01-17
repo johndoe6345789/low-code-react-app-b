@@ -28,6 +28,11 @@ export default defineConfig({
     port: 5000,
     strictPort: false,
   },
+  preview: {
+    host: '0.0.0.0',
+    port: Number(process.env.PORT) || 80,
+    strictPort: false,
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,
