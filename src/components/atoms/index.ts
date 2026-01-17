@@ -22,5 +22,6 @@ export { BindingIndicator } from './BindingIndicator'
 export { StatCard } from './StatCard'
 export { LoadingState } from './LoadingState'
 export { EmptyState } from './EmptyState'
-
-
+export { DetailRow } from './DetailRow'
+export { CompletionCard } from './CompletionCard'
+export { TipsCard } from './TipsCard'
