@@ -8,13 +8,13 @@ declare global {
   interface Window {
     spark: {
       kv: {
-        get: (key: string) => any
+        get: <T = any>(key: string) => T | undefined
         set: (key: string, value: any) => void
         delete: (key: string) => void
         clear: () => void
         keys: () => string[]
       }
-      llm: {
+      llm: ((prompt: string, model?: string, jsonMode?: boolean) => Promise<any>) & {
         chat: (messages: any[]) => Promise<{ role: string; content: string }>
         complete: (prompt: string) => Promise<string>
       }

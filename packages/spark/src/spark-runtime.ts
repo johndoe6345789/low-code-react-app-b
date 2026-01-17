@@ -10,12 +10,35 @@
 // Mock KV Storage
 const kvStorage = new Map<string, any>()
 
+// Create llm function with additional properties
+const llmFunction = async (prompt: string, model?: string, jsonMode?: boolean): Promise<any> => {
+  console.log('Mock LLM called with prompt:', prompt, 'model:', model, 'jsonMode:', jsonMode)
+  return 'This is a mock response from the Spark LLM service.'
+}
+
+llmFunction.chat = async (messages: any[]) => {
+  console.log('Mock LLM chat called with messages:', messages)
+  return {
+    role: 'assistant',
+    content: 'This is a mock response from the Spark LLM service.'
+  }
+}
+
+llmFunction.complete = async (prompt: string) => {
+  console.log('Mock LLM complete called with prompt:', prompt)
+  return 'This is a mock completion from the Spark LLM service.'
+}
+
 export const sparkRuntime = {
   kv: {
-    get: (key: string) => {
+    get: <T = any>(key: string): T | undefined => {
       try {
         const value = kvStorage.get(key)
-        return value !== undefined ? value : localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)!) : undefined
+        if (value !== undefined) {
+          return value as T
+        }
+        const stored = localStorage.getItem(key)
+        return stored ? JSON.parse(stored) : undefined
       } catch (error) {
         console.error('Error getting KV value:', error)
         return undefined
@@ -47,19 +70,7 @@ export const sparkRuntime = {
     keys: () => Array.from(kvStorage.keys())
   },
   
-  llm: {
-    chat: async (messages: any[]) => {
-      console.log('Mock LLM chat called with messages:', messages)
-      return {
-        role: 'assistant',
-        content: 'This is a mock response from the Spark LLM service.'
-      }
-    },
-    complete: async (prompt: string) => {
-      console.log('Mock LLM complete called with prompt:', prompt)
-      return 'This is a mock completion from the Spark LLM service.'
-    }
-  },
+  llm: llmFunction,
   
   user: {
     getCurrentUser: () => ({
