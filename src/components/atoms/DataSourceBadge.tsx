@@ -1,37 +1,38 @@
 import { Badge } from '@/components/ui/badge'
-import { Database, Function, FileText } from '@phosphor-icons/react'
 import { DataSourceType } from '@/types/json-ui'
+import { Database, Function, File } from '@phosphor-icons/react'
 
 interface DataSourceBadgeProps {
   type: DataSourceType
   className?: string
 }
 
-const icons = {
-  kv: Database,
-  computed: Function,
-  static: FileText,
-}
-
-const labels = {
-  kv: 'KV Store',
-  computed: 'Computed',
-  static: 'Static',
-}
-
-const variants = {
-  kv: 'bg-accent/20 text-accent border-accent/40',
-  computed: 'bg-primary/20 text-primary border-primary/40',
-  static: 'bg-muted text-muted-foreground border-border',
+const dataSourceConfig = {
+  kv: {
+    icon: Database,
+    label: 'KV Storage',
+    className: 'bg-accent/20 text-accent border-accent/30'
+  },
+  computed: {
+    icon: Function,
+    label: 'Computed',
+    className: 'bg-primary/20 text-primary border-primary/30'
+  },
+  static: {
+    icon: File,
+    label: 'Static',
+    className: 'bg-muted text-muted-foreground border-border'
+  }
 }
 
 export function DataSourceBadge({ type, className = '' }: DataSourceBadgeProps) {
-  const Icon = icons[type]
+  const config = dataSourceConfig[type]
+  const Icon = config.icon
   
   return (
-    <Badge variant="outline" className={`${variants[type]} ${className}`}>
-      <Icon className="w-3 h-3 mr-1" />
-      {labels[type]}
+    <Badge className={`flex items-center gap-1 ${config.className} ${className}`} variant="outline">
+      <Icon className="w-3 h-3" weight="bold" />
+      <span>{config.label}</span>
     </Badge>
   )
 }
