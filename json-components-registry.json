@@ -497,8 +497,8 @@
   ],
   "statistics": {
     "total": 60,
-    "supported": 43,
-    "planned": 17,
+    "supported": 46,
+    "planned": 14,
     "byCategory": {
       "layout": 12,
       "input": 11,
