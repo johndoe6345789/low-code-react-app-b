@@ -1,5 +1,6 @@
 import { lazy } from 'react'
 import { lazyWithRetry, lazyWithPreload } from '@/lib/lazy-loader'
+import { preloadMonacoEditor } from '@/components/molecules'
 
 export const ComponentRegistry = {
   ProjectDashboard: lazyWithPreload(
@@ -8,7 +9,10 @@ export const ComponentRegistry = {
   ),
   
   CodeEditor: lazyWithPreload(
-    () => import('@/components/CodeEditor').then(m => ({ default: m.CodeEditor })),
+    () => {
+      preloadMonacoEditor()
+      return import('@/components/CodeEditor').then(m => ({ default: m.CodeEditor }))
+    },
     'CodeEditor'
   ),
   
@@ -33,12 +37,18 @@ export const ComponentRegistry = {
   ),
   
   WorkflowDesigner: lazyWithPreload(
-    () => import('@/components/WorkflowDesigner').then(m => ({ default: m.WorkflowDesigner })),
+    () => {
+      preloadMonacoEditor()
+      return import('@/components/WorkflowDesigner').then(m => ({ default: m.WorkflowDesigner }))
+    },
     'WorkflowDesigner'
   ),
   
   LambdaDesigner: lazyWithPreload(
-    () => import('@/components/LambdaDesigner').then(m => ({ default: m.LambdaDesigner })),
+    () => {
+      preloadMonacoEditor()
+      return import('@/components/LambdaDesigner').then(m => ({ default: m.LambdaDesigner }))
+    },
     'LambdaDesigner'
   ),
   

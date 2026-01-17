@@ -1,5 +1,5 @@
-import Editor from '@monaco-editor/react'
 import { ProjectFile } from '@/types/project'
+import { LazyMonacoEditor } from './LazyMonacoEditor'
 
 interface MonacoEditorPanelProps {
   file: ProjectFile
@@ -7,22 +7,5 @@ interface MonacoEditorPanelProps {
 }
 
 export function MonacoEditorPanel({ file, onChange }: MonacoEditorPanelProps) {
-  return (
-    <Editor
-      height="100%"
-      language={file.language}
-      value={file.content}
-      onChange={(value) => onChange(value || '')}
-      theme="vs-dark"
-      options={{
-        minimap: { enabled: false },
-        fontSize: 14,
-        fontFamily: 'JetBrains Mono, monospace',
-        fontLigatures: true,
-        lineNumbers: 'on',
-        scrollBeyondLastLine: false,
-        automaticLayout: true,
-      }}
-    />
-  )
+  return <LazyMonacoEditor file={file} onChange={onChange} />
 }

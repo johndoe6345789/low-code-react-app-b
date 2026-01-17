@@ -34,7 +34,7 @@ import {
   Link,
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import Editor from '@monaco-editor/react'
+import { LazyInlineMonacoEditor } from '@/components/molecules/LazyInlineMonacoEditor'
 
 interface WorkflowDesignerProps {
   workflows: Workflow[]
@@ -688,7 +688,7 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                     <div>
                       <Label>Lambda Code</Label>
                       <div className="border border-border rounded-md overflow-hidden mt-2">
-                        <Editor
+                        <LazyInlineMonacoEditor
                           height="300px"
                           defaultLanguage="javascript"
                           value={selectedNode.config?.lambdaCode || '// Write your lambda code here\n'}
@@ -750,7 +750,7 @@ export function WorkflowDesigner({ workflows, onWorkflowsChange }: WorkflowDesig
                     <div>
                       <Label>Transform Script</Label>
                       <div className="border border-border rounded-md overflow-hidden mt-2">
-                        <Editor
+                        <LazyInlineMonacoEditor
                           height="300px"
                           defaultLanguage="javascript"
                           value={

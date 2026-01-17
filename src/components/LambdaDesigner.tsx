@@ -30,7 +30,7 @@ import {
   Queue,
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import Editor from '@monaco-editor/react'
+import { LazyInlineMonacoEditor } from '@/components/molecules/LazyInlineMonacoEditor'
 
 interface LambdaDesignerProps {
   lambdas: Lambda[]
@@ -452,7 +452,7 @@ export function LambdaDesigner({ lambdas, onLambdasChange }: LambdaDesignerProps
               </div>
 
               <TabsContent value="code" className="flex-1 m-0">
-                <Editor
+                <LazyInlineMonacoEditor
                   height="100%"
                   language={getEditorLanguage(selectedLambda.language)}
                   value={selectedLambda.code}

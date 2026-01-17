@@ -17,8 +17,9 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 - **[PRD](./PRD.md)** - Product Requirements Document
 
 ### Performance & Optimization
-- **[Hover-Based Preloading](./hover-preloading.md)** - Instant navigation with preloading (NEW!)
-- **[Preloading Quick Reference](./preloading-quick-reference.md)** - Quick start (NEW!)
+- **[Bundle Optimization (Monaco Editor)](./bundle-optimization.md)** - Lazy-load heavy components (NEW!)
+- **[Hover-Based Preloading](./hover-preloading.md)** - Instant navigation with preloading
+- **[Preloading Quick Reference](./preloading-quick-reference.md)** - Quick start
 - **[React Router Integration](./REACT_ROUTER_INTEGRATION.md)** - Route-based code splitting
 - **[Router vs Tabs Comparison](./ROUTER_VS_TABS_COMPARISON.md)** - Performance benchmarks
 - **[Router Quick Start](./ROUTER_QUICK_START.md)** - Enable router in 2 minutes
@@ -44,7 +45,25 @@ This directory contains comprehensive documentation for the CodeForge low-code a
 
 ## 🆕 Recent Additions
 
-### Hover-Based Route Preloading (Latest)
+### Monaco Editor Lazy Loading (Latest)
+Optimized bundle size by lazy-loading Monaco Editor (2.5MB+):
+
+**Benefits:**
+- ~2.5MB reduction in initial bundle size
+- Faster initial page load for all users
+- Monaco Editor loads only when needed
+- Automatic preloading when editor pages are accessed
+
+**Components optimized:**
+- CodeEditor (main file editor)
+- LambdaDesigner (lambda function editor)
+- WorkflowDesigner (inline script editors)
+
+**Learn more:**
+- [Full Documentation](./bundle-optimization.md) - Complete optimization guide
+- [Implementation Details](./bundle-optimization.md#optimization-strategy) - Technical details
+
+### Hover-Based Route Preloading
 Instant page navigation with intelligent preloading:
 
 **Benefits:**
