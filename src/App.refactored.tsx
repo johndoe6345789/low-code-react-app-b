@@ -1,3 +1,12 @@
+/**
+ * LEGACY FILE - NOT USED IN PRODUCTION
+ * 
+ * This file is a legacy demo app that is not actively used.
+ * The JSON components used here manage their own state internally via hooks (e.g., useKV)
+ * and don't accept props like the old stub components did.
+ * 
+ * The production app (App.tsx) uses the component registry pattern instead.
+ */
 import { useState } from 'react'
 import { useKV } from '@/hooks/use-kv'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
