@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY packages/spark-tools ./packages/spark-tools
 COPY packages/spark ./packages/spark
 
 # Install dependencies with npm ci for consistent, reproducible builds
-# Include optional dependencies to ensure platform-specific binaries (like @rollup/rollup-linux-arm64-musl) are installed
+# Include optional dependencies to ensure platform-specific binaries are installed
 RUN npm ci --include=optional
 
 # Copy remaining application files
