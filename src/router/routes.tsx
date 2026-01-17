@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { RouteObject, Navigate } from 'react-router-dom'
 import { LoadingFallback } from '@/components/molecules'
+import { NotFoundPage } from '@/components/NotFoundPage'
 import { getEnabledPages, resolveProps } from '@/config/page-loader'
 import { ComponentRegistry } from '@/lib/component-registry'
 import { FeatureToggles } from '@/types/project'
@@ -140,7 +141,7 @@ export function createRoutes(
 
   routes.push({
     path: '*',
-    element: <Navigate to="/" replace />
+    element: <NotFoundPage />
   })
 
   console.log('[ROUTES] ✅ Routes created:', routes.length, 'routes')

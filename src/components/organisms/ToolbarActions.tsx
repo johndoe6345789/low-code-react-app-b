@@ -36,6 +36,7 @@ export function ToolbarActions({
         icon={<MagnifyingGlass size={18} />}
         label="Search (Ctrl+K)"
         onClick={onSearch}
+        data-search-trigger
       />
 
       {showErrorButton && errorCount > 0 && onShowErrors && (
