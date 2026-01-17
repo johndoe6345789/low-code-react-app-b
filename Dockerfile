@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS builder
+FROM node:lts-slim AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:lts-alpine
+FROM node:lts-slim
 
 WORKDIR /app
 
@@ -23,5 +23,6 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 80
 
 ENV PORT=80
+ENV VITE_FLASK_API_URL=""
 
 CMD ["npm", "run", "preview"]

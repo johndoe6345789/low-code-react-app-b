@@ -101,30 +101,36 @@ cat QEMU_INTEGRATION.md
 
 ### Storage Backend Configuration
 
-CodeForge supports two storage backends that can be configured at deployment:
+CodeForge uses **IndexedDB by default** with optional Flask API backend support. The storage system automatically falls back to IndexedDB if the Flask API is unavailable.
 
-#### IndexedDB (Default)
-- Client-side browser storage
-- Works offline, no server required
-- Perfect for development and single-user scenarios
+#### IndexedDB (Default - No Configuration Required)
+- ✅ Client-side browser storage
+- ✅ Works offline, no server required
+- ✅ Zero configuration needed
+- ✅ Perfect for development and single-user scenarios
+- ✅ Automatic fallback if Flask API fails
 
-#### Flask Backend with SQLite (Production)
+#### Flask Backend (Optional)
 - Server-side persistent storage
 - Data shared across devices and browsers
-- Production-ready deployment
+- Configured via environment variable or UI settings
+- Automatic fallback to IndexedDB on failure
 
 ```bash
-# Use Flask backend with Docker Compose
-docker-compose up -d
+# Use IndexedDB only (default, no configuration)
+docker run -p 80:80 codeforge
 
-# Configure Flask backend URL
-USE_FLASK_BACKEND=true FLASK_BACKEND_URL=http://backend:5001
+# Enable Flask backend with automatic fallback
+docker run -p 80:80 \
+  -e VITE_FLASK_API_URL=http://backend:5001 \
+  codeforge
 
-# See full documentation
-cat docs/STORAGE_BACKEND.md
+# Or configure at runtime via Storage Settings in the UI
 ```
 
-**Migration:** Switch between backends anytime via the Storage Management UI with automatic data migration.
+**Automatic Fallback:** If Flask API fails (network error, CORS, timeout), the app automatically switches to IndexedDB without data loss.
+
+**📚 [Storage System Documentation](./PACKAGES_REMOVAL_FINAL.md)** - Complete storage architecture guide
 
 **📚 [QEMU Integration Guide](./QEMU_INTEGRATION.md)** - Complete multi-architecture documentation
 

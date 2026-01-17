@@ -133,16 +133,31 @@ This is a sophisticated development platform with router-based navigation, multi
 - **Progression**: Register SW → Cache assets → Show install prompt → Handle updates → Enable offline
 - **Success criteria**: Offline mode works, install succeeds, updates apply
 
+### Storage System (IndexedDB with Optional Flask API)
+- **Functionality**: Unified storage system using IndexedDB by default, with optional Flask API backend
+- **Purpose**: Persist all application data locally without external dependencies, with optional server sync
+- **Trigger**: Automatic on first data access, configurable via UI settings or environment variable
+- **Progression**: Initialize IndexedDB → Load stored data → Enable Flask API if configured → Auto-fallback on failure
+- **Success criteria**: Data persists across sessions, Flask API optional, automatic fallback works
+- **Configuration**: 
+  - Default: IndexedDB (no configuration needed)
+  - Environment: Set `VITE_FLASK_API_URL` to enable Flask backend
+  - Runtime: Toggle via Storage Settings UI
+- **Fallback Behavior**: If Flask API fails (network error, timeout, CORS), automatically switch to IndexedDB
+
 ## Edge Case Handling
 
 - **No Project Data**: Show onboarding with sample project option
 - **Large Files**: Monaco editor lazy-loads only visible content
-- **Network Failures**: All state persists to KV storage, works offline
+- **Network Failures**: All state persists to IndexedDB storage, works completely offline
+- **Flask API Unavailable**: Automatic fallback to IndexedDB with console warning
+- **Storage Quota Exceeded**: IndexedDB provides clear error messages, recommend cleanup
 - **Invalid JSON**: Schema validation with helpful error messages
 - **Circular References**: Workflow and component tree validation prevents cycles
 - **Conflicting Changes**: Last-write-wins with timestamp tracking
-- **Browser Compatibility**: Graceful degradation for older browsers
+- **Browser Compatibility**: Graceful degradation for older browsers (IndexedDB supported in all modern browsers)
 - **Memory Limits**: Lazy loading and code splitting for large projects
+- **CORS Issues**: Flask API configured with proper CORS headers, falls back to IndexedDB if blocked
 
 ## Design Direction
 
