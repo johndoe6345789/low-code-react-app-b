@@ -12,8 +12,28 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Heading } from '@/components/atoms/Heading'
 import { Text } from '@/components/atoms/Text'
+import { TextArea } from '@/components/atoms/TextArea'
 import { List } from '@/components/atoms/List'
 import { Grid } from '@/components/atoms/Grid'
+import { Stack } from '@/components/atoms/Stack'
+import { Flex } from '@/components/atoms/Flex'
+import { Container } from '@/components/atoms/Container'
+import { Link } from '@/components/atoms/Link'
+import { Image } from '@/components/atoms/Image'
+import { Avatar } from '@/components/atoms/Avatar'
+import { Code } from '@/components/atoms/Code'
+import { Tag } from '@/components/atoms/Tag'
+import { Spinner } from '@/components/atoms/Spinner'
+import { Skeleton } from '@/components/atoms/Skeleton'
+import { Slider } from '@/components/atoms/Slider'
+import { NumberInput } from '@/components/atoms/NumberInput'
+import { Radio } from '@/components/atoms/Radio'
+import { Alert } from '@/components/atoms/Alert'
+import { InfoBox } from '@/components/atoms/InfoBox'
+import { EmptyState } from '@/components/atoms/EmptyState'
+import { Table } from '@/components/atoms/Table'
+import { KeyValue } from '@/components/atoms/KeyValue'
+import { StatCard } from '@/components/atoms/StatCard'
 import { StatusBadge } from '@/components/atoms/StatusBadge'
 import { DataCard } from '@/components/molecules/DataCard'
 import { SearchInput } from '@/components/molecules/SearchInput'
@@ -29,10 +49,15 @@ export const componentRegistry: Record<ComponentType, any> = {
   'Button': Button,
   'Card': Card,
   'Input': Input,
+  'TextArea': TextArea,
   'Select': Select,
   'Checkbox': Checkbox,
+  'Radio': Radio,
   'Switch': Switch,
+  'Slider': Slider,
+  'NumberInput': NumberInput,
   'Badge': Badge,
+  'Tag': Tag,
   'Progress': Progress,
   'Separator': Separator,
   'Tabs': Tabs,
@@ -40,8 +65,27 @@ export const componentRegistry: Record<ComponentType, any> = {
   'Text': Text,
   'Heading': Heading,
   'Label': Label,
+  'Link': Link,
+  'Image': Image,
+  'Avatar': Avatar,
+  'Code': Code,
+  'Spinner': Spinner,
+  'Skeleton': Skeleton,
   'List': List,
   'Grid': Grid,
+  'Stack': Stack,
+  'Flex': Flex,
+  'Container': Container,
+  'Alert': Alert,
+  'InfoBox': InfoBox,
+  'EmptyState': EmptyState,
+  'StatusBadge': StatusBadge,
+  'Table': Table,
+  'KeyValue': KeyValue,
+  'StatCard': StatCard,
+  'DataCard': DataCard,
+  'SearchInput': SearchInput,
+  'ActionBar': ActionBar,
 }
 
 export const cardSubComponents = {
@@ -63,6 +107,12 @@ export const customComponents = {
   'DataCard': DataCard,
   'SearchInput': SearchInput,
   'ActionBar': ActionBar,
+  'StatCard': StatCard,
+  'KeyValue': KeyValue,
+  'Table': Table,
+  'Alert': Alert,
+  'InfoBox': InfoBox,
+  'EmptyState': EmptyState,
 }
 
 export function getComponent(type: ComponentType | string): any {
