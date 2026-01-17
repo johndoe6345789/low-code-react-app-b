@@ -35,7 +35,12 @@ export interface Action {
   target?: string
   path?: string
   value?: any
+  // Legacy: function-based compute
   compute?: (data: Record<string, any>, event?: any) => any
+  // New: JSON-friendly expression (e.g., "event.target.value", "data.fieldName")
+  expression?: string
+  // New: JSON template with dynamic values
+  valueTemplate?: Record<string, any>
   message?: string
   variant?: 'success' | 'error' | 'info' | 'warning'
 }
