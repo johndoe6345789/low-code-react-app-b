@@ -388,6 +388,17 @@
       "shortcut": "ctrl+shift+a",
       "order": 26,
       "props": {}
+    },
+    {
+      "id": "conflicts",
+      "title": "Conflict Resolution",
+      "icon": "Warning",
+      "component": "ConflictResolutionPage",
+      "enabled": true,
+      "toggleKey": "conflictResolution",
+      "shortcut": "ctrl+shift+c",
+      "order": 27,
+      "props": {}
     }
   ]
 }

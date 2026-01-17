@@ -293,6 +293,15 @@
       "preload": false,
       "category": "showcase",
       "description": "Atomic component library demonstration"
+    },
+    {
+      "name": "ConflictResolutionPage",
+      "path": "@/components/ConflictResolutionPage",
+      "export": "ConflictResolutionPage",
+      "type": "feature",
+      "preload": false,
+      "category": "sync",
+      "description": "Conflict resolution UI for handling sync conflicts between local and remote data"
     }
   ],
   "dialogs": [

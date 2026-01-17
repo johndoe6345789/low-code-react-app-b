@@ -10,6 +10,7 @@ import lambdasReducer from './slices/lambdasSlice'
 import themeReducer from './slices/themeSlice'
 import settingsReducer from './slices/settingsSlice'
 import syncReducer from './slices/syncSlice'
+import conflictsReducer from './slices/conflictsSlice'
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     theme: themeReducer,
     settings: settingsReducer,
     sync: syncReducer,
+    conflicts: conflictsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

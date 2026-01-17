@@ -36,6 +36,13 @@ A comprehensive state management system built with Redux Toolkit, seamlessly int
 - **Progression**: User triggers sync → Bulk data collection → HTTP request to Flask → Server processes → Response updates state
 - **Success criteria**: Data consistency between local and remote, connection status visible, errors handled gracefully
 
+### Conflict Detection & Resolution
+- **Functionality**: Automatic detection and manual resolution of sync conflicts between local and remote data
+- **Purpose**: Prevent data loss when local and remote versions differ, provide clear conflict resolution UI
+- **Trigger**: During sync operations when timestamp or content differences are detected
+- **Progression**: Sync attempt → Conflict detected → User notified → User reviews conflict details → User selects resolution strategy → Conflict resolved → Data synced
+- **Success criteria**: All conflicts detected accurately, side-by-side comparison of versions, multiple resolution strategies available, resolved data persists correctly
+
 ### Auto-Sync System
 - **Functionality**: Configurable automatic synchronization at set intervals
 - **Purpose**: Reduce manual sync burden and ensure data is regularly backed up
@@ -74,13 +81,16 @@ A comprehensive state management system built with Redux Toolkit, seamlessly int
 ## Edge Case Handling
 
 - **Network Failures**: Gracefully degrade to local-only mode, queue sync operations, retry with exponential backoff
-- **Sync Conflicts**: Last-write-wins strategy, track timestamps, provide manual conflict resolution UI
+- **Sync Conflicts**: Timestamp-based conflict detection, visual diff comparison, multiple resolution strategies (keep local, keep remote, merge, manual edit), conflict history tracking
 - **Browser Storage Limits**: Monitor IndexedDB quota, warn when approaching limits, provide cleanup utilities
 - **Corrupted Data**: Validate data structures on load, provide reset/repair utilities, log errors for debugging
 - **Concurrent Modifications**: Use Redux's immutable updates to prevent race conditions, timestamp all changes
 - **Flask API Unavailable**: Detect via health check, show connection status, continue with local operations only
 - **Invalid JSON**: Validate and sanitize data before storage, provide error messages, prevent app crashes
 - **Browser Compatibility**: Feature-detect IndexedDB support, provide fallback message for unsupported browsers
+- **Multiple Conflicting Fields**: Show field-by-field diff in detailed view, allow selective field resolution
+- **Auto-Resolution**: Support configurable auto-resolution strategies for specific entity types
+- **Conflict Notification**: Persistent badge indicator showing conflict count, toast notifications for new conflicts
 
 ## Design Direction
 
