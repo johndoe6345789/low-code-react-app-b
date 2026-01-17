@@ -34,6 +34,10 @@ console.log('[INIT] ✅ theme.css loaded')
 import "./index.css"
 console.log('[INIT] ✅ index.css loaded')
 
+console.log('[INIT] 📊 Importing bundle metrics')
+import { startPerformanceMonitoring } from './lib/bundle-metrics'
+console.log('[INIT] ✅ Bundle metrics imported')
+
 console.log('[INIT] 🛡️ Setting up error handlers')
 
 const isResizeObserverError = (message: string | undefined): boolean => {
@@ -84,6 +88,10 @@ window.addEventListener('unhandledrejection', (e) => {
 })
 
 console.log('[INIT] ✅ Error handlers configured')
+
+console.log('[INIT] 🔍 Starting performance monitoring')
+startPerformanceMonitoring()
+console.log('[INIT] ✅ Performance monitoring started')
 
 console.log('[INIT] 🎯 Finding root element')
 const rootElement = document.getElementById('root')

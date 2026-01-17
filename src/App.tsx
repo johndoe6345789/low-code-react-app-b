@@ -1,7 +1,7 @@
 console.log('[APP] 🚀 App.tsx loading - BEGIN')
 console.time('[APP] Component initialization')
 
-import { useState, lazy, Suspense, useMemo, useEffect } from 'react'
+import { useState, Suspense, useMemo, useEffect } from 'react'
 console.log('[APP] ✅ React hooks imported')
 
 import { Tabs, TabsContent } from '@/components/ui/tabs'
@@ -28,40 +28,14 @@ console.log('[APP] ✅ Page config imported')
 import { toast } from 'sonner'
 console.log('[APP] ✅ Toast imported')
 
-console.log('[APP] 📦 Setting up lazy-loaded components')
-const componentMap: Record<string, React.LazyExoticComponent<any>> = {
-  ProjectDashboard: lazy(() => import('@/components/ProjectDashboard').then(m => ({ default: m.ProjectDashboard }))),
-  CodeEditor: lazy(() => import('@/components/CodeEditor').then(m => ({ default: m.CodeEditor }))),
-  FileExplorer: lazy(() => import('@/components/FileExplorer').then(m => ({ default: m.FileExplorer }))),
-  ModelDesigner: lazy(() => import('@/components/ModelDesigner').then(m => ({ default: m.ModelDesigner }))),
-  ComponentTreeBuilder: lazy(() => import('@/components/ComponentTreeBuilder').then(m => ({ default: m.ComponentTreeBuilder }))),
-  ComponentTreeManager: lazy(() => import('@/components/ComponentTreeManager').then(m => ({ default: m.ComponentTreeManager }))),
-  WorkflowDesigner: lazy(() => import('@/components/WorkflowDesigner').then(m => ({ default: m.WorkflowDesigner }))),
-  LambdaDesigner: lazy(() => import('@/components/LambdaDesigner').then(m => ({ default: m.LambdaDesigner }))),
-  StyleDesigner: lazy(() => import('@/components/StyleDesigner').then(m => ({ default: m.StyleDesigner }))),
-  PlaywrightDesigner: lazy(() => import('@/components/PlaywrightDesigner').then(m => ({ default: m.PlaywrightDesigner }))),
-  StorybookDesigner: lazy(() => import('@/components/StorybookDesigner').then(m => ({ default: m.StorybookDesigner }))),
-  UnitTestDesigner: lazy(() => import('@/components/UnitTestDesigner').then(m => ({ default: m.UnitTestDesigner }))),
-  FlaskDesigner: lazy(() => import('@/components/FlaskDesigner').then(m => ({ default: m.FlaskDesigner }))),
-  ProjectSettingsDesigner: lazy(() => import('@/components/ProjectSettingsDesigner').then(m => ({ default: m.ProjectSettingsDesigner }))),
-  ErrorPanel: lazy(() => import('@/components/ErrorPanel').then(m => ({ default: m.ErrorPanel }))),
-  DocumentationView: lazy(() => import('@/components/DocumentationView').then(m => ({ default: m.DocumentationView }))),
-  SassStylesShowcase: lazy(() => import('@/components/SassStylesShowcase').then(m => ({ default: m.SassStylesShowcase }))),
-  FeatureToggleSettings: lazy(() => import('@/components/FeatureToggleSettings').then(m => ({ default: m.FeatureToggleSettings }))),
-  PWASettings: lazy(() => import('@/components/PWASettings').then(m => ({ default: m.PWASettings }))),
-  FaviconDesigner: lazy(() => import('@/components/FaviconDesigner').then(m => ({ default: m.FaviconDesigner }))),
-  FeatureIdeaCloud: lazy(() => import('@/components/FeatureIdeaCloud').then(m => ({ default: m.FeatureIdeaCloud }))),
-  TemplateSelector: lazy(() => import('@/components/TemplateSelector').then(m => ({ default: m.TemplateSelector }))),
-}
-console.log('[APP] ✅ Component map created with', Object.keys(componentMap).length, 'components')
+import { ComponentRegistry, DialogRegistry, PWARegistry, preloadCriticalComponents, preloadComponentByName } from '@/lib/component-registry'
+console.log('[APP] ✅ Component registry imported')
 
-const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })))
-const KeyboardShortcutsDialog = lazy(() => import('@/components/KeyboardShortcutsDialog').then(m => ({ default: m.KeyboardShortcutsDialog })))
-const PreviewDialog = lazy(() => import('@/components/PreviewDialog').then(m => ({ default: m.PreviewDialog })))
-const PWAInstallPrompt = lazy(() => import('@/components/PWAInstallPrompt').then(m => ({ default: m.PWAInstallPrompt })))
-const PWAUpdatePrompt = lazy(() => import('@/components/PWAUpdatePrompt').then(m => ({ default: m.PWAUpdatePrompt })))
-const PWAStatusBar = lazy(() => import('@/components/PWAStatusBar').then(m => ({ default: m.PWAStatusBar })))
-console.log('[APP] ✅ Additional lazy components registered')
+console.log('[APP] 📦 Component registry ready with', Object.keys(ComponentRegistry).length, 'components')
+
+const { GlobalSearch, KeyboardShortcutsDialog, PreviewDialog } = DialogRegistry
+const { PWAInstallPrompt, PWAUpdatePrompt, PWAStatusBar } = PWARegistry
+console.log('[APP] ✅ Dialog and PWA components registered')
 
 console.log('[APP] 🎯 App component function executing')
 
@@ -124,6 +98,28 @@ function App() {
   const [appReady, setAppReady] = useState(false)
   console.log('[APP] ✅ State variables initialized')
 
+  console.log('[APP] 🧮 Computing page configuration')
+  const pageConfig = useMemo(() => {
+    console.log('[APP] 📄 Getting page config')
+    const config = getPageConfig()
+    console.log('[APP] ✅ Page config retrieved:', Object.keys(config).length, 'pages')
+    return config
+  }, [])
+  
+  const enabledPages = useMemo(() => {
+    console.log('[APP] 🔍 Filtering enabled pages')
+    const pages = getEnabledPages(featureToggles)
+    console.log('[APP] ✅ Enabled pages:', pages.map(p => p.id).join(', '))
+    return pages
+  }, [featureToggles])
+  
+  const shortcuts = useMemo(() => {
+    console.log('[APP] ⌨️ Getting keyboard shortcuts')
+    const s = getPageShortcuts(featureToggles)
+    console.log('[APP] ✅ Shortcuts configured:', s.length)
+    return s
+  }, [featureToggles])
+
   console.log('[APP] ⏰ Setting up initialization effect')
   useEffect(() => {
     console.log('[APP] 🚀 Initialization effect triggered')
@@ -148,6 +144,9 @@ function App() {
         setAppReady(true)
         console.timeEnd('[APP] Seed data loading')
         console.log('[APP] ✅ App marked as ready')
+        
+        console.log('[APP] 🚀 Preloading critical components')
+        preloadCriticalComponents()
       })
 
     return () => {
@@ -156,27 +155,28 @@ function App() {
     }
   }, [loadSeedData])
 
-  console.log('[APP] 🧮 Computing page configuration')
-  const pageConfig = useMemo(() => {
-    console.log('[APP] 📄 Getting page config')
-    const config = getPageConfig()
-    console.log('[APP] ✅ Page config retrieved:', Object.keys(config).length, 'pages')
-    return config
-  }, [])
-  
-  const enabledPages = useMemo(() => {
-    console.log('[APP] 🔍 Filtering enabled pages')
-    const pages = getEnabledPages(featureToggles)
-    console.log('[APP] ✅ Enabled pages:', pages.map(p => p.id).join(', '))
-    return pages
-  }, [featureToggles])
-  
-  const shortcuts = useMemo(() => {
-    console.log('[APP] ⌨️ Getting keyboard shortcuts')
-    const s = getPageShortcuts(featureToggles)
-    console.log('[APP] ✅ Shortcuts configured:', s.length)
-    return s
-  }, [featureToggles])
+  useEffect(() => {
+    if (activeTab && appReady) {
+      console.log('[APP] 🎯 Active tab changed to:', activeTab)
+      const currentPage = enabledPages.find(p => p.id === activeTab)
+      if (currentPage) {
+        console.log('[APP] 📦 Preloading next likely components for:', activeTab)
+        
+        const nextPages = enabledPages.slice(
+          enabledPages.indexOf(currentPage) + 1,
+          enabledPages.indexOf(currentPage) + 3
+        )
+        
+        nextPages.forEach(page => {
+          const componentName = page.component as keyof typeof ComponentRegistry
+          if (ComponentRegistry[componentName]) {
+            console.log('[APP] 🔮 Preloading:', componentName)
+            preloadComponentByName(componentName)
+          }
+        })
+      }
+    }
+  }, [activeTab, appReady, enabledPages])
 
   console.log('[APP] ⌨️ Configuring keyboard shortcuts')
   useKeyboardShortcuts([
@@ -277,7 +277,7 @@ function App() {
   const renderPageContent = (page: any) => {
     console.log('[APP] 🎨 Rendering page:', page.id)
     try {
-      const Component = componentMap[page.component]
+      const Component = ComponentRegistry[page.component as keyof typeof ComponentRegistry] as any
       if (!Component) {
         console.error('[APP] ❌ Component not found:', page.component)
         return <LoadingFallback message={`Component ${page.component} not found`} />
@@ -287,7 +287,7 @@ function App() {
       if (page.requiresResizable && page.resizableConfig) {
         console.log('[APP] 🔀 Rendering resizable layout for:', page.id)
         const config = page.resizableConfig
-        const LeftComponent = componentMap[config.leftComponent]
+        const LeftComponent = ComponentRegistry[config.leftComponent as keyof typeof ComponentRegistry] as any
         const RightComponent = Component
 
         if (!LeftComponent) {
