@@ -131,6 +131,11 @@ export const ComponentRegistry = {
     () => import('@/components/SchemaEditorPage').then(m => ({ default: m.SchemaEditorPage })),
     'SchemaEditor'
   ),
+  
+  DataBindingDesigner: lazyWithPreload(
+    () => import('@/components/DataBindingDesigner').then(m => ({ default: m.DataBindingDesigner })),
+    'DataBindingDesigner'
+  ),
 } as const
 
 export const DialogRegistry = {

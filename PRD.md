@@ -20,6 +20,13 @@ This is an advanced system that interprets JSON schemas, manages state across mu
 - **Progression**: Select component from palette → Drag to canvas → Drop at position → Configure properties → Preview result → Export JSON
 - **Success criteria**: Users can create complete page schemas visually, with property editing, component tree view, and JSON export
 
+### Data Source Binding UI
+- **Functionality**: Visual interface for connecting components to KV storage and computed values with dependency tracking
+- **Purpose**: Enable declarative data management without manual state handling
+- **Trigger**: User opens data binding designer or edits component bindings in schema editor
+- **Progression**: Create data source → Configure type (KV/computed/static) → Set up dependencies → Bind to component properties → Test reactive updates
+- **Success criteria**: Users can create KV stores, computed values, and static data, then bind them to components with automatic reactive updates
+
 ### JSON Schema Parser
 - **Functionality**: Parse and validate JSON UI schemas with full TypeScript type safety
 - **Purpose**: Enable building UIs from configuration rather than code

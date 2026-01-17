@@ -17,3 +17,6 @@ export { Text } from './Text'
 export { Heading } from './Heading'
 export { List } from './List'
 export { Grid } from './Grid'
+export { DataSourceBadge } from './DataSourceBadge'
+export { BindingIndicator } from './BindingIndicator'
+

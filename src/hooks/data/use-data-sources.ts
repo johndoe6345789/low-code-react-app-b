@@ -1,70 +1,114 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useKV } from '@github/spark/hooks'
 import { DataSource } from '@/types/json-ui'
 
-export function useDataSources(sources: DataSource[]) {
-  const [data, setData] = useState<Record<string, any>>(() => {
-    const initial: Record<string, any> = {}
-    sources.forEach(source => {
-      initial[source.id] = source.defaultValue
-    })
-    return initial
-  })
+export function useDataSources(dataSources: DataSource[]) {
+  const [data, setData] = useState<Record<string, any>>({})
+  const [loading, setLoading] = useState(true)
+
+  const kvSources = dataSources.filter(ds => ds.type === 'kv')
+  const kvStates = kvSources.map(ds => 
+    useKV(ds.key || `ds-${ds.id}`, ds.defaultValue)
+  )
 
   useEffect(() => {
-    const computedData = { ...data }
+    const initializeData = async () => {
+      const newData: Record<string, any> = {}
+
+      dataSources.forEach((source, index) => {
+        if (source.type === 'kv') {
+          const kvIndex = kvSources.indexOf(source)
+          if (kvIndex !== -1 && kvStates[kvIndex]) {
+            newData[source.id] = kvStates[kvIndex][0]
+          }
+        } else if (source.type === 'static') {
+          newData[source.id] = source.defaultValue
+        }
+      })
+
+      setData(newData)
+      setLoading(false)
+    }
+
+    initializeData()
+  }, [])
+
+  useEffect(() => {
+    const computedSources = dataSources.filter(ds => ds.type === 'computed')
     
-    sources.forEach(source => {
-      if (source.type === 'computed' && source.compute) {
-        computedData[source.id] = source.compute(data)
+    computedSources.forEach(source => {
+      if (source.compute) {
+        const deps = source.dependencies || []
+        const hasAllDeps = deps.every(dep => dep in data)
+        
+        if (hasAllDeps) {
+          const computedValue = source.compute(data)
+          setData(prev => ({ ...prev, [source.id]: computedValue }))
+        }
       }
     })
-    
-    setData(computedData)
-  }, [sources])
+  }, [data, dataSources])
 
   const updateData = useCallback((sourceId: string, value: any) => {
-    setData(prev => {
-      const updated = { ...prev, [sourceId]: value }
-      
-      sources.forEach(source => {
-        if (source.type === 'computed' && source.compute) {
-          updated[source.id] = source.compute(updated)
-        }
-      })
-      
-      return updated
-    })
-  }, [sources])
+    const source = dataSources.find(ds => ds.id === sourceId)
+    
+    if (!source) {
+      console.warn(`Data source ${sourceId} not found`)
+      return
+    }
+
+    if (source.type === 'kv') {
+      const kvIndex = kvSources.indexOf(source)
+      if (kvIndex !== -1 && kvStates[kvIndex]) {
+        kvStates[kvIndex][1](value)
+      }
+    }
+
+    setData(prev => ({ ...prev, [sourceId]: value }))
+  }, [dataSources, kvSources, kvStates])
 
   const updatePath = useCallback((sourceId: string, path: string, value: any) => {
+    const source = dataSources.find(ds => ds.id === sourceId)
+    
+    if (!source) {
+      console.warn(`Data source ${sourceId} not found`)
+      return
+    }
+
     setData(prev => {
-      const keys = path.split('.')
-      const result = { ...prev }
-      const current = { ...result[sourceId] }
-      result[sourceId] = current
-      
-      let target: any = current
-      for (let i = 0; i < keys.length - 1; i++) {
-        const key = keys[i]
-        target[key] = { ...target[key] }
-        target = target[key]
+      const sourceData = prev[sourceId]
+      if (!sourceData || typeof sourceData !== 'object') {
+        return prev
       }
-      
-      target[keys[keys.length - 1]] = value
-      
-      sources.forEach(source => {
-        if (source.type === 'computed' && source.compute) {
-          result[source.id] = source.compute(result)
+
+      const pathParts = path.split('.')
+      const newData = { ...sourceData }
+      let current: any = newData
+
+      for (let i = 0; i < pathParts.length - 1; i++) {
+        if (!(pathParts[i] in current)) {
+          current[pathParts[i]] = {}
         }
-      })
-      
-      return result
+        current = current[pathParts[i]]
+      }
+
+      current[pathParts[pathParts.length - 1]] = value
+
+      if (source.type === 'kv') {
+        const kvIndex = kvSources.indexOf(source)
+        if (kvIndex !== -1 && kvStates[kvIndex]) {
+          kvStates[kvIndex][1](newData)
+        }
+      }
+
+      return { ...prev, [sourceId]: newData }
     })
-  }, [sources])
+  }, [dataSources, kvSources, kvStates])
 
   return {
     data,
     updateData,
     updatePath,
+    loading,
   }
 }

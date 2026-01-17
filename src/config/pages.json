@@ -293,6 +293,17 @@
       "shortcut": "ctrl+shift+s",
       "order": 23,
       "props": {}
+    },
+    {
+      "id": "data-binding",
+      "title": "Data Binding",
+      "icon": "Link",
+      "component": "DataBindingDesigner",
+      "enabled": true,
+      "toggleKey": "dataBinding",
+      "shortcut": "ctrl+shift+d",
+      "order": 24,
+      "props": {}
     }
   ]
 }

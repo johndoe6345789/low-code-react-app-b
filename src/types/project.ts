@@ -283,6 +283,7 @@ export interface FeatureToggles {
   faviconDesigner: boolean
   ideaCloud: boolean
   schemaEditor: boolean
+  dataBinding: boolean
 }
 
 export interface Project {
