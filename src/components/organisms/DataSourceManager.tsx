@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu'
 import { DataSourceCard } from '@/components/molecules/DataSourceCard'
 import { DataSourceEditorDialog } from '@/components/molecules/DataSourceEditorDialog'
 import { useDataSourceManager } from '@/hooks/data/use-data-source-manager'
@@ -8,11 +13,14 @@ import { DataSource, DataSourceType } from '@/types/json-ui'
 import { Plus, Database, Function, FileText } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu'
+  EmptyState, 
+  ActionButton, 
+  Heading, 
+  Text, 
+  IconText,
+  Stack,
+  Section
+} from '@/components/atoms'
 
 interface DataSourceManagerProps {
   dataSources: DataSource[]
@@ -76,18 +84,22 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Data Sources</CardTitle>
-              <CardDescription>
+            <Stack direction="vertical" spacing="xs">
+              <Heading level={2}>Data Sources</Heading>
+              <Text variant="muted">
                 Manage KV storage, computed values, and static data
-              </CardDescription>
-            </div>
+              </Text>
+            </Stack>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Data Source
-                </Button>
+                <div>
+                  <ActionButton
+                    icon={<Plus size={16} />}
+                    label="Add Data Source"
+                    variant="default"
+                    onClick={() => {}}
+                  />
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => handleAddDataSource('kv')}>
@@ -108,24 +120,22 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
         </CardHeader>
         <CardContent>
           {localSources.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                <Database className="w-8 h-8 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">No data sources yet</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Create your first data source to start binding data to components
-              </p>
-            </div>
+            <EmptyState
+              icon={<Database size={48} weight="duotone" />}
+              title="No data sources yet"
+              description="Create your first data source to start binding data to components"
+            />
           ) : (
-            <div className="space-y-6">
+            <Stack direction="vertical" spacing="xl">
               {groupedSources.kv.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <Database className="w-4 h-4" />
+                <Section>
+                  <IconText 
+                    icon={<Database size={16} />}
+                    className="text-sm font-semibold mb-3"
+                  >
                     KV Store ({groupedSources.kv.length})
-                  </h3>
-                  <div className="space-y-2">
+                  </IconText>
+                  <Stack direction="vertical" spacing="sm">
                     {groupedSources.kv.map(ds => (
                       <DataSourceCard
                         key={ds.id}
@@ -135,17 +145,19 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
                         onDelete={handleDeleteSource}
                       />
                     ))}
-                  </div>
-                </div>
+                  </Stack>
+                </Section>
               )}
 
               {groupedSources.static.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
+                <Section>
+                  <IconText 
+                    icon={<FileText size={16} />}
+                    className="text-sm font-semibold mb-3"
+                  >
                     Static Data ({groupedSources.static.length})
-                  </h3>
-                  <div className="space-y-2">
+                  </IconText>
+                  <Stack direction="vertical" spacing="sm">
                     {groupedSources.static.map(ds => (
                       <DataSourceCard
                         key={ds.id}
@@ -155,17 +167,19 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
                         onDelete={handleDeleteSource}
                       />
                     ))}
-                  </div>
-                </div>
+                  </Stack>
+                </Section>
               )}
 
               {groupedSources.computed.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <Function className="w-4 h-4" />
+                <Section>
+                  <IconText 
+                    icon={<Function size={16} />}
+                    className="text-sm font-semibold mb-3"
+                  >
                     Computed Values ({groupedSources.computed.length})
-                  </h3>
-                  <div className="space-y-2">
+                  </IconText>
+                  <Stack direction="vertical" spacing="sm">
                     {groupedSources.computed.map(ds => (
                       <DataSourceCard
                         key={ds.id}
@@ -175,10 +189,10 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
                         onDelete={handleDeleteSource}
                       />
                     ))}
-                  </div>
-                </div>
+                  </Stack>
+                </Section>
               )}
-            </div>
+            </Stack>
           )}
         </CardContent>
       </Card>

@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import { Badge, Chip, Text, Flex } from '@/components/atoms'
 
 interface SchemaEditorStatusBarProps {
   componentCount: number
@@ -16,31 +16,35 @@ export function SchemaEditorStatusBar({
 }: SchemaEditorStatusBarProps) {
   return (
     <div className={cn(
-      "border-t border-border px-4 py-2 bg-card flex items-center justify-between text-xs text-muted-foreground",
+      "border-t border-border px-4 py-2 bg-card flex items-center justify-between",
       className
     )}>
-      <div className="flex items-center gap-4">
-        <span>
+      <Flex align="center" gap="lg">
+        <Text variant="caption">
           <span className="font-medium text-foreground">{componentCount}</span> component{componentCount !== 1 ? 's' : ''}
-        </span>
+        </Text>
         
         {selectedComponentType && (
-          <div className="flex items-center gap-2">
-            <span>Selected:</span>
-            <Badge variant="secondary" className="text-xs font-mono">
+          <Flex align="center" gap="sm">
+            <Text variant="caption">Selected:</Text>
+            <Chip 
+              variant="default" 
+              size="sm"
+              className="font-mono"
+            >
               {selectedComponentType}
-            </Badge>
-          </div>
+            </Chip>
+          </Flex>
         )}
-      </div>
+      </Flex>
       
-      <div className="flex items-center gap-2">
+      <Flex align="center" gap="sm">
         {hasUnsavedChanges && (
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" size="sm">
             Unsaved changes
           </Badge>
         )}
-      </div>
+      </Flex>
     </div>
   )
 }

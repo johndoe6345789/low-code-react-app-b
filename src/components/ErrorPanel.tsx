@@ -3,10 +3,7 @@ import { CodeError } from '@/types/errors'
 import { ProjectFile } from '@/types/project'
 import { ErrorRepairService } from '@/lib/error-repair-service'
 import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
 import { 
   Warning, 
   X, 
@@ -23,6 +20,19 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import {
+  Badge,
+  ActionButton,
+  Stack,
+  Flex,
+  Heading,
+  Text,
+  EmptyState,
+  IconText,
+  Code,
+  StatusIcon,
+  PanelHeader
+} from '@/components/atoms'
 
 interface ErrorPanelProps {
   files: ProjectFile[]
@@ -210,14 +220,13 @@ export function ErrorPanel({ files, onFileChange, onFileSelect }: ErrorPanelProp
   return (
     <div className="h-full flex flex-col bg-background">
       <div className="border-b border-border bg-card px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <Wrench size={20} weight="duotone" className="text-accent" />
-              <h2 className="text-lg font-semibold">Error Detection & Repair</h2>
-            </div>
+        <Flex align="center" justify="between">
+          <Flex align="center" gap="md">
+            <IconText icon={<Wrench size={20} weight="duotone" className="text-accent" />}>
+              <Heading level={3}>Error Detection & Repair</Heading>
+            </IconText>
             {errors.length > 0 && (
-              <div className="flex gap-2">
+              <Flex gap="sm">
                 {errorCount > 0 && (
                   <Badge variant="destructive">
                     {errorCount} {errorCount === 1 ? 'Error' : 'Errors'}
@@ -228,85 +237,81 @@ export function ErrorPanel({ files, onFileChange, onFileSelect }: ErrorPanelProp
                     {warningCount} {warningCount === 1 ? 'Warning' : 'Warnings'}
                   </Badge>
                 )}
-              </div>
+              </Flex>
             )}
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
+          </Flex>
+          <Flex gap="sm">
+            <ActionButton
+              icon={<Lightning size={16} />}
+              label={isScanning ? 'Scanning...' : 'Scan'}
               onClick={scanForErrors}
               disabled={isScanning || isRepairing}
-            >
-              <Lightning size={16} className="mr-2" />
-              {isScanning ? 'Scanning...' : 'Scan'}
-            </Button>
-            <Button
+              variant="outline"
+            />
+            <ActionButton
+              icon={<Wrench size={16} />}
+              label={isRepairing ? 'Repairing...' : 'Repair All'}
               onClick={repairAllErrors}
               disabled={errors.length === 0 || isRepairing || isScanning}
-            >
-              <Wrench size={16} className="mr-2" />
-              {isRepairing ? 'Repairing...' : 'Repair All'}
-            </Button>
-          </div>
-        </div>
+              variant="default"
+            />
+          </Flex>
+        </Flex>
       </div>
 
       <ScrollArea className="flex-1">
         <div className="p-6">
           {errors.length === 0 && !isScanning && (
-            <Card className="p-8 text-center">
-              <CheckCircle size={48} weight="duotone" className="text-green-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No Issues Found</h3>
-              <p className="text-sm text-muted-foreground">
-                All files are looking good! Click "Scan" to check again.
-              </p>
-            </Card>
+            <EmptyState
+              icon={<CheckCircle size={48} weight="duotone" className="text-green-500" />}
+              title="No Issues Found"
+              description="All files are looking good! Click 'Scan' to check again."
+            />
           )}
 
           {isScanning && (
-            <Card className="p-8 text-center">
-              <Lightning size={48} weight="duotone" className="text-accent mx-auto mb-4 animate-pulse" />
-              <h3 className="text-lg font-semibold mb-2">Scanning Files...</h3>
-              <p className="text-sm text-muted-foreground">
-                Analyzing your code for errors and issues
-              </p>
-            </Card>
+            <EmptyState
+              icon={<Lightning size={48} weight="duotone" className="text-accent animate-pulse" />}
+              title="Scanning Files..."
+              description="Analyzing your code for errors and issues"
+            />
           )}
 
           {errors.length > 0 && (
-            <div className="space-y-4">
+            <Stack direction="vertical" spacing="md">
               {Object.entries(errorsByFile).map(([fileId, fileErrors]) => {
                 const file = files.find(f => f.id === fileId)
                 if (!file) return null
 
                 return (
                   <Card key={fileId} className="overflow-hidden">
-                    <div className="bg-muted px-4 py-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <FileCode size={18} weight="duotone" />
-                        <span className="font-medium">{file.name}</span>
-                        <Badge variant="outline">
-                          {fileErrors.length} {fileErrors.length === 1 ? 'issue' : 'issues'}
-                        </Badge>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onFileSelect(fileId)}
-                        >
-                          <ArrowRight size={14} className="mr-1" />
-                          Open
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => repairFileWithContext(fileId)}
-                          disabled={isRepairing}
-                        >
-                          <Wrench size={14} className="mr-1" />
-                          Repair
-                        </Button>
-                      </div>
+                    <div className="bg-muted px-4 py-3">
+                      <Flex align="center" justify="between">
+                        <Flex align="center" gap="sm">
+                          <FileCode size={18} weight="duotone" />
+                          <Text className="font-medium">{file.name}</Text>
+                          <Badge variant="outline" size="sm">
+                            {fileErrors.length} {fileErrors.length === 1 ? 'issue' : 'issues'}
+                          </Badge>
+                        </Flex>
+                        <Flex gap="sm">
+                          <ActionButton
+                            icon={<ArrowRight size={14} />}
+                            label="Open"
+                            onClick={() => onFileSelect(fileId)}
+                            variant="outline"
+                            size="sm"
+                          />
+                          <ActionButton
+                            icon={<Wrench size={14} />}
+                            label="Repair"
+                            onClick={() => repairFileWithContext(fileId)}
+                            disabled={isRepairing}
+                            variant="default"
+                            size="sm"
+                          />
+                        </Flex>
+                      </Flex>
                     </div>
 
                     <div className="p-4 space-y-2">
@@ -317,48 +322,46 @@ export function ErrorPanel({ files, onFileChange, onFileSelect }: ErrorPanelProp
                               {getSeverityIcon(error.severity)}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <Badge variant={getSeverityColor(error.severity) as any} className="text-xs">
+                              <Flex align="center" gap="sm" className="mb-1">
+                                <Badge variant={getSeverityColor(error.severity) as any} size="sm">
                                   {error.type}
                                 </Badge>
                                 {error.line && (
-                                  <span className="text-xs text-muted-foreground">
+                                  <Text variant="caption">
                                     Line {error.line}
-                                  </span>
+                                  </Text>
                                 )}
                                 {error.isFixed && (
-                                  <Badge variant="outline" className="text-green-500 border-green-500">
+                                  <Badge variant="outline" size="sm" className="text-green-500 border-green-500">
                                     <CheckCircle size={12} className="mr-1" />
                                     Fixed
                                   </Badge>
                                 )}
-                              </div>
-                              <p className="text-sm mb-2">{error.message}</p>
+                              </Flex>
+                              <Text variant="body" className="mb-2">{error.message}</Text>
                               {error.code && (
                                 <CollapsibleTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-auto p-0 text-xs text-accent hover:text-accent/80"
+                                  <button
+                                    className="text-xs text-accent hover:text-accent/80 underline"
                                   >
                                     {expandedErrors.has(error.id) ? 'Hide' : 'Show'} code
-                                  </Button>
+                                  </button>
                                 </CollapsibleTrigger>
                               )}
                             </div>
-                            <Button
-                              size="sm"
-                              variant="outline"
+                            <ActionButton
+                              icon={<Wrench size={14} />}
+                              label=""
                               onClick={() => repairSingleError(error)}
                               disabled={isRepairing || error.isFixed}
-                            >
-                              <Wrench size={14} />
-                            </Button>
+                              variant="outline"
+                              size="sm"
+                            />
                           </div>
                           {error.code && (
                             <CollapsibleContent>
-                              <div className="ml-8 mt-2 p-3 bg-muted rounded text-xs font-mono">
-                                {error.code}
+                              <div className="ml-8 mt-2 p-3 bg-muted rounded">
+                                <Code className="text-xs">{error.code}</Code>
                               </div>
                             </CollapsibleContent>
                           )}
@@ -368,7 +371,7 @@ export function ErrorPanel({ files, onFileChange, onFileSelect }: ErrorPanelProp
                   </Card>
                 )
               })}
-            </div>
+            </Stack>
           )}
         </div>
       </ScrollArea>

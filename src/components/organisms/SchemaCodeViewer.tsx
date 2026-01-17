@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Code, Eye } from '@phosphor-icons/react'
 import { UIComponent } from '@/types/json-ui'
+import { PanelHeader, Text, Code as CodeAtom, Stack, IconText } from '@/components/atoms'
 
 interface SchemaCodeViewerProps {
   components: UIComponent[]
@@ -14,14 +14,7 @@ export function SchemaCodeViewer({ components, schema }: SchemaCodeViewerProps) 
   
   return (
     <div className="h-full flex flex-col bg-card">
-      <div className="border-b border-border px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Code className="w-5 h-5 text-primary" />
-            <h3 className="font-semibold">Schema Output</h3>
-          </div>
-        </div>
-      </div>
+      <PanelHeader title="Schema Output" icon={<Code size={20} weight="duotone" />} />
       
       <Tabs defaultValue="json" className="flex-1 flex flex-col">
         <TabsList className="w-full justify-start px-4 pt-2">
@@ -39,9 +32,9 @@ export function SchemaCodeViewer({ components, schema }: SchemaCodeViewerProps) 
         
         <TabsContent value="preview" className="flex-1 m-0 mt-2">
           <div className="p-4">
-            <p className="text-sm text-muted-foreground">
+            <Text variant="muted">
               Live preview coming soon
-            </p>
+            </Text>
           </div>
         </TabsContent>
       </Tabs>

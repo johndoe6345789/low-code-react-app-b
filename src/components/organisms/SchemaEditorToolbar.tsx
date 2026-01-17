@@ -1,5 +1,3 @@
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { 
   Download, 
   Upload, 
@@ -7,6 +5,9 @@ import {
   Trash,
   Copy,
 } from '@phosphor-icons/react'
+import { Heading, TextGradient, Text, Separator, Stack } from '@/components/atoms'
+import { ActionBar } from '@/components/molecules'
+import { ActionButton } from '@/components/atoms'
 
 interface SchemaEditorToolbarProps {
   onImport: () => void
@@ -26,58 +27,56 @@ export function SchemaEditorToolbar({
   return (
     <div className="border-b border-border px-6 py-3 bg-card">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+        <Stack direction="vertical" spacing="xs">
+          <TextGradient 
+            from="primary" 
+            to="accent"
+            className="text-2xl font-bold"
+          >
             Schema Editor
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          </TextGradient>
+          <Text variant="muted">
             Build JSON UI schemas with drag-and-drop
-          </p>
-        </div>
+          </Text>
+        </Stack>
         
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
+          <ActionButton
+            icon={<Upload size={16} />}
+            label="Import"
             onClick={onImport}
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            Import
-          </Button>
-          <Button
             variant="outline"
             size="sm"
+          />
+          <ActionButton
+            icon={<Copy size={16} />}
+            label="Copy JSON"
             onClick={onCopy}
-          >
-            <Copy className="w-4 h-4 mr-2" />
-            Copy JSON
-          </Button>
-          <Button
             variant="outline"
             size="sm"
+          />
+          <ActionButton
+            icon={<Download size={16} />}
+            label="Export"
             onClick={onExport}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
+            variant="outline"
+            size="sm"
+          />
           <Separator orientation="vertical" className="h-6" />
-          <Button
-            variant="outline"
-            size="sm"
+          <ActionButton
+            icon={<Play size={16} />}
+            label="Preview"
             onClick={onPreview}
-          >
-            <Play className="w-4 h-4 mr-2" />
-            Preview
-          </Button>
-          <Button
             variant="outline"
             size="sm"
+          />
+          <ActionButton
+            icon={<Trash size={16} />}
+            label="Clear"
             onClick={onClear}
-            className="text-destructive hover:text-destructive hover:bg-destructive/10"
-          >
-            <Trash className="w-4 h-4 mr-2" />
-            Clear
-          </Button>
+            variant="destructive"
+            size="sm"
+          />
         </div>
       </div>
     </div>
