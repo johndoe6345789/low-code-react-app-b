@@ -83,10 +83,24 @@ function App() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [lastSaved] = useState<number | null>(Date.now())
   const [errorCount] = useState(0)
+  const [appReady, setAppReady] = useState(false)
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setAppReady(true)
+    }, 100)
+    
     loadSeedData()
-  }, [])
+      .catch(err => {
+        console.error('Seed data loading failed:', err)
+      })
+      .finally(() => {
+        clearTimeout(timer)
+        setAppReady(true)
+      })
+
+    return () => clearTimeout(timer)
+  }, [loadSeedData])
 
   const pageConfig = useMemo(() => getPageConfig(), [])
   const enabledPages = useMemo(() => getEnabledPages(featureToggles), [featureToggles])
@@ -186,92 +200,112 @@ function App() {
   }
 
   const renderPageContent = (page: any) => {
-    const Component = componentMap[page.component]
-    if (!Component) {
-      return <LoadingFallback message={`Component ${page.component} not found`} />
-    }
-
-    if (page.requiresResizable && page.resizableConfig) {
-      const config = page.resizableConfig
-      const LeftComponent = componentMap[config.leftComponent]
-      const RightComponent = Component
-
-      if (!LeftComponent) {
-        return <LoadingFallback message={`Component ${config.leftComponent} not found`} />
+    try {
+      const Component = componentMap[page.component]
+      if (!Component) {
+        return <LoadingFallback message={`Component ${page.component} not found`} />
       }
 
-      const stateContext = {
-        files,
-        models,
-        components,
-        componentTrees,
-        workflows,
-        lambdas,
-        theme,
-        playwrightTests,
-        storybookStories,
-        unitTests,
-        flaskConfig,
-        nextjsConfig,
-        npmSettings,
-        featureToggles,
-        activeFileId,
+      if (page.requiresResizable && page.resizableConfig) {
+        const config = page.resizableConfig
+        const LeftComponent = componentMap[config.leftComponent]
+        const RightComponent = Component
+
+        if (!LeftComponent) {
+          return <LoadingFallback message={`Component ${config.leftComponent} not found`} />
+        }
+
+        const stateContext = {
+          files,
+          models,
+          components,
+          componentTrees,
+          workflows,
+          lambdas,
+          theme,
+          playwrightTests,
+          storybookStories,
+          unitTests,
+          flaskConfig,
+          nextjsConfig,
+          npmSettings,
+          featureToggles,
+          activeFileId,
+        }
+
+        const actionContext = {
+          handleFileChange,
+          setActiveFileId,
+          handleFileClose,
+          handleFileAdd,
+          setModels,
+          setComponents,
+          setComponentTrees,
+          setWorkflows,
+          setLambdas,
+          setTheme,
+          setPlaywrightTests,
+          setStorybookStories,
+          setUnitTests,
+          setFlaskConfig,
+          setNextjsConfig,
+          setNpmSettings,
+          setFeatureToggles,
+        }
+
+        const leftProps = resolveProps(config.leftProps, stateContext, actionContext)
+        const rightProps = getPropsForComponent(page.id)
+
+        return (
+          <ResizablePanelGroup direction="horizontal">
+            <ResizablePanel 
+              defaultSize={config.leftPanel.defaultSize} 
+              minSize={config.leftPanel.minSize} 
+              maxSize={config.leftPanel.maxSize}
+            >
+              <Suspense fallback={<LoadingFallback message={`Loading ${config.leftComponent.toLowerCase()}...`} />}>
+                <LeftComponent {...leftProps} />
+              </Suspense>
+            </ResizablePanel>
+            <ResizableHandle />
+            <ResizablePanel defaultSize={config.rightPanel.defaultSize}>
+              <Suspense fallback={<LoadingFallback message={`Loading ${page.title.toLowerCase()}...`} />}>
+                <RightComponent {...rightProps} />
+              </Suspense>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        )
       }
 
-      const actionContext = {
-        handleFileChange,
-        setActiveFileId,
-        handleFileClose,
-        handleFileAdd,
-        setModels,
-        setComponents,
-        setComponentTrees,
-        setWorkflows,
-        setLambdas,
-        setTheme,
-        setPlaywrightTests,
-        setStorybookStories,
-        setUnitTests,
-        setFlaskConfig,
-        setNextjsConfig,
-        setNpmSettings,
-        setFeatureToggles,
-      }
-
-      const leftProps = resolveProps(config.leftProps, stateContext, actionContext)
-      const rightProps = getPropsForComponent(page.id)
-
+      const props = getPropsForComponent(page.id)
       return (
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel 
-            defaultSize={config.leftPanel.defaultSize} 
-            minSize={config.leftPanel.minSize} 
-            maxSize={config.leftPanel.maxSize}
-          >
-            <Suspense fallback={<LoadingFallback message={`Loading ${config.leftComponent.toLowerCase()}...`} />}>
-              <LeftComponent {...leftProps} />
-            </Suspense>
-          </ResizablePanel>
-          <ResizableHandle />
-          <ResizablePanel defaultSize={config.rightPanel.defaultSize}>
-            <Suspense fallback={<LoadingFallback message={`Loading ${page.title.toLowerCase()}...`} />}>
-              <RightComponent {...rightProps} />
-            </Suspense>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+        <Suspense fallback={<LoadingFallback message={`Loading ${page.title.toLowerCase()}...`} />}>
+          <Component {...props} />
+        </Suspense>
+      )
+    } catch (error) {
+      console.error(`Failed to render page ${page.id}:`, error)
+      return (
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <p className="text-destructive font-semibold">Failed to load {page.title}</p>
+            <p className="text-sm text-muted-foreground mt-2">Check console for details</p>
+          </div>
+        </div>
       )
     }
-
-    const props = getPropsForComponent(page.id)
-    return (
-      <Suspense fallback={<LoadingFallback message={`Loading ${page.title.toLowerCase()}...`} />}>
-        <Component {...props} />
-      </Suspense>
-    )
   }
 
   return (
     <div className="h-screen flex flex-col bg-background">
+      {!appReady && (
+        <div className="fixed inset-0 bg-background z-50 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm text-muted-foreground">Loading CodeForge...</p>
+          </div>
+        </div>
+      )}
       <Suspense fallback={<div className="h-1 bg-primary animate-pulse" />}>
         <PWAStatusBar />
       </Suspense>

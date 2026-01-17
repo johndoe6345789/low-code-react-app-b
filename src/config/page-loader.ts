@@ -83,26 +83,38 @@ export function resolveProps(propConfig: PropConfig | undefined, stateContext: R
   
   const resolvedProps: Record<string, any> = {}
   
-  if (propConfig.state) {
-    for (const stateKey of propConfig.state) {
-      const [propName, contextKey] = stateKey.includes(':') 
-        ? stateKey.split(':') 
-        : [stateKey, stateKey]
-      
-      if (stateContext[contextKey] !== undefined) {
-        resolvedProps[propName] = stateContext[contextKey]
+  try {
+    if (propConfig.state) {
+      for (const stateKey of propConfig.state) {
+        try {
+          const [propName, contextKey] = stateKey.includes(':') 
+            ? stateKey.split(':') 
+            : [stateKey, stateKey]
+          
+          if (stateContext[contextKey] !== undefined) {
+            resolvedProps[propName] = stateContext[contextKey]
+          }
+        } catch (err) {
+          console.warn(`Failed to resolve state prop: ${stateKey}`, err)
+        }
       }
     }
-  }
-  
-  if (propConfig.actions) {
-    for (const actionKey of propConfig.actions) {
-      const [propName, contextKey] = actionKey.split(':')
-      
-      if (actionContext[contextKey]) {
-        resolvedProps[propName] = actionContext[contextKey]
+    
+    if (propConfig.actions) {
+      for (const actionKey of propConfig.actions) {
+        try {
+          const [propName, contextKey] = actionKey.split(':')
+          
+          if (actionContext[contextKey]) {
+            resolvedProps[propName] = actionContext[contextKey]
+          }
+        } catch (err) {
+          console.warn(`Failed to resolve action prop: ${actionKey}`, err)
+        }
       }
     }
+  } catch (err) {
+    console.error('Failed to resolve props:', err)
   }
   
   return resolvedProps

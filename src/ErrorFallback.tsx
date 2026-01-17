@@ -9,6 +9,8 @@ interface ErrorFallbackProps {
 }
 
 export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
+  console.error('ErrorFallback caught:', error);
+  
   if (import.meta.env.DEV) throw error;
 
   return (
@@ -27,6 +29,11 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps)
           <pre className="text-xs text-destructive bg-muted/50 p-3 rounded border overflow-auto max-h-32">
             {error.message}
           </pre>
+          {error.stack && (
+            <pre className="text-xs text-muted-foreground bg-muted/50 p-3 rounded border overflow-auto max-h-48 mt-2">
+              {error.stack}
+            </pre>
+          )}
         </div>
         
         <Button 
