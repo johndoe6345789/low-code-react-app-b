@@ -26,3 +26,4 @@ export { useFormField, useForm } from './forms/use-form-field'
 
 export * from './use-route-preload'
 export * from './use-navigation-history'
+export * from './use-theme-config'
