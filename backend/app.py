@@ -7,7 +7,20 @@ from datetime import datetime
 from contextlib import contextmanager
 
 app = Flask(__name__)
-CORS(app)
+
+# CORS configuration for CapRover/Cloudflare deployment
+# Allow requests from frontend domain
+ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*').split(',')
+CORS(app, 
+     resources={r"/api/*": {
+         "origins": ALLOWED_ORIGINS,
+         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+         "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
+         "expose_headers": ["Content-Type", "X-Total-Count"],
+         "supports_credentials": True,
+         "max_age": 3600
+     }},
+     supports_credentials=True)
 
 DATABASE_PATH = os.environ.get('DATABASE_PATH', '/data/codeforge.db')
 os.makedirs(os.path.dirname(DATABASE_PATH), exist_ok=True)
