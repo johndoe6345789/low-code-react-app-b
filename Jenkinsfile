@@ -187,11 +187,22 @@ pipeline {
                         imageTags.add("${IMAGE_NAME}:latest")
                     }
 
+                    sh '''
+                        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+                        docker buildx create --name multiarch --driver docker-container --use || true
+                        docker buildx inspect --bootstrap
+                    '''
+
                     docker.withRegistry("https://${REGISTRY}", 'docker-registry-credentials') {
-                        def customImage = docker.build("${IMAGE_NAME}:${env.BUILD_ID}")
-                        imageTags.each { tag ->
-                            customImage.push(tag.split(':')[1])
-                        }
+                        sh """
+                            docker buildx build \
+                                --platform linux/amd64,linux/arm64 \
+                                --tag ${IMAGE_NAME}:${env.BRANCH_NAME} \
+                                --tag ${IMAGE_NAME}:${env.BRANCH_NAME}-${env.GIT_COMMIT_SHORT} \
+                                ${env.BRANCH_NAME == 'main' ? "--tag ${IMAGE_NAME}:latest" : ''} \
+                                --push \
+                                .
+                        """
                     }
                 }
             }

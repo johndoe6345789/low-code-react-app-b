@@ -167,21 +167,30 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Build Docker image
+          name: Install QEMU
           command: |
-            docker build -t ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH .
-            docker tag ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH \
-              ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH-$CIRCLE_SHA1
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - run:
-          name: Push to registry
+          name: Set up Docker Buildx
+          command: |
+            docker buildx create --name multiarch --driver docker-container --use
+            docker buildx inspect --bootstrap
+      - run:
+          name: Build multi-arch Docker image
           command: |
             echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_USERNAME --password-stdin
-            docker push ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH
-            docker push ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH-$CIRCLE_SHA1
+            docker buildx build \
+              --platform linux/amd64,linux/arm64 \
+              --tag ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH \
+              --tag ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH-$CIRCLE_SHA1 \
+              --push \
+              .
             if [ "$CIRCLE_BRANCH" = "main" ]; then
-              docker tag ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH \
-                ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
-              docker push ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
+              docker buildx build \
+                --platform linux/amd64,linux/arm64 \
+                --tag ghcr.io/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:latest \
+                --push \
+                .
             fi
       - notify-slack-on-fail
 

@@ -117,14 +117,24 @@ docker:build:
     - docker:24-dind
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+    - docker buildx create --name multiarch --driver docker-container --use
+    - docker buildx inspect --bootstrap
   script:
-    - docker build -t $REGISTRY:$CI_COMMIT_REF_SLUG -t $REGISTRY:$CI_COMMIT_SHORT_SHA .
-    - docker push $REGISTRY:$CI_COMMIT_REF_SLUG
-    - docker push $REGISTRY:$CI_COMMIT_SHORT_SHA
+    - |
+      docker buildx build \
+        --platform linux/amd64,linux/arm64 \
+        --tag $REGISTRY:$CI_COMMIT_REF_SLUG \
+        --tag $REGISTRY:$CI_COMMIT_SHORT_SHA \
+        --push \
+        .
     - |
       if [ "$CI_COMMIT_REF_NAME" = "main" ]; then
-        docker tag $REGISTRY:$CI_COMMIT_SHORT_SHA $REGISTRY:latest
-        docker push $REGISTRY:latest
+        docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+          --tag $REGISTRY:latest \
+          --push \
+          .
       fi
   needs:
     - build:app

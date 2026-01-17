@@ -64,6 +64,7 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 ### Prerequisites
 - Node.js >= 16.x
 - npm >= 8.3.0 (for overrides support)
+- Docker (optional, for containerization)
 
 ### Installation
 ```bash
@@ -76,6 +77,29 @@ npx playwright install
 # Start development server
 npm run dev
 ```
+
+### Docker & Multi-Architecture Support
+
+CodeForge supports multi-architecture Docker builds (AMD64 + ARM64) using QEMU:
+
+```bash
+# Build multi-arch image locally
+chmod +x scripts/build-multiarch.sh
+./scripts/build-multiarch.sh codeforge latest
+
+# Validate QEMU setup
+./scripts/validate-qemu.sh
+
+# See full documentation
+cat QEMU_INTEGRATION.md
+```
+
+**Benefits:**
+- Deploy to AWS Graviton, Azure ARM VMs, Apple Silicon
+- 20-40% cost reduction with ARM instances
+- Automatic multi-arch builds in all CI/CD pipelines
+
+**📚 [QEMU Integration Guide](./QEMU_INTEGRATION.md)** - Complete multi-architecture documentation
 
 ### Dependency Management
 
@@ -418,6 +442,7 @@ The Spark Template files and resources from GitHub are licensed under the terms 
 
 - **[Documentation Hub](./docs/README.md)** - 📖 Complete documentation index
 - **[PRD](./docs/PRD.md)** - Product requirements and design decisions
+- **[QEMU Integration](./QEMU_INTEGRATION.md)** - 🐳 Multi-architecture Docker builds guide
 - **[Error Repair Guide](./docs/guides/ERROR_REPAIR_GUIDE.md)** - Error detection and repair system
 - **[CI/CD Guide](./docs/guides/CI_CD_GUIDE.md)** - Complete CI/CD setup and configuration
 - **[Favicon Designer Access](./docs/guides/FAVICON_DESIGNER_ACCESS.md)** - How to access and use the Favicon Designer
