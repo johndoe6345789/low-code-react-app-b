@@ -25,6 +25,7 @@ export interface PageConfig {
   icon: string
   component: string
   enabled: boolean
+  isRoot?: boolean
   toggleKey?: string
   shortcut?: string
   order: number

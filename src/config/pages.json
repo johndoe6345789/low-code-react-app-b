@@ -1,6 +1,18 @@
 {
   "pages": [
     {
+      "id": "home",
+      "title": "Home",
+      "icon": "House",
+      "component": "ProjectDashboard",
+      "enabled": true,
+      "isRoot": true,
+      "order": 0,
+      "props": {
+        "state": ["files", "models", "components", "theme", "playwrightTests", "storybookStories", "unitTests", "flaskConfig", "nextjsConfig"]
+      }
+    },
+    {
       "id": "dashboard",
       "title": "Dashboard",
       "icon": "ChartBar",

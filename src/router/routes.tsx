@@ -76,46 +76,64 @@ export function createRoutes(
   const enabledPages = getEnabledPages(featureToggles)
   console.log('[ROUTES] 📄 Enabled pages:', enabledPages.map(p => p.id).join(', '))
 
-  const routes: RouteObject[] = enabledPages.map(page => {
-    console.log('[ROUTES] 📝 Configuring route for page:', page.id)
-    
-    const props = page.props 
-      ? resolveProps(page.props, stateContext, actionContext)
-      : {}
+  const rootPage = enabledPages.find(p => p.isRoot)
+  console.log('[ROUTES] 🏠 Root page:', rootPage?.id || 'none (will use dashboard)')
 
-    if (page.requiresResizable && page.resizableConfig) {
-      console.log('[ROUTES] 🔀 Page requires resizable layout:', page.id)
-      const config = page.resizableConfig
-      const leftProps = resolveProps(config.leftProps, stateContext, actionContext)
+  const routes: RouteObject[] = enabledPages
+    .filter(p => !p.isRoot)
+    .map(page => {
+      console.log('[ROUTES] 📝 Configuring route for page:', page.id)
+      
+      const props = page.props 
+        ? resolveProps(page.props, stateContext, actionContext)
+        : {}
+
+      if (page.requiresResizable && page.resizableConfig) {
+        console.log('[ROUTES] 🔀 Page requires resizable layout:', page.id)
+        const config = page.resizableConfig
+        const leftProps = resolveProps(config.leftProps, stateContext, actionContext)
+
+        return {
+          path: `/${page.id}`,
+          element: (
+            <ResizableLayout
+              leftComponent={config.leftComponent}
+              rightComponent={page.component}
+              leftProps={leftProps}
+              rightProps={props}
+              config={config}
+            />
+          )
+        }
+      }
 
       return {
         path: `/${page.id}`,
-        element: (
-          <ResizableLayout
-            leftComponent={config.leftComponent}
-            rightComponent={page.component}
-            leftProps={leftProps}
-            rightProps={props}
-            config={config}
-          />
-        )
+        element: <LazyComponent componentName={page.component} props={props} />
       }
-    }
+    })
 
-    return {
-      path: `/${page.id}`,
-      element: <LazyComponent componentName={page.component} props={props} />
-    }
-  })
-
-  routes.push({
-    path: '/',
-    element: <Navigate to="/dashboard" replace />
-  })
+  if (rootPage) {
+    console.log('[ROUTES] ✅ Adding root route from JSON config:', rootPage.component)
+    const props = rootPage.props 
+      ? resolveProps(rootPage.props, stateContext, actionContext)
+      : {}
+    
+    routes.push({
+      path: '/',
+      element: <LazyComponent componentName={rootPage.component} props={props} />
+    })
+  } else {
+    console.log('[ROUTES] ⚠️ No root page in config, redirecting to /dashboard')
+    routes.push({
+      path: '/',
+      element: <Navigate to="/dashboard" replace />
+    })
+  }
 
   routes.push({
     path: '*',
-    element: <Navigate to="/dashboard" replace />
+    element: <Navigate to="/" replace />
   })
 
   console.log('[ROUTES] ✅ Routes created:', routes.length, 'routes')

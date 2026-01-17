@@ -29,9 +29,11 @@
 
 ## JSON-Driven UI
 - [JSON_PAGES_GUIDE.md](./JSON_PAGES_GUIDE.md) - Building pages from JSON configuration
+- [json-routing.md](./json-routing.md) - **JSON-based routing and root route configuration**
 - [JSON_UI_GUIDE.md](../JSON_UI_GUIDE.md) - Original JSON UI documentation
 
 ### Page Schemas
+- `/src/config/pages.json` - **Master routing configuration (includes root `/` route)**
 - `/src/config/pages/dashboard.json` - Dashboard page configuration
 - More schemas can be added for other pages
 
