@@ -17,6 +17,9 @@ interface ComponentTreeNodeProps {
   onDragLeave: (e: React.DragEvent) => void
   onDrop: (e: React.DragEvent) => void
   depth?: number
+  hasChildren?: boolean
+  isExpanded?: boolean
+  onToggleExpand?: () => void
 }
 
 export function ComponentTreeNode({
@@ -33,10 +36,12 @@ export function ComponentTreeNode({
   onDragLeave,
   onDrop,
   depth = 0,
+  hasChildren = false,
+  isExpanded = false,
+  onToggleExpand,
 }: ComponentTreeNodeProps) {
   const def = getComponentDef(component.type)
   const IconComponent = def ? (Icons as any)[def.icon] || Icons.Cube : Icons.Cube
-  const hasChildren = Array.isArray(component.children) && component.children.length > 0
   
   return (
     <div className="relative">
@@ -67,7 +72,19 @@ export function ComponentTreeNode({
         )}
       >
         {hasChildren ? (
-          <Icons.CaretDown className="w-3 h-3 text-muted-foreground" />
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onToggleExpand?.()
+            }}
+            className="hover:text-accent"
+          >
+            {isExpanded ? (
+              <Icons.CaretDown className="w-3 h-3 text-muted-foreground" />
+            ) : (
+              <Icons.CaretRight className="w-3 h-3 text-muted-foreground" />
+            )}
+          </button>
         ) : (
           <div className="w-3" />
         )}
