@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button, Flex, Heading } from '@/components/atoms'
 
 interface ActionBarProps {
   title?: string
@@ -16,13 +16,15 @@ interface ActionBarProps {
 
 export function ActionBar({ title, actions = [], children, className = '' }: ActionBarProps) {
   return (
-    <div className={`flex items-center justify-between gap-4 ${className}`}>
+    <Flex justify="between" align="center" gap="md" className={className}>
       {title && (
-        <h2 className="text-xl font-semibold">{title}</h2>
+        <Heading level={2} className="text-xl font-semibold">
+          {title}
+        </Heading>
       )}
       {children}
       {actions.length > 0 && (
-        <div className="flex gap-2">
+        <Flex gap="sm">
           {actions.map((action, index) => (
             <Button
               key={index}
@@ -30,13 +32,13 @@ export function ActionBar({ title, actions = [], children, className = '' }: Act
               onClick={action.onClick}
               disabled={action.disabled}
               size="sm"
+              leftIcon={action.icon}
             >
-              {action.icon}
-              {action.label && action.icon ? <span className="ml-2">{action.label}</span> : action.label}
+              {action.label}
             </Button>
           ))}
-        </div>
+        </Flex>
       )}
-    </div>
+    </Flex>
   )
 }

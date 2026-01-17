@@ -1,7 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Button } from '@/components/ui/button'
 import { TreeCard, TreeListHeader } from '@/components/molecules'
-import { EmptyState } from '@/components/atoms'
+import { EmptyState, Stack, Container } from '@/components/atoms'
 import { ComponentTree } from '@/types/project'
 import { FolderOpen } from '@phosphor-icons/react'
 
@@ -38,7 +37,12 @@ export function TreeListPanel({
       />
 
       {trees.length === 0 ? (
-        <div className="flex-1 flex items-center justify-center">
+        <Stack 
+          direction="vertical" 
+          align="center" 
+          justify="center" 
+          className="flex-1"
+        >
           <EmptyState
             icon={<FolderOpen size={48} weight="duotone" />}
             title="No component trees yet"
@@ -48,10 +52,10 @@ export function TreeListPanel({
               onClick: onCreateNew
             }}
           />
-        </div>
+        </Stack>
       ) : (
         <ScrollArea className="flex-1">
-          <div className="space-y-2">
+          <Stack direction="vertical" spacing="sm">
             {trees.map((tree) => (
               <TreeCard
                 key={tree.id}
@@ -64,7 +68,7 @@ export function TreeListPanel({
                 disableDelete={trees.length === 1}
               />
             ))}
-          </div>
+          </Stack>
         </ScrollArea>
       )}
     </div>

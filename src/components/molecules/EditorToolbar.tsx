@@ -1,6 +1,7 @@
 import { ProjectFile } from '@/types/project'
 import { FileTabs } from './FileTabs'
 import { EditorActions } from './EditorActions'
+import { Flex } from '@/components/atoms'
 
 interface EditorToolbarProps {
   openFiles: ProjectFile[]
@@ -22,7 +23,12 @@ export function EditorToolbar({
   onImprove,
 }: EditorToolbarProps) {
   return (
-    <div className="flex items-center gap-1 bg-secondary/50 border-b border-border px-2 py-1 justify-between">
+    <Flex 
+      align="center" 
+      justify="between" 
+      gap="xs" 
+      className="bg-secondary/50 border-b border-border px-2 py-1"
+    >
       <FileTabs
         files={openFiles}
         activeFileId={activeFileId}
@@ -35,6 +41,6 @@ export function EditorToolbar({
           onImprove={onImprove}
         />
       )}
-    </div>
+    </Flex>
   )
 }

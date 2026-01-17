@@ -5,9 +5,15 @@ import {
   Trash,
   Copy,
 } from '@phosphor-icons/react'
-import { Heading, TextGradient, Text, Separator, Stack } from '@/components/atoms'
-import { ActionBar } from '@/components/molecules'
-import { ActionButton } from '@/components/atoms'
+import { 
+  Heading, 
+  TextGradient, 
+  Text, 
+  Separator, 
+  Stack, 
+  ActionButton,
+  Flex 
+} from '@/components/atoms'
 
 interface SchemaEditorToolbarProps {
   onImport: () => void
@@ -26,7 +32,7 @@ export function SchemaEditorToolbar({
 }: SchemaEditorToolbarProps) {
   return (
     <div className="border-b border-border px-6 py-3 bg-card">
-      <div className="flex items-center justify-between">
+      <Flex justify="between" align="center">
         <Stack direction="vertical" spacing="xs">
           <TextGradient 
             from="primary" 
@@ -40,7 +46,7 @@ export function SchemaEditorToolbar({
           </Text>
         </Stack>
         
-        <div className="flex items-center gap-2">
+        <Flex align="center" gap="sm">
           <ActionButton
             icon={<Upload size={16} />}
             label="Import"
@@ -77,8 +83,8 @@ export function SchemaEditorToolbar({
             variant="destructive"
             size="sm"
           />
-        </div>
-      </div>
+        </Flex>
+      </Flex>
     </div>
   )
 }

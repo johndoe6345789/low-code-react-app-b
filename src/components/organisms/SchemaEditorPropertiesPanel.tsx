@@ -1,6 +1,6 @@
 import { ComponentTree } from '@/components/molecules/ComponentTree'
 import { PropertyEditor } from '@/components/molecules/PropertyEditor'
-import { Separator } from '@/components/ui/separator'
+import { Separator, Stack } from '@/components/atoms'
 import { UIComponent } from '@/types/json-ui'
 
 interface SchemaEditorPropertiesPanelProps {
@@ -39,7 +39,7 @@ export function SchemaEditorPropertiesPanel({
   onDelete,
 }: SchemaEditorPropertiesPanelProps) {
   return (
-    <div className="w-80 border-l border-border bg-card flex flex-col">
+    <Stack direction="vertical" spacing="none" className="w-80 border-l border-border bg-card">
       <div className="flex-1 overflow-hidden">
         <ComponentTree
           components={components}
@@ -66,6 +66,6 @@ export function SchemaEditorPropertiesPanel({
           onDelete={onDelete}
         />
       </div>
-    </div>
+    </Stack>
   )
 }

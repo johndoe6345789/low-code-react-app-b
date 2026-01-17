@@ -1,5 +1,5 @@
 import { ToolbarButton } from '@/components/molecules'
-import { ErrorBadge } from '@/components/atoms'
+import { ErrorBadge, Flex, Tooltip, Badge } from '@/components/atoms'
 import {
   MagnifyingGlass,
   Keyboard,
@@ -31,7 +31,7 @@ export function ToolbarActions({
   showErrorButton = false,
 }: ToolbarActionsProps) {
   return (
-    <div className="flex gap-1 sm:gap-2 shrink-0">
+    <Flex gap="xs" shrink className="shrink-0">
       <ToolbarButton
         icon={<MagnifyingGlass size={18} />}
         label="Search (Ctrl+K)"
@@ -81,6 +81,6 @@ export function ToolbarActions({
         onClick={onExport}
         variant="default"
       />
-    </div>
+    </Flex>
   )
 }
