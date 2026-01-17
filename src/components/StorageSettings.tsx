@@ -1,33 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Database, HardDrive, CloudArrowUp, CloudArrowDown, Trash, Info } from '@phosphor-icons/react'
 import { storage } from '@/lib/storage'
-import { db } from '@/lib/db'
 import { toast } from 'sonner'
 import { StorageSettingsPanel } from './StorageSettingsPanel'
 
 export function StorageSettings() {
   const [isMigrating, setIsMigrating] = useState(false)
-  const [isSyncing, setIsSyncing] = useState(false)
-  const [migrationProgress, setMigrationProgress] = useState(0)
+  const [backendType, setBackendType] = useState<'flask' | 'indexeddb' | null>(null)
+  const [flaskUrl, setFlaskUrl] = useState('http://localhost:5001')
   const [stats, setStats] = useState<{
-    indexedDBCount: number
-    sparkKVCount: number
+    totalKeys: number
   } | null>(null)
+
+  useEffect(() => {
+    const type = storage.getBackendType()
+    setBackendType(type)
+    loadStats()
+  }, [])
 
   const loadStats = async () => {
     try {
-      const [settingsCount, sparkKeys] = await Promise.all([
-        db.count('settings'),
-        window.spark?.kv.keys() || Promise.resolve([]),
-      ])
-
+      const keys = await storage.keys()
       setStats({
-        indexedDBCount: settingsCount,
-        sparkKVCount: sparkKeys.length,
+        totalKeys: keys.length,
       })
     } catch (error) {
       console.error('Failed to load stats:', error)
@@ -35,21 +35,19 @@ export function StorageSettings() {
     }
   }
 
-  const handleMigrate = async () => {
+  const handleMigrateToFlask = async () => {
+    if (!flaskUrl) {
+      toast.error('Please enter a Flask backend URL')
+      return
+    }
+
     setIsMigrating(true)
-    setMigrationProgress(0)
 
     try {
-      const result = await storage.migrateFromSparkKV()
-      setMigrationProgress(100)
-
-      toast.success(
-        `Migration complete! ${result.migrated} items migrated${
-          result.failed > 0 ? `, ${result.failed} failed` : ''
-        }`
-      )
-
-      await loadStats()
+      const count = await storage.migrateToFlask(flaskUrl)
+      toast.success(`Migration complete! ${count} items migrated to Flask backend`)
+      
+      setTimeout(() => window.location.reload(), 1000)
     } catch (error) {
       console.error('Migration failed:', error)
       toast.error('Migration failed. Check console for details.')
@@ -58,45 +56,34 @@ export function StorageSettings() {
     }
   }
 
-  const handleSync = async () => {
-    setIsSyncing(true)
+  const handleMigrateToIndexedDB = async () => {
+    setIsMigrating(true)
 
     try {
-      const result = await storage.syncToSparkKV()
-
-      toast.success(
-        `Sync complete! ${result.synced} items synced${
-          result.failed > 0 ? `, ${result.failed} failed` : ''
-        }`
-      )
-
-      await loadStats()
+      const count = await storage.migrateToIndexedDB()
+      toast.success(`Migration complete! ${count} items migrated to IndexedDB`)
+      
+      setTimeout(() => window.location.reload(), 1000)
     } catch (error) {
-      console.error('Sync failed:', error)
-      toast.error('Sync failed. Check console for details.')
+      console.error('Migration failed:', error)
+      toast.error('Migration failed. Check console for details.')
     } finally {
-      setIsSyncing(false)
+      setIsMigrating(false)
     }
   }
 
-  const handleClearIndexedDB = async () => {
-    if (!confirm('Are you sure you want to clear all IndexedDB data? This cannot be undone.')) {
+  const handleClearStorage = async () => {
+    if (!confirm('Are you sure you want to clear all storage data? This cannot be undone.')) {
       return
     }
 
     try {
-      await db.clear('settings')
-      await db.clear('files')
-      await db.clear('models')
-      await db.clear('components')
-      await db.clear('workflows')
-      await db.clear('projects')
-
-      toast.success('IndexedDB cleared successfully')
+      await storage.clear()
+      toast.success('Storage cleared successfully')
       await loadStats()
     } catch (error) {
-      console.error('Failed to clear IndexedDB:', error)
-      toast.error('Failed to clear IndexedDB')
+      console.error('Failed to clear storage:', error)
+      toast.error('Failed to clear storage')
     }
   }
 
@@ -105,7 +92,7 @@ export function StorageSettings() {
       <div>
         <h1 className="text-3xl font-bold mb-2">Storage Management</h1>
         <p className="text-muted-foreground">
-          Manage your local database and sync with cloud storage
+          Manage your application storage backend
         </p>
       </div>
 
@@ -115,125 +102,127 @@ export function StorageSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Info size={20} />
-            Legacy Storage Information
+            Current Storage Backend
           </CardTitle>
           <CardDescription>
-            This application uses IndexedDB as the primary local database, with Spark KV as a
-            fallback/sync option
+            Your data is currently stored in:
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
-            <Button onClick={loadStats} variant="outline" size="sm">
-              Refresh Stats
-            </Button>
+            <div className="flex items-center gap-2">
+              {backendType === 'flask' ? (
+                <>
+                  <Database size={24} />
+                  <div>
+                    <div className="font-semibold">Flask Backend (SQLite)</div>
+                    <div className="text-sm text-muted-foreground">Using persistent database</div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <HardDrive size={24} />
+                  <div>
+                    <div className="font-semibold">IndexedDB (Browser)</div>
+                    <div className="text-sm text-muted-foreground">Using local browser storage</div>
+                  </div>
+                </>
+              )}
+            </div>
+            <Badge variant={backendType === 'flask' ? 'default' : 'secondary'}>
+              {backendType === 'flask' ? 'Server-Side' : 'Client-Side'}
+            </Badge>
           </div>
 
+          <Button onClick={loadStats} variant="outline" size="sm" className="w-full">
+            Refresh Stats
+          </Button>
+
           {stats && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium flex items-center gap-2">
-                    <HardDrive size={16} />
-                    IndexedDB (Primary)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold">{stats.indexedDBCount}</span>
-                    <span className="text-sm text-muted-foreground">items</span>
-                  </div>
-                  <Badge variant="default" className="mt-2">
-                    Active
-                  </Badge>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium flex items-center gap-2">
-                    <Database size={16} />
-                    Spark KV (Fallback)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold">{stats.sparkKVCount}</span>
-                    <span className="text-sm text-muted-foreground">items</span>
-                  </div>
-                  <Badge variant="secondary" className="mt-2">
-                    Backup
-                  </Badge>
-                </CardContent>
-              </Card>
-            </div>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold">{stats.totalKeys}</span>
+                  <span className="text-sm text-muted-foreground">total keys stored</span>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CloudArrowDown size={20} />
-            Data Migration
-          </CardTitle>
-          <CardDescription>
-            Migrate existing data from Spark KV to IndexedDB for improved performance
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {isMigrating && (
-            <div className="space-y-2">
-              <Progress value={migrationProgress} />
-              <p className="text-sm text-muted-foreground text-center">
-                Migrating data... {migrationProgress}%
-              </p>
+      {backendType === 'indexeddb' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CloudArrowUp size={20} />
+              Migrate to Flask Backend
+            </CardTitle>
+            <CardDescription>
+              Switch to server-side storage using Flask + SQLite for better reliability
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="flask-url">Flask Backend URL</Label>
+              <Input
+                id="flask-url"
+                type="url"
+                placeholder="http://localhost:5001"
+                value={flaskUrl}
+                onChange={(e) => setFlaskUrl(e.target.value)}
+                className="mt-2"
+              />
             </div>
-          )}
 
-          <Button
-            onClick={handleMigrate}
-            disabled={isMigrating}
-            className="w-full"
-            size="lg"
-          >
-            <CloudArrowDown size={20} className="mr-2" />
-            {isMigrating ? 'Migrating...' : 'Migrate from Spark KV to IndexedDB'}
-          </Button>
+            <Button
+              onClick={handleMigrateToFlask}
+              disabled={isMigrating}
+              className="w-full"
+              size="lg"
+            >
+              <CloudArrowUp size={20} className="mr-2" />
+              {isMigrating ? 'Migrating...' : 'Migrate to Flask Backend'}
+            </Button>
 
-          <p className="text-xs text-muted-foreground">
-            This will copy all data from Spark KV into IndexedDB. Your Spark KV data will remain
-            unchanged.
-          </p>
-        </CardContent>
-      </Card>
+            <p className="text-xs text-muted-foreground">
+              This will copy all data from IndexedDB to the Flask backend. Your browser data will remain
+              unchanged and the app will reload to use the new backend.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CloudArrowUp size={20} />
-            Backup & Sync
-          </CardTitle>
-          <CardDescription>Sync IndexedDB data back to Spark KV as a backup</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            onClick={handleSync}
-            disabled={isSyncing}
-            variant="outline"
-            className="w-full"
-            size="lg"
-          >
-            <CloudArrowUp size={20} className="mr-2" />
-            {isSyncing ? 'Syncing...' : 'Sync to Spark KV'}
-          </Button>
+      {backendType === 'flask' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CloudArrowDown size={20} />
+              Migrate to IndexedDB
+            </CardTitle>
+            <CardDescription>
+              Switch back to browser-side storage using IndexedDB
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Button
+              onClick={handleMigrateToIndexedDB}
+              disabled={isMigrating}
+              variant="outline"
+              className="w-full"
+              size="lg"
+            >
+              <CloudArrowDown size={20} className="mr-2" />
+              {isMigrating ? 'Migrating...' : 'Migrate to IndexedDB'}
+            </Button>
 
-          <p className="text-xs text-muted-foreground">
-            This will update Spark KV with your current IndexedDB data. Useful for creating backups
-            or syncing across devices.
-          </p>
-        </CardContent>
-      </Card>
+            <p className="text-xs text-muted-foreground">
+              This will copy all data from Flask backend to IndexedDB. The server data will remain
+              unchanged and the app will reload to use IndexedDB.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="border-destructive">
         <CardHeader>
@@ -244,12 +233,13 @@ export function StorageSettings() {
           <CardDescription>Irreversible actions that affect your data</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={handleClearIndexedDB} variant="destructive" className="w-full">
+          <Button onClick={handleClearStorage} variant="destructive" className="w-full">
             <Trash size={20} className="mr-2" />
-            Clear All IndexedDB Data
+            Clear All Storage Data
           </Button>
         </CardContent>
       </Card>
     </div>
   )
 }
+

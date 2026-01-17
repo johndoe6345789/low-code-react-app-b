@@ -99,6 +99,33 @@ cat QEMU_INTEGRATION.md
 - 20-40% cost reduction with ARM instances
 - Automatic multi-arch builds in all CI/CD pipelines
 
+### Storage Backend Configuration
+
+CodeForge supports two storage backends that can be configured at deployment:
+
+#### IndexedDB (Default)
+- Client-side browser storage
+- Works offline, no server required
+- Perfect for development and single-user scenarios
+
+#### Flask Backend with SQLite (Production)
+- Server-side persistent storage
+- Data shared across devices and browsers
+- Production-ready deployment
+
+```bash
+# Use Flask backend with Docker Compose
+docker-compose up -d
+
+# Configure Flask backend URL
+USE_FLASK_BACKEND=true FLASK_BACKEND_URL=http://backend:5001
+
+# See full documentation
+cat docs/STORAGE_BACKEND.md
+```
+
+**Migration:** Switch between backends anytime via the Storage Management UI with automatic data migration.
+
 **📚 [QEMU Integration Guide](./QEMU_INTEGRATION.md)** - Complete multi-architecture documentation
 
 ### Dependency Management

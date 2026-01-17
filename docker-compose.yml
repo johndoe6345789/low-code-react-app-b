@@ -9,7 +9,8 @@ services:
       - '3000:80'
     environment:
       - NODE_ENV=production
-      - VITE_BACKEND_URL=http://backend:5001
+      - USE_FLASK_BACKEND=true
+      - FLASK_BACKEND_URL=http://backend:5001
     depends_on:
       - backend
     restart: unless-stopped
