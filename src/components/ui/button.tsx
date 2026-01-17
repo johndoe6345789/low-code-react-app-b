@@ -56,4 +56,9 @@ function Button({
   )
 }
 
+export type ButtonProps = ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }
+
 export { Button, buttonVariants }

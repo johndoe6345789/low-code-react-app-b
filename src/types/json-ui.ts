@@ -86,3 +86,5 @@ export interface JSONUIContext {
   updateData: (sourceId: string, value: any) => void
   executeAction: (action: Action, event?: any) => Promise<void>
 }
+
+export type ComponentSchema = UIComponent

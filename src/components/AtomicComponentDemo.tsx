@@ -29,19 +29,15 @@ export function AtomicComponentDemo() {
     searchFields: ['title'],
   })
 
-  const { filtered: filteredByPriority, filters, addFilter, clearFilters } = useFilter({
-    items: filtered,
-  })
-
   const showCompleted = useToggle({ initial: true })
   const addDialog = useDialog()
 
   const displayedTasks = showCompleted.value 
-    ? filteredByPriority 
-    : filteredByPriority.filter(t => t.status !== 'success')
+    ? filtered 
+    : filtered.filter(t => t.status !== 'success')
 
   const handleAddTask = () => {
-    create({
+    crud.create({
       id: Date.now(),
       title: 'New Task',
       status: 'pending',
@@ -97,17 +93,6 @@ export function AtomicComponentDemo() {
         placeholder="Search tasks..."
       />
 
-      {filters.length > 0 && (
-        <div className="flex gap-2 items-center">
-          <span className="text-sm text-muted-foreground">
-            {filters.length} filter(s) active
-          </span>
-          <Button size="sm" variant="ghost" onClick={clearFilters}>
-            Clear filters
-          </Button>
-        </div>
-      )}
-
       <div className="space-y-3">
         {displayedTasks.map(task => (
           <Card key={task.id}>
@@ -119,7 +104,7 @@ export function AtomicComponentDemo() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => remove(task.id)}
+                    onClick={() => crud.delete(task.id)}
                   >
                     <Trash size={16} />
                   </Button>

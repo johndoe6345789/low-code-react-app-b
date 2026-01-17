@@ -35,10 +35,10 @@ export function useComponentRegistry({ customComponents = {} }: ComponentRegistr
     return registry[type as keyof typeof registry] || null
   }
 
-  const getIcon = (iconName: string, props?: any) => {
+  const getIcon = (iconName: string, props?: any): React.ReactElement | null => {
     const IconComponent = (Icons as any)[iconName]
     if (!IconComponent) return null
-    return <IconComponent size={24} weight="duotone" {...props} />
+    return IconComponent({ size: 24, weight: "duotone", ...props })
   }
 
   return {

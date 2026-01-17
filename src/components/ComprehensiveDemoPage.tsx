@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { Progress } from '@/components/ui/progress'
 import { useCRUD, useSearch } from '@/hooks/data'
 import { useDialog } from '@/hooks/ui'
+import { useKV } from '@github/spark/hooks'
 import { SearchBar } from '@/components/molecules/SearchBar'
 import { DataList, ActionButton, IconButton } from '@/components/atoms'
 import { Plus, Trash, Check, Clock } from '@phosphor-icons/react'
@@ -22,10 +23,11 @@ interface Todo {
 }
 
 export function ComprehensiveDemoPage() {
-  const { items: todos, create, update, remove } = useCRUD<Todo>({
-    key: 'json-demo-todos',
-    defaultValue: [],
-    persist: true,
+  const [todos, setTodos] = useKV<Todo[]>('json-demo-todos', [])
+  
+  const crud = useCRUD<Todo>({
+    items: todos,
+    setItems: (updater) => setTodos(updater),
   })
 
   const { query, setQuery, filtered } = useSearch({
@@ -46,7 +48,7 @@ export function ComprehensiveDemoPage() {
 
   const handleAddTodo = () => {
     if (newTodoText.trim()) {
-      create({
+      crud.create({
         id: Date.now(),
         text: newTodoText,
         completed: false,
@@ -63,13 +65,13 @@ export function ComprehensiveDemoPage() {
   const handleToggleTodo = (id: number) => {
     const todo = todos.find(t => t.id === id)
     if (todo) {
-      update(id, { completed: !todo.completed })
+      crud.update(id, { completed: !todo.completed })
       toast.success(todo.completed ? 'Task marked as pending' : 'Task completed!')
     }
   }
 
   const handleDeleteTodo = (id: number) => {
-    remove(id)
+    crud.delete(id)
     toast.success('Task deleted')
   }
 

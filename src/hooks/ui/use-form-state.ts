@@ -19,10 +19,10 @@ export function useFormState<T extends Record<string, any>>(
   fields: FormFieldConfig[],
   initialValues?: Partial<T>
 ) {
-  const defaultValues = fields.reduce((acc, field) => {
+  const defaultValues: any = fields.reduce((acc: any, field) => {
     acc[field.name] = initialValues?.[field.name] ?? field.defaultValue
     return acc
-  }, {} as T)
+  }, {})
 
   const [state, setState] = useState<FormState<T>>({
     values: defaultValues,

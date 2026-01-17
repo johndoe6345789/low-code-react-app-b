@@ -22,7 +22,7 @@ export function useDataSources(dataSources: DataSource[]) {
       for (const ds of dataSources) {
         if (ds.type === 'kv' && ds.key) {
           try {
-            const value = await spark.kv.get(ds.key)
+            const value = await window.spark.kv.get(ds.key)
             initialData[ds.id] = value !== undefined ? value : ds.defaultValue
           } catch {
             initialData[ds.id] = ds.defaultValue
@@ -44,7 +44,7 @@ export function useDataSources(dataSources: DataSource[]) {
 
     const kvSource = dataSources.find((ds) => ds.id === id && ds.type === 'kv')
     if (kvSource && kvSource.key) {
-      await spark.kv.set(kvSource.key, value)
+      await window.spark.kv.set(kvSource.key, value)
     }
   }, [dataSources])
 

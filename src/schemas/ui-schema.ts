@@ -10,7 +10,7 @@ export const ComponentSchema: z.ZodType<any> = z.lazy(() =>
   z.object({
     id: z.string(),
     type: z.string(),
-    props: z.record(z.any()).optional(),
+    props: z.record(z.string(), z.any()).optional(),
     children: z.array(ComponentSchema).optional(),
     binding: z.string().optional(),
     condition: z.string().optional(),
@@ -21,7 +21,7 @@ export const ComponentSchema: z.ZodType<any> = z.lazy(() =>
         indexVar: z.string().optional(),
       })
       .optional(),
-    events: z.record(z.string()).optional(),
+    events: z.record(z.string(), z.string()).optional(),
   })
 )
 
@@ -48,7 +48,7 @@ export const PageSchema = z.object({
   layout: LayoutSchema,
   components: z.array(ComponentSchema),
   dataBindings: z.array(z.string()).optional(),
-  functions: z.record(z.string()).optional(),
+  functions: z.record(z.string(), z.string()).optional(),
 })
 
 export type Binding = z.infer<typeof BindingSchema>
