@@ -31,9 +31,9 @@ export const updateNewTodo = (data: any, event: any) => event?.target?.value || 
 
 export const checkCanAddTodo = (data: any) => data.newTodo?.trim().length > 0
 
-export const transformFilteredUsers = (users: any[]) => `${users.length} users`
+export const transformFilteredUsers = (users: any[]) => `${users?.length || 0} users`
 
-export const transformUserList = (users: any[]) => users.map((user: any) => ({
+export const transformUserList = (users: any[]) => (users || []).map((user: any) => ({
   type: 'Card',
   id: `user-${user.id}`,
   props: {
