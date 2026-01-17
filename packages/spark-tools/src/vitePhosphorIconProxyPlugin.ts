@@ -1,8 +1,12 @@
 /**
  * Vite Phosphor Icon Proxy Plugin
  * 
- * This plugin provides a proxy for Phosphor icon imports to improve
- * build performance and bundle size.
+ * This plugin provides a proxy for Phosphor icon imports.
+ * Currently provides a pass-through implementation that allows
+ * Vite to handle icon imports normally. Can be extended to:
+ * - Optimize icon bundle sizes
+ * - Implement lazy loading for icons
+ * - Transform icon imports for better tree-shaking
  */
 
 export default function createIconImportProxy() {
@@ -10,14 +14,16 @@ export default function createIconImportProxy() {
     name: 'vite-phosphor-icon-proxy',
     
     resolveId(id: string) {
-      // Handle icon imports
+      // TODO: Add custom icon resolution if needed
+      // Currently lets Vite handle all icon imports normally
       if (id.includes('@phosphor-icons/react')) {
         return null // Let Vite handle it normally
       }
     },
     
     transform(code: string, id: string) {
-      // Transform icon imports if needed
+      // TODO: Add icon import transformations if needed
+      // Currently returns null to let Vite handle transformations
       return null
     }
   }

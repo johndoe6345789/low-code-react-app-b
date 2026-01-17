@@ -7,16 +7,22 @@
  * - User authentication
  */
 
+// Type definitions for LLM responses
+interface LLMChatResponse {
+  role: string
+  content: string
+}
+
 // Mock KV Storage
 const kvStorage = new Map<string, any>()
 
 // Create llm function with additional properties
-const llmFunction = async (prompt: string, model?: string, jsonMode?: boolean): Promise<any> => {
+const llmFunction = async (prompt: string, model?: string, jsonMode?: boolean): Promise<string> => {
   console.log('Mock LLM called with prompt:', prompt, 'model:', model, 'jsonMode:', jsonMode)
   return 'This is a mock response from the Spark LLM service.'
 }
 
-llmFunction.chat = async (messages: any[]) => {
+llmFunction.chat = async (messages: any[]): Promise<LLMChatResponse> => {
   console.log('Mock LLM chat called with messages:', messages)
   return {
     role: 'assistant',
@@ -24,7 +30,7 @@ llmFunction.chat = async (messages: any[]) => {
   }
 }
 
-llmFunction.complete = async (prompt: string) => {
+llmFunction.complete = async (prompt: string): Promise<string> => {
   console.log('Mock LLM complete called with prompt:', prompt)
   return 'This is a mock completion from the Spark LLM service.'
 }

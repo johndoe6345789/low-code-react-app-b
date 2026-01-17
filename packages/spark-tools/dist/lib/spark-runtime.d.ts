@@ -6,6 +6,10 @@
  * - LLM service (language model integration)
  * - User authentication
  */
+interface LLMChatResponse {
+    role: string;
+    content: string;
+}
 export declare const sparkRuntime: {
     kv: {
         get: <T = any>(key: string) => T | undefined;
@@ -15,11 +19,8 @@ export declare const sparkRuntime: {
         keys: () => string[];
     };
     llm: {
-        (prompt: string, model?: string, jsonMode?: boolean): Promise<any>;
-        chat(messages: any[]): Promise<{
-            role: string;
-            content: string;
-        }>;
+        (prompt: string, model?: string, jsonMode?: boolean): Promise<string>;
+        chat(messages: any[]): Promise<LLMChatResponse>;
         complete(prompt: string): Promise<string>;
     };
     user: {
@@ -31,4 +32,5 @@ export declare const sparkRuntime: {
         isAuthenticated: () => boolean;
     };
 };
+export {};
 //# sourceMappingURL=spark-runtime.d.ts.map

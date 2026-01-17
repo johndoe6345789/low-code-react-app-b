@@ -2,7 +2,10 @@
  * Spark Vite Plugin
  *
  * This plugin integrates Spark functionality into the Vite build process.
- * It handles initialization and configuration of Spark features.
+ * Currently provides a minimal implementation that can be extended with:
+ * - Spark runtime injection
+ * - Configuration validation
+ * - Development server enhancements
  */
 export default function sparkPlugin(): {
     name: string;

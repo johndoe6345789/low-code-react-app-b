@@ -1,1 +1,1 @@
-{"version":3,"file":"sparkVitePlugin.d.ts","sourceRoot":"","sources":["../src/sparkVitePlugin.ts"],"names":[],"mappings":"AAAA;;;;;GAKG;AAEH,MAAM,CAAC,OAAO,UAAU,WAAW;;2BAIR,GAAG;6BAID,MAAM;EAKlC"}
+{"version":3,"file":"sparkVitePlugin.d.ts","sourceRoot":"","sources":["../src/sparkVitePlugin.ts"],"names":[],"mappings":"AAAA;;;;;;;;GAQG;AAEH,MAAM,CAAC,OAAO,UAAU,WAAW;;2BAIR,GAAG;6BAKD,MAAM;EAMlC"}
