@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
-import { CaretRight, House } from '@phosphor-icons/react'
+import { CaretRight, House, X } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { useNavigationHistory } from '@/hooks/use-navigation-history'
 import { getPageById } from '@/config/page-loader'
 import { Flex, IconWrapper } from '@/components/atoms'
+import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 export function Breadcrumb() {
-  const { history } = useNavigationHistory()
+  const { history, clearHistory } = useNavigationHistory()
 
   if (history.length === 0) {
     return null
@@ -88,6 +90,27 @@ export function Breadcrumb() {
               {getPageTitle(currentPage.path)}
             </span>
           </>
+        )}
+
+        {history.length > 1 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 ml-2 shrink-0"
+                  onClick={clearHistory}
+                  aria-label="Clear navigation history"
+                >
+                  <X size={14} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Clear history</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
       </Flex>
     </nav>
