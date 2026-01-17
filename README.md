@@ -99,7 +99,7 @@ npm run test:e2e:headed
 npm run test:e2e:report
 ```
 
-**See [RUN_TESTS.md](./RUN_TESTS.md) for detailed test execution guide.**
+**See [docs/testing/RUN_TESTS.md](./docs/testing/RUN_TESTS.md) for detailed test execution guide.**
 
 ### Project Management
 - **Save Project** - Save current work with name and description to database
@@ -127,19 +127,23 @@ npm run test:e2e:report
 - **Global Search** - Press `Ctrl+K` (or `Cmd+K`) to search all features, files, and navigate instantly
 - **Hamburger Menu** - Click the menu icon (☰) in the top-left to browse all available tabs
 - **Feature Toggles** - Go to **Features** tab to enable/disable specific designers
-- **Need Help?** - See [FAVICON_DESIGNER_ACCESS.md](./FAVICON_DESIGNER_ACCESS.md) for troubleshooting
+- **Need Help?** - See [docs/guides/FAVICON_DESIGNER_ACCESS.md](./docs/guides/FAVICON_DESIGNER_ACCESS.md) for troubleshooting
 
 ## 🏗️ Phase 4: Refactored Architecture
 
 CodeForge has been completely refactored with a modular, JSON-driven architecture:
 
 ### 📚 Complete Documentation
-- **[INDEX.md](./INDEX.md)** - 📖 **START HERE** - Navigation hub for all documentation
-- **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - ⚡ Fast lookup guide with code examples
-- **[COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md)** - 🎣 Complete hook API reference
-- **[JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md)** - 📄 JSON page orchestration guide
-- **[PHASE4_IMPLEMENTATION_COMPLETE.md](./PHASE4_IMPLEMENTATION_COMPLETE.md)** - 📊 Implementation summary
-- **[ARCHITECTURE_VISUAL_GUIDE.md](./ARCHITECTURE_VISUAL_GUIDE.md)** - 🎨 Visual architecture diagrams
+
+**👉 [View All Documentation in /docs](./docs/README.md)**
+
+Quick Links:
+- **[docs/PRD.md](./docs/PRD.md)** - 📋 Product Requirements Document
+- **[docs/guides/QUICK_REFERENCE.md](./docs/guides/QUICK_REFERENCE.md)** - ⚡ Fast lookup guide
+- **[docs/api/COMPLETE_HOOK_LIBRARY.md](./docs/api/COMPLETE_HOOK_LIBRARY.md)** - 🎣 Complete hook API reference
+- **[docs/architecture/DECLARATIVE_SYSTEM.md](./docs/architecture/DECLARATIVE_SYSTEM.md)** - ⭐ JSON-driven system
+- **[docs/architecture/ARCHITECTURE_VISUAL_GUIDE.md](./docs/architecture/ARCHITECTURE_VISUAL_GUIDE.md)** - 🎨 Architecture diagrams
+- **[docs/testing/RUN_TESTS.md](./docs/testing/RUN_TESTS.md)** - 🧪 Testing guide
 
 ### 🎣 Hook Library (12+ Hooks, All <150 LOC)
 
@@ -202,17 +206,17 @@ Build entire pages using JSON schemas without writing React code:
 CodeForge uses modern patterns for maintainability and extensibility:
 
 ### Declarative System (Primary)
-- **[DECLARATIVE_SYSTEM.md](./DECLARATIVE_SYSTEM.md)** - **⭐ START HERE** Complete guide to the JSON-driven architecture
+- **[docs/architecture/DECLARATIVE_SYSTEM.md](./docs/architecture/DECLARATIVE_SYSTEM.md)** - **⭐ START HERE** Complete guide to the JSON-driven architecture
 - Learn how to add pages by editing JSON instead of writing React code
 - Understand the component registry, keyboard shortcuts, and feature toggles
 - Includes migration guide and best practices
 
 ### Atomic Component Architecture (Legacy)
-- **[ATOMIC_README.md](./ATOMIC_README.md)** - Quick start guide
-- **[ATOMIC_REFACTOR_SUMMARY.md](./ATOMIC_REFACTOR_SUMMARY.md)** - Overview of the atomic structure
-- **[ATOMIC_COMPONENTS.md](./ATOMIC_COMPONENTS.md)** - Complete architecture guide
-- **[ATOMIC_USAGE_EXAMPLES.md](./ATOMIC_USAGE_EXAMPLES.md)** - Code examples and patterns
-- **[COMPONENT_MAP.md](./COMPONENT_MAP.md)** - Visual dependency maps
+- **[docs/architecture/atomic/ATOMIC_README.md](./docs/architecture/atomic/ATOMIC_README.md)** - Quick start guide
+- **[docs/architecture/atomic/ATOMIC_REFACTOR_SUMMARY.md](./docs/architecture/atomic/ATOMIC_REFACTOR_SUMMARY.md)** - Overview of the atomic structure
+- **[docs/architecture/atomic/ATOMIC_COMPONENTS.md](./docs/architecture/atomic/ATOMIC_COMPONENTS.md)** - Complete architecture guide
+- **[docs/architecture/atomic/ATOMIC_USAGE_EXAMPLES.md](./docs/architecture/atomic/ATOMIC_USAGE_EXAMPLES.md)** - Code examples and patterns
+- **[docs/architecture/atomic/COMPONENT_MAP.md](./docs/architecture/atomic/COMPONENT_MAP.md)** - Visual dependency maps
 
 ### Component Levels
 - **Atoms** (7) - Basic building blocks: `AppLogo`, `StatusIcon`, `ErrorBadge`, etc.
@@ -246,15 +250,24 @@ CodeForge uses modern patterns for maintainability and extensibility:
 
 ## 📚 Documentation
 
-The application includes comprehensive built-in documentation:
-- **README** - Complete feature overview and getting started guide
-- **Roadmap** - Completed features and planned enhancements
-- **Agents Files** - AI service architecture and integration points
-- **Sass Styles Guide** - Custom Material UI components, utilities, mixins, and animations
-- **CI/CD Guide** - Complete setup guide for all CI/CD platforms
-- **PWA Features** - Progressive Web App capabilities and offline support
+The application includes comprehensive documentation organized in the `/docs` folder:
 
-Access documentation by clicking the **Documentation** tab in the application.
+### Core Documentation
+- **[README](./README.md)** - Complete feature overview and getting started guide (this file)
+- **[docs/PRD.md](./docs/PRD.md)** - Product Requirements Document
+- **[docs/reference/ROADMAP.md](./docs/reference/ROADMAP.md)** - Completed features and planned enhancements
+
+### Technical Guides
+- **[docs/architecture/](./docs/architecture/)** - Architecture and design patterns
+- **[docs/api/](./docs/api/)** - Hook library and API references
+- **[docs/guides/](./docs/guides/)** - User guides (PWA, CI/CD, Error Repair, etc.)
+- **[docs/testing/](./docs/testing/)** - Testing documentation and test execution guides
+- **[docs/deployment/](./docs/deployment/)** - Deployment and operations guides
+
+### Navigation
+- **[docs/README.md](./docs/README.md)** - 📖 Documentation index with quick navigation
+
+Access in-app documentation by clicking the **Documentation** tab in the application.
 
 ### 📱 Progressive Web App Features
 
@@ -338,14 +351,15 @@ The Spark Template files and resources from GitHub are licensed under the terms 
 
 ## 🔗 Resources
 
-- [Full Documentation](./PRD.md) - Complete product requirements and design decisions
-- [Error Repair Guide](./ERROR_REPAIR_GUIDE.md) - Error detection and repair system documentation
-- [CI/CD Guide](./CI_CD_GUIDE.md) - Complete CI/CD setup and configuration guide
-- [Favicon Designer Access](./FAVICON_DESIGNER_ACCESS.md) - How to access and use the Favicon Designer
-- [E2E Test Documentation](./e2e/README.md) - Comprehensive Playwright test suite guide
-- [E2E Test Summary](./E2E_TEST_SUMMARY.md) - Test coverage and validation details
-- [Run Tests Guide](./RUN_TESTS.md) - How to execute smoke tests and full test suite
-- [PWA Guide](./PWA_GUIDE.md) - Progressive Web App features and setup
+- **[Documentation Hub](./docs/README.md)** - 📖 Complete documentation index
+- **[PRD](./docs/PRD.md)** - Product requirements and design decisions
+- **[Error Repair Guide](./docs/guides/ERROR_REPAIR_GUIDE.md)** - Error detection and repair system
+- **[CI/CD Guide](./docs/guides/CI_CD_GUIDE.md)** - Complete CI/CD setup and configuration
+- **[Favicon Designer Access](./docs/guides/FAVICON_DESIGNER_ACCESS.md)** - How to access and use the Favicon Designer
+- **[E2E Test Documentation](./e2e/README.md)** - Comprehensive Playwright test suite guide
+- **[E2E Test Summary](./docs/testing/E2E_TEST_SUMMARY.md)** - Test coverage and validation details
+- **[Run Tests Guide](./docs/testing/RUN_TESTS.md)** - How to execute smoke tests and full test suite
+- **[PWA Guide](./docs/guides/PWA_GUIDE.md)** - Progressive Web App features and setup
 
 ---
 
