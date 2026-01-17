@@ -755,6 +755,6 @@ function useResource<T>(resourceName: string) {
 ## Next Steps
 
 - Explore `/src/hooks/` directory for implementations
-- Check `JSON_ORCHESTRATION_GUIDE.md` for page schemas
+- Check `../architecture/JSON_ORCHESTRATION_GUIDE.md` for page schemas
 - See `REFACTOR_PHASE3.md` for architecture overview
 - Read individual hook files for detailed implementation notes

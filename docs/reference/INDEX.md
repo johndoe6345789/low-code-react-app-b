@@ -12,8 +12,8 @@ Welcome to the Phase 4 refactoring documentation! This index will help you find 
 3. **[PHASE4_IMPLEMENTATION_COMPLETE.md](./PHASE4_IMPLEMENTATION_COMPLETE.md)** - Complete summary
 
 ### Ready to Code?
-1. **[COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md)** - Hook API reference
-2. **[JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md)** - JSON page guide
+1. **[COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md)** - Hook API reference
+2. **[JSON_ORCHESTRATION_COMPLETE.md](../architecture/JSON_ORCHESTRATION_COMPLETE.md)** - JSON page guide
 3. **[MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md)** - Step-by-step migration from old to new
 
 ## 📖 Documentation Files
@@ -177,27 +177,27 @@ src/config/pages/
 ### "How do I...?"
 
 #### Data Management
-- **Store an array?** → `useArray` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#usearray)
-- **Search items?** → `useSearch` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#usesearch)
-- **Sort items?** → `useSort` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#usesort)
-- **Paginate items?** → `usePagination` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#usepagination)
-- **CRUD operations?** → `useCRUD` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#usecrud)
+- **Store an array?** → `useArray` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#usearray)
+- **Search items?** → `useSearch` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#usesearch)
+- **Sort items?** → `useSort` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#usesort)
+- **Paginate items?** → `usePagination` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#usepagination)
+- **CRUD operations?** → `useCRUD` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#usecrud)
 
 #### UI State
 - **Modal/dialog?** → `useDialog` in [QUICK_REFERENCE.md](./QUICK_REFERENCE.md#ui-hooks)
 - **Tabs?** → `useTabs` in [QUICK_REFERENCE.md](./QUICK_REFERENCE.md#ui-hooks)
-- **Multi-select?** → `useSelection` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#useselection)
+- **Multi-select?** → `useSelection` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#useselection)
 - **Copy to clipboard?** → `useClipboard` in [QUICK_REFERENCE.md](./QUICK_REFERENCE.md#ui-hooks)
 
 #### Forms
-- **Full form?** → `useForm` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#useform)
-- **Single field?** → `useFormField` in [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md#useformfield)
+- **Full form?** → `useForm` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#useform)
+- **Single field?** → `useFormField` in [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md#useformfield)
 
 #### JSON Pages
-- **Create a page?** → [JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md#complete-examples)
-- **Define data sources?** → [JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md#2-data-sources)
-- **Add actions?** → [JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md#3-actions)
-- **Build component tree?** → [JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md#4-components)
+- **Create a page?** → [JSON_ORCHESTRATION_COMPLETE.md](../architecture/JSON_ORCHESTRATION_COMPLETE.md#complete-examples)
+- **Define data sources?** → [JSON_ORCHESTRATION_COMPLETE.md](../architecture/JSON_ORCHESTRATION_COMPLETE.md#2-data-sources)
+- **Add actions?** → [JSON_ORCHESTRATION_COMPLETE.md](../architecture/JSON_ORCHESTRATION_COMPLETE.md#3-actions)
+- **Build component tree?** → [JSON_ORCHESTRATION_COMPLETE.md](../architecture/JSON_ORCHESTRATION_COMPLETE.md#4-components)
 
 #### Architecture
 - **System design?** → [ARCHITECTURE_VISUAL_GUIDE.md](./ARCHITECTURE_VISUAL_GUIDE.md)

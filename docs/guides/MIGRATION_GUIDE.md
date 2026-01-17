@@ -468,8 +468,8 @@ export function useMyFeature() {
 
 ### Read First
 1. [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - Fast overview
-2. [COMPLETE_HOOK_LIBRARY.md](./COMPLETE_HOOK_LIBRARY.md) - Hook details
-3. [JSON_ORCHESTRATION_COMPLETE.md](./JSON_ORCHESTRATION_COMPLETE.md) - JSON guide
+2. [COMPLETE_HOOK_LIBRARY.md](../api/COMPLETE_HOOK_LIBRARY.md) - Hook details
+3. [JSON_ORCHESTRATION_COMPLETE.md](../architecture/JSON_ORCHESTRATION_COMPLETE.md) - JSON guide
 
 ### Examples
 - `/src/hooks/data/` - Hook implementations
