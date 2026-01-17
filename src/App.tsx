@@ -18,6 +18,7 @@ import { useFileOperations } from '@/hooks/use-file-operations'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { useSeedData } from '@/hooks/data/use-seed-data'
 import { useRouterNavigation } from '@/hooks/use-router-navigation'
+import { useComponentTreeLoader } from '@/hooks/use-component-tree-loader'
 console.log('[APP_ROUTER] ✅ Custom hooks imported')
 
 import { getPageShortcuts } from '@/config/page-loader'
@@ -311,6 +312,7 @@ function App() {
   
   console.log('[APP_ROUTER] 🌱 Initializing seed data hook')
   const { loadSeedData } = useSeedData()
+  const { loadComponentTrees } = useComponentTreeLoader()
   const projectState = useProjectState()
   const { featureToggles, files, setFiles, ...restState } = projectState
   console.log('[APP_ROUTER] ✅ Hooks initialized')
@@ -335,6 +337,11 @@ function App() {
     loadSeedData()
       .then(() => {
         console.log('[APP_ROUTER] ✅ Seed data loaded successfully')
+        console.log('[APP_ROUTER] 📦 Loading component trees from JSON')
+        return loadComponentTrees()
+      })
+      .then(() => {
+        console.log('[APP_ROUTER] ✅ Component trees loaded successfully')
       })
       .catch(err => {
         console.error('[APP_ROUTER] ❌ Seed data loading failed:', err)
@@ -354,7 +361,7 @@ function App() {
       console.log('[APP_ROUTER] 🧹 Cleaning up initialization effect')
       clearTimeout(timer)
     }
-  }, [loadSeedData])
+  }, [loadSeedData, loadComponentTrees])
 
   const stateContext = {
     files,
