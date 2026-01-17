@@ -1,75 +1,55 @@
 import { useState, useCallback } from 'react'
+import { useKV } from '@github/spark/hooks'
 
-export interface Entity {
-  id: string
-  [key: string]: any
+export interface UseCRUDOptions<T> {
+  key: string
+  defaultValue?: T[]
+  persist?: boolean
+  getId?: (item: T) => string | number
 }
 
-export function useCRUD<T extends Entity>(
-  items: T[],
-  setItems: (items: T[] | ((prev: T[]) => T[])) => void
-) {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+export function useCRUD<T>(options: UseCRUDOptions<T>) {
+  const { key, defaultValue = [], persist = true, getId = (item: any) => item.id } = options
 
-  const create = useCallback(
-    (item: T) => {
-      setItems((current) => [...(current || []), item])
-      return item.id
-    },
-    [setItems]
-  )
+  const [persistedItems, setPersistedItems] = useKV<T[]>(key, defaultValue)
+  const [localItems, setLocalItems] = useState<T[]>(defaultValue)
 
-  const read = useCallback(
-    (id: string) => {
-      return items?.find((item) => item.id === id)
-    },
-    [items]
-  )
+  const items = persist ? persistedItems : localItems
+  const setItems = persist ? setPersistedItems : setLocalItems
 
-  const update = useCallback(
-    (id: string, updates: Partial<T>) => {
-      setItems((current) =>
-        (current || []).map((item) =>
-          item.id === id ? { ...item, ...updates } : item
-        )
+  const create = useCallback((item: T) => {
+    setItems((current: T[]) => [...current, item])
+  }, [setItems])
+
+  const read = useCallback((id: string | number): T | undefined => {
+    return items.find(item => getId(item) === id)
+  }, [items, getId])
+
+  const update = useCallback((id: string | number, updates: Partial<T>) => {
+    setItems((current: T[]) =>
+      current.map(item =>
+        getId(item) === id ? { ...item, ...updates } : item
       )
-    },
-    [setItems]
-  )
+    )
+  }, [setItems, getId])
 
-  const remove = useCallback(
-    (id: string) => {
-      setItems((current) => (current || []).filter((item) => item.id !== id))
-      if (selectedId === id) {
-        setSelectedId(null)
-      }
-    },
-    [setItems, selectedId]
-  )
+  const remove = useCallback((id: string | number) => {
+    setItems((current: T[]) =>
+      current.filter(item => getId(item) !== id)
+    )
+  }, [setItems, getId])
 
-  const duplicate = useCallback(
-    (id: string, newId: string) => {
-      const item = read(id)
-      if (!item) return null
-
-      const duplicated = { ...item, id: newId }
-      create(duplicated)
-      return newId
-    },
-    [read, create]
-  )
-
-  const selected = selectedId ? read(selectedId) : null
+  const clear = useCallback(() => {
+    setItems([])
+  }, [setItems])
 
   return {
-    items: items || [],
+    items,
     create,
     read,
     update,
     remove,
-    duplicate,
-    selectedId,
-    setSelectedId,
-    selected,
+    clear,
+    setItems,
   }
 }

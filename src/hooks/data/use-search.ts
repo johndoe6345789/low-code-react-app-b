@@ -1,42 +1,38 @@
-import { useState, useEffect } from 'react'
-import { useDebounce } from './use-debounce'
+import { useState, useMemo } from 'react'
 
-export function useSearch<T>(
-  items: T[],
-  searchKeys: (keyof T)[],
-  debounceMs: number = 300
-) {
+export interface UseSearchOptions<T> {
+  items: T[]
+  searchFields: (keyof T)[]
+  caseSensitive?: boolean
+}
+
+export function useSearch<T>(options: UseSearchOptions<T>) {
+  const { items, searchFields, caseSensitive = false } = options
   const [query, setQuery] = useState('')
-  const debouncedQuery = useDebounce(query, debounceMs)
-  const [results, setResults] = useState<T[]>(items)
 
-  useEffect(() => {
-    if (!debouncedQuery.trim()) {
-      setResults(items)
-      return
-    }
+  const filtered = useMemo(() => {
+    if (!query.trim()) return items
 
-    const lowerQuery = debouncedQuery.toLowerCase()
-    const filtered = items.filter((item) =>
-      searchKeys.some((key) => {
-        const value = item[key]
-        if (typeof value === 'string') {
-          return value.toLowerCase().includes(lowerQuery)
-        }
-        if (typeof value === 'number') {
-          return value.toString().includes(lowerQuery)
-        }
-        return false
+    const searchTerm = caseSensitive ? query : query.toLowerCase()
+
+    return items.filter(item => {
+      return searchFields.some(field => {
+        const value = item[field]
+        if (value == null) return false
+        
+        const stringValue = String(value)
+        const comparable = caseSensitive ? stringValue : stringValue.toLowerCase()
+        
+        return comparable.includes(searchTerm)
       })
-    )
-
-    setResults(filtered)
-  }, [debouncedQuery, items, searchKeys])
+    })
+  }, [items, query, searchFields, caseSensitive])
 
   return {
     query,
     setQuery,
-    results,
-    isSearching: query.length > 0,
+    filtered,
+    hasQuery: query.trim().length > 0,
+    resultCount: filtered.length,
   }
 }

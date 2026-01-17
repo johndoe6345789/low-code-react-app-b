@@ -1,5 +1,5 @@
+export { JSONUIRenderer, JSONFormRenderer } from './renderer'
+export { getUIComponent, uiComponentRegistry, registerComponent } from './component-registry'
 export * from './schema'
-export * from './renderer'
-export * from './hooks'
-export * from './valida
 export * from './utils'
+export * from './validator'
