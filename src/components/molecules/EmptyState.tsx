@@ -1,4 +1,4 @@
-import { EmptyStateIcon } from '@/components/atoms'
+import { EmptyStateIcon, Stack, Heading, Text } from '@/components/atoms'
 
 interface EmptyStateProps {
   icon: React.ReactNode
@@ -9,15 +9,21 @@ interface EmptyStateProps {
 
 export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 py-12 px-4 text-center">
+    <Stack 
+      direction="vertical" 
+      align="center" 
+      justify="center" 
+      spacing="md" 
+      className="py-12 px-4 text-center"
+    >
       <EmptyStateIcon icon={icon} />
-      <div className="space-y-2">
-        <h3 className="text-lg font-semibold">{title}</h3>
+      <Stack direction="vertical" spacing="sm">
+        <Heading level={3} className="text-lg">{title}</Heading>
         {description && (
-          <p className="text-sm text-muted-foreground max-w-md">{description}</p>
+          <Text variant="muted" className="max-w-md">{description}</Text>
         )}
-      </div>
+      </Stack>
       {action && <div className="mt-2">{action}</div>}
-    </div>
+    </Stack>
   )
 }

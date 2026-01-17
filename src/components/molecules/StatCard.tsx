@@ -1,5 +1,4 @@
-import { Card } from '@/components/ui/card'
-import { IconWrapper } from '@/components/atoms'
+import { Card, IconWrapper, Stack, Text } from '@/components/atoms'
 
 interface StatCardProps {
   icon: React.ReactNode
@@ -17,17 +16,17 @@ export function StatCard({ icon, label, value, variant = 'default' }: StatCardPr
 
   return (
     <Card className={`p-4 ${variantClasses[variant]}`}>
-      <div className="flex items-center gap-3">
+      <Stack direction="horizontal" align="center" spacing="md">
         <IconWrapper 
           icon={icon} 
           size="lg" 
           variant={variant === 'default' ? 'muted' : variant}
         />
-        <div className="flex-1">
-          <p className="text-xs text-muted-foreground">{label}</p>
-          <p className="text-2xl font-bold">{value}</p>
-        </div>
-      </div>
+        <Stack direction="vertical" spacing="xs" className="flex-1">
+          <Text variant="caption">{label}</Text>
+          <Text className="text-2xl font-bold">{value}</Text>
+        </Stack>
+      </Stack>
     </Card>
   )
 }

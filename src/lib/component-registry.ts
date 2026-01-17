@@ -156,6 +156,11 @@ export const ComponentRegistry = {
     () => import('@/components/DockerBuildDebugger').then(m => ({ default: m.DockerBuildDebugger })),
     'DockerBuildDebugger'
   ),
+  
+  AtomicLibraryShowcase: lazyWithPreload(
+    () => import('@/components/AtomicLibraryShowcase').then(m => ({ default: m.AtomicLibraryShowcase })),
+    'AtomicLibraryShowcase'
+  ),
 } as const
 
 export const DialogRegistry = {

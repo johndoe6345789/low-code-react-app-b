@@ -365,6 +365,16 @@
       "toggleKey": "dockerDebugger",
       "order": 25,
       "props": {}
+    },
+    {
+      "id": "atomic-library",
+      "title": "Atomic Components",
+      "icon": "Atom",
+      "component": "AtomicLibraryShowcase",
+      "enabled": true,
+      "shortcut": "ctrl+shift+a",
+      "order": 26,
+      "props": {}
     }
   ]
 }

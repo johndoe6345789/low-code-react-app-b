@@ -17,6 +17,7 @@ import {
   Faders,
   Lightbulb,
   PencilRuler,
+  Atom,
 } from '@phosphor-icons/react'
 import { FeatureToggles } from '@/types/project'
 
@@ -151,6 +152,11 @@ export const tabInfo: Record<string, TabInfo> = {
     title: 'JSON UI Showcase',
     icon: <Code size={24} weight="duotone" />,
     description: 'JSON-driven UI examples',
+  },
+  'atomic-library': {
+    title: 'Atomic Components',
+    icon: <Atom size={24} weight="duotone" />,
+    description: 'Comprehensive atomic component library',
   },
 }
 

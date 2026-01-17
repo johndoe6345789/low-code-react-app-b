@@ -1,13 +1,13 @@
 import { cn } from '@/lib/utils'
 
-interface PageHeaderProps {
+interface BasicPageHeaderProps {
   title: string
   description?: string
   actions?: React.ReactNode
   className?: string
 }
 
-export function PageHeader({ title, description, actions, className }: PageHeaderProps) {
+export function BasicPageHeader({ title, description, actions, className }: BasicPageHeaderProps) {
   return (
     <div className={cn('flex items-start justify-between mb-6', className)}>
       <div className="space-y-1">
