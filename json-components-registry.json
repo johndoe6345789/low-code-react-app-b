@@ -1,7 +1,8 @@
 {
   "$schema": "./schemas/json-components-registry-schema.json",
-  "version": "1.0.0",
-  "description": "Registry of all components that can be rendered from JSON schemas",
+  "version": "2.0.0",
+  "description": "Registry of all components in the application",
+  "lastUpdated": "2026-01-17T22:10:22.582Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -13,52 +14,22 @@
   },
   "components": [
     {
-      "type": "div",
-      "name": "Container (div)",
+      "type": "ActionCard",
+      "name": "ActionCard",
       "category": "layout",
       "canHaveChildren": true,
-      "description": "Generic container element",
-      "status": "supported"
+      "description": "ActionCard component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "section",
-      "name": "Section",
+      "type": "AlertDialog",
+      "name": "AlertDialog",
       "category": "layout",
       "canHaveChildren": true,
-      "description": "Semantic section element",
-      "status": "supported"
-    },
-    {
-      "type": "article",
-      "name": "Article",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Semantic article element",
-      "status": "supported"
-    },
-    {
-      "type": "header",
-      "name": "Header",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Semantic header element",
-      "status": "supported"
-    },
-    {
-      "type": "footer",
-      "name": "Footer",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Semantic footer element",
-      "status": "supported"
-    },
-    {
-      "type": "main",
-      "name": "Main",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Semantic main content element",
-      "status": "supported"
+      "description": "AlertDialog component",
+      "status": "supported",
+      "source": "ui"
     },
     {
       "type": "Card",
@@ -67,31 +38,45 @@
       "canHaveChildren": true,
       "description": "Container card with optional header, content, and footer",
       "status": "supported",
-      "subComponents": ["CardHeader", "CardTitle", "CardDescription", "CardContent", "CardFooter"]
+      "source": "atoms"
     },
     {
-      "type": "Grid",
-      "name": "Grid",
+      "type": "Card",
+      "name": "Card",
       "category": "layout",
       "canHaveChildren": true,
-      "description": "Responsive grid layout",
-      "status": "supported"
+      "description": "Container card with optional header, content, and footer",
+      "status": "supported",
+      "source": "ui"
     },
     {
-      "type": "Flex",
-      "name": "Flex",
+      "type": "CodeExplanationDialog",
+      "name": "CodeExplanationDialog",
       "category": "layout",
       "canHaveChildren": true,
-      "description": "Flexible box layout container",
-      "status": "supported"
+      "description": "CodeExplanationDialog component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
     },
     {
-      "type": "Stack",
-      "name": "Stack",
+      "type": "CompletionCard",
+      "name": "CompletionCard",
       "category": "layout",
       "canHaveChildren": true,
-      "description": "Vertical or horizontal stack layout",
-      "status": "supported"
+      "description": "CompletionCard component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ComponentBindingDialog",
+      "name": "ComponentBindingDialog",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "ComponentBindingDialog component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
     },
     {
       "type": "Container",
@@ -99,7 +84,174 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "Centered container with max-width",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "DataSourceCard",
+      "name": "DataSourceCard",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "DataSourceCard component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "DataSourceEditorDialog",
+      "name": "DataSourceEditorDialog",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "DataSourceEditorDialog component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Dialog",
+      "name": "Dialog",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Modal dialog overlay",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Drawer",
+      "name": "Drawer",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Sliding panel overlay",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Drawer",
+      "name": "Drawer",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Sliding panel overlay",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Flex",
+      "name": "Flex",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Flexible box layout container",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "GlowCard",
+      "name": "GlowCard",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "GlowCard component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Grid",
+      "name": "Grid",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Responsive grid layout",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "HoverCard",
+      "name": "HoverCard",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Card shown on hover",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "HoverCard",
+      "name": "HoverCard",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Card shown on hover",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Modal",
+      "name": "Modal",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Modal dialog overlay",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ResponsiveGrid",
+      "name": "ResponsiveGrid",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "ResponsiveGrid component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Section",
+      "name": "Section",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Section component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Stack",
+      "name": "Stack",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Vertical or horizontal stack layout",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "TipsCard",
+      "name": "TipsCard",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "TipsCard component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "TreeCard",
+      "name": "TreeCard",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "TreeCard component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "TreeFormDialog",
+      "name": "TreeFormDialog",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "TreeFormDialog component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ActionButton",
+      "name": "ActionButton",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "Button with action icon",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "Button",
@@ -107,31 +259,26 @@
       "category": "input",
       "canHaveChildren": true,
       "description": "Interactive button element",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Input",
-      "name": "Input",
+      "type": "Button",
+      "name": "Button",
       "category": "input",
-      "canHaveChildren": false,
-      "description": "Text input field",
-      "status": "supported"
+      "canHaveChildren": true,
+      "description": "Interactive button element",
+      "status": "supported",
+      "source": "ui"
     },
     {
-      "type": "TextArea",
-      "name": "TextArea",
+      "type": "ButtonGroup",
+      "name": "ButtonGroup",
       "category": "input",
-      "canHaveChildren": false,
-      "description": "Multi-line text input",
-      "status": "supported"
-    },
-    {
-      "type": "Select",
-      "name": "Select",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Dropdown select control",
-      "status": "supported"
+      "canHaveChildren": true,
+      "description": "Group of related buttons",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "Checkbox",
@@ -139,39 +286,35 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Checkbox toggle control",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Radio",
-      "name": "Radio",
+      "type": "Checkbox",
+      "name": "Checkbox",
       "category": "input",
       "canHaveChildren": false,
-      "description": "Radio button selection",
-      "status": "supported"
+      "description": "Checkbox toggle control",
+      "status": "supported",
+      "source": "ui"
     },
     {
-      "type": "Switch",
-      "name": "Switch",
+      "type": "ConfirmButton",
+      "name": "ConfirmButton",
       "category": "input",
-      "canHaveChildren": false,
-      "description": "Toggle switch control",
-      "status": "supported"
+      "canHaveChildren": true,
+      "description": "ConfirmButton component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Slider",
-      "name": "Slider",
+      "type": "CopyButton",
+      "name": "CopyButton",
       "category": "input",
-      "canHaveChildren": false,
-      "description": "Numeric range slider",
-      "status": "supported"
-    },
-    {
-      "type": "NumberInput",
-      "name": "NumberInput",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Numeric input with increment/decrement",
-      "status": "supported"
+      "canHaveChildren": true,
+      "description": "CopyButton component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "DatePicker",
@@ -179,7 +322,8 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Date selection input",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
     },
     {
       "type": "FileUpload",
@@ -187,63 +331,234 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "File upload control",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
     },
     {
-      "type": "Text",
-      "name": "Text",
-      "category": "display",
+      "type": "FilterInput",
+      "name": "FilterInput",
+      "category": "input",
       "canHaveChildren": true,
-      "description": "Text content with typography variants",
-      "status": "supported"
+      "description": "FilterInput component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Heading",
-      "name": "Heading",
-      "category": "display",
+      "type": "Form",
+      "name": "Form",
+      "category": "input",
       "canHaveChildren": true,
-      "description": "Heading text with level (h1-h6)",
-      "status": "supported"
+      "description": "Form container component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Label",
-      "name": "Label",
-      "category": "display",
+      "type": "Form",
+      "name": "Form",
+      "category": "input",
       "canHaveChildren": true,
-      "description": "Form label element",
-      "status": "supported"
+      "description": "Form container component",
+      "status": "supported",
+      "source": "ui"
     },
     {
-      "type": "Badge",
-      "name": "Badge",
-      "category": "display",
+      "type": "IconButton",
+      "name": "IconButton",
+      "category": "input",
       "canHaveChildren": true,
-      "description": "Small status or count indicator",
-      "status": "supported"
+      "description": "Button with icon only",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Tag",
-      "name": "Tag",
-      "category": "display",
-      "canHaveChildren": true,
-      "description": "Removable tag or chip",
-      "status": "supported"
-    },
-    {
-      "type": "Code",
-      "name": "Code",
-      "category": "display",
-      "canHaveChildren": true,
-      "description": "Inline or block code display",
-      "status": "supported"
-    },
-    {
-      "type": "Image",
-      "name": "Image",
-      "category": "display",
+      "type": "Input",
+      "name": "Input",
+      "category": "input",
       "canHaveChildren": false,
-      "description": "Image element with loading states",
-      "status": "supported"
+      "description": "Text input field",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Input",
+      "name": "Input",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Text input field",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "InputOtp",
+      "name": "InputOtp",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "InputOtp component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "NumberInput",
+      "name": "NumberInput",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Numeric input with increment/decrement",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "PasswordInput",
+      "name": "PasswordInput",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "Password input with visibility toggle",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "QuickActionButton",
+      "name": "QuickActionButton",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "QuickActionButton component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Radio",
+      "name": "Radio",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Radio button selection",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "RadioGroup",
+      "name": "RadioGroup",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "RadioGroup component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "RangeSlider",
+      "name": "RangeSlider",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "RangeSlider component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Select",
+      "name": "Select",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Dropdown select control",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Select",
+      "name": "Select",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Dropdown select control",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Slider",
+      "name": "Slider",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Numeric range slider",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Slider",
+      "name": "Slider",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Numeric range slider",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Switch",
+      "name": "Switch",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Toggle switch control",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Switch",
+      "name": "Switch",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Toggle switch control",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "TextArea",
+      "name": "TextArea",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Multi-line text input",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Toggle",
+      "name": "Toggle",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "Toggle button control",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Toggle",
+      "name": "Toggle",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "Toggle button control",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "ToggleGroup",
+      "name": "ToggleGroup",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "ToggleGroup component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "ToolbarButton",
+      "name": "ToolbarButton",
+      "category": "input",
+      "canHaveChildren": true,
+      "description": "ToolbarButton component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ActionIcon",
+      "name": "ActionIcon",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "ActionIcon component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "Avatar",
@@ -251,47 +566,44 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "User avatar image",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Icon",
-      "name": "Icon",
+      "type": "Avatar",
+      "name": "Avatar",
       "category": "display",
       "canHaveChildren": false,
-      "description": "Icon from icon library",
-      "status": "planned"
+      "description": "User avatar image",
+      "status": "supported",
+      "source": "ui"
     },
     {
-      "type": "Separator",
-      "name": "Separator",
+      "type": "AvatarGroup",
+      "name": "AvatarGroup",
       "category": "display",
-      "canHaveChildren": false,
-      "description": "Visual divider line",
-      "status": "supported"
+      "canHaveChildren": true,
+      "description": "Group of user avatars",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Divider",
-      "name": "Divider",
+      "type": "Badge",
+      "name": "Badge",
       "category": "display",
-      "canHaveChildren": false,
-      "description": "Visual section divider",
-      "status": "planned"
+      "canHaveChildren": true,
+      "description": "Small status or count indicator",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Progress",
-      "name": "Progress",
+      "type": "Badge",
+      "name": "Badge",
       "category": "display",
-      "canHaveChildren": false,
-      "description": "Progress bar indicator",
-      "status": "supported"
-    },
-    {
-      "type": "ProgressBar",
-      "name": "ProgressBar",
-      "category": "display",
-      "canHaveChildren": false,
-      "description": "Linear progress bar",
-      "status": "planned"
+      "canHaveChildren": true,
+      "description": "Small status or count indicator",
+      "status": "supported",
+      "source": "ui"
     },
     {
       "type": "CircularProgress",
@@ -299,15 +611,144 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Circular progress indicator",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
     },
     {
-      "type": "Spinner",
-      "name": "Spinner",
+      "type": "Code",
+      "name": "Code",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Inline or block code display",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Divider",
+      "name": "Divider",
       "category": "display",
       "canHaveChildren": false,
-      "description": "Loading spinner",
-      "status": "supported"
+      "description": "Visual section divider",
+      "status": "planned",
+      "source": "atoms"
+    },
+    {
+      "type": "FileIcon",
+      "name": "FileIcon",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "FileIcon component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Heading",
+      "name": "Heading",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Heading text with level (h1-h6)",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "HelperText",
+      "name": "HelperText",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "HelperText component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "IconText",
+      "name": "IconText",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "IconText component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "IconWrapper",
+      "name": "IconWrapper",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "IconWrapper component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Image",
+      "name": "Image",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Image element with loading states",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Label",
+      "name": "Label",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Form label element",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Label",
+      "name": "Label",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Form label element",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Progress",
+      "name": "Progress",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Progress bar indicator",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "ProgressBar",
+      "name": "ProgressBar",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Linear progress bar",
+      "status": "planned",
+      "source": "atoms"
+    },
+    {
+      "type": "SchemaCodeViewer",
+      "name": "SchemaCodeViewer",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "SchemaCodeViewer organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Separator",
+      "name": "Separator",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Visual divider line",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Separator",
+      "name": "Separator",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Visual divider line",
+      "status": "supported",
+      "source": "ui"
     },
     {
       "type": "Skeleton",
@@ -315,15 +756,80 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Loading skeleton placeholder",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Link",
-      "name": "Link",
-      "category": "navigation",
+      "type": "Skeleton",
+      "name": "Skeleton",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Loading skeleton placeholder",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Spinner",
+      "name": "Spinner",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Loading spinner",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Tag",
+      "name": "Tag",
+      "category": "display",
       "canHaveChildren": true,
-      "description": "Hyperlink element",
-      "status": "supported"
+      "description": "Removable tag or chip",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Text",
+      "name": "Text",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Text content with typography variants",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Textarea",
+      "name": "Textarea",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Textarea component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "TextGradient",
+      "name": "TextGradient",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "TextGradient component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "TextHighlight",
+      "name": "TextHighlight",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "TextHighlight component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "TreeIcon",
+      "name": "TreeIcon",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "TreeIcon component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "Breadcrumb",
@@ -331,7 +837,139 @@
       "category": "navigation",
       "canHaveChildren": false,
       "description": "Navigation breadcrumb trail",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
+    },
+    {
+      "type": "Breadcrumb",
+      "name": "Breadcrumb",
+      "category": "navigation",
+      "canHaveChildren": false,
+      "description": "Navigation breadcrumb trail",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Breadcrumb",
+      "name": "Breadcrumb",
+      "category": "navigation",
+      "canHaveChildren": false,
+      "description": "Navigation breadcrumb trail",
+      "status": "planned",
+      "source": "ui"
+    },
+    {
+      "type": "ContextMenu",
+      "name": "ContextMenu",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "Right-click context menu",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ContextMenu",
+      "name": "ContextMenu",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "Right-click context menu",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "DropdownMenu",
+      "name": "DropdownMenu",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "DropdownMenu component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "FileTabs",
+      "name": "FileTabs",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "FileTabs component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Link",
+      "name": "Link",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "Hyperlink element",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Menu",
+      "name": "Menu",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "Menu component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Menubar",
+      "name": "Menubar",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "Menubar component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "NavigationGroupHeader",
+      "name": "NavigationGroupHeader",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "NavigationGroupHeader component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "NavigationItem",
+      "name": "NavigationItem",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "NavigationItem component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "NavigationMenu",
+      "name": "NavigationMenu",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "NavigationMenu component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "NavigationMenu",
+      "name": "NavigationMenu",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "NavigationMenu component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "TabIcon",
+      "name": "TabIcon",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "TabIcon component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "Tabs",
@@ -340,7 +978,16 @@
       "canHaveChildren": true,
       "description": "Tabbed interface container",
       "status": "supported",
-      "subComponents": ["TabsList", "TabsTrigger", "TabsContent"]
+      "source": "atoms"
+    },
+    {
+      "type": "Tabs",
+      "name": "Tabs",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "Tabbed interface container",
+      "status": "supported",
+      "source": "ui"
     },
     {
       "type": "Alert",
@@ -348,39 +995,64 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Alert notification message",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "InfoBox",
-      "name": "InfoBox",
+      "type": "Alert",
+      "name": "Alert",
       "category": "feedback",
       "canHaveChildren": true,
-      "description": "Information box with icon",
-      "status": "supported"
+      "description": "Alert notification message",
+      "status": "supported",
+      "source": "ui"
     },
     {
-      "type": "Notification",
-      "name": "Notification",
+      "type": "CountBadge",
+      "name": "CountBadge",
       "category": "feedback",
       "canHaveChildren": true,
-      "description": "Toast notification",
-      "status": "planned"
+      "description": "CountBadge component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "StatusBadge",
-      "name": "StatusBadge",
+      "type": "DataSourceBadge",
+      "name": "DataSourceBadge",
       "category": "feedback",
-      "canHaveChildren": false,
-      "description": "Status indicator badge",
-      "status": "supported"
+      "canHaveChildren": true,
+      "description": "DataSourceBadge component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "StatusIcon",
-      "name": "StatusIcon",
+      "type": "EmptyCanvasState",
+      "name": "EmptyCanvasState",
       "category": "feedback",
-      "canHaveChildren": false,
-      "description": "Status indicator icon",
-      "status": "planned"
+      "canHaveChildren": true,
+      "description": "EmptyCanvasState organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "EmptyEditorState",
+      "name": "EmptyEditorState",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "EmptyEditorState component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "EmptyMessage",
+      "name": "EmptyMessage",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "EmptyMessage component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "EmptyState",
@@ -388,7 +1060,27 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Empty state placeholder",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "EmptyState",
+      "name": "EmptyState",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "Empty state placeholder",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "EmptyStateIcon",
+      "name": "EmptyStateIcon",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "EmptyStateIcon component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "ErrorBadge",
@@ -396,15 +1088,130 @@
       "category": "feedback",
       "canHaveChildren": false,
       "description": "Error state badge",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
     },
     {
-      "type": "List",
-      "name": "List",
-      "category": "data",
+      "type": "GitHubBuildStatus",
+      "name": "GitHubBuildStatus",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "GitHubBuildStatus component",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": false
+    },
+    {
+      "type": "InfoBox",
+      "name": "InfoBox",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "Information box with icon",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "LabelWithBadge",
+      "name": "LabelWithBadge",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "LabelWithBadge component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "LoadingFallback",
+      "name": "LoadingFallback",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "LoadingFallback component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "LoadingSpinner",
+      "name": "LoadingSpinner",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "LoadingSpinner component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "LoadingState",
+      "name": "LoadingState",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "LoadingState component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "LoadingState",
+      "name": "LoadingState",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "LoadingState component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Notification",
+      "name": "Notification",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "Toast notification",
+      "status": "planned",
+      "source": "atoms"
+    },
+    {
+      "type": "SchemaEditorStatusBar",
+      "name": "SchemaEditorStatusBar",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "SchemaEditorStatusBar organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "SeedDataStatus",
+      "name": "SeedDataStatus",
+      "category": "feedback",
+      "canHaveChildren": true,
+      "description": "SeedDataStatus component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "StatusBadge",
+      "name": "StatusBadge",
+      "category": "feedback",
       "canHaveChildren": false,
-      "description": "Generic list renderer with custom items",
-      "status": "supported"
+      "description": "Status indicator badge",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "StatusIcon",
+      "name": "StatusIcon",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "Status indicator icon",
+      "status": "planned",
+      "source": "atoms"
+    },
+    {
+      "type": "Chart",
+      "name": "Chart",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "Chart component",
+      "status": "supported",
+      "source": "ui"
     },
     {
       "type": "DataList",
@@ -412,15 +1219,18 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Styled data list",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
     },
     {
-      "type": "Table",
-      "name": "Table",
+      "type": "DataSourceManager",
+      "name": "DataSourceManager",
       "category": "data",
-      "canHaveChildren": false,
-      "description": "Data table",
-      "status": "supported"
+      "canHaveChildren": true,
+      "description": "DataSourceManager organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
     },
     {
       "type": "DataTable",
@@ -428,7 +1238,8 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Advanced data table with sorting and filtering",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
     },
     {
       "type": "KeyValue",
@@ -436,23 +1247,56 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Key-value pair display",
-      "status": "supported"
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "Timeline",
-      "name": "Timeline",
+      "type": "LazyBarChart",
+      "name": "LazyBarChart",
       "category": "data",
-      "canHaveChildren": false,
-      "description": "Timeline visualization",
-      "status": "planned"
+      "canHaveChildren": true,
+      "description": "LazyBarChart component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
     },
     {
-      "type": "StatCard",
-      "name": "StatCard",
+      "type": "LazyD3BarChart",
+      "name": "LazyD3BarChart",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "LazyD3BarChart component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "LazyLineChart",
+      "name": "LazyLineChart",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "LazyLineChart component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "List",
+      "name": "List",
       "category": "data",
       "canHaveChildren": false,
-      "description": "Statistic card display",
-      "status": "supported"
+      "description": "Generic list renderer with custom items",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ListItem",
+      "name": "ListItem",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "ListItem component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
       "type": "MetricCard",
@@ -460,23 +1304,111 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Metric display card",
-      "status": "planned"
+      "status": "planned",
+      "source": "atoms"
     },
     {
-      "type": "DataCard",
-      "name": "DataCard",
-      "category": "custom",
-      "canHaveChildren": false,
-      "description": "Custom data display card",
-      "status": "supported"
+      "type": "MetricDisplay",
+      "name": "MetricDisplay",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "MetricDisplay component",
+      "status": "supported",
+      "source": "atoms"
     },
     {
-      "type": "SearchInput",
-      "name": "SearchInput",
-      "category": "custom",
+      "type": "SeedDataManager",
+      "name": "SeedDataManager",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "SeedDataManager component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "StatCard",
+      "name": "StatCard",
+      "category": "data",
       "canHaveChildren": false,
-      "description": "Search input with icon",
-      "status": "supported"
+      "description": "Statistic card display",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "StatCard",
+      "name": "StatCard",
+      "category": "data",
+      "canHaveChildren": false,
+      "description": "Statistic card display",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Table",
+      "name": "Table",
+      "category": "data",
+      "canHaveChildren": false,
+      "description": "Data table",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Table",
+      "name": "Table",
+      "category": "data",
+      "canHaveChildren": false,
+      "description": "Data table",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Timeline",
+      "name": "Timeline",
+      "category": "data",
+      "canHaveChildren": false,
+      "description": "Timeline visualization",
+      "status": "planned",
+      "source": "atoms"
+    },
+    {
+      "type": "TreeListHeader",
+      "name": "TreeListHeader",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "TreeListHeader component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "TreeListPanel",
+      "name": "TreeListPanel",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "TreeListPanel organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Accordion",
+      "name": "Accordion",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Collapsible content sections",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Accordion",
+      "name": "Accordion",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Collapsible content sections",
+      "status": "supported",
+      "source": "ui"
     },
     {
       "type": "ActionBar",
@@ -484,29 +1416,651 @@
       "category": "custom",
       "canHaveChildren": false,
       "description": "Action button toolbar",
-      "status": "supported"
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
     },
     {
-      "type": "Dialog",
-      "name": "Dialog",
-      "category": "layout",
+      "type": "AppBranding",
+      "name": "AppBranding",
+      "category": "custom",
       "canHaveChildren": true,
-      "description": "Modal dialog overlay",
-      "status": "supported"
+      "description": "AppBranding component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "AppHeader",
+      "name": "AppHeader",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "AppHeader organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "AppLogo",
+      "name": "AppLogo",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "AppLogo component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "AspectRatio",
+      "name": "AspectRatio",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "AspectRatio component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "BindingEditor",
+      "name": "BindingEditor",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "BindingEditor component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "BindingIndicator",
+      "name": "BindingIndicator",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "BindingIndicator component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Calendar",
+      "name": "Calendar",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Calendar date selector",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Calendar",
+      "name": "Calendar",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Calendar date selector",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "CanvasRenderer",
+      "name": "CanvasRenderer",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "CanvasRenderer component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Carousel",
+      "name": "Carousel",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Carousel component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Chip",
+      "name": "Chip",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Compact element for tags or selections",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Collapsible",
+      "name": "Collapsible",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Collapsible component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "ColorSwatch",
+      "name": "ColorSwatch",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "ColorSwatch component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Command",
+      "name": "Command",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Command component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "CommandPalette",
+      "name": "CommandPalette",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Command search and execution",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ComponentPalette",
+      "name": "ComponentPalette",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "ComponentPalette component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ComponentPaletteItem",
+      "name": "ComponentPaletteItem",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "ComponentPaletteItem component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ComponentTree",
+      "name": "ComponentTree",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "ComponentTree component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ComponentTreeNode",
+      "name": "ComponentTreeNode",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "ComponentTreeNode component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "DataCard",
+      "name": "DataCard",
+      "category": "custom",
+      "canHaveChildren": false,
+      "description": "Custom data display card",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "DetailRow",
+      "name": "DetailRow",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "DetailRow component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Dot",
+      "name": "Dot",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Dot component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "EditorActions",
+      "name": "EditorActions",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "EditorActions component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "EditorToolbar",
+      "name": "EditorToolbar",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "EditorToolbar component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "InfoPanel",
+      "name": "InfoPanel",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "InfoPanel component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "JSONUIShowcase",
+      "name": "JSONUIShowcase",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "JSONUIShowcase organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Kbd",
+      "name": "Kbd",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Keyboard key display",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "LazyInlineMonacoEditor",
+      "name": "LazyInlineMonacoEditor",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "LazyInlineMonacoEditor component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "LazyMonacoEditor",
+      "name": "LazyMonacoEditor",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "LazyMonacoEditor component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "LiveIndicator",
+      "name": "LiveIndicator",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "LiveIndicator component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "MonacoEditorPanel",
+      "name": "MonacoEditorPanel",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "MonacoEditorPanel component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PageHeader",
+      "name": "PageHeader",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "PageHeader component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "PageHeader",
+      "name": "PageHeader",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "PageHeader component",
+      "status": "json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PageHeaderContent",
+      "name": "PageHeaderContent",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "PageHeaderContent component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Pagination",
+      "name": "Pagination",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Pagination component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "PanelHeader",
+      "name": "PanelHeader",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "PanelHeader component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Popover",
+      "name": "Popover",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Popover overlay content",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Popover",
+      "name": "Popover",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Popover overlay content",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "PropertyEditor",
+      "name": "PropertyEditor",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "PropertyEditor component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PropertyEditorField",
+      "name": "PropertyEditorField",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "PropertyEditorField component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Pulse",
+      "name": "Pulse",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Pulse component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Rating",
+      "name": "Rating",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Star rating component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Resizable",
+      "name": "Resizable",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Resizable component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "SaveIndicator",
+      "name": "SaveIndicator",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "SaveIndicator component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "SchemaEditorCanvas",
+      "name": "SchemaEditorCanvas",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "SchemaEditorCanvas organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "SchemaEditorLayout",
+      "name": "SchemaEditorLayout",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "SchemaEditorLayout organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "SchemaEditorPropertiesPanel",
+      "name": "SchemaEditorPropertiesPanel",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "SchemaEditorPropertiesPanel organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "SchemaEditorSidebar",
+      "name": "SchemaEditorSidebar",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "SchemaEditorSidebar organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "SchemaEditorToolbar",
+      "name": "SchemaEditorToolbar",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "SchemaEditorToolbar organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ScrollArea",
+      "name": "ScrollArea",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Scrollable container area",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ScrollArea",
+      "name": "ScrollArea",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Scrollable container area",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "SearchBar",
+      "name": "SearchBar",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "SearchBar component",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "SearchInput",
+      "name": "SearchInput",
+      "category": "custom",
+      "canHaveChildren": false,
+      "description": "Search input with icon",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "SearchInput",
+      "name": "SearchInput",
+      "category": "custom",
+      "canHaveChildren": false,
+      "description": "Search input with icon",
+      "status": "maybe-json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Sheet",
+      "name": "Sheet",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Sheet component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Sidebar",
+      "name": "Sidebar",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Sidebar component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Sonner",
+      "name": "Sonner",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Sonner component",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "Spacer",
+      "name": "Spacer",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Spacer component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Sparkle",
+      "name": "Sparkle",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Sparkle component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "StepIndicator",
+      "name": "StepIndicator",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "StepIndicator component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Stepper",
+      "name": "Stepper",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Step-by-step navigation",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "StorageSettings",
+      "name": "StorageSettings",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "StorageSettings component",
+      "status": "json-compatible",
+      "source": "molecules",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Timestamp",
+      "name": "Timestamp",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Timestamp component",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "ToolbarActions",
+      "name": "ToolbarActions",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "ToolbarActions organism component",
+      "status": "maybe-json-compatible",
+      "source": "organisms",
+      "jsonCompatible": true
+    },
+    {
+      "type": "Tooltip",
+      "name": "Tooltip",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Tooltip overlay text",
+      "status": "supported",
+      "source": "atoms"
+    },
+    {
+      "type": "Tooltip",
+      "name": "Tooltip",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "Tooltip overlay text",
+      "status": "supported",
+      "source": "ui"
     }
   ],
   "statistics": {
-    "total": 60,
-    "supported": 46,
+    "total": 219,
+    "supported": 150,
     "planned": 14,
+    "jsonCompatible": 14,
+    "maybeJsonCompatible": 41,
     "byCategory": {
-      "layout": 12,
-      "input": 11,
-      "display": 16,
-      "navigation": 3,
-      "feedback": 7,
-      "data": 8,
-      "custom": 3
+      "layout": 25,
+      "input": 34,
+      "display": 31,
+      "navigation": 17,
+      "feedback": 23,
+      "data": 20,
+      "custom": 69
+    },
+    "bySource": {
+      "atoms": 117,
+      "molecules": 41,
+      "organisms": 15,
+      "ui": 46
     }
   }
 }
