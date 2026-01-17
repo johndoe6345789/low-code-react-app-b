@@ -1,0 +1,1 @@
+{"version":3,"file":"spark-runtime.d.ts","sourceRoot":"","sources":["../../src/lib/spark-runtime.ts"],"names":[],"mappings":"AAAA;;;;;;;GAOG;AAwBH,eAAO,MAAM,YAAY;;cAEf,CAAC,aAAa,MAAM,KAAG,CAAC,GAAG,SAAS;mBAa/B,MAAM,SAAS,GAAG;sBAQf,MAAM;;;;;iBAzCW,MAAM,UAAU,MAAM,aAAa,OAAO,GAAG,OAAO,CAAC,GAAG,CAAC;uBAKxD,GAAG,EAAE;;;;yBAQH,MAAM;;;;;;;;;;CA4D3C,CAAA"}
