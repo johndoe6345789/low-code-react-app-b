@@ -134,9 +134,22 @@ const DEFAULT_FILES: ProjectFile[] = [
 ]
 
 export function useProjectState() {
+  console.log('[STATE] 🔧 useProjectState hook initializing')
+  console.time('[STATE] Project state initialization')
+  
+  console.log('[STATE] 📁 Loading files from KV')
   const [files, setFiles] = useKV<ProjectFile[]>('project-files', DEFAULT_FILES)
+  console.log('[STATE] ✅ Files loaded:', files?.length || 0, 'files')
+  
+  console.log('[STATE] 🗃️ Loading models from KV')
   const [models, setModels] = useKV<PrismaModel[]>('project-models', [])
+  console.log('[STATE] ✅ Models loaded:', models?.length || 0, 'models')
+  
+  console.log('[STATE] 🧩 Loading components from KV')
   const [components, setComponents] = useKV<ComponentNode[]>('project-components', [])
+  console.log('[STATE] ✅ Components loaded:', components?.length || 0, 'components')
+  
+  console.log('[STATE] 🌳 Loading component trees from KV')
   const [componentTrees, setComponentTrees] = useKV<ComponentTree[]>('project-component-trees', [
     {
       id: 'default-tree',
@@ -147,17 +160,49 @@ export function useProjectState() {
       updatedAt: Date.now(),
     },
   ])
+  console.log('[STATE] ✅ Component trees loaded:', componentTrees?.length || 0, 'trees')
+  
+  console.log('[STATE] 🔄 Loading workflows from KV')
   const [workflows, setWorkflows] = useKV<Workflow[]>('project-workflows', [])
+  console.log('[STATE] ✅ Workflows loaded:', workflows?.length || 0, 'workflows')
+  
+  console.log('[STATE] λ Loading lambdas from KV')
   const [lambdas, setLambdas] = useKV<Lambda[]>('project-lambdas', [])
+  console.log('[STATE] ✅ Lambdas loaded:', lambdas?.length || 0, 'lambdas')
+  
+  console.log('[STATE] 🎨 Loading theme from KV')
   const [theme, setTheme] = useKV<ThemeConfig>('project-theme', DEFAULT_THEME)
+  console.log('[STATE] ✅ Theme loaded')
+  
+  console.log('[STATE] 🎭 Loading Playwright tests from KV')
   const [playwrightTests, setPlaywrightTests] = useKV<PlaywrightTest[]>('project-playwright-tests', [])
+  console.log('[STATE] ✅ Playwright tests loaded:', playwrightTests?.length || 0, 'tests')
+  
+  console.log('[STATE] 📚 Loading Storybook stories from KV')
   const [storybookStories, setStorybookStories] = useKV<StorybookStory[]>('project-storybook-stories', [])
+  console.log('[STATE] ✅ Storybook stories loaded:', storybookStories?.length || 0, 'stories')
+  
+  console.log('[STATE] 🧪 Loading unit tests from KV')
   const [unitTests, setUnitTests] = useKV<UnitTest[]>('project-unit-tests', [])
+  console.log('[STATE] ✅ Unit tests loaded:', unitTests?.length || 0, 'tests')
+  
+  console.log('[STATE] 🐍 Loading Flask config from KV')
   const [flaskConfig, setFlaskConfig] = useKV<FlaskConfig>('project-flask-config', DEFAULT_FLASK_CONFIG)
+  console.log('[STATE] ✅ Flask config loaded')
+  
+  console.log('[STATE] ⚛️ Loading Next.js config from KV')
   const [nextjsConfig, setNextjsConfig] = useKV<NextJsConfig>('project-nextjs-config', DEFAULT_NEXTJS_CONFIG)
+  console.log('[STATE] ✅ Next.js config loaded')
+  
+  console.log('[STATE] 📦 Loading NPM settings from KV')
   const [npmSettings, setNpmSettings] = useKV<NpmSettings>('project-npm-settings', DEFAULT_NPM_SETTINGS)
+  console.log('[STATE] ✅ NPM settings loaded')
+  
+  console.log('[STATE] 🎚️ Loading feature toggles from KV')
   const [featureToggles, setFeatureToggles] = useKV<FeatureToggles>('project-feature-toggles', DEFAULT_FEATURE_TOGGLES)
+  console.log('[STATE] ✅ Feature toggles loaded')
 
+  console.log('[STATE] 🛡️ Creating safe array wrappers')
   const safeFiles = Array.isArray(files) ? files : []
   const safeModels = Array.isArray(models) ? models : []
   const safeComponents = Array.isArray(components) ? components : []
@@ -172,7 +217,11 @@ export function useProjectState() {
   const safeNextjsConfig = nextjsConfig || DEFAULT_NEXTJS_CONFIG
   const safeNpmSettings = npmSettings || DEFAULT_NPM_SETTINGS
   const safeFeatureToggles = featureToggles || DEFAULT_FEATURE_TOGGLES
+  console.log('[STATE] ✅ Safe wrappers created')
 
+  console.log('[STATE] 📤 Returning project state object')
+  console.timeEnd('[STATE] Project state initialization')
+  
   return {
     files: safeFiles,
     setFiles,

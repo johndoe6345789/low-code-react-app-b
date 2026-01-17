@@ -1,15 +1,34 @@
+console.log('[APP] 🚀 App.tsx loading - BEGIN')
+console.time('[APP] Component initialization')
+
 import { useState, lazy, Suspense, useMemo, useEffect } from 'react'
+console.log('[APP] ✅ React hooks imported')
+
 import { Tabs, TabsContent } from '@/components/ui/tabs'
+console.log('[APP] ✅ Tabs imported')
+
 import { AppHeader, PageHeader } from '@/components/organisms'
+console.log('[APP] ✅ Header components imported')
+
 import { LoadingFallback } from '@/components/molecules'
+console.log('[APP] ✅ LoadingFallback imported')
+
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
+console.log('[APP] ✅ Resizable components imported')
+
 import { useProjectState } from '@/hooks/use-project-state'
 import { useFileOperations } from '@/hooks/use-file-operations'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { useSeedData } from '@/hooks/data/use-seed-data'
-import { getPageConfig, getEnabledPages, getPageShortcuts, resolveProps } from '@/config/page-loader'
-import { toast } from 'sonner'
+console.log('[APP] ✅ Custom hooks imported')
 
+import { getPageConfig, getEnabledPages, getPageShortcuts, resolveProps } from '@/config/page-loader'
+console.log('[APP] ✅ Page config imported')
+
+import { toast } from 'sonner'
+console.log('[APP] ✅ Toast imported')
+
+console.log('[APP] 📦 Setting up lazy-loaded components')
 const componentMap: Record<string, React.LazyExoticComponent<any>> = {
   ProjectDashboard: lazy(() => import('@/components/ProjectDashboard').then(m => ({ default: m.ProjectDashboard }))),
   CodeEditor: lazy(() => import('@/components/CodeEditor').then(m => ({ default: m.CodeEditor }))),
@@ -34,6 +53,7 @@ const componentMap: Record<string, React.LazyExoticComponent<any>> = {
   FeatureIdeaCloud: lazy(() => import('@/components/FeatureIdeaCloud').then(m => ({ default: m.FeatureIdeaCloud }))),
   TemplateSelector: lazy(() => import('@/components/TemplateSelector').then(m => ({ default: m.TemplateSelector }))),
 }
+console.log('[APP] ✅ Component map created with', Object.keys(componentMap).length, 'components')
 
 const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })))
 const KeyboardShortcutsDialog = lazy(() => import('@/components/KeyboardShortcutsDialog').then(m => ({ default: m.KeyboardShortcutsDialog })))
@@ -41,9 +61,18 @@ const PreviewDialog = lazy(() => import('@/components/PreviewDialog').then(m => 
 const PWAInstallPrompt = lazy(() => import('@/components/PWAInstallPrompt').then(m => ({ default: m.PWAInstallPrompt })))
 const PWAUpdatePrompt = lazy(() => import('@/components/PWAUpdatePrompt').then(m => ({ default: m.PWAUpdatePrompt })))
 const PWAStatusBar = lazy(() => import('@/components/PWAStatusBar').then(m => ({ default: m.PWAStatusBar })))
+console.log('[APP] ✅ Additional lazy components registered')
+
+console.log('[APP] 🎯 App component function executing')
 
 function App() {
+  console.log('[APP] 🔧 Initializing App component')
+  console.time('[APP] App render')
+  
+  console.log('[APP] 📊 Initializing project state hook')
   const projectState = useProjectState()
+  console.log('[APP] ✅ Project state initialized')
+  
   const {
     files,
     models,
@@ -75,10 +104,17 @@ function App() {
     setFeatureToggles,
   } = projectState
 
+  console.log('[APP] 📁 Initializing file operations')
   const fileOps = useFileOperations(files, setFiles)
+  console.log('[APP] ✅ File operations initialized')
+  
   const { activeFileId, setActiveFileId, handleFileChange, handleFileAdd, handleFileClose } = fileOps
+  
+  console.log('[APP] 🌱 Initializing seed data hook')
   const { loadSeedData } = useSeedData()
+  console.log('[APP] ✅ Seed data hook initialized')
 
+  console.log('[APP] 💾 Initializing state variables')
   const [activeTab, setActiveTab] = useState('dashboard')
   const [searchOpen, setSearchOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
@@ -86,28 +122,63 @@ function App() {
   const [lastSaved] = useState<number | null>(Date.now())
   const [errorCount] = useState(0)
   const [appReady, setAppReady] = useState(false)
+  console.log('[APP] ✅ State variables initialized')
 
+  console.log('[APP] ⏰ Setting up initialization effect')
   useEffect(() => {
+    console.log('[APP] 🚀 Initialization effect triggered')
+    console.time('[APP] Seed data loading')
+    
     const timer = setTimeout(() => {
+      console.log('[APP] ⏱️ Fallback timer triggered (100ms)')
       setAppReady(true)
     }, 100)
     
+    console.log('[APP] 📥 Starting seed data load')
     loadSeedData()
+      .then(() => {
+        console.log('[APP] ✅ Seed data loaded successfully')
+      })
       .catch(err => {
-        console.error('Seed data loading failed:', err)
+        console.error('[APP] ❌ Seed data loading failed:', err)
       })
       .finally(() => {
+        console.log('[APP] 🏁 Seed data loading complete')
         clearTimeout(timer)
         setAppReady(true)
+        console.timeEnd('[APP] Seed data loading')
+        console.log('[APP] ✅ App marked as ready')
       })
 
-    return () => clearTimeout(timer)
+    return () => {
+      console.log('[APP] 🧹 Cleaning up initialization effect')
+      clearTimeout(timer)
+    }
   }, [loadSeedData])
 
-  const pageConfig = useMemo(() => getPageConfig(), [])
-  const enabledPages = useMemo(() => getEnabledPages(featureToggles), [featureToggles])
-  const shortcuts = useMemo(() => getPageShortcuts(featureToggles), [featureToggles])
+  console.log('[APP] 🧮 Computing page configuration')
+  const pageConfig = useMemo(() => {
+    console.log('[APP] 📄 Getting page config')
+    const config = getPageConfig()
+    console.log('[APP] ✅ Page config retrieved:', Object.keys(config).length, 'pages')
+    return config
+  }, [])
+  
+  const enabledPages = useMemo(() => {
+    console.log('[APP] 🔍 Filtering enabled pages')
+    const pages = getEnabledPages(featureToggles)
+    console.log('[APP] ✅ Enabled pages:', pages.map(p => p.id).join(', '))
+    return pages
+  }, [featureToggles])
+  
+  const shortcuts = useMemo(() => {
+    console.log('[APP] ⌨️ Getting keyboard shortcuts')
+    const s = getPageShortcuts(featureToggles)
+    console.log('[APP] ✅ Shortcuts configured:', s.length)
+    return s
+  }, [featureToggles])
 
+  console.log('[APP] ⌨️ Configuring keyboard shortcuts')
   useKeyboardShortcuts([
     ...shortcuts.map(s => ({
       key: s.key,
@@ -120,6 +191,7 @@ function App() {
     { key: '/', ctrl: true, description: 'Shortcuts', action: () => setShortcutsOpen(true) },
     { key: 'p', ctrl: true, description: 'Preview', action: () => setPreviewOpen(true) },
   ])
+  console.log('[APP] ✅ Keyboard shortcuts configured')
 
   const getCurrentProject = () => ({
     name: nextjsConfig.appName,
@@ -203,20 +275,26 @@ function App() {
   }
 
   const renderPageContent = (page: any) => {
+    console.log('[APP] 🎨 Rendering page:', page.id)
     try {
       const Component = componentMap[page.component]
       if (!Component) {
+        console.error('[APP] ❌ Component not found:', page.component)
         return <LoadingFallback message={`Component ${page.component} not found`} />
       }
+      console.log('[APP] ✅ Component found:', page.component)
 
       if (page.requiresResizable && page.resizableConfig) {
+        console.log('[APP] 🔀 Rendering resizable layout for:', page.id)
         const config = page.resizableConfig
         const LeftComponent = componentMap[config.leftComponent]
         const RightComponent = Component
 
         if (!LeftComponent) {
+          console.error('[APP] ❌ Left component not found:', config.leftComponent)
           return <LoadingFallback message={`Component ${config.leftComponent} not found`} />
         }
+        console.log('[APP] ✅ Resizable layout components ready')
 
         const stateContext = {
           files,
@@ -280,6 +358,7 @@ function App() {
         )
       }
 
+      console.log('[APP] 📦 Rendering standard component:', page.component)
       const props = getPropsForComponent(page.id)
       return (
         <Suspense fallback={<LoadingFallback message={`Loading ${page.title.toLowerCase()}...`} />}>
@@ -287,7 +366,7 @@ function App() {
         </Suspense>
       )
     } catch (error) {
-      console.error(`Failed to render page ${page.id}:`, error)
+      console.error('[APP] ❌ Failed to render page', page.id, ':', error)
       return (
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
@@ -299,6 +378,10 @@ function App() {
     }
   }
 
+  console.log('[APP] 🎨 Rendering App component UI')
+  console.log('[APP] App state - appReady:', appReady, 'activeTab:', activeTab)
+  console.timeEnd('[APP] App render')
+  
   return (
     <div className="h-screen flex flex-col bg-background">
       {!appReady && (
@@ -371,5 +454,8 @@ function App() {
     </div>
   )
 }
+
+console.log('[APP] ✅ App component defined')
+console.timeEnd('[APP] Component initialization')
 
 export default App
