@@ -1,164 +1,131 @@
-# JSON-Driven UI Architecture Enhancement
+# Planning Guide
 
-Build a comprehensive JSON-driven UI system that allows building entire user interfaces from declarative JSON schemas, including a visual drag-and-drop schema editor for creating JSON UI configs, breaking down complex components into atomic pieces, and extracting reusable logic into custom hooks for maximum maintainability and rapid development.
-
-**Recent Updates:**
-- ✅ Converted Models, Component Trees, and Workflows pages to JSON-driven configuration
-- ✅ Converted Lambdas, Styling, and Flask API pages to JSON-driven configuration
-- ✅ Created JSON schema definitions for all six pages with data sources, computed values, and bindings
-- ✅ Added JSON-based versions of pages alongside traditional implementations for comparison
-- ✅ Implemented seed data for all six converted pages with realistic examples
-- ✅ Complete JSON-driven UI system now covers all major designer pages
-- ✅ Enhanced JSON schema system with additional UI components and patterns
-- ✅ Created focused custom hooks for common UI patterns (useConfirmDialog, useFormState, useListOperations)
-- ✅ Built additional atomic components for improved composability
-- ✅ **NEW:** Created `useJSONRenderer` hook with data binding utilities (resolveBinding, resolveValue, resolveProps)
-- ✅ **NEW:** Created `useDataSources` hook for unified KV, static, and computed data management
-- ✅ **NEW:** Built atomic JSON UI components: IconRenderer, DataCard (<50 LOC each)
-- ✅ **NEW:** Established hooks/json-ui and components/atoms/json-ui directories for modularity
+A visual Docker build error analyzer that parses build logs, highlights errors, and provides actionable solutions with automatic fix generation.
 
 **Experience Qualities**:
-1. **Modular** - Every component under 150 LOC, highly composable and reusable
-2. **Declarative** - Define UIs through configuration rather than imperative code
-3. **Maintainable** - Clear separation of concerns between data, logic, and presentation
+1. **Clarifying** - Takes cryptic Docker logs and transforms them into clear, understandable problem statements
+2. **Actionable** - Provides specific, copy-paste ready solutions rather than generic advice
+3. **Educational** - Explains the root cause so users learn what went wrong and why
 
-**Complexity Level**: Complex Application (advanced functionality with multiple views)
-
-This is an advanced system that interprets JSON schemas, manages state across multiple data sources, executes actions dynamically, renders complex component hierarchies, and provides a visual editor for creating schemas through drag-and-drop - requiring sophisticated architecture with component registries, action executors, data source managers, and interactive canvas rendering.
+**Complexity Level**: Light Application (multiple features with basic state)
+This is a diagnostic tool with log parsing, error highlighting, and solution generation - more than a single-purpose tool but not a complex multi-view application.
 
 ## Essential Features
 
-### Visual Schema Editor
-- **Functionality**: Drag-and-drop interface for building JSON UI schemas with real-time preview
-- **Purpose**: Enable non-technical users to create complex UIs without writing JSON
-- **Trigger**: User opens the schema editor page
-- **Progression**: Select component from palette → Drag to canvas → Drop at position → Configure properties → Preview result → Export JSON
-- **Success criteria**: Users can create complete page schemas visually, with property editing, component tree view, and JSON export
+### Log Parser & Error Highlighter
+- **Functionality**: Paste Docker build logs and automatically extract error information
+- **Purpose**: Make sense of lengthy, unformatted build output
+- **Trigger**: User pastes log text into a text area
+- **Progression**: Paste log → Auto-parse on input → Highlight errors in red → Extract key details → Display structured output
+- **Success criteria**: Correctly identifies build stage, error type, exit codes, and root cause from real Docker logs
 
-### Data Source Binding UI
-- **Functionality**: Visual interface for connecting components to KV storage and computed values with dependency tracking
-- **Purpose**: Enable declarative data management without manual state handling
-- **Trigger**: User opens data binding designer or edits component bindings in schema editor
-- **Progression**: Create data source → Configure type (KV/computed/static) → Set up dependencies → Bind to component properties → Test reactive updates
-- **Success criteria**: Users can create KV stores, computed values, and static data, then bind them to components with automatic reactive updates
+### Smart Solution Generator
+- **Functionality**: Analyzes parsed errors and suggests specific fixes with code examples
+- **Purpose**: Provide actionable solutions tailored to the exact error type
+- **Trigger**: After log is parsed and error identified
+- **Progression**: Error identified → Match error pattern → Generate relevant solutions → Display with copy buttons → Show explanation
+- **Success criteria**: Provides relevant, working solutions for common Docker build issues (missing dependencies, platform issues, build failures)
 
-### JSON Schema Parser
-- **Functionality**: Parse and validate JSON UI schemas with full TypeScript type safety
-- **Purpose**: Enable building UIs from configuration rather than code
-- **Trigger**: User loads a page defined by JSON schema
-- **Progression**: Load schema → Validate structure → Initialize data sources → Render component tree → Bind events
-- **Success criteria**: Schemas render correctly with all data bindings and event handlers working
+### Error Knowledge Base
+- **Functionality**: Common Docker build errors with explanations and fixes
+- **Purpose**: Quick reference for developers debugging builds
+- **Trigger**: User browses error categories or searches
+- **Progression**: Click category → View error patterns → Select specific error → See explanation and fixes
+- **Success criteria**: Covers at least 10 common Docker build error patterns with clear explanations
 
-### Data Source Management
-- **Functionality**: Manage multiple data sources (KV store, computed values, static data) with automatic dependency tracking
-- **Purpose**: Centralize data management and enable reactive updates
-- **Trigger**: Component needs data or data changes
-- **Progression**: Request data → Check source type → Load/compute value → Update dependents → Re-render
-- **Success criteria**: Data flows correctly between sources, components, and persistence layer
-
-### Action Executor
-- **Functionality**: Execute user actions declaratively (CRUD, navigation, toasts, custom actions)
-- **Purpose**: Handle all user interactions declaratively without component-specific code
-- **Trigger**: User interaction (click, change, submit, etc.)
-- **Progression**: Parse action → Validate params → Execute handler → Update data → Show feedback
-- **Success criteria**: All action types work correctly with proper error handling
-
-### Atomic Component Library  
-- **Functionality**: Library of small, focused, reusable components (atoms, molecules, organisms)
-- **Purpose**: Build complex UIs from simple, tested building blocks
-- **Trigger**: Developer needs a UI element
-- **Progression**: Select component → Configure props → Compose with other components → Render
-- **Success criteria**: No component exceeds 150 LOC, all components highly reusable
-
-### Custom Hooks Library  
-- **Functionality**: Extracted business logic in reusable hooks (useCRUD, useSearch, useFilter, useForm, etc.)
-- **Purpose**: Separate concerns and enable logic reuse across components
-- **Trigger**: Component needs common functionality (data management, search, form handling)
-- **Progression**: Call hook → Provide config → Receive state and handlers → Render UI
-- **Success criteria**: Hooks are testable, reusable, and follow React best practices
+### Fix Code Generator
+- **Functionality**: Generate copy-paste ready Dockerfile snippets or package.json modifications
+- **Purpose**: Speed up fixing by providing exact code changes needed
+- **Trigger**: After solution is displayed
+- **Progression**: Solution shown → Click "Generate Fix" → Code snippet created → Copy to clipboard → Apply to project
+- **Success criteria**: Generated code is syntactically correct and addresses the identified issue
 
 ## Edge Case Handling
 
-- **Invalid Schemas** - Validate JSON structure, show helpful error messages, provide fallback UI
-- **Missing Components** - Log warnings, render fallback div, continue rendering other components
-- **Data Source Errors** - Catch KV failures, show toast notifications, maintain app stability
-- **Circular Dependencies** - Detect loops in computed data sources, break cycles, warn developer
-- **Concurrent Updates** - Use optimistic updates with rollback on failure
-- **Empty States** - Show helpful messages and actions when no data exists
+- **Incomplete Logs**: Gracefully handle partial logs by extracting whatever information is available
+- **Unknown Errors**: For unrecognized error patterns, provide general debugging steps and encourage manual investigation
+- **Multiple Errors**: When multiple errors present, prioritize and display them in order of likely root cause
+- **Empty Input**: Show helpful placeholder text with example log format
+- **Very Long Logs**: Truncate display but maintain full parsing capability
 
 ## Design Direction
 
-A **dark cyberpunk development theme** with electric accents and technical precision that feels like a high-powered code editor with visual design tools integrated.
+The design should feel like a developer's diagnostic dashboard - technical but approachable, with clear visual hierarchy that guides the eye from problem to solution. Think of a code editor meets troubleshooting assistant.
 
 ## Color Selection
 
-Convey technical sophistication with electric highlights against deep, professional backgrounds.
+A code-focused palette with strong error signaling and calm backgrounds.
 
-- **Primary Color**: Deep Purple `oklch(0.45 0.15 270)` - Commands attention for primary actions, evokes advanced technology
-- **Secondary Colors**: 
-  - Dark Slate `oklch(0.35 0.02 250)` for secondary surfaces
-  - Deep Navy `oklch(0.18 0.02 250)` for cards and elevated surfaces
-- **Accent Color**: Cyan Glow `oklch(0.70 0.15 200)` - Electric highlight for CTAs, active states, and focus indicators
-- **Foreground/Background Pairings**:
-  - Background (Deep Navy #1E1E2E) → Foreground (Light Gray #E8E8EC) - Ratio 12.5:1 ✓
-  - Card (Darker Navy #252535) → Card Foreground (Light Gray #E8E8EC) - Ratio 11.2:1 ✓  
-  - Primary (Deep Purple #7C3AED) → Primary Foreground (White #FFFFFF) - Ratio 6.8:1 ✓
-  - Accent (Cyan #5DD5F5) → Accent Foreground (Deep Navy #1E1E2E) - Ratio 9.2:1 ✓
-  - Muted (Slate #38384A) → Muted Foreground (Mid Gray #A8A8B0) - Ratio 5.2:1 ✓
+- **Primary Color**: `oklch(0.58 0.24 265)` - Tech purple that feels modern and developer-centric
+- **Secondary Colors**: `oklch(0.25 0.03 265)` - Deep navy backgrounds for code blocks and panels
+- **Accent Color**: `oklch(0.75 0.20 145)` - Bright teal for success states and actionable elements
+- **Foreground/Background Pairings**: 
+  - Background (`oklch(0.15 0.02 265)`): Light text `oklch(0.95 0.01 265)` - Ratio 11.2:1 ✓
+  - Card (`oklch(0.19 0.02 265)`): Light text `oklch(0.95 0.01 265)` - Ratio 9.8:1 ✓
+  - Accent (`oklch(0.75 0.20 145)`): Dark text `oklch(0.15 0.02 265)` - Ratio 7.5:1 ✓
+  - Destructive/Error (`oklch(0.60 0.25 25)`): White text `oklch(1 0 0)` - Ratio 5.2:1 ✓
 
 ## Font Selection
 
-Convey **technical precision and modern development** with a mix of geometric sans-serif and monospace fonts.
+Monospace for code and logs, clean sans-serif for explanations - reflecting the technical nature while remaining readable.
 
 - **Typographic Hierarchy**:
-  - H1 (Page Titles): Space Grotesk Bold/32px/tight (-0.02em) - Geometric, technical, commanding
-  - H2 (Section Headers): Space Grotesk Semi-Bold/24px/tight (-0.01em)
-  - H3 (Component Headers): Space Grotesk Medium/18px/normal
-  - Body Text: Inter Regular/14px/relaxed (1.6) - Highly readable, neutral, professional
-  - Code/Technical: JetBrains Mono Regular/13px/normal (1.5) - Monospace for code and technical content
-  - Captions/Labels: Inter Medium/12px/normal - Slightly bolder for hierarchy
+  - H1 (Main Title): JetBrains Mono Bold/32px/tight letter spacing
+  - H2 (Section Headers): JetBrains Mono Medium/24px/normal spacing
+  - Body Text: IBM Plex Sans Regular/16px/1.6 line height
+  - Code/Logs: JetBrains Mono Regular/14px/1.5 line height
+  - Small Labels: IBM Plex Sans Medium/12px/uppercase tracking
 
 ## Animations
 
-Animations should feel **snappy and purposeful** - fast micro-interactions (100-150ms) for buttons and inputs, smooth transitions (250-300ms) for page changes and dialogs, with spring physics for natural movement. Use subtle scale transforms (0.98→1.0) on button press, slide-in animations for modals, and fade effects for state changes. Avoid unnecessary flourishes - every animation serves feedback or orientation.
+Animations should feel snappy and technical, like a terminal responding to commands.
+
+- Error highlights fade in with a quick pulse (200ms) to draw attention
+- Solutions expand/collapse smoothly (300ms ease-out)
+- Copy confirmation shows brief checkmark animation (150ms)
+- Log parsing shows subtle progress indicator during processing
+- Tab switches use fast slide transitions (200ms)
 
 ## Component Selection
 
 - **Components**: 
-  - `Card`, `Button`, `Input`, `Select`, `Checkbox`, `Switch` for core UI
-  - `Dialog`, `Tabs`, `Badge`, `Progress`, `Separator` for layout and feedback
-  - `Heading`, `Text`, `List`, `Grid` for typography and layout primitives
-  - `ScrollArea` for contained scrollable regions
-  - `Tooltip` for contextual help
+  - Textarea (custom styled) for log input with monospace font
+  - Card for structured error display with distinct sections
+  - Badge for error types, build stages, and exit codes
+  - Tabs for switching between parsed errors, solutions, and knowledge base
+  - Button (primary for actions, secondary for copy operations)
+  - ScrollArea for long log outputs
+  - Separator to divide error details from solutions
+  - Alert for success/info messages after copying
   
 - **Customizations**: 
-  - `StatusBadge` - Status indicator with predefined styles
-  - `DataCard` - Stat card with icon, trend, and loading states
-  - `SearchInput` - Input with search icon and clear button
-  - `ActionBar` - Title with action buttons
-  - All new atomic components follow the 150 LOC limit
+  - Custom syntax highlighting for Docker logs using color coding
+  - Custom error badge with pulsing animation for critical errors
+  - Monospace code blocks with line numbers for generated fixes
   
 - **States**: 
-  - Buttons: subtle scale on press, glow effect on hover, disabled with opacity
-  - Inputs: border color shift on focus, inline validation icons, smooth error states
-  - Cards: subtle lift shadow on hover for interactive cards
+  - Buttons: Default solid with subtle shadow, hover lifts with brightness increase, active depresses
+  - Input: Focused state has bright accent border with subtle glow
+  - Code blocks: Hover shows copy button overlay in corner
   
 - **Icon Selection**: 
-  - Phosphor Icons throughout
-  - Code, Database, Tree, Cube for feature areas
-  - Plus, Pencil, Trash for CRUD operations
-  - MagnifyingGlass, Gear, Download for utilities
+  - Terminal (for log input)
+  - Warning/WarningCircle (for errors)
+  - CheckCircle (for solutions)
+  - Copy/CopySimple (for copy actions)
+  - MagnifyingGlass (for search in knowledge base)
+  - Code (for generated fixes)
+  - Stack (for Docker layers)
   
 - **Spacing**: 
-  - Container padding: p-6 (1.5rem)
-  - Section gaps: gap-6 (1.5rem) 
-  - Card gaps: gap-4 (1rem)
-  - Button groups: gap-2 (0.5rem)
-  - Tight elements: gap-1 (0.25rem)
+  - Container padding: p-6 on desktop, p-4 on mobile
+  - Section gaps: gap-8 for major sections, gap-4 for related content
+  - Card internal padding: p-6
+  - Button spacing: px-6 py-3 for primary, px-4 py-2 for secondary
   
 - **Mobile**: 
-  - Stack layouts vertically on <768px
-  - Reduce padding to p-4 on mobile
-  - Touch-friendly tap targets (min 44px)
-  - Responsive grid columns (1 → 2 → 3 → 4)
-  - Bottom sheet dialogs on small screens
+  - Stack all sections vertically on mobile
+  - Reduce font sizes: H1 to 24px, Body to 14px
+  - Full-width buttons and inputs
+  - Collapsible sections for solutions to save space
+  - Fixed header with title, scrollable content below

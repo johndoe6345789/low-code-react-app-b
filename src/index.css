@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
-@import './styles/main.scss';
 
 @layer base {
   * {
@@ -8,58 +7,48 @@
   }
   
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
   }
   
   h1, h2, h3 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
   }
   
-  code, pre {
+  code, pre, textarea {
     font-family: 'JetBrains Mono', monospace;
   }
 }
 
-@layer utilities {
-  .react-flow__renderer {
-    will-change: transform;
-  }
-  
-  .react-flow__node {
-    will-change: transform;
-  }
-}
-
 :root {
-  --background: oklch(0.12 0.02 260);
-  --foreground: oklch(0.95 0.005 260);
+  --background: oklch(0.15 0.02 265);
+  --foreground: oklch(0.95 0.01 265);
 
-  --card: oklch(0.16 0.02 260);
-  --card-foreground: oklch(0.95 0.005 260);
+  --card: oklch(0.19 0.02 265);
+  --card-foreground: oklch(0.95 0.01 265);
   
-  --popover: oklch(0.16 0.02 260);
-  --popover-foreground: oklch(0.95 0.005 260);
+  --popover: oklch(0.19 0.02 265);
+  --popover-foreground: oklch(0.95 0.01 265);
 
-  --primary: oklch(0.55 0.18 280);
+  --primary: oklch(0.58 0.24 265);
   --primary-foreground: oklch(1 0 0);
   
-  --secondary: oklch(0.20 0.02 260);
-  --secondary-foreground: oklch(0.95 0.005 260);
+  --secondary: oklch(0.25 0.03 265);
+  --secondary-foreground: oklch(0.95 0.01 265);
 
-  --muted: oklch(0.20 0.02 260);
-  --muted-foreground: oklch(0.65 0.01 260);
+  --muted: oklch(0.25 0.03 265);
+  --muted-foreground: oklch(0.60 0.02 265);
 
-  --accent: oklch(0.75 0.15 195);
-  --accent-foreground: oklch(0.12 0.02 260);
+  --accent: oklch(0.75 0.20 145);
+  --accent-foreground: oklch(0.15 0.02 265);
 
-  --destructive: oklch(0.55 0.22 25);
+  --destructive: oklch(0.60 0.25 25);
   --destructive-foreground: oklch(1 0 0);
 
-  --border: oklch(0.22 0.02 260);
-  --input: oklch(0.24 0.02 260);
-  --ring: oklch(0.75 0.15 195);
+  --border: oklch(0.28 0.03 265);
+  --input: oklch(0.28 0.03 265);
+  --ring: oklch(0.75 0.20 145);
 
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 }
 
 @theme {
@@ -89,14 +78,4 @@
   --radius-xl: calc(var(--radius) * 2);
   --radius-2xl: calc(var(--radius) * 3);
   --radius-full: 9999px;
-}
-
-@layer components {
-  [data-slot="tabs-list"] {
-    @apply w-full;
-  }
-  
-  [data-slot="tabs-trigger"] {
-    @apply flex-none;
-  }
 }

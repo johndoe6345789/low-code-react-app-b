@@ -1,387 +1,432 @@
-console.log('[APP] 🚀 App.tsx loading - BEGIN')
-console.time('[APP] Component initialization')
-
-import { useState, Suspense, useEffect } from 'react'
-console.log('[APP] ✅ React hooks imported')
-
-import { BrowserRouter, useLocation } from 'react-router-dom'
-console.log('[APP] ✅ React Router imported')
-
-import { AppHeader } from '@/components/organisms'
-console.log('[APP] ✅ Header components imported')
-
-import { LoadingFallback } from '@/components/molecules'
-console.log('[APP] ✅ LoadingFallback imported')
-
-import { useProjectState } from '@/hooks/use-project-state'
-import { useFileOperations } from '@/hooks/use-file-operations'
-import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
-import { useSeedData } from '@/hooks/data/use-seed-data'
-import { useRouterNavigation } from '@/hooks/use-router-navigation'
-console.log('[APP] ✅ Custom hooks imported')
-
-import { getPageShortcuts } from '@/config/page-loader'
-console.log('[APP] ✅ Page config imported')
-
+import { useState } from 'react'
+import { useKV } from '@github/spark/hooks'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Textarea } from '@/components/ui/textarea'
+import { Badge } from '@/components/ui/badge'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Terminal, Warning, CheckCircle, Copy, Code, Stack, MagnifyingGlass, Sparkle } from '@phosphor-icons/react'
+import { parseDockerLog, getSolutionsForError, knowledgeBase } from '@/lib/docker-parser'
+import { DockerError, KnowledgeBaseItem } from '@/types/docker'
 import { toast } from 'sonner'
-console.log('[APP] ✅ Toast imported')
+import { motion, AnimatePresence } from 'framer-motion'
 
-import { DialogRegistry, PWARegistry, preloadCriticalComponents } from '@/lib/component-registry'
-console.log('[APP] ✅ Component registry imported')
+function App() {
+  const [logInput, setLogInput] = useKV<string>('docker-log-input', '')
+  const [parsedErrors, setParsedErrors] = useState<DockerError[]>([])
+  const [selectedKbItem, setSelectedKbItem] = useState<KnowledgeBaseItem | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
-import { RouterProvider } from '@/router'
-import { routePreloadManager } from '@/lib/route-preload-manager'
-import { PreloadIndicator } from '@/components/PreloadIndicator'
-console.log('[APP] ✅ Router provider imported')
-
-const { GlobalSearch, KeyboardShortcutsDialog, PreviewDialog } = DialogRegistry
-const { PWAInstallPrompt, PWAUpdatePrompt, PWAStatusBar } = PWARegistry
-console.log('[APP] ✅ Dialog and PWA components registered')
-
-console.log('[APP] 🎯 App component function executing')
-
-function AppLayout() {
-  console.log('[APP] 🏗️ AppLayout component rendering')
-  const location = useLocation()
-  const { currentPage, navigateToPage } = useRouterNavigation()
-  
-  console.log('[APP] 📍 Current location:', location.pathname)
-  console.log('[APP] 📄 Current page:', currentPage)
-  
-  console.log('[APP] 📊 Initializing project state hook')
-  const projectState = useProjectState()
-  console.log('[APP] ✅ Project state initialized')
-  
-  const {
-    files,
-    models,
-    components,
-    componentTrees,
-    workflows,
-    lambdas,
-    theme,
-    playwrightTests,
-    storybookStories,
-    unitTests,
-    flaskConfig,
-    nextjsConfig,
-    npmSettings,
-    featureToggles,
-    setFiles,
-    setModels,
-    setComponents,
-    setComponentTrees,
-    setWorkflows,
-    setLambdas,
-    setTheme,
-    setPlaywrightTests,
-    setStorybookStories,
-    setUnitTests,
-    setFlaskConfig,
-    setNextjsConfig,
-    setNpmSettings,
-    setFeatureToggles,
-  } = projectState
-
-  useEffect(() => {
-    console.log('[APP] 🎯 Setting feature toggles in preload manager')
-    routePreloadManager.setFeatureToggles(featureToggles)
-  }, [featureToggles])
-
-  console.log('[APP] 📁 Initializing file operations')
-  const fileOps = useFileOperations(files, setFiles)
-  console.log('[APP] ✅ File operations initialized')
-  
-  const { activeFileId, setActiveFileId, handleFileChange, handleFileAdd, handleFileClose } = fileOps
-
-  console.log('[APP] 💾 Initializing state variables')
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [shortcutsOpen, setShortcutsOpen] = useState(false)
-  const [previewOpen, setPreviewOpen] = useState(false)
-  const [lastSaved] = useState<number | null>(Date.now())
-  const [errorCount] = useState(0)
-  console.log('[APP] ✅ State variables initialized')
-
-  const shortcuts = getPageShortcuts(featureToggles)
-  console.log('[APP] ⌨️ Keyboard shortcuts configured:', shortcuts.length)
-
-  console.log('[APP] ⌨️ Setting up keyboard shortcuts')
-  useKeyboardShortcuts([
-    ...shortcuts.map(s => ({
-      key: s.key,
-      ctrl: s.ctrl,
-      shift: s.shift,
-      description: s.description,
-      action: () => {
-        console.log('[APP] ⌨️ Shortcut triggered, navigating to:', s.action)
-        navigateToPage(s.action)
-      }
-    })),
-    { 
-      key: 'k', 
-      ctrl: true, 
-      description: 'Search', 
-      action: () => {
-        console.log('[APP] ⌨️ Search shortcut triggered')
-        setSearchOpen(true)
-      }
-    },
-    { 
-      key: '/', 
-      ctrl: true, 
-      description: 'Shortcuts', 
-      action: () => {
-        console.log('[APP] ⌨️ Shortcuts dialog triggered')
-        setShortcutsOpen(true)
-      }
-    },
-    { 
-      key: 'p', 
-      ctrl: true, 
-      description: 'Preview', 
-      action: () => {
-        console.log('[APP] ⌨️ Preview shortcut triggered')
-        setPreviewOpen(true)
-      }
-    },
-  ])
-  console.log('[APP] ✅ Keyboard shortcuts configured')
-
-  const getCurrentProject = () => ({
-    name: nextjsConfig.appName,
-    files,
-    models,
-    components,
-    componentTrees,
-    workflows,
-    lambdas,
-    theme,
-    playwrightTests,
-    storybookStories,
-    unitTests,
-    flaskConfig,
-    nextjsConfig,
-    npmSettings,
-    featureToggles,
-  })
-
-  const handleProjectLoad = (project: any) => {
-    console.log('[APP] 📦 Loading project:', project.name)
-    if (project.files) setFiles(project.files)
-    if (project.models) setModels(project.models)
-    if (project.components) setComponents(project.components)
-    if (project.componentTrees) setComponentTrees(project.componentTrees)
-    if (project.workflows) setWorkflows(project.workflows)
-    if (project.lambdas) setLambdas(project.lambdas)
-    if (project.theme) setTheme(project.theme)
-    if (project.playwrightTests) setPlaywrightTests(project.playwrightTests)
-    if (project.storybookStories) setStorybookStories(project.storybookStories)
-    if (project.unitTests) setUnitTests(project.unitTests)
-    if (project.flaskConfig) setFlaskConfig(project.flaskConfig)
-    if (project.nextjsConfig) setNextjsConfig(project.nextjsConfig)
-    if (project.npmSettings) setNpmSettings(project.npmSettings)
-    if (project.featureToggles) setFeatureToggles(project.featureToggles)
-    toast.success('Project loaded')
-    console.log('[APP] ✅ Project loaded successfully')
+  const handleParse = () => {
+    if (!logInput.trim()) {
+      toast.error('Please paste a Docker build log first')
+      return
+    }
+    
+    const errors = parseDockerLog(logInput)
+    
+    if (errors.length === 0) {
+      toast.info('No errors detected in the log')
+    } else {
+      setParsedErrors(errors)
+      toast.success(`Found ${errors.length} error${errors.length > 1 ? 's' : ''}`)
+    }
   }
 
-  useEffect(() => {
-    console.log('[APP] 📍 Route changed to:', location.pathname, '- Page:', currentPage)
-    routePreloadManager.setCurrentRoute(currentPage)
-    
-    const stats = routePreloadManager.getStats()
-    console.log('[APP] 📊 Preload stats:', stats)
-  }, [location, currentPage])
+  const handleCopy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text)
+    toast.success(`${label} copied to clipboard`)
+  }
 
-  console.log('[APP] 🎨 Rendering AppLayout UI')
-  
+  const filteredKnowledgeBase = knowledgeBase.filter(item =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.explanation.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
-    <div className="h-screen flex flex-col bg-background">
-      <Suspense fallback={<div className="h-1 bg-primary animate-pulse" />}>
-        <PWAStatusBar />
-      </Suspense>
-      <Suspense fallback={null}>
-        <PWAUpdatePrompt />
-      </Suspense>
-      <AppHeader
-        activeTab={currentPage}
-        onTabChange={navigateToPage}
-        featureToggles={featureToggles}
-        errorCount={errorCount}
-        lastSaved={lastSaved}
-        currentProject={getCurrentProject()}
-        onProjectLoad={handleProjectLoad}
-        onSearch={() => {
-          console.log('[APP] 🔍 Search opened')
-          setSearchOpen(true)
-        }}
-        onShowShortcuts={() => {
-          console.log('[APP] ⌨️ Shortcuts dialog opened')
-          setShortcutsOpen(true)
-        }}
-        onGenerateAI={() => {
-          console.log('[APP] 🤖 AI generation requested')
-          toast.info('AI generation coming soon')
-        }}
-        onExport={() => {
-          console.log('[APP] 📤 Export requested')
-          toast.info('Export coming soon')
-        }}
-        onPreview={() => {
-          console.log('[APP] 👁️ Preview opened')
-          setPreviewOpen(true)
-        }}
-        onShowErrors={() => {
-          console.log('[APP] ⚠️ Navigating to errors page')
-          navigateToPage('errors')
-        }}
-      />
-      <div className="flex-1 overflow-hidden">
-        <RouterProvider 
-          featureToggles={featureToggles}
-          stateContext={{
-            files,
-            models,
-            components,
-            componentTrees,
-            workflows,
-            lambdas,
-            theme,
-            playwrightTests,
-            storybookStories,
-            unitTests,
-            flaskConfig,
-            nextjsConfig,
-            npmSettings,
-            featureToggles,
-            activeFileId,
-          }}
-          actionContext={{
-            handleFileChange,
-            setActiveFileId,
-            handleFileClose,
-            handleFileAdd,
-            setModels,
-            setComponents,
-            setComponentTrees,
-            setWorkflows,
-            setLambdas,
-            setTheme,
-            setPlaywrightTests,
-            setStorybookStories,
-            setUnitTests,
-            setFlaskConfig,
-            setNextjsConfig,
-            setNpmSettings,
-            setFeatureToggles,
-          }}
-        />
+    <div className="min-h-screen bg-background">
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f12_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f12_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+        
+        <div className="relative">
+          <header className="border-b border-border/40 backdrop-blur-sm">
+            <div className="container mx-auto px-4 sm:px-6 py-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                  <Stack size={32} weight="bold" className="text-primary" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Docker Build Debugger</h1>
+                  <p className="text-sm text-muted-foreground">Analyze errors and get instant solutions</p>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main className="container mx-auto px-4 sm:px-6 py-8">
+            <Tabs defaultValue="analyzer" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-2 lg:w-auto lg:inline-grid bg-card/50 backdrop-blur-sm">
+                <TabsTrigger value="analyzer" className="gap-2">
+                  <Terminal size={16} weight="bold" />
+                  <span className="hidden sm:inline">Log Analyzer</span>
+                  <span className="sm:hidden">Analyze</span>
+                </TabsTrigger>
+                <TabsTrigger value="knowledge" className="gap-2">
+                  <MagnifyingGlass size={16} weight="bold" />
+                  <span className="hidden sm:inline">Knowledge Base</span>
+                  <span className="sm:hidden">Knowledge</span>
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="analyzer" className="space-y-6">
+                <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          <Terminal size={20} weight="bold" className="text-primary" />
+                          Paste Build Log
+                        </CardTitle>
+                        <CardDescription>
+                          Copy your Docker build output and paste it below for analysis
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Textarea
+                      value={logInput}
+                      onChange={(e) => setLogInput(e.target.value)}
+                      placeholder="Paste your Docker build log here...
+
+Example:
+#30 50.69 Error: Cannot find module @rollup/rollup-linux-arm64-musl
+#30 ERROR: process '/bin/sh -c npm run build' did not complete successfully: exit code: 1"
+                      className="min-h-[300px] font-mono text-sm bg-secondary/50 border-border/50 focus:border-accent/50 focus:ring-accent/20"
+                    />
+                    <div className="flex gap-3">
+                      <Button onClick={handleParse} className="gap-2" size="lg">
+                        <Sparkle size={18} weight="fill" />
+                        Analyze Log
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setLogInput('')
+                          setParsedErrors([])
+                        }}
+                        size="lg"
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <AnimatePresence mode="wait">
+                  {parsedErrors.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                      className="space-y-6"
+                    >
+                      {parsedErrors.map((error, index) => (
+                        <Card key={error.id} className="border-destructive/30 bg-card/50 backdrop-blur-sm">
+                          <CardHeader>
+                            <div className="flex items-start justify-between">
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <Warning size={24} weight="fill" className="text-destructive animate-pulse" />
+                                  <CardTitle className="text-destructive">Error #{index + 1}</CardTitle>
+                                  <Badge variant="destructive" className="font-mono">
+                                    {error.type}
+                                  </Badge>
+                                  {error.exitCode && (
+                                    <Badge variant="outline" className="font-mono">
+                                      Exit Code: {error.exitCode}
+                                    </Badge>
+                                  )}
+                                  {error.stage && (
+                                    <Badge variant="secondary" className="font-mono">
+                                      {error.stage}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-sm text-muted-foreground font-mono">{error.message}</p>
+                              </div>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-6">
+                            {error.context.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
+                                  <Code size={16} weight="bold" />
+                                  Error Context
+                                </h4>
+                                <ScrollArea className="h-32 rounded-md border border-border/50 bg-secondary/50 p-3">
+                                  <pre className="text-xs font-mono text-muted-foreground whitespace-pre-wrap">
+                                    {error.context.join('\n')}
+                                  </pre>
+                                </ScrollArea>
+                              </div>
+                            )}
+
+                            <Separator />
+
+                            <div>
+                              <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <CheckCircle size={20} weight="bold" className="text-accent" />
+                                Recommended Solutions
+                              </h4>
+                              <div className="space-y-4">
+                                {getSolutionsForError(error).map((solution, sIndex) => (
+                                  <motion.div
+                                    key={sIndex}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: sIndex * 0.1 }}
+                                  >
+                                    <Card className="bg-secondary/30 border-accent/20">
+                                      <CardHeader>
+                                        <CardTitle className="text-base text-accent">
+                                          {solution.title}
+                                        </CardTitle>
+                                        <CardDescription>{solution.description}</CardDescription>
+                                      </CardHeader>
+                                      <CardContent className="space-y-3">
+                                        <div>
+                                          <h5 className="text-sm font-semibold mb-2">Steps:</h5>
+                                          <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
+                                            {solution.steps.map((step, stepIndex) => (
+                                              <li key={stepIndex}>{step}</li>
+                                            ))}
+                                          </ol>
+                                        </div>
+                                        {solution.code && (
+                                          <div>
+                                            <div className="flex items-center justify-between mb-2">
+                                              <h5 className="text-sm font-semibold">Code:</h5>
+                                              <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => handleCopy(solution.code!, 'Code')}
+                                                className="gap-2 h-7"
+                                              >
+                                                <Copy size={14} />
+                                                Copy
+                                              </Button>
+                                            </div>
+                                            <ScrollArea className="max-h-48 rounded-md border border-border/50 bg-secondary/50 p-3">
+                                              <pre className="text-xs font-mono text-foreground whitespace-pre-wrap">
+                                                {solution.code}
+                                              </pre>
+                                            </ScrollArea>
+                                            {solution.codeLanguage && (
+                                              <p className="text-xs text-muted-foreground mt-1">
+                                                Language: {solution.codeLanguage}
+                                              </p>
+                                            )}
+                                          </div>
+                                        )}
+                                      </CardContent>
+                                    </Card>
+                                  </motion.div>
+                                ))}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </TabsContent>
+
+              <TabsContent value="knowledge" className="space-y-6">
+                <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <MagnifyingGlass size={20} weight="bold" className="text-primary" />
+                      Search Knowledge Base
+                    </CardTitle>
+                    <CardDescription>
+                      Browse common Docker build errors and their solutions
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="relative">
+                      <MagnifyingGlass 
+                        size={20} 
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                      />
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search errors, categories, or keywords..."
+                        className="w-full pl-10 pr-4 py-3 rounded-lg border border-border/50 bg-secondary/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent/50"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  {filteredKnowledgeBase.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Card 
+                        className="border-border/50 bg-card/50 backdrop-blur-sm cursor-pointer hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5 transition-all"
+                        onClick={() => setSelectedKbItem(item)}
+                      >
+                        <CardHeader>
+                          <div className="flex items-start justify-between gap-2">
+                            <CardTitle className="text-base">{item.title}</CardTitle>
+                            <Badge variant="secondary" className="text-xs shrink-0">
+                              {item.category}
+                            </Badge>
+                          </div>
+                          <CardDescription className="text-xs font-mono text-muted-foreground">
+                            {item.pattern}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {item.explanation}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {filteredKnowledgeBase.length === 0 && (
+                  <Alert>
+                    <AlertDescription>
+                      No results found for "{searchQuery}". Try different keywords.
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                <AnimatePresence mode="wait">
+                  {selectedKbItem && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
+                      onClick={() => setSelectedKbItem(null)}
+                    >
+                      <motion.div
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0.9 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-full max-w-3xl max-h-[90vh] overflow-auto"
+                      >
+                        <Card className="border-border bg-card">
+                          <CardHeader>
+                            <div className="flex items-start justify-between">
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                  <Badge variant="secondary">{selectedKbItem.category}</Badge>
+                                  <CardTitle>{selectedKbItem.title}</CardTitle>
+                                </div>
+                                <p className="text-sm font-mono text-muted-foreground">
+                                  Pattern: {selectedKbItem.pattern}
+                                </p>
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedKbItem(null)}
+                              >
+                                Close
+                              </Button>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-6">
+                            <div>
+                              <h4 className="font-semibold mb-2">Explanation</h4>
+                              <p className="text-sm text-muted-foreground">
+                                {selectedKbItem.explanation}
+                              </p>
+                            </div>
+
+                            <Separator />
+
+                            <div>
+                              <h4 className="font-semibold mb-4 flex items-center gap-2">
+                                <CheckCircle size={18} weight="bold" className="text-accent" />
+                                Solutions
+                              </h4>
+                              <div className="space-y-4">
+                                {selectedKbItem.solutions.map((solution, index) => (
+                                  <Card key={index} className="bg-secondary/30 border-accent/20">
+                                    <CardHeader>
+                                      <CardTitle className="text-base text-accent">
+                                        {solution.title}
+                                      </CardTitle>
+                                      <CardDescription>{solution.description}</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-3">
+                                      <div>
+                                        <h5 className="text-sm font-semibold mb-2">Steps:</h5>
+                                        <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
+                                          {solution.steps.map((step, stepIndex) => (
+                                            <li key={stepIndex}>{step}</li>
+                                          ))}
+                                        </ol>
+                                      </div>
+                                      {solution.code && (
+                                        <div>
+                                          <div className="flex items-center justify-between mb-2">
+                                            <h5 className="text-sm font-semibold">Code:</h5>
+                                            <Button
+                                              variant="outline"
+                                              size="sm"
+                                              onClick={() => handleCopy(solution.code!, 'Code')}
+                                              className="gap-2 h-7"
+                                            >
+                                              <Copy size={14} />
+                                              Copy
+                                            </Button>
+                                          </div>
+                                          <ScrollArea className="max-h-48 rounded-md border border-border/50 bg-secondary/50 p-3">
+                                            <pre className="text-xs font-mono text-foreground whitespace-pre-wrap">
+                                              {solution.code}
+                                            </pre>
+                                          </ScrollArea>
+                                        </div>
+                                      )}
+                                    </CardContent>
+                                  </Card>
+                                ))}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </TabsContent>
+            </Tabs>
+          </main>
+        </div>
       </div>
-
-      <Suspense fallback={null}>
-        <GlobalSearch
-          open={searchOpen}
-          onOpenChange={setSearchOpen}
-          files={files}
-          models={models}
-          components={components}
-          componentTrees={componentTrees}
-          workflows={workflows}
-          lambdas={lambdas}
-          playwrightTests={playwrightTests}
-          storybookStories={storybookStories}
-          unitTests={unitTests}
-          onNavigate={navigateToPage}
-          onFileSelect={setActiveFileId}
-        />
-      </Suspense>
-
-      <Suspense fallback={null}>
-        <KeyboardShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
-      </Suspense>
-      <Suspense fallback={null}>
-        <PreviewDialog open={previewOpen} onOpenChange={setPreviewOpen} />
-      </Suspense>
-      <Suspense fallback={null}>
-        <PWAInstallPrompt />
-      </Suspense>
-      
-      <PreloadIndicator />
     </div>
   )
 }
-
-function App() {
-  console.log('[APP] 🚀 App component initializing')
-  console.log('[APP] 🌐 Current URL:', window.location.href)
-  console.log('[APP] 📍 Current pathname:', window.location.pathname)
-  console.log('[APP] 🔍 Current search:', window.location.search)
-  console.log('[APP] 🏷️ Current hash:', window.location.hash)
-  
-  console.log('[APP] 🌱 Initializing seed data hook')
-  const { loadSeedData } = useSeedData()
-  const [appReady, setAppReady] = useState(false)
-  
-  useEffect(() => {
-    console.log('[APP] 🚀 Initialization effect triggered')
-    console.log('[APP] ⏰ Timestamp:', new Date().toISOString())
-    console.time('[APP] Seed data loading')
-    
-    const timer = setTimeout(() => {
-      console.log('[APP] ⏱️ Fallback timer triggered (100ms)')
-      setAppReady(true)
-    }, 100)
-    
-    console.log('[APP] 📥 Starting seed data load')
-    loadSeedData()
-      .then(() => {
-        console.log('[APP] ✅ Seed data loaded successfully')
-      })
-      .catch(err => {
-        console.error('[APP] ❌ Seed data loading failed:', err)
-      })
-      .finally(() => {
-        console.log('[APP] 🏁 Seed data loading complete')
-        clearTimeout(timer)
-        setAppReady(true)
-        console.timeEnd('[APP] Seed data loading')
-        console.log('[APP] ✅ App marked as ready')
-        
-        console.log('[APP] 🚀 Preloading critical components')
-        preloadCriticalComponents()
-        
-        console.log('[APP] ⭐ Preloading popular routes')
-        setTimeout(() => {
-          routePreloadManager.preloadPopularRoutes()
-        }, 1000)
-      })
-
-    return () => {
-      console.log('[APP] 🧹 Cleaning up initialization effect')
-      clearTimeout(timer)
-    }
-  }, [loadSeedData])
-
-  console.log('[APP] 🎨 Rendering App component, appReady:', appReady)
-  
-  return (
-    <>
-      {!appReady && (
-        <div className="fixed inset-0 bg-background z-50 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-muted-foreground">Loading CodeForge...</p>
-          </div>
-        </div>
-      )}
-      <BrowserRouter>
-        <AppLayout />
-      </BrowserRouter>
-    </>
-  )
-}
-
-console.log('[APP] ✅ App component defined')
-console.timeEnd('[APP] Component initialization')
 
 export default App
