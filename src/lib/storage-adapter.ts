@@ -16,9 +16,30 @@ export interface StorageAdapter {
 class FlaskBackendAdapter implements StorageAdapter {
   private baseUrl: string
   private isAvailable: boolean | null = null
+  private readonly TIMEOUT_MS = 2000
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl.replace(/\/$/, '')
+  }
+
+  private async fetchWithTimeout(url: string, options: RequestInit = {}): Promise<Response> {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS)
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
+      return response
+    } catch (error: any) {
+      clearTimeout(timeoutId)
+      if (error.name === 'AbortError') {
+        throw new Error(`Request timeout after ${this.TIMEOUT_MS}ms`)
+      }
+      throw error
+    }
   }
 
   private async checkAvailability(): Promise<boolean> {
@@ -27,10 +48,9 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/health`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        signal: AbortSignal.timeout(3000),
       })
       this.isAvailable = response.ok
       console.log('[StorageAdapter] Flask backend available:', this.isAvailable)
@@ -48,7 +68,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/${encodeURIComponent(key)}`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/${encodeURIComponent(key)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -65,6 +85,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       return data.value as T
     } catch (error) {
       console.error(`[StorageAdapter] Error getting key ${key}:`, error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -75,7 +96,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/${encodeURIComponent(key)}`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/${encodeURIComponent(key)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ value }),
@@ -86,6 +107,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       }
     } catch (error) {
       console.error(`[StorageAdapter] Error setting key ${key}:`, error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -96,7 +118,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/${encodeURIComponent(key)}`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/${encodeURIComponent(key)}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -110,6 +132,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       }
     } catch (error) {
       console.error(`[StorageAdapter] Error deleting key ${key}:`, error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -120,7 +143,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/keys`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/keys`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -133,6 +156,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       return data.keys
     } catch (error) {
       console.error('[StorageAdapter] Error getting keys:', error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -143,7 +167,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/clear`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/clear`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -153,6 +177,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       }
     } catch (error) {
       console.error('[StorageAdapter] Error clearing storage:', error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -163,7 +188,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/export`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/export`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -175,6 +200,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       return await response.json()
     } catch (error) {
       console.error('[StorageAdapter] Error exporting data:', error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -185,7 +211,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/import`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/import`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -199,6 +225,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       return result.imported
     } catch (error) {
       console.error('[StorageAdapter] Error importing data:', error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -209,7 +236,7 @@ class FlaskBackendAdapter implements StorageAdapter {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/api/storage/stats`, {
+      const response = await this.fetchWithTimeout(`${this.baseUrl}/api/storage/stats`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -221,6 +248,7 @@ class FlaskBackendAdapter implements StorageAdapter {
       return await response.json()
     } catch (error) {
       console.error('[StorageAdapter] Error getting stats:', error)
+      this.isAvailable = false
       throw error
     }
   }
@@ -338,6 +366,8 @@ class AutoStorageAdapter implements StorageAdapter {
   private backendType: 'flask' | 'indexeddb' | null = null
   private initPromise: Promise<void> | null = null
   private hasWarnedAboutFallback = false
+  private failureCount = 0
+  private readonly MAX_FAILURES_BEFORE_SWITCH = 3
 
   private async initialize(): Promise<void> {
     if (this.adapter) {
@@ -362,18 +392,39 @@ class AutoStorageAdapter implements StorageAdapter {
     await this.initPromise
   }
 
+  private switchToFallback(): void {
+    if (this.backendType === 'flask' && this.fallbackAdapter) {
+      console.warn('[StorageAdapter] Too many Flask failures detected, permanently switching to IndexedDB for this session')
+      this.adapter = this.fallbackAdapter
+      this.backendType = 'indexeddb'
+      this.fallbackAdapter = null
+      this.failureCount = 0
+    }
+  }
+
   private async executeWithFallback<T>(
     operation: () => Promise<T>,
     fallbackOperation?: () => Promise<T>
   ): Promise<T> {
     try {
-      return await operation()
+      const result = await operation()
+      if (this.backendType === 'flask') {
+        this.failureCount = 0
+      }
+      return result
     } catch (error) {
       if (this.backendType === 'flask' && this.fallbackAdapter && fallbackOperation) {
+        this.failureCount++
+        
         if (!this.hasWarnedAboutFallback) {
           console.warn('[StorageAdapter] Flask backend operation failed, falling back to IndexedDB:', error)
           this.hasWarnedAboutFallback = true
         }
+        
+        if (this.failureCount >= this.MAX_FAILURES_BEFORE_SWITCH) {
+          this.switchToFallback()
+        }
+        
         try {
           return await fallbackOperation()
         } catch (fallbackError) {

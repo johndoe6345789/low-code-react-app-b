@@ -11,26 +11,41 @@ export interface StorageAdapter {
 
 class FlaskBackendAdapter implements StorageAdapter {
   private baseUrl: string
+  private readonly TIMEOUT_MS = 2000
 
   constructor(baseUrl?: string) {
     this.baseUrl = baseUrl || localStorage.getItem('codeforge-flask-url') || import.meta.env.VITE_FLASK_BACKEND_URL || 'http://localhost:5001'
   }
 
   private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
-    })
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS)
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: response.statusText }))
-      throw new Error(error.error || `HTTP ${response.status}`)
+    try {
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options?.headers,
+        },
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: response.statusText }))
+        throw new Error(error.error || `HTTP ${response.status}`)
+      }
+
+      return response.json()
+    } catch (error: any) {
+      clearTimeout(timeoutId)
+      if (error.name === 'AbortError') {
+        throw new Error(`Request timeout after ${this.TIMEOUT_MS}ms`)
+      }
+      throw error
     }
-
-    return response.json()
   }
 
   async get<T>(key: string): Promise<T | undefined> {
@@ -343,20 +358,6 @@ class UnifiedStorage {
       const flaskEnvUrl = import.meta.env.VITE_FLASK_BACKEND_URL
       const preferSQLite = localStorage.getItem('codeforge-prefer-sqlite') === 'true'
 
-      if (preferFlask || flaskEnvUrl) {
-        try {
-          console.log('[Storage] Flask backend explicitly configured, attempting to initialize...')
-          const flaskAdapter = new FlaskBackendAdapter(flaskEnvUrl)
-          await flaskAdapter.get('_health_check')
-          this.adapter = flaskAdapter
-          this.backend = 'flask'
-          console.log('[Storage] ✓ Using Flask backend')
-          return
-        } catch (error) {
-          console.warn('[Storage] Flask backend not available, falling back to IndexedDB:', error)
-        }
-      }
-
       if (typeof indexedDB !== 'undefined') {
         try {
           console.log('[Storage] Initializing default IndexedDB backend...')
@@ -368,6 +369,26 @@ class UnifiedStorage {
           return
         } catch (error) {
           console.warn('[Storage] IndexedDB not available:', error)
+        }
+      }
+
+      if (preferFlask || flaskEnvUrl) {
+        try {
+          console.log('[Storage] Flask backend explicitly configured, attempting to initialize...')
+          const flaskAdapter = new FlaskBackendAdapter(flaskEnvUrl)
+          const testResponse = await Promise.race([
+            flaskAdapter.get('_health_check'),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Flask connection timeout')), 2000))
+          ])
+          this.adapter = flaskAdapter
+          this.backend = 'flask'
+          console.log('[Storage] ✓ Using Flask backend')
+          return
+        } catch (error) {
+          console.warn('[Storage] Flask backend not available, already using IndexedDB:', error)
+          if (this.adapter && this.backend === 'indexeddb') {
+            return
+          }
         }
       }
 
@@ -405,29 +426,42 @@ class UnifiedStorage {
     return this.initPromise
   }
 
+  private async executeWithAutoFallback<T>(operation: () => Promise<T>): Promise<T> {
+    try {
+      return await operation()
+    } catch (error) {
+      if (this.backend === 'flask') {
+        console.warn('[Storage] Flask operation failed, switching to IndexedDB:', error)
+        await this.switchToIndexedDB()
+        return await operation()
+      }
+      throw error
+    }
+  }
+
   async get<T>(key: string): Promise<T | undefined> {
     await this.detectAndInitialize()
-    return this.adapter!.get<T>(key)
+    return this.executeWithAutoFallback(() => this.adapter!.get<T>(key))
   }
 
   async set<T>(key: string, value: T): Promise<void> {
     await this.detectAndInitialize()
-    await this.adapter!.set(key, value)
+    return this.executeWithAutoFallback(() => this.adapter!.set(key, value))
   }
 
   async delete(key: string): Promise<void> {
     await this.detectAndInitialize()
-    await this.adapter!.delete(key)
+    return this.executeWithAutoFallback(() => this.adapter!.delete(key))
   }
 
   async keys(): Promise<string[]> {
     await this.detectAndInitialize()
-    return this.adapter!.keys()
+    return this.executeWithAutoFallback(() => this.adapter!.keys())
   }
 
   async clear(): Promise<void> {
     await this.detectAndInitialize()
-    await this.adapter!.clear()
+    return this.executeWithAutoFallback(() => this.adapter!.clear())
   }
 
   async getBackend(): Promise<StorageBackend | null> {
