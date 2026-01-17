@@ -6,79 +6,36 @@
  * Lists all components that can be rendered from JSON using the JSON UI system.
  * 
  * Usage:
- *   node scripts/list-json-components.js [--format=table|json]
+ *   node scripts/list-json-components.cjs [--format=table|json] [--status=all|supported|planned]
  */
 
 const fs = require('fs')
 const path = require('path')
 
-// Read the component definitions
-const componentDefsPath = path.join(process.cwd(), 'src', 'lib', 'component-definitions.ts')
+// Read the JSON components registry
+const registryPath = path.join(process.cwd(), 'json-components-registry.json')
 
-if (!fs.existsSync(componentDefsPath)) {
-  console.error('❌ Could not find src/lib/component-definitions.ts')
+if (!fs.existsSync(registryPath)) {
+  console.error('❌ Could not find json-components-registry.json')
   process.exit(1)
 }
 
-// Read the types file to get the ComponentType union
-const typesPath = path.join(process.cwd(), 'src', 'types', 'json-ui.ts')
-
-if (!fs.existsSync(typesPath)) {
-  console.error('❌ Could not find src/types/json-ui.ts')
-  process.exit(1)
-}
-
-// Parse the component definitions from the TypeScript file
-const componentDefsContent = fs.readFileSync(componentDefsPath, 'utf8')
-
-// Extract the component definitions array using regex
-const arrayMatch = componentDefsContent.match(/export const componentDefinitions: ComponentDefinition\[\] = (\[[\s\S]*?\n\])/m)
-
-if (!arrayMatch) {
-  console.error('❌ Could not parse componentDefinitions from file')
-  process.exit(1)
-}
-
-// Convert the TypeScript array to JSON by replacing single quotes with double quotes
-// and removing trailing commas
-let arrayStr = arrayMatch[1]
-  .replace(/'/g, '"')
-  .replace(/,(\s*[}\]])/g, '$1')
-
-// Parse as JSON
-let componentDefinitions
+let registry
 try {
-  componentDefinitions = JSON.parse(arrayStr)
+  registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'))
 } catch (e) {
-  console.error('❌ Failed to parse component definitions:', e.message)
+  console.error('❌ Failed to parse json-components-registry.json:', e.message)
   process.exit(1)
-}
-
-// Parse the ComponentType union from types file
-const typesContent = fs.readFileSync(typesPath, 'utf8')
-const typeMatch = typesContent.match(/export type ComponentType = \n([\s\S]*?)\n\n/)
-
-let componentTypes = []
-if (typeMatch) {
-  const typeLines = typeMatch[1].split('\n')
-  componentTypes = typeLines
-    .map(line => line.trim())
-    .filter(line => line.startsWith('|'))
-    .map(line => line.replace(/^\|\s*/, '').replace(/['"\s]/g, ''))
-    .filter(t => t.length > 0)
 }
 
 const format = process.argv.find(arg => arg.startsWith('--format='))?.split('=')[1] || 'table'
+const statusFilter = process.argv.find(arg => arg.startsWith('--status='))?.split('=')[1] || 'all'
 
-// Build the output data
-const componentsList = componentDefinitions.map(comp => ({
-  type: comp.type,
-  label: comp.label,
-  category: comp.category,
-  icon: comp.icon,
-  canHaveChildren: comp.canHaveChildren || false,
-  hasDefaultProps: !!comp.defaultProps
-}))
+// Filter components by status if requested
+let componentsList = registry.components
+if (statusFilter !== 'all') {
+  componentsList = componentsList.filter(c => c.status === statusFilter)
+}
 
 if (format === 'json') {
   console.log(JSON.stringify(componentsList, null, 2))
@@ -88,14 +45,21 @@ if (format === 'json') {
 // Table format output
 console.log('\n🧩 JSON-Compatible Components\n')
 console.log('═══════════════════════════════════════════════════════════════════════════\n')
-console.log('These components can be rendered from JSON schemas using the JSON UI system.\n')
+console.log(`These components can be rendered from JSON schemas using the JSON UI system.`)
+if (statusFilter !== 'all') {
+  console.log(`\nFiltered by status: ${statusFilter}`)
+}
+console.log()
 
 // Group by category
-const categories = ['layout', 'input', 'display', 'custom']
+const categories = ['layout', 'input', 'display', 'navigation', 'feedback', 'data', 'custom']
 const categoryIcons = {
   layout: '📐',
   input: '⌨️ ',
   display: '🎨',
+  navigation: '🧭',
+  feedback: '💬',
+  data: '📊',
   custom: '⚡'
 }
 
@@ -109,42 +73,46 @@ categories.forEach(category => {
   
   categoryComps.forEach(comp => {
     const children = comp.canHaveChildren ? '👶 Can have children' : '➖ No children'
-    const defaults = comp.hasDefaultProps ? '✓' : '✗'
+    const statusIcon = comp.status === 'supported' ? '✅' : '📋'
+    const subComps = comp.subComponents ? ` (includes: ${comp.subComponents.join(', ')})` : ''
     
-    console.log(`  • ${comp.label} (${comp.type})`)
-    console.log(`    Icon: ${comp.icon}`)
+    console.log(`  ${statusIcon} ${comp.name} (${comp.type})`)
+    console.log(`    ${comp.description}`)
     console.log(`    ${children}`)
-    console.log(`    Default Props: ${defaults}`)
+    if (comp.subComponents) {
+      console.log(`    Sub-components: ${comp.subComponents.join(', ')}`)
+    }
     console.log('')
   })
 })
 
 console.log('═══════════════════════════════════════════════════════════════════════════')
 console.log(`\nTotal Components: ${componentsList.length}`)
-console.log(`By Category:`)
+
+if (statusFilter === 'all') {
+  const supported = componentsList.filter(c => c.status === 'supported').length
+  const planned = componentsList.filter(c => c.status === 'planned').length
+  console.log(`\nBy Status:`)
+  console.log(`  ✅ Supported: ${supported}`)
+  console.log(`  📋 Planned: ${planned}`)
+}
+
+console.log(`\nBy Category:`)
 categories.forEach(cat => {
   const count = componentsList.filter(c => c.category === cat).length
   if (count > 0) {
-    console.log(`  ${cat}: ${count}`)
+    console.log(`  ${categoryIcons[cat]} ${cat}: ${count}`)
   }
 })
 
 console.log(`\nComponents with children support: ${componentsList.filter(c => c.canHaveChildren).length}`)
-console.log(`Components with default props: ${componentsList.filter(c => c.hasDefaultProps).length}`)
 
 console.log('\n💡 Tips:')
-console.log('  • These components are defined in src/lib/component-definitions.ts')
-console.log('  • Component types are listed in src/types/json-ui.ts')
-console.log('  • Component registry is in src/lib/json-ui/component-registry.tsx')
+console.log('  • Full registry in json-components-registry.json')
+console.log('  • Component types defined in src/types/json-ui.ts')
+console.log('  • Component registry in src/lib/json-ui/component-registry.tsx')
+console.log('  • Component definitions in src/lib/component-definitions.ts')
 console.log('  • Run with --format=json for JSON output')
-console.log('')
-
-// List all available ComponentTypes
-console.log('\n📝 Available ComponentTypes:\n')
-console.log('───────────────────────────────────────────────────────────────────────────')
-componentTypes.forEach(type => {
-  const isDefined = componentsList.some(c => c.type === type)
-  const status = isDefined ? '✓' : '⚠️ '
-  console.log(`  ${status} ${type}`)
-})
+console.log('  • Run with --status=supported to see only supported components')
+console.log('  • Run with --status=planned to see only planned components')
 console.log('')
