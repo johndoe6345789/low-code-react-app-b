@@ -2,10 +2,10 @@
 
 Build a comprehensive JSON-driven UI system that allows building entire user interfaces from declarative JSON schemas, breaking down complex components into atomic pieces, and extracting reusable logic into custom hooks for maximum maintainability and rapid development.
 
-**Experience Qualities**:
-1. **Declarative** - Define entire UI layouts using JSON schemas without writing React code, making it accessible to non-developers and rapid to prototype
-2. **Modular** - Every component is small, focused, and reusable, with complex UIs composed from atomic building blocks
-3. **Maintainable** - Logic extracted into custom hooks, components kept under 150 LOC, making the codebase easy to understand and modify
+2. **Modular** - Every co
+
+This is an advanced system that interprets JSON schemas, manages state across multiple data sources, executes actions d
+## Essential Features
 
 **Complexity Level**: Complex Application (advanced functionality with multiple views)
 This is an advanced system that interprets JSON schemas, manages state across multiple data sources, executes actions dynamically, and renders complex component hierarchies - requiring sophisticated architecture with component registries, action executors, and data source managers.
@@ -16,59 +16,59 @@ This is an advanced system that interprets JSON schemas, manages state across mu
 - **Functionality**: Parse and validate JSON UI schemas with full TypeScript type safety
 - **Purpose**: Enable building UIs from configuration rather than code
 - **Trigger**: User loads a page defined by JSON schema
-- **Progression**: Load JSON → Validate schema → Parse component tree → Register data sources → Render UI
-- **Success criteria**: Any valid JSON schema renders correctly without React code changes
-
-### Component Registry System
-- **Functionality**: Map JSON component types to React components dynamically
-- **Purpose**: Decouple component definitions from rendering logic
-- **Trigger**: JSON renderer encounters a component type
 - **Progression**: Look up type → Resolve component → Pass props → Render with children
-- **Success criteria**: All shadcn components and custom components accessible via type string
 
-### Data Source Manager
-- **Functionality**: Handle KV store, computed values, and external data sources
-- **Purpose**: Centralize data management for JSON-driven UIs
-- **Trigger**: Component needs data or action modifies data
-- **Progression**: Initialize sources → Subscribe to changes → Update UI → Persist to KV
-- **Success criteria**: Data flows correctly between sources, components, and persistence layer
 
+- **Trigger**: Component need
+- **Success criteria**: Data flows correctly between sources, components, and
 ### Action Executor
-- **Functionality**: Execute CRUD, navigation, and custom actions from JSON
-- **Purpose**: Handle all user interactions declaratively
-- **Trigger**: User clicks button, submits form, or triggers event
-- **Progression**: Parse action → Validate params → Execute handler → Update data → Show feedback
-- **Success criteria**: All common actions (create, update, delete, navigate) work from JSON
+- **Purpose**: Handle all user interactions declarativel
+- **Progression**: Parse action → Validate params → Execute handler → Update data → Sho
 
-### Atomic Component Library
-- **Functionality**: Break down large components into atomic pieces
-- **Purpose**: Keep all components under 150 LOC for maintainability
-- **Trigger**: Developer needs to render UI element
-- **Progression**: Import atom → Compose into molecule → Build organism → Assemble page
-- **Success criteria**: No component exceeds 150 LOC, all components highly reusable
 
+- **Trigger**: Develope
+- **Success criteria**: No component exceeds 150 LOC, all components highly reus
 ### Custom Hooks Library  
-- **Functionality**: Extract business logic into focused, reusable hooks
-- **Purpose**: Separate concerns and enable logic reuse across components
-- **Trigger**: Component needs state management, side effects, or complex logic
+- **Purpose**: Separate concerns and enable logic reuse acr
 - **Progression**: Call hook → Provide config → Receive state and handlers → Render UI
-- **Success criteria**: All hooks under 150 LOC, cover common patterns (CRUD, forms, dialogs, tabs)
 
-## Edge Case Handling
 
-- **Invalid JSON Schema** - Validate schema on load, show detailed error messages with line numbers
-- **Missing Component Types** - Fall back to placeholder component, log warning to console
-- **Circular Dependencies** - Detect and prevent infinite loops in component trees
-- **Data Source Errors** - Catch KV failures, show toast notifications, maintain last good state
-- **Large Data Sets** - Implement virtual scrolling and pagination for lists with 1000+ items
-- **Concurrent Updates** - Use optimistic updates with rollback on conflict
-- **Missing Data** - Provide sensible defaults, show empty states with helpful guidance
+- **Missing Compone
+- **Data Source Errors** - Catch KV failures, show toast notifications, mai
+- **Concurrent Updates** - Use optimistic updates with ro
 
-## Design Direction
 
-The design should feel **powerful yet accessible** - a professional IDE experience that doesn't intimidate. Bold, technical aesthetics with code-inspired elements (monospace fonts, syntax-style colors, grid patterns) combined with smooth animations and glassmorphism effects. The UI should feel like a next-generation development tool - confident, precise, and intelligent.
 
-## Color Selection
+
+
+- **Secondary Colors**: 
+  - Deep Navy `oklch(0.18 0.02 250)` for cards and elevated surfaces
+- **Foreground/Background Pairings**:
+  - Card (Darker Navy #252535) → Card Foreground (Light Gray #E8E8EC) - Ratio 11.2:1 ✓ 
+  - Accent (Cyan #5DD5F5) → Accent Foreground (Deep Navy #1E1E2E) - Ratio 9.2:1 ✓
+
+
+
+  - H1 (Page Titles): Space Grotesk Bold/32px/tight (-0.02em) - Geometric
+  - H3 (Component Headers): Space Grotesk Medium/18px/normal
+  - Code/Technical: JetBrains Mono Regular/13px/normal (1.5) - Monospace for code and 
+
+
+
+
+  - `Card` for containing feature sections and data panels
+  - `Input`, `Textarea`, `Select`, `Checkbox`, `Switch` for forms
+  - `Tabs` for organizing related content
+  - `Progress` for completion metrics
+  - `ScrollArea` for contained scrollable regions
+  
+  - Create `JSONRenderer` component to interpret schemas
+
+  
+
+  - Cards: subtle lift shadow on hover for interactive cards
+
+  - Code, Database
 
 A **dark cyberpunk development theme** with electric accents and technical precision.
 
@@ -129,6 +129,21 @@ Animations should feel **snappy and purposeful** - fast micro-interactions (100-
   - Phosphor Icons with duotone weight for primary actions
   - Code, Database, Tree, Cube for feature areas
   - Plus, Pencil, Trash for CRUD operations
+  - MagnifyingGlass, Gear, Download for utilities
+  
+- **Spacing**: 
+  - Container padding: p-6 (1.5rem)
+  - Section gaps: gap-6 (1.5rem) 
+  - Card gaps: gap-4 (1rem)
+  - Button groups: gap-2 (0.5rem)
+  - Tight elements: gap-1 (0.25rem)
+  
+- **Mobile**: 
+  - Stack toolbar actions vertically on <640px
+  - Single column layouts on <768px
+  - Reduce padding to p-4 on mobile
+  - Bottom sheet dialogs instead of centered modals
+  - Hamburger menu for navigation on small screens
   - MagnifyingGlass, Gear, Download for utilities
   
 - **Spacing**: 
