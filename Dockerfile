@@ -2,6 +2,9 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
+# Upgrade npm to the latest version
+RUN npm install -g npm@latest
+
 # Copy workspace configuration and all package files
 COPY package*.json ./
 
