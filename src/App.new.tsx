@@ -4,17 +4,17 @@ import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
 import { CodeEditor } from '@/components/CodeEditor'
-import { ModelDesigner } from '@/components/ModelDesigner'
+import { JSONModelDesigner } from '@/components/JSONModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
-import { ComponentTreeManager } from '@/components/ComponentTreeManager'
-import { WorkflowDesigner } from '@/components/WorkflowDesigner'
-import { LambdaDesigner } from '@/components/LambdaDesigner'
-import { StyleDesigner } from '@/components/StyleDesigner'
+import { JSONComponentTreeManager } from '@/components/JSONComponentTreeManager'
+import { JSONWorkflowDesigner } from '@/components/JSONWorkflowDesigner'
+import { JSONLambdaDesigner } from '@/components/JSONLambdaDesigner'
+import { JSONStyleDesigner } from '@/components/JSONStyleDesigner'
 import { FileExplorer } from '@/components/FileExplorer'
 import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
 import { StorybookDesigner } from '@/components/StorybookDesigner'
 import { UnitTestDesigner } from '@/components/UnitTestDesigner'
-import { FlaskDesigner } from '@/components/FlaskDesigner'
+import { JSONFlaskDesigner } from '@/components/JSONFlaskDesigner'
 import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
 import { ErrorPanel } from '@/components/ErrorPanel'
 import { DocumentationView } from '@/components/DocumentationView'
@@ -208,7 +208,7 @@ function App() {
 
           {featureToggles.models && (
             <TabsContent value="models" className="h-full m-0">
-              <ModelDesigner models={models} onModelsChange={setModels} />
+              <JSONModelDesigner models={models} onModelsChange={setModels} />
             </TabsContent>
           )}
 
@@ -220,31 +220,31 @@ function App() {
 
           {featureToggles.componentTrees && (
             <TabsContent value="component-trees" className="h-full m-0">
-              <ComponentTreeManager trees={componentTrees} onTreesChange={setComponentTrees} />
+              <JSONComponentTreeManager trees={componentTrees} onTreesChange={setComponentTrees} />
             </TabsContent>
           )}
 
           {featureToggles.workflows && (
             <TabsContent value="workflows" className="h-full m-0">
-              <WorkflowDesigner workflows={workflows} onWorkflowsChange={setWorkflows} />
+              <JSONWorkflowDesigner workflows={workflows} onWorkflowsChange={setWorkflows} />
             </TabsContent>
           )}
 
           {featureToggles.lambdas && (
             <TabsContent value="lambdas" className="h-full m-0">
-              <LambdaDesigner lambdas={lambdas} onLambdasChange={setLambdas} />
+              <JSONLambdaDesigner />
             </TabsContent>
           )}
 
           {featureToggles.styling && (
             <TabsContent value="styling" className="h-full m-0">
-              <StyleDesigner theme={theme} onThemeChange={setTheme} />
+              <JSONStyleDesigner />
             </TabsContent>
           )}
 
           {featureToggles.flaskApi && (
             <TabsContent value="flask" className="h-full m-0">
-              <FlaskDesigner config={flaskConfig} onConfigChange={setFlaskConfig} />
+              <JSONFlaskDesigner />
             </TabsContent>
           )}
 

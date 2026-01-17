@@ -4,17 +4,17 @@ import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { AppHeader, PageHeader } from '@/components/organisms'
 import { ProjectDashboard } from '@/components/ProjectDashboard'
 import { CodeEditor } from '@/components/CodeEditor'
-import { ModelDesigner } from '@/components/ModelDesigner'
+import { JSONModelDesigner } from '@/components/JSONModelDesigner'
 import { ComponentTreeBuilder } from '@/components/ComponentTreeBuilder'
-import { ComponentTreeManager } from '@/components/ComponentTreeManager'
-import { WorkflowDesigner } from '@/components/WorkflowDesigner'
-import { LambdaDesigner } from '@/components/LambdaDesigner'
-import { StyleDesigner } from '@/components/StyleDesigner'
+import { JSONComponentTreeManager } from '@/components/JSONComponentTreeManager'
+import { JSONWorkflowDesigner } from '@/components/JSONWorkflowDesigner'
+import { JSONLambdaDesigner } from '@/components/JSONLambdaDesigner'
+import { JSONStyleDesigner } from '@/components/JSONStyleDesigner'
 import { FileExplorer } from '@/components/FileExplorer'
 import { PlaywrightDesigner } from '@/components/PlaywrightDesigner'
 import { StorybookDesigner } from '@/components/StorybookDesigner'
 import { UnitTestDesigner } from '@/components/UnitTestDesigner'
-import { FlaskDesigner } from '@/components/FlaskDesigner'
+import { JSONFlaskDesigner } from '@/components/JSONFlaskDesigner'
 import { ProjectSettingsDesigner } from '@/components/ProjectSettingsDesigner'
 import { ErrorPanel } from '@/components/ErrorPanel'
 import { DocumentationView } from '@/components/DocumentationView'
@@ -127,13 +127,13 @@ function App() {
               </ResizablePanelGroup>
             </TabsContent>
           )}
-          {featureToggles.models && <TabsContent value="models" className="h-full m-0"><ModelDesigner models={models} onModelsChange={setModels} /></TabsContent>}
+          {featureToggles.models && <TabsContent value="models" className="h-full m-0"><JSONModelDesigner models={models} onModelsChange={setModels} /></TabsContent>}
           {featureToggles.components && <TabsContent value="components" className="h-full m-0"><ComponentTreeBuilder components={components} onComponentsChange={setComponents} /></TabsContent>}
-          {featureToggles.componentTrees && <TabsContent value="component-trees" className="h-full m-0"><ComponentTreeManager trees={componentTrees} onTreesChange={setComponentTrees} /></TabsContent>}
-          {featureToggles.workflows && <TabsContent value="workflows" className="h-full m-0"><WorkflowDesigner workflows={workflows} onWorkflowsChange={setWorkflows} /></TabsContent>}
-          {featureToggles.lambdas && <TabsContent value="lambdas" className="h-full m-0"><LambdaDesigner lambdas={lambdas} onLambdasChange={setLambdas} /></TabsContent>}
-          {featureToggles.styling && <TabsContent value="styling" className="h-full m-0"><StyleDesigner theme={theme} onThemeChange={setTheme} /></TabsContent>}
-          {featureToggles.flaskApi && <TabsContent value="flask" className="h-full m-0"><FlaskDesigner config={flaskConfig} onConfigChange={setFlaskConfig} /></TabsContent>}
+          {featureToggles.componentTrees && <TabsContent value="component-trees" className="h-full m-0"><JSONComponentTreeManager trees={componentTrees} onTreesChange={setComponentTrees} /></TabsContent>}
+          {featureToggles.workflows && <TabsContent value="workflows" className="h-full m-0"><JSONWorkflowDesigner workflows={workflows} onWorkflowsChange={setWorkflows} /></TabsContent>}
+          {featureToggles.lambdas && <TabsContent value="lambdas" className="h-full m-0"><JSONLambdaDesigner /></TabsContent>}
+          {featureToggles.styling && <TabsContent value="styling" className="h-full m-0"><JSONStyleDesigner /></TabsContent>}
+          {featureToggles.flaskApi && <TabsContent value="flask" className="h-full m-0"><JSONFlaskDesigner /></TabsContent>}
           <TabsContent value="settings" className="h-full m-0"><ProjectSettingsDesigner nextjsConfig={nextjsConfig} npmSettings={npmSettings} onNextjsConfigChange={setNextjsConfig} onNpmSettingsChange={setNpmSettings} /></TabsContent>
           <TabsContent value="pwa" className="h-full m-0"><PWASettings /></TabsContent>
           <TabsContent value="features" className="h-full m-0"><FeatureToggleSettings features={featureToggles} onFeaturesChange={setFeatureToggles} /></TabsContent>
