@@ -61,9 +61,13 @@ A comprehensive visual low-code platform for generating production-ready Next.js
 
 ## 🚀 Getting Started
 
+### Prerequisites
+- Node.js >= 16.x
+- npm >= 8.3.0 (for overrides support)
+
 ### Installation
 ```bash
-# Install dependencies
+# Install dependencies (no special flags needed!)
 npm install
 
 # Install Playwright browsers (for testing)
@@ -71,6 +75,22 @@ npx playwright install
 
 # Start development server
 npm run dev
+```
+
+### Dependency Management
+
+This project uses npm's **overrides** feature to manage dependencies without `--legacy-peer-deps`. See [docs/DEPENDENCY_MANAGEMENT.md](./docs/DEPENDENCY_MANAGEMENT.md) for details.
+
+**Key Points:**
+- ✅ No `--legacy-peer-deps` flag required
+- ✅ Uses `npm ci` in CI/CD for reproducible builds
+- ✅ Overrides ensure consistent React 19 and Vite 7 versions
+- ✅ Monorepo workspace support with standard npm
+
+If you encounter dependency issues, clean install:
+```bash
+rm -rf node_modules package-lock.json
+npm install
 ```
 
 ### Troubleshooting

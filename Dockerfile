@@ -14,8 +14,8 @@ COPY packages/spark/package.json ./packages/spark/package.json
 COPY packages/spark/src ./packages/spark/src
 COPY packages/spark/tsconfig.json ./packages/spark/tsconfig.json
 
-# Install dependencies using npm workspaces
-RUN npm install --workspaces --include-workspace-root
+# Install dependencies using npm ci for reproducible builds
+RUN npm ci
 
 # Copy remaining application files
 COPY . .

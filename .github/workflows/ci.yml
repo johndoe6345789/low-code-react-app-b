@@ -26,10 +26,10 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install --workspaces --legacy-peer-deps
+        run: npm ci
 
       - name: Run ESLint
-        run: npm run lint --if-present || echo "No lint script found"
+        run: npm run lint:check
 
       - name: Type check
         run: npx tsc --noEmit
@@ -47,7 +47,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install --workspaces --legacy-peer-deps
+        run: npm ci
 
       - name: Run unit tests
         run: npm test --if-present || echo "No test script found"
@@ -75,7 +75,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install --workspaces --legacy-peer-deps
+        run: npm ci
 
       - name: Prepare build directories
         run: |
@@ -115,7 +115,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install --workspaces --legacy-peer-deps
+        run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -154,7 +154,7 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm install --workspaces --legacy-peer-deps
+        run: npm ci
 
       - name: Run npm audit
         run: npm audit --audit-level=moderate || true
