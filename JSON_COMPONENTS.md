@@ -171,6 +171,24 @@ To add a new component to the JSON UI system:
 4. Update `json-components-registry.json` with metadata
 5. Test the component in a JSON schema
 
+### JSON Compatibility Checklist
+
+Before migrating a component, confirm all required conditions are met:
+
+- [ ] **Hooks/state are registry-safe**: hooks and internal state are acceptable when the component registry can control or expose them through JSON bindings.
+- [ ] **Bindings are defined**: any required actions, event handlers, or state bindings are already supported by the JSON UI binding system.
+- [ ] **Refactoring covered by PR**: JSON compatibility gaps should be resolved via refactoring as part of the same pull request.
+
+### Step-by-Step Migration Path
+
+Use this repeatable migration flow for planned components:
+
+1. **Update the type union** in `src/types/json-ui.ts` to include the new component type name.
+2. **Register the component** in `src/lib/json-ui/component-registry.tsx` so JSON schemas can resolve it at runtime.
+3. **Define component metadata** in `src/lib/component-definitions.ts` (defaults, prop schema, and any JSON-driven constraints).
+4. **Validate JSON schema usage** by rendering a sample schema that uses the new type.
+5. **Update registry metadata** in `json-components-registry.json` so the CLI/listing reflects the new status.
+
 ## Migration Strategy
 
 Components marked as "planned" are:
