@@ -8,6 +8,7 @@ export type ComponentType =
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
   | 'ErrorBadge' | 'Notification' | 'StatusIcon'
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
+  | 'DataList' | 'DataTable' | 'MetricCard' | 'Timeline'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
 
 export type ActionType =

@@ -3,7 +3,7 @@ import { AtomicComponentDemo } from '@/components/AtomicComponentDemo'
 import { DashboardDemoPage } from '@/components/DashboardDemoPage'
 import { PageRenderer } from '@/lib/json-ui/page-renderer'
 import { hydrateSchema } from '@/schemas/schema-loader'
-import { feedbackAtomsDemoSchema } from '@/schemas/page-schemas'
+import { dataComponentsDemoSchema } from '@/schemas/page-schemas'
 import todoListJson from '@/schemas/todo-list.json'
 import newMoleculesShowcaseJson from '@/schemas/new-molecules-showcase.json'
 
@@ -27,6 +27,7 @@ export function JSONUIShowcasePage() {
             <TabsTrigger value="atomic">Atomic Components</TabsTrigger>
             <TabsTrigger value="feedback">Feedback Atoms</TabsTrigger>
             <TabsTrigger value="molecules">New Molecules</TabsTrigger>
+            <TabsTrigger value="data-components">Data Components</TabsTrigger>
             <TabsTrigger value="dashboard">JSON Dashboard</TabsTrigger>
             <TabsTrigger value="todos">JSON Todo List</TabsTrigger>
           </TabsList>
@@ -43,6 +44,10 @@ export function JSONUIShowcasePage() {
           
           <TabsContent value="molecules" className="h-full m-0 data-[state=active]:block">
             <PageRenderer schema={newMoleculesShowcaseSchema} />
+          </TabsContent>
+
+          <TabsContent value="data-components" className="h-full m-0 data-[state=active]:block">
+            <PageRenderer schema={dataComponentsDemoSchema} />
           </TabsContent>
           
           <TabsContent value="dashboard" className="h-full m-0 data-[state=active]:block">

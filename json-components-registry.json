@@ -1219,7 +1219,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Styled data list",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1238,7 +1238,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Advanced data table with sorting and filtering",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1304,7 +1304,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Metric display card",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1369,7 +1369,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Timeline visualization",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -2043,8 +2043,8 @@
   ],
   "statistics": {
     "total": 219,
-    "supported": 150,
-    "planned": 14,
+    "supported": 154,
+    "planned": 10,
     "jsonCompatible": 14,
     "maybeJsonCompatible": 41,
     "byCategory": {

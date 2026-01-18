@@ -383,11 +383,41 @@ export const componentDefinitions: ComponentDefinition[] = [
     defaultProps: { items: [], emptyMessage: 'No items' }
   },
   {
+    type: 'DataList',
+    label: 'Data List',
+    category: 'data',
+    icon: 'List',
+    defaultProps: {
+      items: ['Daily summary', 'New signups', 'Pending approvals'],
+      emptyMessage: 'No updates',
+      itemClassName: 'rounded-md border border-border bg-card/50 px-4 py-2'
+    }
+  },
+  {
     type: 'Table',
     label: 'Table',
     category: 'data',
     icon: 'Table',
     defaultProps: { data: [], columns: [] }
+  },
+  {
+    type: 'DataTable',
+    label: 'Data Table',
+    category: 'data',
+    icon: 'Table',
+    defaultProps: {
+      columns: [
+        { key: 'name', header: 'Name' },
+        { key: 'status', header: 'Status' },
+        { key: 'owner', header: 'Owner' },
+      ],
+      data: [
+        { name: 'Launch Plan', status: 'In Progress', owner: 'Avery' },
+        { name: 'Design Review', status: 'Scheduled', owner: 'Jordan' },
+        { name: 'QA Checklist', status: 'Done', owner: 'Riley' },
+      ],
+      emptyMessage: 'No records available',
+    }
   },
   {
     type: 'KeyValue',
@@ -402,6 +432,45 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'data',
     icon: 'ChartBar',
     defaultProps: { title: 'Metric', value: '0' }
+  },
+  {
+    type: 'MetricCard',
+    label: 'Metric Card',
+    category: 'data',
+    icon: 'ChartBar',
+    defaultProps: {
+      label: 'Active Users',
+      value: '1,248',
+      trend: { value: 12.4, direction: 'up' },
+    }
+  },
+  {
+    type: 'Timeline',
+    label: 'Timeline',
+    category: 'data',
+    icon: 'Clock',
+    defaultProps: {
+      items: [
+        {
+          title: 'Planning',
+          description: 'Finalize milestones',
+          timestamp: 'Mon 9:00 AM',
+          status: 'completed',
+        },
+        {
+          title: 'Execution',
+          description: 'Kick off delivery',
+          timestamp: 'Tue 11:00 AM',
+          status: 'current',
+        },
+        {
+          title: 'Review',
+          description: 'Collect feedback',
+          timestamp: 'Wed 3:00 PM',
+          status: 'pending',
+        },
+      ],
+    }
   },
   // Custom Components
   {

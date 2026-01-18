@@ -74,113 +74,137 @@ export const stateBindingsDemoSchema: PageSchema = {
   ],
 }
 
-export const feedbackAtomsDemoSchema: PageSchema = {
-  id: 'feedback-atoms-demo',
-  name: 'Feedback Atoms Demo',
+export const dataComponentsDemoSchema: PageSchema = {
+  id: 'data-components-demo',
+  name: 'Data Components Demo',
   layout: {
     type: 'single',
   },
   dataSources: [
     {
-      id: 'errorCount',
+      id: 'metricCards',
       type: 'static',
-      defaultValue: 3,
+      defaultValue: [
+        { label: 'Active Users', value: 1248, trend: { value: 12.4, direction: 'up' } },
+        { label: 'Churn Rate', value: '3.2%', trend: { value: 1.1, direction: 'down' } },
+        { label: 'Net Revenue', value: '$48.3k', trend: { value: 6.8, direction: 'up' } },
+      ],
     },
     {
-      id: 'showNotification',
+      id: 'tableColumns',
       type: 'static',
-      defaultValue: true,
+      defaultValue: [
+        { key: 'initiative', header: 'Initiative' },
+        { key: 'owner', header: 'Owner' },
+        { key: 'status', header: 'Status' },
+      ],
     },
     {
-      id: 'statusType',
+      id: 'tableRows',
       type: 'static',
-      defaultValue: 'saved',
+      defaultValue: [
+        { initiative: 'Landing Page', owner: 'Avery', status: 'In Progress' },
+        { initiative: 'Retention Emails', owner: 'Jordan', status: 'Review' },
+        { initiative: 'Billing Update', owner: 'Riley', status: 'Done' },
+      ],
+    },
+    {
+      id: 'listItems',
+      type: 'static',
+      defaultValue: ['Prepare briefing deck', 'Confirm stakeholder approvals', 'Publish roadmap update'],
+    },
+    {
+      id: 'timelineItems',
+      type: 'static',
+      defaultValue: [
+        {
+          title: 'Kickoff',
+          description: 'Align on scope and milestones',
+          timestamp: 'Mon 9:00 AM',
+          status: 'completed',
+        },
+        {
+          title: 'Execution',
+          description: 'Deliver initial workstream',
+          timestamp: 'Tue 11:00 AM',
+          status: 'current',
+        },
+        {
+          title: 'Review',
+          description: 'Stakeholder walkthrough',
+          timestamp: 'Thu 3:00 PM',
+          status: 'pending',
+        },
+      ],
     },
   ],
   components: [
     {
-      id: 'feedback-atoms-root',
+      id: 'data-components-root',
       type: 'div',
       props: {
         className: 'space-y-6 rounded-lg border border-border bg-card p-6',
       },
       children: [
         {
-          id: 'feedback-atoms-title',
+          id: 'data-components-title',
           type: 'Heading',
           props: {
-            className: 'text-lg font-semibold',
-            children: 'Feedback Atoms',
+            className: 'text-xl font-semibold',
+            children: 'Data Components Showcase',
           },
         },
         {
-          id: 'feedback-atoms-row',
+          id: 'data-components-metrics-grid',
           type: 'div',
           props: {
-            className: 'flex flex-wrap items-center gap-6',
+            className: 'grid gap-4 md:grid-cols-3',
+          },
+          loop: {
+            source: 'metricCards',
+            itemVar: 'metricCard',
           },
           children: [
             {
-              id: 'feedback-atoms-status-icon',
-              type: 'StatusIcon',
-              props: {
-                animate: true,
-                size: 18,
-              },
+              id: 'data-components-metric-card',
+              type: 'MetricCard',
               bindings: {
-                type: {
-                  source: 'statusType',
-                  sourceType: 'data',
-                },
+                label: { sourceType: 'bindings', source: 'metricCard', path: 'label' },
+                value: { sourceType: 'bindings', source: 'metricCard', path: 'value' },
+                trend: { sourceType: 'bindings', source: 'metricCard', path: 'trend' },
               },
-            },
-            {
-              id: 'feedback-atoms-badge-wrapper',
-              type: 'div',
-              props: {
-                className: 'relative h-10 w-10 rounded-full bg-muted',
-              },
-              children: [
-                {
-                  id: 'feedback-atoms-error-badge',
-                  type: 'ErrorBadge',
-                  props: {
-                    variant: 'destructive',
-                    size: 'md',
-                  },
-                  bindings: {
-                    count: {
-                      source: 'errorCount',
-                      sourceType: 'data',
-                    },
-                  },
-                },
-              ],
             },
           ],
         },
         {
-          id: 'feedback-atoms-notification',
-          type: 'Notification',
+          id: 'data-components-table',
+          type: 'DataTable',
           props: {
-            type: 'info',
-            title: 'Heads up!',
-            message: 'You have unsent changes ready to sync.',
+            className: 'bg-background',
+            emptyMessage: 'No initiatives found',
           },
-          conditional: {
-            if: 'data.showNotification',
+          bindings: {
+            columns: { source: 'tableColumns', sourceType: 'data' },
+            data: { source: 'tableRows', sourceType: 'data' },
           },
-          events: {
-            onClose: {
-              actions: [
-                {
-                  id: 'dismiss-notification',
-                  type: 'set-value',
-                  target: 'showNotification',
-                  value: false,
-                },
-              ],
-            },
+        },
+        {
+          id: 'data-components-list',
+          type: 'DataList',
+          props: {
+            className: 'space-y-3',
+            itemClassName: 'rounded-md border border-border bg-card/50 px-4 py-2 text-sm',
+            emptyMessage: 'No action items',
+          },
+          bindings: {
+            items: { source: 'listItems', sourceType: 'data' },
+          },
+        },
+        {
+          id: 'data-components-timeline',
+          type: 'Timeline',
+          bindings: {
+            items: { source: 'timelineItems', sourceType: 'data' },
           },
         },
       ],
