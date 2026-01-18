@@ -77,6 +77,7 @@ const buildRegistryFromNames = (
 }
 
 const jsonRegistryEntries = jsonRegistry.components ?? []
+const atomComponentMap = AtomComponents as Record<string, ComponentType<any>>
 const deprecatedComponentInfo = jsonRegistryEntries.reduce<Record<string, DeprecatedComponentInfo>>(
   (acc, entry) => {
     const entryName = entry.export ?? entry.name ?? entry.type
@@ -173,12 +174,14 @@ export const shadcnComponents: UIComponentRegistry = {
 export const atomComponents: UIComponentRegistry = {
   ...buildRegistryFromNames(
     atomRegistryNames,
-    AtomComponents as Record<string, ComponentType<any>>
+    atomComponentMap
   ),
-  DataList: (AtomComponents as Record<string, ComponentType<any>>).DataList,
-  DataTable: (AtomComponents as Record<string, ComponentType<any>>).DataTable,
-  MetricCard: (AtomComponents as Record<string, ComponentType<any>>).MetricCard,
-  Timeline: (AtomComponents as Record<string, ComponentType<any>>).Timeline,
+  DatePicker: atomComponentMap.DatePicker,
+  FileUpload: atomComponentMap.FileUpload,
+  DataList: atomComponentMap.DataList,
+  DataTable: atomComponentMap.DataTable,
+  MetricCard: atomComponentMap.MetricCard,
+  Timeline: atomComponentMap.Timeline,
 }
 
 const breadcrumbComponent = AtomComponents.Breadcrumb ?? AtomComponents.BreadcrumbNav
