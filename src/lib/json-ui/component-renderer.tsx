@@ -1,20 +1,16 @@
 import { createElement, useMemo } from 'react'
 import { UIComponent, Binding, ComponentRendererProps } from '@/types/json-ui'
 import { getUIComponent } from './component-registry'
+import { getNestedValue } from './utils'
 
 function resolveBinding(binding: Binding, data: Record<string, unknown>): unknown {
-  let value: unknown = data[binding.source]
+  const sourceValue = binding.source.includes('.')
+    ? getNestedValue(data, binding.source)
+    : data[binding.source]
+  let value: unknown = sourceValue
   
   if (binding.path) {
-    const keys = binding.path.split('.')
-    for (const key of keys) {
-      if (value && typeof value === 'object') {
-        value = (value as Record<string, unknown>)[key]
-      } else {
-        value = undefined
-        break
-      }
-    }
+    value = getNestedValue(value, binding.path)
   }
   
   if (binding.transform) {
@@ -24,20 +20,21 @@ function resolveBinding(binding: Binding, data: Record<string, unknown>): unknow
   return value
 }
 
-export function ComponentRenderer({ component, data, onEvent }: ComponentRendererProps) {
+export function ComponentRenderer({ component, data, context = {}, onEvent }: ComponentRendererProps) {
+  const mergedData = useMemo(() => ({ ...data, ...context }), [data, context])
   const resolvedProps = useMemo(() => {
     const resolved: Record<string, unknown> = { ...component.props }
     
     if (component.bindings) {
       Object.entries(component.bindings).forEach(([propName, binding]) => {
-        resolved[propName] = resolveBinding(binding, data)
+        resolved[propName] = resolveBinding(binding, mergedData)
       })
     }
     
     if (component.events && onEvent) {
       component.events.forEach(handler => {
         resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
-          if (!handler.condition || handler.condition(data)) {
+          if (!handler.condition || handler.condition(mergedData as Record<string, any>)) {
             onEvent(component.id, handler.event, e)
           }
         }
@@ -45,7 +42,7 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
     }
     
     return resolved
-  }, [component, data, onEvent])
+  }, [component, mergedData, onEvent])
   
   const Component = getUIComponent(component.type)
   
@@ -55,7 +52,7 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
   }
   
   if (component.condition) {
-    const conditionValue = resolveBinding(component.condition, data)
+    const conditionValue = resolveBinding(component.condition, mergedData)
     if (!conditionValue) {
       return null
     }
@@ -66,6 +63,7 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
       key={child.id || index}
       component={child}
       data={data}
+      context={context}
       onEvent={onEvent}
     />
   ))
