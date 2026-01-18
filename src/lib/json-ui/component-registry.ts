@@ -21,6 +21,10 @@ import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
 import {
   BreadcrumbWrapper,
+  ComponentBindingDialogWrapper,
+  ComponentTreeWrapper,
+  DataSourceEditorDialogWrapper,
+  GitHubBuildStatusWrapper,
   LazyBarChartWrapper,
   LazyD3BarChartWrapper,
   LazyLineChartWrapper,
@@ -168,12 +172,27 @@ export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
 
 export const jsonWrapperComponents: UIComponentRegistry = {
   Breadcrumb: BreadcrumbWrapper,
+  BreadcrumbWrapper: BreadcrumbWrapper,
   SaveIndicator: SaveIndicatorWrapper,
+  SaveIndicatorWrapper: SaveIndicatorWrapper,
   LazyBarChart: LazyBarChartWrapper,
+  LazyBarChartWrapper: LazyBarChartWrapper,
   LazyLineChart: LazyLineChartWrapper,
+  LazyLineChartWrapper: LazyLineChartWrapper,
   LazyD3BarChart: LazyD3BarChartWrapper,
+  LazyD3BarChartWrapper: LazyD3BarChartWrapper,
   SeedDataManager: SeedDataManagerWrapper,
+  SeedDataManagerWrapper: SeedDataManagerWrapper,
   StorageSettings: StorageSettingsWrapper,
+  StorageSettingsWrapper: StorageSettingsWrapper,
+  GitHubBuildStatus: GitHubBuildStatusWrapper,
+  GitHubBuildStatusWrapper: GitHubBuildStatusWrapper,
+  ComponentBindingDialog: ComponentBindingDialogWrapper,
+  ComponentBindingDialogWrapper: ComponentBindingDialogWrapper,
+  DataSourceEditorDialog: DataSourceEditorDialogWrapper,
+  DataSourceEditorDialogWrapper: DataSourceEditorDialogWrapper,
+  ComponentTree: ComponentTreeWrapper,
+  ComponentTreeWrapper: ComponentTreeWrapper,
 }
 
 export const iconComponents: UIComponentRegistry = {
