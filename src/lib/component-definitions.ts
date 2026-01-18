@@ -224,6 +224,19 @@ export const componentDefinitions: ComponentDefinition[] = [
     canHaveChildren: true,
     defaultProps: { href: '#', children: 'Link' }
   },
+  {
+    type: 'Breadcrumb',
+    label: 'Breadcrumb',
+    category: 'navigation',
+    icon: 'CaretRight',
+    canHaveChildren: false,
+    defaultProps: {
+      items: [
+        { label: 'Home', href: '/' },
+        { label: 'Current' }
+      ]
+    }
+  },
   // Feedback Components
   {
     type: 'Alert',

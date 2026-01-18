@@ -2,7 +2,7 @@
   "$schema": "./schemas/json-components-registry-schema.json",
   "version": "2.0.0",
   "description": "Registry of all components in the application",
-  "lastUpdated": "2026-01-17T22:10:22.582Z",
+  "lastUpdated": "2026-01-18T11:30:24.191Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -836,28 +836,9 @@
       "name": "Breadcrumb",
       "category": "navigation",
       "canHaveChildren": false,
-      "description": "Navigation breadcrumb trail",
-      "status": "planned",
+      "description": "Navigation breadcrumb trail using the atoms/BreadcrumbNav JSON-safe items prop",
+      "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Breadcrumb",
-      "name": "Breadcrumb",
-      "category": "navigation",
-      "canHaveChildren": false,
-      "description": "Navigation breadcrumb trail",
-      "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
-    },
-    {
-      "type": "Breadcrumb",
-      "name": "Breadcrumb",
-      "category": "navigation",
-      "canHaveChildren": false,
-      "description": "Navigation breadcrumb trail",
-      "status": "planned",
-      "source": "ui"
     },
     {
       "type": "ContextMenu",
@@ -2042,25 +2023,25 @@
     }
   ],
   "statistics": {
-    "total": 219,
-    "supported": 150,
-    "planned": 14,
-    "jsonCompatible": 14,
+    "total": 217,
+    "supported": 151,
+    "planned": 12,
+    "jsonCompatible": 13,
     "maybeJsonCompatible": 41,
     "byCategory": {
       "layout": 25,
       "input": 34,
       "display": 31,
-      "navigation": 17,
+      "navigation": 15,
       "feedback": 23,
       "data": 20,
       "custom": 69
     },
     "bySource": {
       "atoms": 117,
-      "molecules": 41,
+      "molecules": 40,
       "organisms": 15,
-      "ui": 46
+      "ui": 45
     }
   }
 }

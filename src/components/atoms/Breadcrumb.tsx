@@ -17,19 +17,19 @@ export function BreadcrumbNav({ items, className }: BreadcrumbNavProps) {
     <nav aria-label="Breadcrumb" className={cn('flex items-center gap-2', className)}>
       {items.map((item, index) => {
         const isLast = index === items.length - 1
+        const linkClassName = cn(
+          'text-sm transition-colors',
+          isLast ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'
+        )
 
         return (
           <div key={index} className="flex items-center gap-2">
-            {item.href || item.onClick ? (
-              <button
-                onClick={item.onClick}
-                className={cn(
-                  'text-sm transition-colors',
-                  isLast
-                    ? 'text-foreground font-medium'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
+            {item.href ? (
+              <a href={item.href} onClick={item.onClick} className={linkClassName}>
+                {item.label}
+              </a>
+            ) : item.onClick ? (
+              <button onClick={item.onClick} className={linkClassName}>
                 {item.label}
               </button>
             ) : (
@@ -49,3 +49,5 @@ export function BreadcrumbNav({ items, className }: BreadcrumbNavProps) {
     </nav>
   )
 }
+
+export const Breadcrumb = BreadcrumbNav

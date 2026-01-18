@@ -4,7 +4,7 @@ export type ComponentType =
   | 'Input' | 'TextArea' | 'Textarea' | 'Select' | 'Checkbox' | 'Radio' | 'Switch' | 'Slider' | 'NumberInput'
   | 'Badge' | 'Progress' | 'Separator' | 'Tabs' | 'TabsContent' | 'TabsList' | 'TabsTrigger' | 'Dialog'
   | 'Text' | 'Heading' | 'Label' | 'List' | 'Grid' | 'Stack' | 'Flex' | 'Container'
-  | 'Link' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
+  | 'Link' | 'Breadcrumb' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
