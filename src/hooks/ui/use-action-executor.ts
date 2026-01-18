@@ -2,9 +2,17 @@ import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { Action, JSONUIContext } from '@/types/json-ui'
 import { evaluateExpression, evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
+import { getNestedValue } from '@/lib/json-ui/utils'
 
 export function useActionExecutor(context: JSONUIContext) {
   const { data, updateData, updatePath, executeAction: contextExecute } = context
+
+  const getTargetParts = (target?: string) => {
+    if (!target) return null
+    const [sourceId, ...pathParts] = target.split('.')
+    const path = pathParts.join('.')
+    return { sourceId, path: path || undefined }
+  }
 
   const executeAction = useCallback(async (action: Action, event?: any) => {
     try {
@@ -67,7 +75,8 @@ export function useActionExecutor(context: JSONUIContext) {
         }
 
         case 'update': {
-          if (!action.target) return
+          const targetParts = getTargetParts(action.target)
+          if (!targetParts) return
           
           let newValue
           if (action.compute) {
@@ -79,8 +88,12 @@ export function useActionExecutor(context: JSONUIContext) {
           } else {
             newValue = action.value
           }
-          
-          updateData(action.target, newValue)
+
+          if (targetParts.path) {
+            updatePath(targetParts.sourceId, targetParts.path, newValue)
+          } else {
+            updateData(targetParts.sourceId, newValue)
+          }
           break
         }
 
@@ -98,7 +111,8 @@ export function useActionExecutor(context: JSONUIContext) {
         }
 
         case 'set-value': {
-          if (!action.target) return
+          const targetParts = getTargetParts(action.target)
+          if (!targetParts) return
           
           let newValue
           if (action.compute) {
@@ -110,31 +124,65 @@ export function useActionExecutor(context: JSONUIContext) {
           } else {
             newValue = action.value
           }
-          
-          updateData(action.target, newValue)
+
+          if (targetParts.path) {
+            updatePath(targetParts.sourceId, targetParts.path, newValue)
+          } else {
+            updateData(targetParts.sourceId, newValue)
+          }
           break
         }
 
         case 'toggle-value': {
-          if (!action.target) return
-          const currentValue = data[action.target]
-          updateData(action.target, !currentValue)
+          const targetParts = getTargetParts(action.target)
+          if (!targetParts) return
+
+          const currentValue = targetParts.path
+            ? getNestedValue(data[targetParts.sourceId], targetParts.path)
+            : data[targetParts.sourceId]
+          const nextValue = !currentValue
+
+          if (targetParts.path) {
+            updatePath(targetParts.sourceId, targetParts.path, nextValue)
+          } else {
+            updateData(targetParts.sourceId, nextValue)
+          }
           break
         }
 
         case 'increment': {
-          if (!action.target) return
-          const currentValue = data[action.target] || 0
+          const targetParts = getTargetParts(action.target)
+          if (!targetParts) return
+
+          const currentValue = targetParts.path
+            ? getNestedValue(data[targetParts.sourceId], targetParts.path)
+            : data[targetParts.sourceId]
           const amount = action.value || 1
-          updateData(action.target, currentValue + amount)
+          const nextValue = (currentValue || 0) + amount
+
+          if (targetParts.path) {
+            updatePath(targetParts.sourceId, targetParts.path, nextValue)
+          } else {
+            updateData(targetParts.sourceId, nextValue)
+          }
           break
         }
 
         case 'decrement': {
-          if (!action.target) return
-          const currentValue = data[action.target] || 0
+          const targetParts = getTargetParts(action.target)
+          if (!targetParts) return
+
+          const currentValue = targetParts.path
+            ? getNestedValue(data[targetParts.sourceId], targetParts.path)
+            : data[targetParts.sourceId]
           const amount = action.value || 1
-          updateData(action.target, currentValue - amount)
+          const nextValue = (currentValue || 0) - amount
+
+          if (targetParts.path) {
+            updatePath(targetParts.sourceId, targetParts.path, nextValue)
+          } else {
+            updateData(targetParts.sourceId, nextValue)
+          }
           break
         }
 
