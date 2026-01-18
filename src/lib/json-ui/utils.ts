@@ -1,4 +1,4 @@
-type BindingTransform = string | ((data: unknown) => unknown)
+type BindingTransform = string
 
 interface BindingSourceOptions {
   state?: Record<string, any>
@@ -46,10 +46,6 @@ export function resolveDataBinding(
 function applyTransform(value: unknown, transform?: BindingTransform) {
   if (!transform) {
     return value
-  }
-
-  if (typeof transform === 'function') {
-    return transform(value)
   }
 
   return transformData(value, transform)

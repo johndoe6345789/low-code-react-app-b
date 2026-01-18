@@ -95,12 +95,10 @@ export function ComponentRenderer({ component, data, context = {}, state, onEven
     }
     
     if (resolvedEventHandlers.length > 0 && onEvent) {
-      resolvedEventHandlers.forEach(handler => {
-        resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
+        resolvedEventHandlers.forEach(handler => {
+          resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
           const conditionMet = !handler.condition
-            || (typeof handler.condition === 'function'
-              ? handler.condition(mergedData as Record<string, any>)
-              : evaluateCondition(handler.condition, mergedData as Record<string, any>))
+            || evaluateCondition(handler.condition, mergedData as Record<string, any>)
           if (conditionMet) {
             const eventPayload = typeof e === 'object' && e !== null
               ? Object.assign(e as Record<string, unknown>, context)

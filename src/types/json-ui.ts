@@ -52,7 +52,8 @@ export interface DataSource {
   type: DataSourceType
   key?: string
   defaultValue?: any
-  compute?: (data: Record<string, any>) => any
+  expression?: string
+  valueTemplate?: Record<string, any>
   dependencies?: string[]
 }
 
@@ -63,8 +64,6 @@ export interface Action {
   path?: string
   value?: any
   params?: Record<string, any>
-  // Legacy: function-based compute
-  compute?: ((data: Record<string, any>, event?: any) => any) | string
   // New: JSON-friendly expression (e.g., "event.target.value", "data.fieldName")
   expression?: string
   // New: JSON template with dynamic values
@@ -77,20 +76,20 @@ export interface Binding {
   source: string
   sourceType?: BindingSourceType
   path?: string
-  transform?: string | ((value: any) => any)
+  transform?: string
 }
 
 export interface EventHandler {
   event: string
   actions: Action[]
-  condition?: string | ((data: Record<string, any>) => boolean)
+  condition?: string
 }
 
 export interface JSONEventDefinition {
   action?: string
   actions?: Action[]
   payload?: Record<string, any>
-  condition?: string | ((data: Record<string, any>) => boolean)
+  condition?: string
 }
 
 export type JSONEventMap = Record<string, JSONEventDefinition | JSONEventDefinition[] | string>

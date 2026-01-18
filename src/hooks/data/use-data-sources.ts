@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useKV } from '@/hooks/use-kv'
 import { DataSource } from '@/types/json-ui'
 import { setNestedValue } from '@/lib/json-ui/utils'
+import { evaluateExpression, evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 
 export function useDataSources(dataSources: DataSource[]) {
   const [data, setData] = useState<Record<string, any>>({})
@@ -43,14 +44,20 @@ export function useDataSources(dataSources: DataSource[]) {
     const computedSources = dataSources.filter(ds => ds.type === 'computed')
     
     computedSources.forEach(source => {
-      if (source.compute) {
-        const deps = source.dependencies || []
-        const hasAllDeps = deps.every(dep => dep in data)
-        
-        if (hasAllDeps) {
-          const computedValue = source.compute(data)
-          setData(prev => ({ ...prev, [source.id]: computedValue }))
-        }
+      const deps = source.dependencies || []
+      const hasAllDeps = deps.every(dep => dep in data)
+
+      if (!hasAllDeps) return
+
+      if (source.expression) {
+        const computedValue = evaluateExpression(source.expression, { data })
+        setData(prev => ({ ...prev, [source.id]: computedValue }))
+        return
+      }
+
+      if (source.valueTemplate) {
+        const computedValue = evaluateTemplate(source.valueTemplate, { data })
+        setData(prev => ({ ...prev, [source.id]: computedValue }))
       }
     })
   }, [data, dataSources])

@@ -40,14 +40,9 @@ export function ComputedSourceFields({
       <div className="space-y-2">
         <Label>{copy.computeLabel}</Label>
         <Textarea
-          value={editingSource.compute?.toString() || ''}
+          value={editingSource.expression || ''}
           onChange={(e) => {
-            try {
-              const fn = new Function('data', `return (${e.target.value})`)()
-              onUpdateField('compute', fn)
-            } catch (err) {
-              // Invalid function
-            }
+            onUpdateField('expression', e.target.value)
           }}
           placeholder={copy.computePlaceholder}
           className="font-mono text-sm h-24"

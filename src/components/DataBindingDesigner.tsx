@@ -7,12 +7,12 @@ import { ComponentBindingsCard } from '@/components/data-binding-designer/Compon
 import { HowItWorksCard } from '@/components/data-binding-designer/HowItWorksCard'
 import dataBindingCopy from '@/data/data-binding-designer.json'
 
-interface SeedDataSource extends Omit<DataSource, 'compute'> {
+interface SeedDataSource extends DataSource {
   computeId?: string
 }
 
-const computeRegistry: Record<string, (data: Record<string, any>) => any> = {
-  displayName: (data) => `Welcome, ${data.userProfile?.name || 'Guest'}!`,
+const expressionRegistry: Record<string, string> = {
+  displayName: 'data.userProfile.name',
 }
 
 const buildSeedDataSources = (sources: SeedDataSource[]): DataSource[] => {
@@ -20,7 +20,7 @@ const buildSeedDataSources = (sources: SeedDataSource[]): DataSource[] => {
     if (source.type === 'computed' && source.computeId) {
       return {
         ...source,
-        compute: computeRegistry[source.computeId],
+        expression: expressionRegistry[source.computeId],
       }
     }
 

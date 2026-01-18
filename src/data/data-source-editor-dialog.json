@@ -19,9 +19,9 @@
     "valuePlaceholder": "{\"key\": \"value\"}"
   },
   "computed": {
-    "computeLabel": "Compute Function",
-    "computePlaceholder": "(data) => data.source1 + data.source2",
-    "computeHelp": "Function that computes the value from other data sources",
+    "computeLabel": "Expression",
+    "computePlaceholder": "data.source1.length",
+    "computeHelp": "Expression that derives the value from other data sources",
     "dependenciesLabel": "Dependencies",
     "availableSourcesLabel": "Available Sources",
     "emptyDependencies": "No data sources available. Create KV or static sources first."

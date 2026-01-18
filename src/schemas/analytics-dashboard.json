@@ -10,9 +10,9 @@
       "type": "kv",
       "key": "dashboard-users",
       "defaultValue": [
-        { "id": 1, "name": "Alice Johnson", "email": "alice@example.com", "status": "active", "joined": "2024-01-15" },
-        { "id": 2, "name": "Bob Smith", "email": "bob@example.com", "status": "active", "joined": "2024-02-20" },
-        { "id": 3, "name": "Charlie Brown", "email": "charlie@example.com", "status": "inactive", "joined": "2023-12-10" }
+        { "id": 1, "name": "Alice Johnson", "email": "alice@example.com", "status": "active", "joined": "2024-01-15", "search": "Alice Johnson alice@example.com" },
+        { "id": 2, "name": "Bob Smith", "email": "bob@example.com", "status": "active", "joined": "2024-02-20", "search": "Bob Smith bob@example.com" },
+        { "id": 3, "name": "Charlie Brown", "email": "charlie@example.com", "status": "inactive", "joined": "2023-12-10", "search": "Charlie Brown charlie@example.com" }
       ]
     },
     {
@@ -23,13 +23,17 @@
     {
       "id": "filteredUsers",
       "type": "computed",
-      "compute": "computeFilteredUsers",
+      "expression": "data.users.filter(search~=data.filterQuery)",
       "dependencies": ["users", "filterQuery"]
     },
     {
       "id": "stats",
       "type": "computed",
-      "compute": "computeStats",
+      "valueTemplate": {
+        "total": "data.users.length",
+        "active": "data.users.filter(status=active).length",
+        "inactive": "data.users.filter(status=inactive).length"
+      },
       "dependencies": ["users"]
     }
   ],
@@ -189,13 +193,22 @@
                     {
                       "id": "users-badge",
                       "type": "Badge",
-                      "props": { "variant": "secondary" },
-                      "bindings": {
-                        "children": {
-                          "source": "filteredUsers",
-                          "transform": "transformFilteredUsers"
+                      "props": { "variant": "secondary", "className": "flex items-center gap-1" },
+                      "children": [
+                        {
+                          "id": "users-badge-count",
+                          "type": "Text",
+                          "props": { "className": "text-xs" },
+                          "bindings": {
+                            "children": { "source": "filteredUsers", "path": "length" }
+                          }
+                        },
+                        {
+                          "id": "users-badge-label",
+                          "type": "Text",
+                          "props": { "className": "text-xs", "children": "users" }
                         }
-                      }
+                      ]
                     }
                   ]
                 },
@@ -227,7 +240,7 @@
                               "id": "update-filter",
                               "type": "set-value",
                               "target": "filterQuery",
-                              "compute": "updateFilterQuery"
+                              "expression": "event.target.value"
                             }
                           ]
                         }
@@ -239,12 +252,83 @@
                   "id": "users-list",
                   "type": "div",
                   "props": { "className": "space-y-4" },
-                  "bindings": {
-                    "children": {
-                      "source": "filteredUsers",
-                      "transform": "transformUserList"
+                  "loop": {
+                    "source": "filteredUsers",
+                    "itemVar": "user",
+                    "indexVar": "userIndex"
+                  },
+                  "children": [
+                    {
+                      "id": "user-card",
+                      "type": "Card",
+                      "props": {
+                        "className": "bg-background/50 hover:bg-background/80 transition-colors border-l-4 border-l-primary"
+                      },
+                      "children": [
+                        {
+                          "id": "user-content",
+                          "type": "CardContent",
+                          "props": { "className": "pt-6" },
+                          "children": [
+                            {
+                              "id": "user-row",
+                              "type": "div",
+                              "props": { "className": "flex items-start justify-between" },
+                              "children": [
+                                {
+                                  "id": "user-info",
+                                  "type": "div",
+                                  "props": { "className": "flex-1" },
+                                  "children": [
+                                    {
+                                      "id": "user-name",
+                                      "type": "div",
+                                      "props": { "className": "font-semibold text-lg mb-1" },
+                                      "bindings": {
+                                        "children": { "source": "user", "path": "name" }
+                                      }
+                                    },
+                                    {
+                                      "id": "user-email",
+                                      "type": "div",
+                                      "props": { "className": "text-sm text-muted-foreground" },
+                                      "bindings": {
+                                        "children": { "source": "user", "path": "email" }
+                                      }
+                                    },
+                                    {
+                                      "id": "user-joined-label",
+                                      "type": "div",
+                                      "props": {
+                                        "className": "text-xs text-muted-foreground mt-2",
+                                        "children": "Joined"
+                                      }
+                                    },
+                                    {
+                                      "id": "user-joined-value",
+                                      "type": "div",
+                                      "props": { "className": "text-xs text-muted-foreground" },
+                                      "bindings": {
+                                        "children": { "source": "user", "path": "joined" }
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "user-status",
+                                  "type": "Badge",
+                                  "props": { "variant": "secondary" },
+                                  "bindings": {
+                                    "children": { "source": "user", "path": "status" }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
                     }
-                  }
+                  ]
                 }
               ]
             }

@@ -15,6 +15,8 @@ interface EvaluationContext {
  * - Event access: "event.target.value", "event.key"
  * - Literals: numbers, strings, booleans, null
  * - Date operations: "Date.now()"
+ * - Collection filters: "data.items.filter(field=value)", "data.items.filter(field~=data.query)"
+ * - Filter counts: "data.items.filter(field=value).length"
  * - Basic operations: trim(), toLowerCase(), toUpperCase()
  */
 export function evaluateExpression(
@@ -42,6 +44,22 @@ export function evaluateExpression(
     // Handle event access: "event.target.value"
     if (expression.startsWith('event.')) {
       return getNestedValue(event, expression.substring(6))
+    }
+
+    const filterLengthMatch = expression.match(/^data\.([a-zA-Z0-9_.]+)\.filter\(([^)]+)\)\.length$/)
+    if (filterLengthMatch) {
+      const items = getNestedValue(data, filterLengthMatch[1]) || []
+      if (!Array.isArray(items)) return 0
+      const predicate = buildFilterPredicate(filterLengthMatch[2], context)
+      return items.filter(predicate).length
+    }
+
+    const filterMatch = expression.match(/^data\.([a-zA-Z0-9_.]+)\.filter\(([^)]+)\)$/)
+    if (filterMatch) {
+      const items = getNestedValue(data, filterMatch[1]) || []
+      if (!Array.isArray(items)) return []
+      const predicate = buildFilterPredicate(filterMatch[2], context)
+      return items.filter(predicate)
     }
 
     // Handle Date.now()
@@ -76,6 +94,69 @@ export function evaluateExpression(
     console.error(`Failed to evaluate expression "${expression}":`, error)
     return undefined
   }
+}
+
+type FilterOperator = '=' | '!=' | '~='
+
+function buildFilterPredicate(filterExpression: string, context: EvaluationContext) {
+  const match = filterExpression.match(/^([a-zA-Z0-9_.]+)\s*(=|!=|~=)\s*(.+)$/)
+  if (!match) {
+    console.warn(`Filter "${filterExpression}" could not be parsed, returning all items`)
+    return () => true
+  }
+
+  const [, fieldPath, operator, rawValue] = match
+  const filterValue = resolveFilterValue(rawValue.trim(), context)
+
+  return (item: any) => {
+    const itemValue = getNestedValue(item, fieldPath)
+    switch (operator as FilterOperator) {
+      case '=':
+        return itemValue === filterValue
+      case '!=':
+        return itemValue !== filterValue
+      case '~=': {
+        if (filterValue == null || filterValue === '') return true
+        const itemText = String(itemValue ?? '').toLowerCase()
+        const filterText = String(filterValue).toLowerCase()
+        return itemText.includes(filterText)
+      }
+      default:
+        return true
+    }
+  }
+}
+
+function resolveFilterValue(value: string, context: EvaluationContext) {
+  const { data, event } = context
+
+  if (value.startsWith('data.')) {
+    return getNestedValue(data, value.substring(5))
+  }
+
+  if (value.startsWith('event.')) {
+    return getNestedValue(event, value.substring(6))
+  }
+
+  if (value.startsWith('"') && value.endsWith('"')) {
+    return value.slice(1, -1)
+  }
+
+  if (value.startsWith("'") && value.endsWith("'")) {
+    return value.slice(1, -1)
+  }
+
+  const num = Number(value)
+  if (!isNaN(num)) {
+    return num
+  }
+
+  if (value === 'true') return true
+  if (value === 'false') return false
+  if (value === 'null') return null
+  if (value === 'undefined') return undefined
+
+  return value
 }
 
 /**

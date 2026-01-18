@@ -6,6 +6,7 @@ import { useComponents } from '../data/use-components'
 import { useWorkflows } from '../data/use-workflows'
 import { useLambdas } from '../data/use-lambdas'
 import { useActions } from './use-actions'
+import { evaluateExpression, evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 
 export function usePage(schema: PageSchema) {
   const files = useFiles()
@@ -45,12 +46,14 @@ export function usePage(schema: PageSchema) {
       const computed: Record<string, any> = {}
       
       schema.data.forEach(source => {
-        if (source.type === 'computed' && source.compute) {
-          try {
-            const computeFn = new Function('context', `return ${source.compute}`)
-            computed[source.id] = computeFn(dataContext)
-          } catch (error) {
-            console.error(`Failed to compute ${source.id}:`, error)
+        if (source.type === 'computed') {
+          if (source.expression) {
+            computed[source.id] = evaluateExpression(source.expression, { data: dataContext })
+            return
+          }
+
+          if (source.valueTemplate) {
+            computed[source.id] = evaluateTemplate(source.valueTemplate, { data: dataContext })
           }
         } else if (source.type === 'static' && source.defaultValue !== undefined) {
           computed[source.id] = source.defaultValue

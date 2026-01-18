@@ -9,7 +9,7 @@ export function useDataSourceManager(initialSources: DataSource[] = []) {
       id: `ds-${Date.now()}`,
       type,
       ...(type === 'kv' && { key: '', defaultValue: null }),
-      ...(type === 'computed' && { compute: () => null, dependencies: [] }),
+      ...(type === 'computed' && { expression: '', dependencies: [] }),
       ...(type === 'static' && { defaultValue: null }),
     }
     
