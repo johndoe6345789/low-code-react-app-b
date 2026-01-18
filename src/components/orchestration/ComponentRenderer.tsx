@@ -1,24 +1,6 @@
 import { ReactNode } from 'react'
 import { ComponentSchema as ComponentSchemaType } from '@/types/page-schema'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Textarea } from '@/components/ui/textarea'
-
-const COMPONENT_MAP: Record<string, any> = {
-  Button,
-  Card,
-  Input,
-  Badge,
-  Textarea,
-  div: 'div',
-  span: 'span',
-  h1: 'h1',
-  h2: 'h2',
-  h3: 'h3',
-  p: 'p',
-}
+import { getUIComponent } from '@/lib/json-ui/component-registry'
 
 interface ComponentRendererProps {
   schema: ComponentSchemaType
@@ -27,7 +9,7 @@ interface ComponentRendererProps {
 }
 
 export function ComponentRenderer({ schema, context, onEvent }: ComponentRendererProps) {
-  const Component = COMPONENT_MAP[schema.type]
+  const Component = getUIComponent(schema.type)
   
   if (!Component) {
     console.warn(`Component type "${schema.type}" not found`)
