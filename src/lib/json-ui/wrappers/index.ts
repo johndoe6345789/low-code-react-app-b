@@ -1,4 +1,3 @@
-export { BreadcrumbWrapper } from './BreadcrumbWrapper'
 export { SaveIndicatorWrapper } from './SaveIndicatorWrapper'
 export { LazyBarChartWrapper } from './LazyBarChartWrapper'
 export { LazyLineChartWrapper } from './LazyLineChartWrapper'

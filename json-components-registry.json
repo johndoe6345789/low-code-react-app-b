@@ -724,7 +724,8 @@
       "canHaveChildren": false,
       "description": "Navigation breadcrumb trail using the atoms/BreadcrumbNav JSON-safe items prop",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ContextMenu",

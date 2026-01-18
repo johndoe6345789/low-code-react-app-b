@@ -1,5 +1,5 @@
 import { ComponentType } from '@/types/json-ui'
-import componentDefinitionsData from '@/lib/component-definitions.json'
+import { componentDefinitions } from '@/lib/component-definitions'
 
 export interface ComponentDefinition {
   type: ComponentType
@@ -9,8 +9,6 @@ export interface ComponentDefinition {
   defaultProps?: Record<string, any>
   canHaveChildren?: boolean
 }
-
-export const componentDefinitions = componentDefinitionsData as ComponentDefinition[]
 
 export function getCategoryComponents(category: string): ComponentDefinition[] {
   return componentDefinitions.filter(component => component.category === category)
