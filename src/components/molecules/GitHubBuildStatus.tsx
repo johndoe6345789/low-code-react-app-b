@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,31 +13,8 @@ import {
   CheckSquare,
 } from '@phosphor-icons/react'
 import { Skeleton } from '@/components/ui/skeleton'
-import { toast } from 'sonner'
 import copy from '@/data/github-build-status.json'
-
-interface WorkflowRun {
-  id: number
-  name: string
-  status: string
-  conclusion: string | null
-  created_at: string
-  updated_at: string
-  html_url: string
-  head_branch: string
-  head_sha: string
-  event: string
-  workflow_id: number
-  path: string
-}
-
-interface Workflow {
-  id: number
-  name: string
-  path: string
-  state: string
-  badge_url: string
-}
+import { useGithubBuildStatus, Workflow, WorkflowRun } from '@/hooks/use-github-build-status'
 
 interface GitHubBuildStatusProps {
   owner: string
@@ -67,6 +43,7 @@ interface WorkflowRunItemProps {
 interface WorkflowBadgeListProps {
   workflows: Workflow[]
   copiedBadge: string | null
+  defaultBranch: string
   onCopyBadge: (workflowPath: string, workflowName: string, branch?: string) => void
   getBadgeUrl: (workflowPath: string, branch?: string) => string
   getBadgeMarkdown: (workflowPath: string, workflowName: string, branch?: string) => string
@@ -79,9 +56,6 @@ interface BranchBadgeListProps {
   onCopyBadge: (workflowPath: string, workflowName: string, branch: string) => void
   getBadgeUrl: (workflowPath: string, branch?: string) => string
 }
-
-const formatWithCount = (template: string, count: number) =>
-  template.replace('{count}', count.toString())
 
 const WorkflowRunStatus = ({ status, conclusion }: WorkflowRunStatusProps) => {
   const getStatusIcon = () => {
@@ -169,6 +143,7 @@ const WorkflowRunItem = ({ workflow, renderStatus, renderBadge, formatTime }: Wo
 const WorkflowBadgeList = ({
   workflows,
   copiedBadge,
+  defaultBranch,
   onCopyBadge,
   getBadgeUrl,
   getBadgeMarkdown,
@@ -189,7 +164,7 @@ const WorkflowBadgeList = ({
               onClick={() => onCopyBadge(workflow.path, workflow.name)}
               className="h-7 text-xs"
             >
-              {copiedBadge === `${workflow.path}-default` ? (
+              {copiedBadge === `${workflow.path}-${defaultBranch}` ? (
                 <CheckSquare size={14} className="text-green-500" />
               ) : (
                 <Copy size={14} />
@@ -260,82 +235,18 @@ const BranchBadgeList = ({
 )
 
 export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHubBuildStatusProps) {
-  const [workflows, setWorkflows] = useState<WorkflowRun[]>([])
-  const [allWorkflows, setAllWorkflows] = useState<Workflow[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [copiedBadge, setCopiedBadge] = useState<string | null>(null)
-
-  useEffect(() => {
-    fetchData()
-  }, [owner, repo])
-
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const [runsResponse, workflowsResponse] = await Promise.all([
-        fetch(`https://api.github.com/repos/${owner}/${repo}/actions/runs?per_page=5`, {
-          headers: { Accept: 'application/vnd.github.v3+json' },
-        }),
-        fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows`, {
-          headers: { Accept: 'application/vnd.github.v3+json' },
-        }),
-      ])
-
-      if (!runsResponse.ok || !workflowsResponse.ok) {
-        throw new Error(`GitHub API error: ${runsResponse.status}`)
-      }
-
-      const runsData = await runsResponse.json()
-      const workflowsData = await workflowsResponse.json()
-
-      setWorkflows(runsData.workflow_runs || [])
-      setAllWorkflows(workflowsData.workflows || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch workflows')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const getBadgeUrl = (workflowPath: string, branch?: string) => {
-    const workflowFile = workflowPath.split('/').pop()
-    if (branch) {
-      return `https://github.com/${owner}/${repo}/actions/workflows/${workflowFile}/badge.svg?branch=${branch}`
-    }
-    return `https://github.com/${owner}/${repo}/actions/workflows/${workflowFile}/badge.svg`
-  }
-
-  const getBadgeMarkdown = (workflowPath: string, workflowName: string, branch?: string) => {
-    const badgeUrl = getBadgeUrl(workflowPath, branch)
-    const actionUrl = `https://github.com/${owner}/${repo}/actions/workflows/${workflowPath.split('/').pop()}`
-    return `[![${workflowName}](${badgeUrl})](${actionUrl})`
-  }
-
-  const copyBadgeMarkdown = (workflowPath: string, workflowName: string, branch?: string) => {
-    const markdown = getBadgeMarkdown(workflowPath, workflowName, branch)
-    navigator.clipboard.writeText(markdown)
-    const key = `${workflowPath}-${branch || 'default'}`
-    setCopiedBadge(key)
-    toast.success(copy.toast.badgeCopied)
-    setTimeout(() => setCopiedBadge(null), 2000)
-  }
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const minutes = Math.floor(diff / 60000)
-    const hours = Math.floor(minutes / 60)
-    const days = Math.floor(hours / 24)
-
-    if (days > 0) return formatWithCount(copy.time.daysAgo, days)
-    if (hours > 0) return formatWithCount(copy.time.hoursAgo, hours)
-    if (minutes > 0) return formatWithCount(copy.time.minutesAgo, minutes)
-    return copy.time.justNow
-  }
+  const {
+    workflows,
+    allWorkflows,
+    loading,
+    error,
+    copiedBadge,
+    fetchData,
+    copyBadgeMarkdown,
+    getBadgeUrl,
+    getBadgeMarkdown,
+    formatTime,
+  } = useGithubBuildStatus({ owner, repo, defaultBranch })
 
   if (loading) {
     return (
@@ -437,6 +348,7 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
               <WorkflowBadgeList
                 workflows={allWorkflows}
                 copiedBadge={copiedBadge}
+                defaultBranch={defaultBranch}
                 onCopyBadge={copyBadgeMarkdown}
                 getBadgeUrl={getBadgeUrl}
                 getBadgeMarkdown={getBadgeMarkdown}
