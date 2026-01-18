@@ -41,6 +41,7 @@ type PendingOperation = {
 class PersistenceQueue {
   private queue: Map<string, PendingOperation> = new Map()
   private processing = false
+  private pendingFlush = false
   private debounceTimers: Map<string, ReturnType<typeof setTimeout>> = new Map()
 
   enqueue(operation: PendingOperation, debounceMs: number) {
@@ -62,7 +63,12 @@ class PersistenceQueue {
   }
 
   async processQueue() {
-    if (this.processing || this.queue.size === 0) return
+    if (this.processing) {
+      this.pendingFlush = true
+      return
+    }
+
+    if (this.queue.size === 0) return
 
     this.processing = true
 
@@ -97,6 +103,11 @@ class PersistenceQueue {
       }
     } finally {
       this.processing = false
+      const needsFlush = this.pendingFlush || this.queue.size > 0
+      this.pendingFlush = false
+      if (needsFlush) {
+        await this.processQueue()
+      }
     }
   }
 
