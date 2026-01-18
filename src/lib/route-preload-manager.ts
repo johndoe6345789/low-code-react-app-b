@@ -79,6 +79,12 @@ export class RoutePreloadManager {
       }
 
       try {
+        if (page.type === 'json') {
+          console.log(`[PRELOAD_MGR] 🧩 Skipping component preload for JSON page: ${pageId}`)
+          this.preloadedRoutes.add(pageId)
+          return
+        }
+
         const componentName = page.component as ComponentName
         console.log(`[PRELOAD_MGR] 🚀 Preloading ${pageId} → ${componentName}`)
         preloadComponentByName(componentName)

@@ -246,6 +246,17 @@
       }
     },
     {
+      "id": "json-ui-schema",
+      "title": "JSON UI Schema",
+      "description": "Schema-driven JSON UI page",
+      "icon": "Code",
+      "type": "json",
+      "schemaPath": "json-ui-showcase-page.json",
+      "layout": {
+        "type": "single"
+      }
+    },
+    {
       "id": "sass",
       "title": "Sass Styles",
       "description": "Explore custom Sass components",

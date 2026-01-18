@@ -30,6 +30,8 @@ export function validatePageConfig(): ValidationError[] {
   ]
 
   pagesConfig.pages.forEach((page: PageConfig) => {
+    const pageType = page.type ?? 'component'
+
     if (!page.id) {
       errors.push({
         page: page.title || 'Unknown',
@@ -57,11 +59,29 @@ export function validatePageConfig(): ValidationError[] {
       })
     }
 
-    if (!page.component) {
+    if (page.type && !['component', 'json'].includes(page.type)) {
+      errors.push({
+        page: page.id || 'Unknown',
+        field: 'type',
+        message: `Unknown page type: ${page.type}. Expected "component" or "json".`,
+        severity: 'error',
+      })
+    }
+
+    if (pageType === 'component' && !page.component) {
       errors.push({
         page: page.id || 'Unknown',
         field: 'component',
         message: 'Component name is required',
+        severity: 'error',
+      })
+    }
+
+    if (pageType === 'json' && !page.schemaPath) {
+      errors.push({
+        page: page.id || 'Unknown',
+        field: 'schemaPath',
+        message: 'schemaPath is required for JSON pages',
         severity: 'error',
       })
     }

@@ -23,7 +23,9 @@ export interface PageConfig {
   id: string
   title: string
   icon: string
-  component: string
+  type?: 'component' | 'json'
+  component?: string
+  schemaPath?: string
   enabled: boolean
   isRoot?: boolean
   toggleKey?: string

@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { RouteObject, Navigate } from 'react-router-dom'
 import { LoadingFallback } from '@/components/molecules'
 import { NotFoundPage } from '@/components/NotFoundPage'
+import { JSONSchemaPageLoader } from '@/components/JSONSchemaPageLoader'
 import { getEnabledPages, resolveProps } from '@/config/page-loader'
 import { ComponentRegistry } from '@/lib/component-registry'
 import { FeatureToggles } from '@/types/project'
@@ -80,12 +81,14 @@ export function createRoutes(
   console.log('[ROUTES] 📄 Enabled pages details:', JSON.stringify(enabledPages.map(p => ({ 
     id: p.id, 
     component: p.component, 
+    type: p.type,
+    schemaPath: p.schemaPath,
     isRoot: p.isRoot,
     enabled: p.enabled 
   })), null, 2))
 
   const rootPage = enabledPages.find(p => p.isRoot)
-  console.log('[ROUTES] 🏠 Root page search result:', rootPage ? `Found: ${rootPage.id} (${rootPage.component})` : 'NOT FOUND - will redirect to /dashboard')
+  console.log('[ROUTES] 🏠 Root page search result:', rootPage ? `Found: ${rootPage.id} (${rootPage.type ?? 'component'})` : 'NOT FOUND - will redirect to /dashboard')
 
   const routes: RouteObject[] = enabledPages
     .filter(p => !p.isRoot)
@@ -96,7 +99,14 @@ export function createRoutes(
         ? resolveProps(page.props, stateContext, actionContext)
         : {}
 
-      if (page.requiresResizable && page.resizableConfig) {
+      if (page.type === 'json' && page.schemaPath) {
+        return {
+          path: `/${page.id}`,
+          element: <JSONSchemaPageLoader schemaPath={page.schemaPath} />
+        }
+      }
+
+      if (page.requiresResizable && page.resizableConfig && page.component) {
         console.log('[ROUTES] 🔀 Page requires resizable layout:', page.id)
         const config = page.resizableConfig
         const leftProps = resolveProps(config.leftProps, stateContext, actionContext)
@@ -117,20 +127,31 @@ export function createRoutes(
 
       return {
         path: `/${page.id}`,
-        element: <LazyComponent componentName={page.component} props={props} />
+        element: page.component
+          ? <LazyComponent componentName={page.component} props={props} />
+          : <LoadingFallback message={`Component not configured for ${page.id}`} />
       }
     })
 
   if (rootPage) {
-    console.log('[ROUTES] ✅ Adding root route from JSON config:', rootPage.component)
-    const props = rootPage.props 
-      ? resolveProps(rootPage.props, stateContext, actionContext)
-      : {}
-    
-    routes.push({
-      path: '/',
-      element: <LazyComponent componentName={rootPage.component} props={props} />
-    })
+    console.log('[ROUTES] ✅ Adding root route from JSON config:', rootPage.type ?? 'component')
+    if (rootPage.type === 'json' && rootPage.schemaPath) {
+      routes.push({
+        path: '/',
+        element: <JSONSchemaPageLoader schemaPath={rootPage.schemaPath} />
+      })
+    } else {
+      const props = rootPage.props 
+        ? resolveProps(rootPage.props, stateContext, actionContext)
+        : {}
+      
+      routes.push({
+        path: '/',
+        element: rootPage.component
+          ? <LazyComponent componentName={rootPage.component} props={props} />
+          : <LoadingFallback message="Root component not configured" />
+      })
+    }
   } else {
     console.log('[ROUTES] ⚠️ No root page in config, redirecting to /dashboard')
     routes.push({
