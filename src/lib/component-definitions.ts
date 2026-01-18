@@ -212,6 +212,101 @@ export const componentDefinitions: ComponentDefinition[] = [
     defaultProps: { value: 50 }
   },
   {
+    type: 'ProgressBar',
+    label: 'Progress Bar',
+    category: 'display',
+    icon: 'CircleNotch',
+    defaultProps: { value: 50, max: 100, size: 'md', variant: 'default', showLabel: false },
+    props: [
+      {
+        name: 'value',
+        type: 'number',
+        description: 'Current progress value.',
+        required: true,
+        supportsBinding: true,
+      },
+      {
+        name: 'max',
+        type: 'number',
+        description: 'Maximum progress value.',
+        defaultValue: '100',
+        supportsBinding: true,
+      },
+      {
+        name: 'size',
+        type: 'string',
+        description: 'Height preset for the bar.',
+        defaultValue: 'md',
+        options: ['sm', 'md', 'lg'],
+      },
+      {
+        name: 'variant',
+        type: 'string',
+        description: 'Color variant for the bar.',
+        defaultValue: 'default',
+        options: ['default', 'accent', 'destructive'],
+      },
+      {
+        name: 'showLabel',
+        type: 'boolean',
+        description: 'Whether to render the percentage label below the bar.',
+        defaultValue: 'false',
+      },
+      {
+        name: 'className',
+        type: 'string',
+        description: 'Optional custom classes for the bar container.',
+      },
+    ],
+  },
+  {
+    type: 'CircularProgress',
+    label: 'Circular Progress',
+    category: 'display',
+    icon: 'CircleNotch',
+    defaultProps: { value: 65, max: 100, size: 'md', showLabel: true },
+    props: [
+      {
+        name: 'value',
+        type: 'number',
+        description: 'Current progress value.',
+        required: true,
+        supportsBinding: true,
+      },
+      {
+        name: 'max',
+        type: 'number',
+        description: 'Maximum progress value.',
+        defaultValue: '100',
+        supportsBinding: true,
+      },
+      {
+        name: 'size',
+        type: 'string',
+        description: 'Size preset for the circular indicator.',
+        defaultValue: 'md',
+        options: ['sm', 'md', 'lg', 'xl'],
+      },
+      {
+        name: 'showLabel',
+        type: 'boolean',
+        description: 'Whether to show the percentage label inside the circle.',
+        defaultValue: 'true',
+      },
+      {
+        name: 'strokeWidth',
+        type: 'number',
+        description: 'Custom stroke width for the circle outline.',
+        supportsBinding: true,
+      },
+      {
+        name: 'className',
+        type: 'string',
+        description: 'Optional custom classes for the wrapper.',
+      },
+    ],
+  },
+  {
     type: 'Spinner',
     label: 'Spinner',
     category: 'display',
@@ -231,6 +326,33 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'display',
     icon: 'Minus',
     defaultProps: {}
+  },
+  {
+    type: 'Divider',
+    label: 'Divider',
+    category: 'display',
+    icon: 'Minus',
+    defaultProps: { orientation: 'horizontal', decorative: true },
+    props: [
+      {
+        name: 'orientation',
+        type: 'string',
+        description: 'Layout direction for the divider.',
+        defaultValue: 'horizontal',
+        options: ['horizontal', 'vertical'],
+      },
+      {
+        name: 'decorative',
+        type: 'boolean',
+        description: 'Whether the divider is purely decorative.',
+        defaultValue: 'true',
+      },
+      {
+        name: 'className',
+        type: 'string',
+        description: 'Optional custom classes for spacing or styling.',
+      },
+    ],
   },
   // Navigation Components
   {

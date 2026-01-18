@@ -208,5 +208,88 @@
         ]
       }
     ]
+  },
+  "feedbackAtomsDemoSchema": {
+    "id": "feedback-atoms-demo",
+    "name": "Feedback Atoms Demo",
+    "layout": {
+      "type": "single"
+    },
+    "dataSources": [
+      {
+        "id": "circularProgressValue",
+        "type": "static",
+        "defaultValue": 72
+      },
+      {
+        "id": "progressBarValue",
+        "type": "static",
+        "defaultValue": 42
+      }
+    ],
+    "components": [
+      {
+        "id": "feedback-atoms-root",
+        "type": "div",
+        "props": {
+          "className": "space-y-6 rounded-lg border border-border bg-card p-6"
+        },
+        "children": [
+          {
+            "id": "feedback-atoms-title",
+            "type": "Heading",
+            "props": {
+              "className": "text-xl font-semibold",
+              "children": "Feedback Atoms"
+            }
+          },
+          {
+            "id": "feedback-atoms-divider",
+            "type": "Divider",
+            "props": {
+              "className": "my-2"
+            }
+          },
+          {
+            "id": "feedback-atoms-progress-grid",
+            "type": "div",
+            "props": {
+              "className": "grid gap-6 md:grid-cols-2"
+            },
+            "children": [
+              {
+                "id": "feedback-atoms-circular-progress",
+                "type": "CircularProgress",
+                "props": {
+                  "size": "lg",
+                  "showLabel": true
+                },
+                "bindings": {
+                  "value": {
+                    "source": "circularProgressValue",
+                    "sourceType": "data"
+                  }
+                }
+              },
+              {
+                "id": "feedback-atoms-progress-bar",
+                "type": "ProgressBar",
+                "props": {
+                  "variant": "accent",
+                  "size": "lg",
+                  "showLabel": true
+                },
+                "bindings": {
+                  "value": {
+                    "source": "progressBarValue",
+                    "sourceType": "data"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

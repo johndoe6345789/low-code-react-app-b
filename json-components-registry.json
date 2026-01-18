@@ -611,7 +611,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Circular progress indicator",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -629,7 +629,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Visual section divider",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -719,7 +719,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Linear progress bar",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {

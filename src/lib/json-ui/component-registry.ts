@@ -141,9 +141,12 @@ export const atomComponents: UIComponentRegistry = {
     atomRegistryNames,
     AtomComponents as Record<string, ComponentType<any>>
   ),
+  CircularProgress: (AtomComponents as Record<string, ComponentType<any>>).CircularProgress,
+  Divider: (AtomComponents as Record<string, ComponentType<any>>).Divider,
   DataList: (AtomComponents as Record<string, ComponentType<any>>).DataList,
   DataTable: (AtomComponents as Record<string, ComponentType<any>>).DataTable,
   MetricCard: (AtomComponents as Record<string, ComponentType<any>>).MetricCard,
+  ProgressBar: (AtomComponents as Record<string, ComponentType<any>>).ProgressBar,
   Timeline: (AtomComponents as Record<string, ComponentType<any>>).Timeline,
 }
 

@@ -7,6 +7,7 @@ export type ComponentType =
   | 'Link' | 'Breadcrumb' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
   | 'ErrorBadge' | 'Notification' | 'StatusIcon'
+  | 'CircularProgress' | 'Divider' | 'ProgressBar'
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
   | 'DataList' | 'DataTable' | 'MetricCard' | 'Timeline'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'

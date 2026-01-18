@@ -10,6 +10,7 @@ import newMoleculesShowcaseJson from '@/schemas/new-molecules-showcase.json'
 const todoListSchema = hydrateSchema(todoListJson)
 const newMoleculesShowcaseSchema = hydrateSchema(newMoleculesShowcaseJson)
 const dataComponentsDemoSchema = hydrateSchema(pageSchemasJson.dataComponentsDemoSchema)
+const feedbackAtomsDemoSchema = hydrateSchema(pageSchemasJson.feedbackAtomsDemoSchema)
 
 export function JSONUIShowcasePage() {
   return (
