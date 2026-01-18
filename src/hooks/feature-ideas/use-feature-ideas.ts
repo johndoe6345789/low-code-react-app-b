@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useKV } from '@/hooks/use-kv'
+import seedData from '@/data/feature-idea-cloud.json'
 
 export interface FeatureIdea {
   id: string
@@ -12,35 +13,17 @@ export interface FeatureIdea {
   parentGroup?: string
 }
 
-const SEED_IDEAS: FeatureIdea[] = [
-  {
-    id: 'idea-1',
-    title: 'AI Code Assistant',
-    description: 'Integrate an AI assistant that can suggest code improvements and answer questions',
-    category: 'AI/ML',
-    priority: 'high',
-    status: 'completed',
-    createdAt: Date.now() - 10000000,
-  },
-  {
-    id: 'idea-2',
-    title: 'Real-time Collaboration',
-    description: 'Allow multiple developers to work on the same project simultaneously',
-    category: 'Collaboration',
-    priority: 'high',
-    status: 'idea',
-    createdAt: Date.now() - 9000000,
-  },
-  {
-    id: 'idea-3',
-    title: 'Component Marketplace',
-    description: 'A marketplace where users can share and download pre-built components',
-    category: 'Community',
-    priority: 'medium',
-    status: 'idea',
-    createdAt: Date.now() - 8000000,
-  },
-]
+type SeedIdea = Omit<FeatureIdea, 'createdAt'> & { createdAtOffset: number }
+
+const buildSeedIdeas = (): FeatureIdea[] => {
+  const now = Date.now()
+  return (seedData.ideas as SeedIdea[]).map((idea) => ({
+    ...idea,
+    createdAt: now + idea.createdAtOffset,
+  }))
+}
+
+const SEED_IDEAS = buildSeedIdeas()
 
 export function useFeatureIdeas() {
   const [ideas, setIdeas] = useKV<FeatureIdea[]>('feature-ideas', SEED_IDEAS)
