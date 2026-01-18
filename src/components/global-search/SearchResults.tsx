@@ -1,15 +1,6 @@
 import { Badge } from '@/components/ui/badge'
 import { CommandGroup, CommandItem, CommandSeparator } from '@/components/ui/command'
-
-interface SearchResult {
-  id: string
-  title: string
-  subtitle?: string
-  category: string
-  icon: React.ReactNode
-  action: () => void
-  tags?: string[]
-}
+import type { SearchResult } from './types'
 
 interface SearchResultsProps {
   groupedResults: Record<string, SearchResult[]>

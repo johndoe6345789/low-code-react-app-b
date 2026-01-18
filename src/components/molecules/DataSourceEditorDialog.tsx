@@ -6,6 +6,7 @@ import { DataSourceIdField } from '@/components/molecules/data-source-editor/Dat
 import { KvSourceFields } from '@/components/molecules/data-source-editor/KvSourceFields'
 import { StaticSourceFields } from '@/components/molecules/data-source-editor/StaticSourceFields'
 import { ComputedSourceFields } from '@/components/molecules/data-source-editor/ComputedSourceFields'
+import { useDataSourceEditor } from '@/hooks/data/use-data-source-editor'
 import dataSourceEditorCopy from '@/data/data-source-editor-dialog.json'
 import { useDataSourceEditor } from '@/hooks/use-data-source-editor'
 
@@ -29,16 +30,16 @@ export function DataSourceEditorDialog({
     updateField,
     addDependency,
     removeDependency,
-    handleSave,
     availableDeps,
     selectedDeps,
     unselectedDeps,
-  } = useDataSourceEditor({
-    dataSource,
-    allDataSources,
-    onSave,
-    onOpenChange,
-  })
+  } = useDataSourceEditor(dataSource, allDataSources)
+
+  const handleSave = () => {
+    if (!editingSource) return
+    onSave(editingSource)
+    onOpenChange(false)
+  }
 
   if (!editingSource) return null
 

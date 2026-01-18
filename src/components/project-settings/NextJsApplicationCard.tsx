@@ -1,18 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { NextJsConfig } from '@/types/project'
 import projectSettingsCopy from '@/data/project-settings.json'
-
-interface NextJsApplicationCardProps {
-  nextjsConfig: NextJsConfig
-  onNextjsConfigChange: (config: NextJsConfig | ((current: NextJsConfig) => NextJsConfig)) => void
-}
+import { NextJsConfigSectionProps } from '@/components/project-settings/types'
 
 export function NextJsApplicationCard({
   nextjsConfig,
   onNextjsConfigChange,
-}: NextJsApplicationCardProps) {
+}: NextJsConfigSectionProps) {
   const { application } = projectSettingsCopy.nextjs
 
   return (

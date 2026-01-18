@@ -1,28 +1,29 @@
 import { useCallback, useEffect, useState } from 'react'
 import { UIComponent } from '@/types/json-ui'
 
-interface UseComponentBindingDialogParams {
+interface UseComponentBindingDialogOptions {
   component: UIComponent | null
-  onSave: (component: UIComponent) => void
+  open: boolean
   onOpenChange: (open: boolean) => void
+  onSave: (component: UIComponent) => void
 }
 
 export function useComponentBindingDialog({
   component,
-  onSave,
+  open,
   onOpenChange,
-}: UseComponentBindingDialogParams) {
+  onSave,
+}: UseComponentBindingDialogOptions) {
   const [editingComponent, setEditingComponent] = useState<UIComponent | null>(component)
 
   useEffect(() => {
-    setEditingComponent(component)
-  }, [component])
+    if (open) {
+      setEditingComponent(component)
+    }
+  }, [component, open])
 
   const updateBindings = useCallback((bindings: Record<string, any>) => {
-    setEditingComponent((prev) => {
-      if (!prev) return prev
-      return { ...prev, bindings }
-    })
+    setEditingComponent(prev => (prev ? { ...prev, bindings } : prev))
   }, [])
 
   const handleSave = useCallback(() => {
@@ -33,7 +34,7 @@ export function useComponentBindingDialog({
 
   return {
     editingComponent,
-    updateBindings,
     handleSave,
+    updateBindings,
   }
 }

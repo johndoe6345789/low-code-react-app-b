@@ -23,8 +23,9 @@ export function ComponentBindingDialog({
 }: ComponentBindingDialogProps) {
   const { editingComponent, handleSave, updateBindings } = useComponentBindingDialog({
     component,
-    onSave,
+    open,
     onOpenChange,
+    onSave,
   })
 
   if (!editingComponent) return null
