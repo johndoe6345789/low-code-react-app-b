@@ -1,12 +1,14 @@
-import { PageRenderer } from '@/lib/json-ui/page-renderer'
+import { JSONPageRenderer } from '@/components/JSONPageRenderer'
 import { LoadingFallback } from '@/components/molecules'
 import { useSchemaLoader } from '@/hooks/use-schema-loader'
 
 interface JSONSchemaPageLoaderProps {
   schemaPath: string
+  data?: Record<string, any>
+  functions?: Record<string, (...args: any[]) => any>
 }
 
-export function JSONSchemaPageLoader({ schemaPath }: JSONSchemaPageLoaderProps) {
+export function JSONSchemaPageLoader({ schemaPath, data, functions }: JSONSchemaPageLoaderProps) {
   const { schema, loading, error } = useSchemaLoader(schemaPath)
 
   if (loading) {
@@ -21,5 +23,5 @@ export function JSONSchemaPageLoader({ schemaPath }: JSONSchemaPageLoaderProps) 
     )
   }
 
-  return <PageRenderer schema={schema} />
+  return <JSONPageRenderer schema={schema} data={data} functions={functions} />
 }

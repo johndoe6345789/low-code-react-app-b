@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { RouteObject, Navigate } from 'react-router-dom'
+import { JSONSchemaPageLoader } from '@/components/JSONSchemaPageLoader'
 import { LoadingFallback } from '@/components/molecules'
 import { NotFoundPage } from '@/components/NotFoundPage'
 import { getEnabledPages, resolveProps } from '@/config/page-loader'
@@ -73,6 +74,11 @@ export function createRoutes(
   stateContext: any,
   actionContext: any
 ): RouteObject[] {
+  const resolveJsonBindings = (jsonProps?: { data?: string[]; functions?: string[] }) => ({
+    data: resolveProps(jsonProps?.data ? { state: jsonProps.data } : undefined, stateContext, actionContext),
+    functions: resolveProps(jsonProps?.functions ? { actions: jsonProps.functions } : undefined, stateContext, actionContext),
+  })
+
   console.log('[ROUTES] 🏗️ Creating routes with feature toggles:', featureToggles)
   const enabledPages = getEnabledPages(featureToggles)
   console.log('[ROUTES] 📄 Enabled pages count:', enabledPages.length)
@@ -95,6 +101,21 @@ export function createRoutes(
       const props = page.props 
         ? resolveProps(page.props, stateContext, actionContext)
         : {}
+
+      if (page.jsonSchemaPath) {
+        const { data, functions } = resolveJsonBindings(page.jsonProps)
+
+        return {
+          path: `/${page.id}`,
+          element: (
+            <JSONSchemaPageLoader
+              schemaPath={page.jsonSchemaPath}
+              data={data}
+              functions={functions}
+            />
+          )
+        }
+      }
 
       if (page.requiresResizable && page.resizableConfig) {
         console.log('[ROUTES] 🔀 Page requires resizable layout:', page.id)
@@ -126,11 +147,26 @@ export function createRoutes(
     const props = rootPage.props 
       ? resolveProps(rootPage.props, stateContext, actionContext)
       : {}
-    
-    routes.push({
-      path: '/',
-      element: <LazyComponent componentName={rootPage.component} props={props} />
-    })
+
+    if (rootPage.jsonSchemaPath) {
+      const { data, functions } = resolveJsonBindings(rootPage.jsonProps)
+
+      routes.push({
+        path: '/',
+        element: (
+          <JSONSchemaPageLoader
+            schemaPath={rootPage.jsonSchemaPath}
+            data={data}
+            functions={functions}
+          />
+        )
+      })
+    } else {
+      routes.push({
+        path: '/',
+        element: <LazyComponent componentName={rootPage.component} props={props} />
+      })
+    }
   } else {
     console.log('[ROUTES] ⚠️ No root page in config, redirecting to /dashboard')
     routes.push({

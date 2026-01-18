@@ -6,6 +6,14 @@ export interface PropConfig {
   actions?: string[]
 }
 
+// JSON page bindings use the same "propName:contextKey" format as PropConfig:
+// - data entries map to stateContext via resolveProps (state)
+// - functions entries map to actionContext via resolveProps (actions)
+export interface JsonPagePropConfig {
+  data?: string[]
+  functions?: string[]
+}
+
 export interface ResizableConfig {
   leftComponent: string
   leftProps: PropConfig
@@ -31,6 +39,8 @@ export interface PageConfig {
   order: number
   requiresResizable?: boolean
   props?: PropConfig
+  jsonSchemaPath?: string
+  jsonProps?: JsonPagePropConfig
   resizableConfig?: ResizableConfig
 }
 
