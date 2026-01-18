@@ -6,6 +6,7 @@ export type ComponentType =
   | 'Badge' | 'Progress' | 'Separator' | 'Tabs' | 'TabsContent' | 'TabsList' | 'TabsTrigger' | 'Dialog'
   | 'Text' | 'Heading' | 'Label' | 'List' | 'Grid' | 'Stack' | 'Flex' | 'Container'
   | 'Link' | 'Breadcrumb' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
+  | 'CircularProgress' | 'Divider' | 'ProgressBar'
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
   | 'ErrorBadge' | 'Notification' | 'StatusIcon'
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
