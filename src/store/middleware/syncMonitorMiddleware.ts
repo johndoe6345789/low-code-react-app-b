@@ -107,21 +107,18 @@ export const createSyncMonitorMiddleware = (): Middleware => {
     const isFulfilledAction = asyncThunkActions.some((prefix) => action.type === `${prefix}/fulfilled`)
     const isRejectedAction = asyncThunkActions.some((prefix) => action.type === `${prefix}/rejected`)
 
-    if (isPendingAction) {
-      const operationId = action.meta?.requestId || `${action.type}-${Date.now()}`
-      syncMonitor.startOperation(operationId)
+    if (isPendingAction && action.meta?.requestId) {
+      syncMonitor.startOperation(action.meta.requestId)
     }
 
     const result = next(action)
 
-    if (isFulfilledAction) {
-      const operationId = action.meta?.requestId || `${action.type}-${Date.now()}`
-      syncMonitor.endOperation(operationId, true)
+    if (isFulfilledAction && action.meta?.requestId) {
+      syncMonitor.endOperation(action.meta.requestId, true)
     }
 
-    if (isRejectedAction) {
-      const operationId = action.meta?.requestId || `${action.type}-${Date.now()}`
-      syncMonitor.endOperation(operationId, false)
+    if (isRejectedAction && action.meta?.requestId) {
+      syncMonitor.endOperation(action.meta.requestId, false)
     }
 
     return result
