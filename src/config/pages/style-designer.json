@@ -314,9 +314,9 @@
                           "event": "onValueChange",
                           "actions": [
                             {
-                              "type": "setState",
+                              "type": "set-value",
                               "target": "selectedTab",
-                              "valueFrom": "event"
+                              "expression": "event"
                             }
                           ]
                         }
@@ -571,7 +571,7 @@
                                               "event": "onClick",
                                               "actions": [
                                                 {
-                                                  "type": "setState",
+                                                  "type": "set-value",
                                                   "target": "customColorDialogOpen",
                                                   "value": true
                                                 }
@@ -602,9 +602,7 @@
                                         "className": "text-center py-8"
                                       },
                                       "conditional": {
-                                        "source": "customColorCount",
-                                        "operator": "eq",
-                                        "value": 0
+                                        "if": "customColorCount === 0"
                                       },
                                       "children": [
                                         {
@@ -630,9 +628,7 @@
                                         "className": "text-sm text-muted-foreground"
                                       },
                                       "conditional": {
-                                        "source": "customColorCount",
-                                        "operator": "gt",
-                                        "value": 0
+                                        "if": "customColorCount > 0"
                                       },
                                       "children": "Custom colors will be displayed here"
                                     }

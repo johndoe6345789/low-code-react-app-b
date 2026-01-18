@@ -26,6 +26,14 @@ export function evaluateExpression(
   const { data, event } = context
 
   try {
+    if (expression === 'event') {
+      return event
+    }
+
+    if (expression === 'data') {
+      return data
+    }
+
     // Handle direct data access: "data.fieldName"
     if (expression.startsWith('data.')) {
       return getNestedValue(data, expression.substring(5))

@@ -102,7 +102,10 @@ export function ComponentRenderer({ component, data, context = {}, state, onEven
               ? handler.condition(mergedData as Record<string, any>)
               : evaluateCondition(handler.condition, mergedData as Record<string, any>))
           if (conditionMet) {
-            onEvent(component.id, handler, e)
+            const eventPayload = typeof e === 'object' && e !== null
+              ? Object.assign(e as Record<string, unknown>, context)
+              : e
+            onEvent(component.id, handler, eventPayload)
           }
         }
       })

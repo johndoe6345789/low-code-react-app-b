@@ -84,7 +84,7 @@
                       "event": "onClick",
                       "actions": [
                         {
-                          "type": "setState",
+                          "type": "set-value",
                           "target": "createDialogOpen",
                           "value": true
                         }
@@ -131,9 +131,7 @@
                 {
                   "type": "div",
                   "conditional": {
-                    "source": "workflowCount",
-                    "operator": "eq",
-                    "value": 0
+                    "if": "workflowCount === 0"
                   },
                   "props": {
                     "className": "text-center py-8 text-muted-foreground"
@@ -158,8 +156,7 @@
                 "className": "flex-1 flex items-center justify-center"
               },
               "conditional": {
-                "source": "selectedWorkflow",
-                "operator": "falsy"
+                "if": "!selectedWorkflow"
               },
               "children": [
                 {
@@ -204,8 +201,7 @@
                 "className": "flex-1 p-6 overflow-auto"
               },
               "conditional": {
-                "source": "selectedWorkflow",
-                "operator": "truthy"
+                "if": "selectedWorkflow"
               },
               "children": [
                 {

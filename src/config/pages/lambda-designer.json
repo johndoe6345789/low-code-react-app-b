@@ -96,7 +96,7 @@
                       "event": "onClick",
                       "actions": [
                         {
-                          "type": "setState",
+                          "type": "set-value",
                           "target": "createDialogOpen",
                           "value": true
                         }
@@ -128,9 +128,7 @@
                     "className": "space-y-2"
                   },
                   "conditional": {
-                    "source": "lambdaCount",
-                    "operator": "gt",
-                    "value": 0
+                    "if": "lambdaCount > 0"
                   },
                   "children": [
                     {
@@ -145,9 +143,7 @@
                     "className": "flex flex-col items-center justify-center py-12 px-4 text-center"
                   },
                   "conditional": {
-                    "source": "lambdaCount",
-                    "operator": "eq",
-                    "value": 0
+                    "if": "lambdaCount === 0"
                   },
                   "children": [
                     {
@@ -191,8 +187,7 @@
                 "className": "flex-1 flex items-center justify-center p-8"
               },
               "conditional": {
-                "source": "selectedLambda",
-                "operator": "truthy"
+                "if": "selectedLambda"
               },
               "children": [
                 {
@@ -248,8 +243,7 @@
                 "className": "flex-1 flex items-center justify-center p-8"
               },
               "conditional": {
-                "source": "selectedLambda",
-                "operator": "falsy"
+                "if": "!selectedLambda"
               },
               "children": [
                 {

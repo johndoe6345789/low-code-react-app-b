@@ -117,7 +117,7 @@
                       "event": "onClick",
                       "actions": [
                         {
-                          "type": "setState",
+                          "type": "set-value",
                           "target": "createBlueprintDialogOpen",
                           "value": true
                         }
@@ -150,9 +150,7 @@
                     "className": "p-4 space-y-2"
                   },
                   "conditional": {
-                    "source": "blueprintCount",
-                    "operator": "gt",
-                    "value": 0
+                    "if": "blueprintCount > 0"
                   },
                   "children": [
                     {
@@ -165,11 +163,7 @@
                           "className": "group cursor-pointer hover:bg-accent/10 transition-all duration-200 hover:shadow-lg hover:shadow-accent/20 border-2 hover:border-accent/50"
                         },
                         "conditionalClass": {
-                          "condition": {
-                            "source": "selectedBlueprintId",
-                            "operator": "eq",
-                            "valueFrom": "item.id"
-                          },
+                          "condition": "selectedBlueprintId === item.id",
                           "trueClass": "bg-accent/20 border-accent shadow-md shadow-accent/30",
                           "falseClass": "border-transparent"
                         },
@@ -178,9 +172,9 @@
                             "event": "onClick",
                             "actions": [
                               {
-                                "type": "setState",
+                                "type": "set-value",
                                 "target": "selectedBlueprintId",
-                                "valueFrom": "item.id"
+                                "expression": "event.item.id"
                               }
                             ]
                           }
@@ -330,9 +324,7 @@
                     "className": "flex flex-col items-center justify-center h-full p-8 text-center"
                   },
                   "conditional": {
-                    "source": "blueprintCount",
-                    "operator": "eq",
-                    "value": 0
+                    "if": "blueprintCount === 0"
                   },
                   "children": [
                     {
@@ -367,7 +359,7 @@
                           "event": "onClick",
                           "actions": [
                             {
-                              "type": "setState",
+                              "type": "set-value",
                               "target": "createBlueprintDialogOpen",
                               "value": true
                             }
@@ -404,8 +396,7 @@
                 "className": "flex-1 overflow-auto p-8"
               },
               "conditional": {
-                "source": "selectedBlueprint",
-                "operator": "truthy"
+                "if": "selectedBlueprint"
               },
               "children": [
                 {
@@ -467,7 +458,7 @@
                                   "event": "onClick",
                                   "actions": [
                                     {
-                                      "type": "toast",
+                                      "type": "show-toast",
                                       "message": "Edit blueprint coming soon",
                                       "variant": "info"
                                     }
@@ -496,7 +487,7 @@
                                   "event": "onClick",
                                   "actions": [
                                     {
-                                      "type": "setState",
+                                      "type": "set-value",
                                       "target": "createEndpointDialogOpen",
                                       "value": true
                                     }
@@ -662,9 +653,7 @@
                                 "className": "space-y-3"
                               },
                               "conditional": {
-                                "source": "endpointCount",
-                                "operator": "gt",
-                                "value": 0
+                                "if": "endpointCount > 0"
                               },
                               "children": [
                                 {
@@ -743,7 +732,7 @@
                                                 "event": "onClick",
                                                 "actions": [
                                                   {
-                                                    "type": "toast",
+                                                    "type": "show-toast",
                                                     "message": "Edit endpoint coming soon",
                                                     "variant": "info"
                                                   }
@@ -804,9 +793,7 @@
                                 "className": "text-center py-12"
                               },
                               "conditional": {
-                                "source": "endpointCount",
-                                "operator": "eq",
-                                "value": 0
+                                "if": "endpointCount === 0"
                               },
                               "children": [
                                 {
@@ -835,7 +822,7 @@
                                       "event": "onClick",
                                       "actions": [
                                         {
-                                          "type": "setState",
+                                          "type": "set-value",
                                           "target": "createEndpointDialogOpen",
                                           "value": true
                                         }
@@ -869,8 +856,7 @@
                 "className": "flex-1 flex items-center justify-center p-8"
               },
               "conditional": {
-                "source": "selectedBlueprint",
-                "operator": "falsy"
+                "if": "!selectedBlueprint"
               },
               "children": [
                 {
