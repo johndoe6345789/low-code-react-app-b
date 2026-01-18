@@ -4,11 +4,43 @@ import { Action, JSONUIContext } from '@/types/json-ui'
 import { evaluateExpression, evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 
 export function useActionExecutor(context: JSONUIContext) {
-  const { data, updateData, executeAction: contextExecute } = context
+  const { data, updateData, updatePath, executeAction: contextExecute } = context
 
   const executeAction = useCallback(async (action: Action, event?: any) => {
     try {
       const evaluationContext = { data, event }
+      const updateByPath = (sourceId: string, path: string, value: any) => {
+        if (updatePath) {
+          updatePath(sourceId, path, value)
+          return
+        }
+
+        const sourceData = data[sourceId] ?? {}
+        const pathParts = path.split('.')
+        const newData = { ...sourceData }
+        let current: any = newData
+
+        for (let i = 0; i < pathParts.length - 1; i++) {
+          const key = pathParts[i]
+          current[key] = typeof current[key] === 'object' && current[key] !== null ? { ...current[key] } : {}
+          current = current[key]
+        }
+
+        current[pathParts[pathParts.length - 1]] = value
+        updateData(sourceId, newData)
+      }
+
+      const resolveDialogTarget = () => {
+        const defaultSourceId = 'uiState'
+        const hasExplicitTarget = Boolean(action.target && action.path)
+        const sourceId = hasExplicitTarget ? action.target : defaultSourceId
+        const dialogId = action.path ?? action.target
+
+        if (!dialogId) return null
+
+        const dialogPath = dialogId.startsWith('dialogs.') ? dialogId : `dialogs.${dialogId}`
+        return { sourceId, dialogPath }
+      }
 
       switch (action.type) {
         case 'create': {
@@ -134,6 +166,20 @@ export function useActionExecutor(context: JSONUIContext) {
           break
         }
 
+        case 'open-dialog': {
+          const dialogTarget = resolveDialogTarget()
+          if (!dialogTarget) return
+          updateByPath(dialogTarget.sourceId, dialogTarget.dialogPath, true)
+          break
+        }
+
+        case 'close-dialog': {
+          const dialogTarget = resolveDialogTarget()
+          if (!dialogTarget) return
+          updateByPath(dialogTarget.sourceId, dialogTarget.dialogPath, false)
+          break
+        }
+
         case 'custom': {
           if (contextExecute) {
             await contextExecute(action, event)
@@ -145,7 +191,7 @@ export function useActionExecutor(context: JSONUIContext) {
       console.error('Action execution failed:', error)
       toast.error('Action failed')
     }
-  }, [data, updateData, contextExecute])
+  }, [data, updateData, updatePath, contextExecute])
 
   const executeActions = useCallback(async (actions: Action[], event?: any) => {
     for (const action of actions) {

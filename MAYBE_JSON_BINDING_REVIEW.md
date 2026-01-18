@@ -169,13 +169,15 @@ The JSON UI system already supports `events` for action execution and `bindings`
     "onImport": { "actions": [{ "id": "import-json", "type": "custom" }] },
     "onExport": { "actions": [{ "id": "export-json", "type": "custom" }] },
     "onCopy": { "actions": [{ "id": "copy-json", "type": "custom" }] },
-    "onPreview": { "actions": [{ "id": "open-preview", "type": "open-dialog", "target": "preview" }] },
+    "onPreview": { "actions": [{ "id": "open-preview", "type": "open-dialog", "target": "uiState", "path": "preview" }] },
     "onClear": { "actions": [{ "id": "clear-schema", "type": "set-value", "target": "schema.components", "value": [] }] }
   }
 }
 ```
 
 **Why:** these are pure event triggers; `custom` actions cover app-specific flows that aren’t part of the built-in action types.
+
+**Dialog storage convention:** `open-dialog`/`close-dialog` actions store booleans in `uiState.dialogs.<dialogId>`. Use `target` for the data source (typically `uiState`) and `path` for the dialog id.
 
 ### 5) Drag-and-drop/hover state (CanvasRenderer, ComponentTree)
 **Bindings:** IDs and `dropPosition` stored in data; events mapped to custom actions for editor logic.
@@ -229,7 +231,7 @@ The JSON UI system already supports `events` for action execution and `bindings`
     },
     "onEdit": {
       "actions": [
-        { "id": "open-source-editor", "type": "open-dialog", "target": "dataSourceEditor" }
+        { "id": "open-source-editor", "type": "open-dialog", "target": "uiState", "path": "dataSourceEditor" }
       ]
     },
     "onDelete": {

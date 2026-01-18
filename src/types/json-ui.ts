@@ -147,6 +147,7 @@ export interface PageSchema {
 export interface JSONUIContext {
   data: Record<string, any>
   updateData: (sourceId: string, value: any) => void
+  updatePath?: (sourceId: string, path: string, value: any) => void
   executeAction: (action: Action, event?: any) => Promise<void>
 }
 

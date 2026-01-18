@@ -17,6 +17,7 @@ export function PageRenderer({ schema, onCustomAction }: PageRendererProps) {
   const context = {
     data,
     updateData,
+    updatePath,
     executeAction: onCustomAction || (async () => {}),
   }
   
