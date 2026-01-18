@@ -1,26 +1,14 @@
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu'
-import { DataSourceCard } from '@/components/molecules/DataSourceCard'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { DataSourceEditorDialog } from '@/components/molecules/DataSourceEditorDialog'
 import { useDataSourceManager } from '@/hooks/data/use-data-source-manager'
 import { DataSource, DataSourceType } from '@/types/json-ui'
-import { Plus, Database, Function, FileText } from '@phosphor-icons/react'
+import { Database, Function, FileText } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import { 
-  EmptyState, 
-  ActionButton, 
-  Heading, 
-  Text, 
-  IconText,
-  Stack,
-  Section
-} from '@/components/atoms'
+import { EmptyState, Stack } from '@/components/atoms'
+import { DataSourceManagerHeader } from '@/components/organisms/data-source-manager/DataSourceManagerHeader'
+import { DataSourceGroupSection } from '@/components/organisms/data-source-manager/DataSourceGroupSection'
+import dataSourceManagerCopy from '@/data/data-source-manager.json'
 
 interface DataSourceManagerProps {
   dataSources: DataSource[]
@@ -56,21 +44,24 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
   const handleDeleteSource = (id: string) => {
     const dependents = getDependents(id)
     if (dependents.length > 0) {
-      toast.error('Cannot delete', {
-        description: `This source is used by ${dependents.length} computed ${dependents.length === 1 ? 'source' : 'sources'}`,
+      const noun = dependents.length === 1 ? 'source' : 'sources'
+      toast.error(dataSourceManagerCopy.toasts.deleteBlockedTitle, {
+        description: dataSourceManagerCopy.toasts.deleteBlockedDescription
+          .replace('{count}', String(dependents.length))
+          .replace('{noun}', noun),
       })
       return
     }
 
     deleteDataSource(id)
     onChange(localSources.filter(ds => ds.id !== id))
-    toast.success('Data source deleted')
+    toast.success(dataSourceManagerCopy.toasts.deleted)
   }
 
   const handleSaveSource = (updatedSource: DataSource) => {
     updateDataSource(updatedSource.id, updatedSource)
     onChange(localSources.map(ds => ds.id === updatedSource.id ? updatedSource : ds))
-    toast.success('Data source updated')
+    toast.success(dataSourceManagerCopy.toasts.updated)
   }
 
   const groupedSources = {
@@ -83,115 +74,51 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <Stack direction="vertical" spacing="xs">
-              <Heading level={2}>Data Sources</Heading>
-              <Text variant="muted">
-                Manage KV storage, computed values, and static data
-              </Text>
-            </Stack>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div>
-                  <ActionButton
-                    icon={<Plus size={16} />}
-                    label="Add Data Source"
-                    variant="default"
-                    onClick={() => {}}
-                  />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleAddDataSource('kv')}>
-                  <Database className="w-4 h-4 mr-2" />
-                  KV Store
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddDataSource('computed')}>
-                  <Function className="w-4 h-4 mr-2" />
-                  Computed Value
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddDataSource('static')}>
-                  <FileText className="w-4 h-4 mr-2" />
-                  Static Data
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <DataSourceManagerHeader
+            copy={{
+              title: dataSourceManagerCopy.header.title,
+              description: dataSourceManagerCopy.header.description,
+              addLabel: dataSourceManagerCopy.actions.add,
+              menu: dataSourceManagerCopy.menu,
+            }}
+            onAdd={handleAddDataSource}
+          />
         </CardHeader>
         <CardContent>
           {localSources.length === 0 ? (
             <EmptyState
               icon={<Database size={48} weight="duotone" />}
-              title="No data sources yet"
-              description="Create your first data source to start binding data to components"
+              title={dataSourceManagerCopy.emptyState.title}
+              description={dataSourceManagerCopy.emptyState.description}
             />
           ) : (
             <Stack direction="vertical" spacing="xl">
-              {groupedSources.kv.length > 0 && (
-                <Section>
-                  <IconText 
-                    icon={<Database size={16} />}
-                    className="text-sm font-semibold mb-3"
-                  >
-                    KV Store ({groupedSources.kv.length})
-                  </IconText>
-                  <Stack direction="vertical" spacing="sm">
-                    {groupedSources.kv.map(ds => (
-                      <DataSourceCard
-                        key={ds.id}
-                        dataSource={ds}
-                        dependents={getDependents(ds.id)}
-                        onEdit={handleEditSource}
-                        onDelete={handleDeleteSource}
-                      />
-                    ))}
-                  </Stack>
-                </Section>
-              )}
+              <DataSourceGroupSection
+                icon={<Database size={16} />}
+                label={dataSourceManagerCopy.groups.kv}
+                dataSources={groupedSources.kv}
+                getDependents={getDependents}
+                onEdit={handleEditSource}
+                onDelete={handleDeleteSource}
+              />
 
-              {groupedSources.static.length > 0 && (
-                <Section>
-                  <IconText 
-                    icon={<FileText size={16} />}
-                    className="text-sm font-semibold mb-3"
-                  >
-                    Static Data ({groupedSources.static.length})
-                  </IconText>
-                  <Stack direction="vertical" spacing="sm">
-                    {groupedSources.static.map(ds => (
-                      <DataSourceCard
-                        key={ds.id}
-                        dataSource={ds}
-                        dependents={getDependents(ds.id)}
-                        onEdit={handleEditSource}
-                        onDelete={handleDeleteSource}
-                      />
-                    ))}
-                  </Stack>
-                </Section>
-              )}
+              <DataSourceGroupSection
+                icon={<FileText size={16} />}
+                label={dataSourceManagerCopy.groups.static}
+                dataSources={groupedSources.static}
+                getDependents={getDependents}
+                onEdit={handleEditSource}
+                onDelete={handleDeleteSource}
+              />
 
-              {groupedSources.computed.length > 0 && (
-                <Section>
-                  <IconText 
-                    icon={<Function size={16} />}
-                    className="text-sm font-semibold mb-3"
-                  >
-                    Computed Values ({groupedSources.computed.length})
-                  </IconText>
-                  <Stack direction="vertical" spacing="sm">
-                    {groupedSources.computed.map(ds => (
-                      <DataSourceCard
-                        key={ds.id}
-                        dataSource={ds}
-                        dependents={getDependents(ds.id)}
-                        onEdit={handleEditSource}
-                        onDelete={handleDeleteSource}
-                      />
-                    ))}
-                  </Stack>
-                </Section>
-              )}
+              <DataSourceGroupSection
+                icon={<Function size={16} />}
+                label={dataSourceManagerCopy.groups.computed}
+                dataSources={groupedSources.computed}
+                getDependents={getDependents}
+                onEdit={handleEditSource}
+                onDelete={handleDeleteSource}
+              />
             </Stack>
           )}
         </CardContent>
