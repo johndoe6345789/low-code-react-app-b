@@ -8,6 +8,5 @@ export { GitHubBuildStatusWrapper } from './GitHubBuildStatusWrapper'
 export { ComponentBindingDialogWrapper } from './ComponentBindingDialogWrapper'
 export { DataSourceEditorDialogWrapper } from './DataSourceEditorDialogWrapper'
 export { ComponentTreeWrapper } from './ComponentTreeWrapper'
-export { LoadingFallbackWrapper } from './LoadingFallbackWrapper'
-export { NavigationItemWrapper } from './NavigationItemWrapper'
-export { PageHeaderContentWrapper } from './PageHeaderContentWrapper'
+// LoadingFallbackWrapper, NavigationItemWrapper, PageHeaderContentWrapper removed
+// These are now pure JSON components exported from @/lib/json-ui/json-components
