@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useKV } from '@/hooks/use-kv'
 import { DataSource } from '@/types/json-ui'
+import { setNestedValue } from '@/lib/json-ui/utils'
 
 export function useDataSources(dataSources: DataSource[]) {
   const [data, setData] = useState<Record<string, any>>({})
@@ -86,18 +87,8 @@ export function useDataSources(dataSources: DataSource[]) {
         return prev
       }
 
-      const pathParts = path.split('.')
-      const newData = { ...sourceData }
-      let current: any = newData
-
-      for (let i = 0; i < pathParts.length - 1; i++) {
-        if (!(pathParts[i] in current)) {
-          current[pathParts[i]] = {}
-        }
-        current = current[pathParts[i]]
-      }
-
-      current[pathParts[pathParts.length - 1]] = value
+      const newData = Array.isArray(sourceData) ? [...sourceData] : { ...sourceData }
+      setNestedValue(newData, path, value)
 
       if (source.type === 'kv') {
         const kvIndex = kvSources.indexOf(source)
