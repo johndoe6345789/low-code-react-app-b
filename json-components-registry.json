@@ -55,7 +55,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "CodeExplanationDialog component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -74,7 +74,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "ComponentBindingDialog component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -93,7 +93,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "DataSourceCard component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -103,7 +103,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "DataSourceEditorDialog component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -230,7 +230,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "TreeCard component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -240,7 +240,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "TreeFormDialog component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -547,7 +547,7 @@
       "category": "input",
       "canHaveChildren": true,
       "description": "ToolbarButton component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -728,7 +728,7 @@
       "category": "display",
       "canHaveChildren": true,
       "description": "SchemaCodeViewer organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -873,7 +873,7 @@
       "category": "navigation",
       "canHaveChildren": true,
       "description": "FileTabs component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -920,7 +920,7 @@
       "category": "navigation",
       "canHaveChildren": true,
       "description": "NavigationItem component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -930,7 +930,7 @@
       "category": "navigation",
       "canHaveChildren": true,
       "description": "NavigationMenu component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1012,7 +1012,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "EmptyCanvasState organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1050,7 +1050,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Empty state placeholder",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1154,7 +1154,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "SchemaEditorStatusBar organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1209,7 +1209,7 @@
       "category": "data",
       "canHaveChildren": true,
       "description": "DataSourceManager organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1322,7 +1322,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Statistic card display",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1359,7 +1359,7 @@
       "category": "data",
       "canHaveChildren": true,
       "description": "TreeListHeader component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1369,7 +1369,7 @@
       "category": "data",
       "canHaveChildren": true,
       "description": "TreeListPanel organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1397,7 +1397,7 @@
       "category": "custom",
       "canHaveChildren": false,
       "description": "Action button toolbar",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1417,7 +1417,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "AppHeader organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1445,7 +1445,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "BindingEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1482,7 +1482,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "CanvasRenderer component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1546,7 +1546,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "ComponentPalette component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1565,7 +1565,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "ComponentTree component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1584,7 +1584,7 @@
       "category": "custom",
       "canHaveChildren": false,
       "description": "Custom data display card",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1612,7 +1612,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "EditorActions component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1622,7 +1622,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "EditorToolbar component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1641,7 +1641,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "JSONUIShowcase organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1660,7 +1660,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "LazyInlineMonacoEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1670,7 +1670,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "LazyMonacoEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1689,7 +1689,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "MonacoEditorPanel component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1718,7 +1718,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "PageHeaderContent component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1764,7 +1764,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "PropertyEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1820,7 +1820,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorCanvas organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1830,7 +1830,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorLayout organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1840,7 +1840,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorPropertiesPanel organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1850,7 +1850,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorSidebar organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1860,7 +1860,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorToolbar organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1888,7 +1888,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SearchBar component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1907,7 +1907,7 @@
       "category": "custom",
       "canHaveChildren": false,
       "description": "Search input with icon",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1999,7 +1999,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "ToolbarActions organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -2023,11 +2023,11 @@
     }
   ],
   "statistics": {
-    "total": 219,
-    "supported": 157,
-    "planned": 7,
-    "jsonCompatible": 14,
-    "maybeJsonCompatible": 41,
+    "total": 217,
+    "supported": 204,
+    "planned": 0,
+    "jsonCompatible": 13,
+    "maybeJsonCompatible": 0,
     "byCategory": {
       "layout": 25,
       "input": 34,

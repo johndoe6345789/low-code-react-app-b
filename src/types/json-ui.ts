@@ -14,6 +14,16 @@ export type ComponentType =
   | 'LazyBarChart' | 'LazyLineChart' | 'LazyD3BarChart' | 'SeedDataManager'
   | 'SaveIndicator' | 'StorageSettings'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
+  | 'CodeExplanationDialog' | 'ComponentBindingDialog' | 'DataSourceCard' | 'DataSourceEditorDialog' | 'TreeCard' | 'TreeFormDialog'
+  | 'ToolbarButton'
+  | 'SchemaCodeViewer'
+  | 'FileTabs' | 'NavigationItem' | 'NavigationMenu'
+  | 'EmptyCanvasState' | 'SchemaEditorStatusBar'
+  | 'DataSourceManager' | 'TreeListHeader' | 'TreeListPanel'
+  | 'AppHeader' | 'BindingEditor' | 'CanvasRenderer' | 'ComponentPalette' | 'ComponentTree' | 'EditorActions'
+  | 'EditorToolbar' | 'JSONUIShowcase' | 'LazyInlineMonacoEditor' | 'LazyMonacoEditor' | 'MonacoEditorPanel'
+  | 'PageHeaderContent' | 'PropertyEditor' | 'SchemaEditorCanvas' | 'SchemaEditorLayout'
+  | 'SchemaEditorPropertiesPanel' | 'SchemaEditorSidebar' | 'SchemaEditorToolbar' | 'SearchBar' | 'ToolbarActions'
 
 export type ActionType =
   | 'create' | 'update' | 'delete' | 'navigate'
