@@ -1,7 +1,9 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useKV } from '@/hooks/use-kv'
 import { DataSource } from '@/types/json-ui'
 import { setNestedValue } from '@/lib/json-ui/utils'
+import { evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
+import { evaluateBindingExpression } from '@/lib/json-ui/expression-helpers'
 
 export function useDataSources(dataSources: DataSource[]) {
   const [data, setData] = useState<Record<string, any>>({})
@@ -27,7 +29,7 @@ export function useDataSources(dataSources: DataSource[]) {
           if (kvIndex !== -1 && kvStates[kvIndex]) {
             newData[source.id] = kvStates[kvIndex][0]
           }
-        } else if (source.type === 'static') {
+        } else if (source.type === 'static' && !source.expression && !source.valueTemplate) {
           newData[source.id] = source.defaultValue
         }
       })
@@ -39,20 +41,32 @@ export function useDataSources(dataSources: DataSource[]) {
     initializeData()
   }, [])
 
-  useEffect(() => {
-    const computedSources = dataSources.filter(ds => ds.type === 'computed')
-    
-    computedSources.forEach(source => {
-      if (source.compute) {
-        const deps = source.dependencies || []
-        const hasAllDeps = deps.every(dep => dep in data)
-        
-        if (hasAllDeps) {
-          const computedValue = source.compute(data)
-          setData(prev => ({ ...prev, [source.id]: computedValue }))
-        }
+  const derivedData = useMemo(() => {
+    const result: Record<string, any> = {}
+    const context = { ...data }
+
+    dataSources.forEach((source) => {
+      if (!source.expression && !source.valueTemplate) return
+
+      let computedValue: any
+      if (source.expression) {
+        computedValue = evaluateBindingExpression(source.expression, context, {
+          fallback: undefined,
+          label: `data source (${source.id})`,
+        })
+      } else if (source.valueTemplate) {
+        computedValue = evaluateTemplate(source.valueTemplate, { data: context })
       }
+
+      if (computedValue === undefined && source.defaultValue !== undefined) {
+        computedValue = source.defaultValue
+      }
+
+      result[source.id] = computedValue
+      context[source.id] = computedValue
     })
+
+    return result
   }, [data, dataSources])
 
   const updateData = useCallback((sourceId: string, value: any) => {
@@ -101,8 +115,10 @@ export function useDataSources(dataSources: DataSource[]) {
     })
   }, [dataSources, kvSources, kvStates])
 
+  const mergedData = useMemo(() => ({ ...data, ...derivedData }), [data, derivedData])
+
   return {
-    data,
+    data: mergedData,
     updateData,
     updatePath,
     loading,

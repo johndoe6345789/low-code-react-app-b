@@ -35,27 +35,27 @@
     },
     {
       "id": "selectedBlueprint",
-      "type": "computed",
-      "compute": "(data) => { const config = data.flaskConfig || {}; const blueprints = config.blueprints || []; return blueprints.find(b => b.id === data.selectedBlueprintId) || null; }",
-      "dependencies": ["flaskConfig", "selectedBlueprintId"]
+      "type": "static",
+      "expression": "findById(data.flaskConfig.blueprints, data.selectedBlueprintId)",
+      "defaultValue": null
     },
     {
       "id": "blueprintCount",
-      "type": "computed",
-      "compute": "(data) => ((data.flaskConfig || {}).blueprints || []).length",
-      "dependencies": ["flaskConfig"]
+      "type": "static",
+      "expression": "length(data.flaskConfig.blueprints)",
+      "defaultValue": 0
     },
     {
       "id": "endpointCount",
-      "type": "computed",
-      "compute": "(data) => { const bp = data.selectedBlueprint; return bp ? (bp.endpoints || []).length : 0; }",
-      "dependencies": ["selectedBlueprint"]
+      "type": "static",
+      "expression": "length(data.selectedBlueprint.endpoints)",
+      "defaultValue": 0
     },
     {
       "id": "totalEndpoints",
-      "type": "computed",
-      "compute": "(data) => { const config = data.flaskConfig || {}; const blueprints = config.blueprints || []; return blueprints.reduce((sum, bp) => sum + (bp.endpoints || []).length, 0); }",
-      "dependencies": ["flaskConfig"]
+      "type": "static",
+      "expression": "sumByLength(data.flaskConfig.blueprints, \"endpoints\")",
+      "defaultValue": 0
     }
   ],
   "components": [

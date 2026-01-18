@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { DataSource } from '@/types/json-ui'
+import { evaluateBindingExpression } from '@/lib/json-ui/expression-helpers'
+import { evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 
 export function useDataSources(dataSources: DataSource[]) {
   const [data, setData] = useState<Record<string, any>>({})
@@ -12,8 +14,8 @@ export function useDataSources(dataSources: DataSource[]) {
     [dataSources]
   )
 
-  const computedSources = useMemo(
-    () => dataSources.filter((ds) => ds.type === 'computed'),
+  const derivedSources = useMemo(
+    () => dataSources.filter((ds) => ds.expression || ds.valueTemplate),
     [dataSources]
   )
 
@@ -29,7 +31,7 @@ export function useDataSources(dataSources: DataSource[]) {
           } catch {
             initialData[ds.id] = ds.defaultValue
           }
-        } else if (ds.type === 'static') {
+        } else if (ds.type === 'static' && !ds.expression && !ds.valueTemplate) {
           initialData[ds.id] = ds.defaultValue
         }
       }
@@ -52,15 +54,29 @@ export function useDataSources(dataSources: DataSource[]) {
 
   const computedData = useMemo(() => {
     const result: Record<string, any> = {}
-    
-    computedSources.forEach((ds) => {
-      if (ds.compute && typeof ds.compute === 'function') {
-        result[ds.id] = ds.compute(data)
+    const context = { ...data }
+
+    derivedSources.forEach((ds) => {
+      let value: any
+      if (ds.expression) {
+        value = evaluateBindingExpression(ds.expression, context, {
+          fallback: undefined,
+          label: `data source (${ds.id})`,
+        })
+      } else if (ds.valueTemplate) {
+        value = evaluateTemplate(ds.valueTemplate, { data: context })
       }
+
+      if (value === undefined && ds.defaultValue !== undefined) {
+        value = ds.defaultValue
+      }
+
+      result[ds.id] = value
+      context[ds.id] = value
     })
     
     return result
-  }, [computedSources, data])
+  }, [derivedSources, data])
 
   const allData = useMemo(
     () => ({ ...data, ...computedData }),

@@ -16,20 +16,7 @@ export function hydrateSchema(jsonSchema: any): PageSchema {
   const schema = { ...jsonSchema }
 
   if (schema.dataSources) {
-    schema.dataSources = schema.dataSources.map((ds: any) => {
-      if (ds.type === 'computed' && typeof ds.compute === 'string') {
-        const functionName = ds.compute as keyof ComputeFunctionMap
-        const computeFunction = computeFunctions[functionName]
-        if (!computeFunction) {
-          console.warn(`Compute function "${functionName}" not found`)
-        }
-        return {
-          ...ds,
-          compute: computeFunction || (() => null)
-        }
-      }
-      return ds
-    })
+    schema.dataSources = schema.dataSources.map((ds: any) => ds)
   }
 
   if (schema.components) {

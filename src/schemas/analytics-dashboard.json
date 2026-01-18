@@ -22,15 +22,19 @@
     },
     {
       "id": "filteredUsers",
-      "type": "computed",
-      "compute": "computeFilteredUsers",
-      "dependencies": ["users", "filterQuery"]
+      "type": "static",
+      "expression": "filterUsersByQuery(data.users, data.filterQuery)",
+      "defaultValue": []
     },
     {
       "id": "stats",
-      "type": "computed",
-      "compute": "computeStats",
-      "dependencies": ["users"]
+      "type": "static",
+      "expression": "userStats(data.users)",
+      "defaultValue": {
+        "total": 0,
+        "active": 0,
+        "inactive": 0
+      }
     }
   ],
   "components": [

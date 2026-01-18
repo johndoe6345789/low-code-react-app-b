@@ -33,15 +33,15 @@
     },
     {
       "id": "selectedTree",
-      "type": "computed",
-      "compute": "(data) => data.trees?.find(t => t.id === data.selectedTreeId) || null",
-      "dependencies": ["trees", "selectedTreeId"]
+      "type": "static",
+      "expression": "findById(data.trees, data.selectedTreeId)",
+      "defaultValue": null
     },
     {
       "id": "treeCount",
-      "type": "computed",
-      "compute": "(data) => (data.trees || []).length",
-      "dependencies": ["trees"]
+      "type": "static",
+      "expression": "length(data.trees)",
+      "defaultValue": 0
     }
   ],
   "components": [

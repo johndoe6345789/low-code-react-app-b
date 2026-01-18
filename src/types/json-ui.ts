@@ -42,7 +42,7 @@ export type ActionType =
   | 'custom'
 
 export type DataSourceType =
-  | 'kv' | 'computed' | 'static'
+  | 'kv' | 'static'
 
 export type BindingSourceType =
   | 'data' | 'bindings' | 'state'
@@ -52,8 +52,8 @@ export interface DataSource {
   type: DataSourceType
   key?: string
   defaultValue?: any
-  compute?: (data: Record<string, any>) => any
-  dependencies?: string[]
+  expression?: string
+  valueTemplate?: Record<string, any>
 }
 
 export interface Action {

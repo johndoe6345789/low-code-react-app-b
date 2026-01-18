@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { DataSourceEditorDialog } from '@/components/molecules/DataSourceEditorDialog'
 import { useDataSourceManager } from '@/hooks/data/use-data-source-manager'
 import { DataSource, DataSourceType } from '@/types/json-ui'
-import { Database, Function, FileText } from '@phosphor-icons/react'
+import { Database, FileText } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { EmptyState, Stack } from '@/components/atoms'
 import { DataSourceManagerHeader } from '@/components/organisms/data-source-manager/DataSourceManagerHeader'
@@ -21,7 +21,6 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
     addDataSource,
     updateDataSource,
     deleteDataSource,
-    getDependents,
   } = useDataSourceManager(dataSources)
 
   const [editingSource, setEditingSource] = useState<DataSource | null>(null)
@@ -42,17 +41,6 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
   }
 
   const handleDeleteSource = (id: string) => {
-    const dependents = getDependents(id)
-    if (dependents.length > 0) {
-      const noun = dependents.length === 1 ? 'source' : 'sources'
-      toast.error(dataSourceManagerCopy.toasts.deleteBlockedTitle, {
-        description: dataSourceManagerCopy.toasts.deleteBlockedDescription
-          .replace('{count}', String(dependents.length))
-          .replace('{noun}', noun),
-      })
-      return
-    }
-
     deleteDataSource(id)
     onChange(localSources.filter(ds => ds.id !== id))
     toast.success(dataSourceManagerCopy.toasts.deleted)
@@ -66,7 +54,6 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
 
   const groupedSources = {
     kv: localSources.filter(ds => ds.type === 'kv'),
-    computed: localSources.filter(ds => ds.type === 'computed'),
     static: localSources.filter(ds => ds.type === 'static'),
   }
 
@@ -97,7 +84,6 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
                 icon={<Database size={16} />}
                 label={dataSourceManagerCopy.groups.kv}
                 dataSources={groupedSources.kv}
-                getDependents={getDependents}
                 onEdit={handleEditSource}
                 onDelete={handleDeleteSource}
               />
@@ -106,16 +92,6 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
                 icon={<FileText size={16} />}
                 label={dataSourceManagerCopy.groups.static}
                 dataSources={groupedSources.static}
-                getDependents={getDependents}
-                onEdit={handleEditSource}
-                onDelete={handleDeleteSource}
-              />
-
-              <DataSourceGroupSection
-                icon={<Function size={16} />}
-                label={dataSourceManagerCopy.groups.computed}
-                dataSources={groupedSources.computed}
-                getDependents={getDependents}
                 onEdit={handleEditSource}
                 onDelete={handleDeleteSource}
               />
@@ -127,7 +103,6 @@ export function DataSourceManager({ dataSources, onChange }: DataSourceManagerPr
       <DataSourceEditorDialog
         open={dialogOpen}
         dataSource={editingSource}
-        allDataSources={localSources}
         onOpenChange={setDialogOpen}
         onSave={handleSaveSource}
       />

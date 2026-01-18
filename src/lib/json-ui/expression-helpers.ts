@@ -1,4 +1,4 @@
-import { evaluateCondition, evaluateExpression } from './expression-evaluator'
+import { evaluateCondition, evaluateExpression, supportedExpressionFunctions } from './expression-evaluator'
 
 const IDENTIFIER_PATTERN = /^[A-Za-z_$][A-Za-z0-9_$]*$/
 const NUMBER_PATTERN = /^-?\d+(?:\.\d+)?$/
@@ -10,6 +10,8 @@ interface EvaluationOptions {
   event?: any
 }
 
+const FUNCTION_PATTERN = /^([A-Za-z_$][A-Za-z0-9_$]*)\((.*)\)$/
+
 const isSupportedExpression = (expression: string) => {
   if (expression === 'event' || expression === 'data') return true
   if (expression.startsWith('data.') || expression.startsWith('event.')) return true
@@ -17,6 +19,10 @@ const isSupportedExpression = (expression: string) => {
   if (STRING_PATTERN.test(expression)) return true
   if (NUMBER_PATTERN.test(expression)) return true
   if (['true', 'false', 'null', 'undefined'].includes(expression)) return true
+  const functionMatch = expression.match(FUNCTION_PATTERN)
+  if (functionMatch) {
+    return supportedExpressionFunctions.has(functionMatch[1])
+  }
   return false
 }
 

@@ -1,6 +1,6 @@
 {
   "title": "Edit Data Source",
-  "description": "Configure the data source settings and dependencies",
+  "description": "Configure the data source settings",
   "fields": {
     "id": {
       "label": "ID",
@@ -17,14 +17,6 @@
   "static": {
     "valueLabel": "Value (JSON)",
     "valuePlaceholder": "{\"key\": \"value\"}"
-  },
-  "computed": {
-    "computeLabel": "Compute Function",
-    "computePlaceholder": "(data) => data.source1 + data.source2",
-    "computeHelp": "Function that computes the value from other data sources",
-    "dependenciesLabel": "Dependencies",
-    "availableSourcesLabel": "Available Sources",
-    "emptyDependencies": "No data sources available. Create KV or static sources first."
   },
   "actions": {
     "cancel": "Cancel",

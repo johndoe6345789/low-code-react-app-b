@@ -22,9 +22,13 @@
     },
     {
       "id": "stats",
-      "type": "computed",
-      "compute": "computeTodoStats",
-      "dependencies": ["todos"]
+      "type": "static",
+      "expression": "todoStats(data.todos)",
+      "defaultValue": {
+        "total": 0,
+        "completed": 0,
+        "remaining": 0
+      }
     }
   ],
   "components": [

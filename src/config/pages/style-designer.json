@@ -54,21 +54,21 @@
     },
     {
       "id": "activeVariant",
-      "type": "computed",
-      "compute": "(data) => { const theme = data.theme || {}; const variants = theme.variants || []; return variants.find(v => v.id === theme.activeVariantId) || variants[0] || null; }",
-      "dependencies": ["theme"]
+      "type": "static",
+      "expression": "findByIdOrFirst(data.theme.variants, data.theme.activeVariantId)",
+      "defaultValue": null
     },
     {
       "id": "variantCount",
-      "type": "computed",
-      "compute": "(data) => ((data.theme || {}).variants || []).length",
-      "dependencies": ["theme"]
+      "type": "static",
+      "expression": "length(data.theme.variants)",
+      "defaultValue": 0
     },
     {
       "id": "customColorCount",
-      "type": "computed",
-      "compute": "(data) => { const variant = data.activeVariant; if (!variant || !variant.colors) return 0; return Object.keys(variant.colors.customColors || {}).length; }",
-      "dependencies": ["activeVariant"]
+      "type": "static",
+      "expression": "keyCount(data.activeVariant.colors.customColors)",
+      "defaultValue": 0
     }
   ],
   "components": [

@@ -45,11 +45,12 @@ function getCompletionMessage(score: number): string {
 }
 
 export function ProjectDashboard(props: ProjectDashboardProps) {
+  const completionSummary = calculateCompletionScore(props)
+
   return (
     <JSONPageRenderer
       schema={dashboardSchema as any}
-      data={props}
-      functions={{ calculateCompletionScore }}
+      data={{ ...props, completionSummary }}
     />
   )
 }

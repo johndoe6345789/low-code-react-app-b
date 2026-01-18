@@ -8,6 +8,121 @@ interface EvaluationContext {
   event?: any
 }
 
+type ExpressionFunction = (args: any[], context: EvaluationContext) => any
+
+const parseArguments = (argsString: string): string[] => {
+  if (!argsString.trim()) return []
+  const args: string[] = []
+  let current = ''
+  let depth = 0
+  let inSingleQuote = false
+  let inDoubleQuote = false
+
+  for (let i = 0; i < argsString.length; i++) {
+    const char = argsString[i]
+    const prevChar = argsString[i - 1]
+
+    if (char === "'" && !inDoubleQuote && prevChar !== '\\') {
+      inSingleQuote = !inSingleQuote
+    } else if (char === '"' && !inSingleQuote && prevChar !== '\\') {
+      inDoubleQuote = !inDoubleQuote
+    } else if (!inSingleQuote && !inDoubleQuote) {
+      if (char === '(') depth += 1
+      if (char === ')') depth = Math.max(0, depth - 1)
+      if (char === ',' && depth === 0) {
+        args.push(current.trim())
+        current = ''
+        continue
+      }
+    }
+
+    current += char
+  }
+
+  if (current.trim()) {
+    args.push(current.trim())
+  }
+
+  return args
+}
+
+const expressionFunctions: Record<string, ExpressionFunction> = {
+  findById: ([list, id]) => {
+    if (!Array.isArray(list)) return null
+    return list.find((item) => item?.id === id) ?? null
+  },
+  findByIdOrFirst: ([list, id]) => {
+    if (!Array.isArray(list)) return null
+    return list.find((item) => item?.id === id) ?? list[0] ?? null
+  },
+  length: ([value]) => {
+    if (Array.isArray(value) || typeof value === 'string') {
+      return value.length
+    }
+    if (value && typeof value === 'object') {
+      return Object.keys(value).length
+    }
+    return 0
+  },
+  keyCount: ([value]) => {
+    if (!value || typeof value !== 'object') return 0
+    return Object.keys(value).length
+  },
+  sumByLength: ([list, path], context) => {
+    if (!Array.isArray(list)) return 0
+    const resolvedPath = typeof path === 'string' ? path : evaluateExpression(String(path), context)
+    if (!resolvedPath || typeof resolvedPath !== 'string') return 0
+    return list.reduce((sum, item) => {
+      const value = getNestedValue(item, resolvedPath)
+      const length = Array.isArray(value) || typeof value === 'string' ? value.length : 0
+      return sum + length
+    }, 0)
+  },
+  isRecentTimestamp: ([lastSaved, nowValue, thresholdValue]) => {
+    if (!lastSaved) return false
+    const now = typeof nowValue === 'number' ? nowValue : Date.now()
+    const threshold = typeof thresholdValue === 'number' ? thresholdValue : 3000
+    return now - lastSaved < threshold
+  },
+  timeAgo: ([lastSaved, nowValue]) => {
+    if (!lastSaved) return ''
+    const now = typeof nowValue === 'number' ? nowValue : Date.now()
+    const seconds = Math.floor((now - lastSaved) / 1000)
+    if (seconds < 60) return 'just now'
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
+    return `${Math.floor(seconds / 86400)}d ago`
+  },
+  filterUsersByQuery: ([users, query]) => {
+    const list = Array.isArray(users) ? users : []
+    const normalizedQuery = typeof query === 'string' ? query.toLowerCase() : ''
+    if (!normalizedQuery) return list
+    return list.filter((user) => {
+      const name = String(user?.name ?? '').toLowerCase()
+      const email = String(user?.email ?? '').toLowerCase()
+      return name.includes(normalizedQuery) || email.includes(normalizedQuery)
+    })
+  },
+  userStats: ([users]) => {
+    const list = Array.isArray(users) ? users : []
+    return {
+      total: list.length,
+      active: list.filter((user) => user?.status === 'active').length,
+      inactive: list.filter((user) => user?.status === 'inactive').length,
+    }
+  },
+  todoStats: ([todos]) => {
+    const list = Array.isArray(todos) ? todos : []
+    return {
+      total: list.length,
+      completed: list.filter((todo) => Boolean(todo?.completed)).length,
+      remaining: list.filter((todo) => !todo?.completed).length,
+    }
+  },
+}
+
+export const supportedExpressionFunctions = new Set(Object.keys(expressionFunctions))
+
 /**
  * Safely evaluate a JSON expression
  * Supports:
@@ -26,6 +141,17 @@ export function evaluateExpression(
   const { data, event } = context
 
   try {
+    const functionMatch = expression.match(/^([A-Za-z_$][A-Za-z0-9_$]*)\((.*)\)$/)
+    if (functionMatch) {
+      const functionName = functionMatch[1]
+      const argString = functionMatch[2]
+      const handler = expressionFunctions[functionName]
+      if (handler) {
+        const args = parseArguments(argString).map((arg) => evaluateExpression(arg, context))
+        return handler(args, context)
+      }
+    }
+
     if (expression === 'event') {
       return event
     }

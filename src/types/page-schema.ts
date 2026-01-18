@@ -26,11 +26,11 @@ export const ComponentSchema: z.ZodType<any> = z.lazy(() =>
 
 export const DataSourceSchema = z.object({
   id: z.string(),
-  type: z.enum(['kv', 'computed', 'static', 'ai'], { message: 'Invalid data source type' }),
+  type: z.enum(['kv', 'static', 'ai'], { message: 'Invalid data source type' }),
   key: z.string().optional(),
   defaultValue: z.any().optional(),
-  dependencies: z.array(z.string()).optional(),
-  compute: z.string().optional(),
+  expression: z.string().optional(),
+  valueTemplate: z.record(z.string(), z.any()).optional(),
 })
 
 export const ActionConfigSchema = z.object({

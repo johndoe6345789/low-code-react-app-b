@@ -7,8 +7,8 @@
       "icon": "CheckCircle",
       "gradient": "from-primary/10 to-accent/10",
       "dataSource": {
-        "type": "computed",
-        "compute": "calculateCompletionScore"
+        "type": "expression",
+        "expression": "data.completionSummary"
       },
       "components": [
         {

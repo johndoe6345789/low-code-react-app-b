@@ -7,7 +7,6 @@ interface DataSourceGroupSectionProps {
   icon: ReactNode
   label: string
   dataSources: DataSource[]
-  getDependents: (id: string) => string[]
   onEdit: (id: string) => void
   onDelete: (id: string) => void
 }
@@ -16,7 +15,6 @@ export function DataSourceGroupSection({
   icon,
   label,
   dataSources,
-  getDependents,
   onEdit,
   onDelete,
 }: DataSourceGroupSectionProps) {
@@ -37,7 +35,6 @@ export function DataSourceGroupSection({
           <DataSourceCard
             key={ds.id}
             dataSource={ds}
-            dependents={getDependents(ds.id)}
             onEdit={onEdit}
             onDelete={onDelete}
           />

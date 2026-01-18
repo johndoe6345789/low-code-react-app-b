@@ -27,15 +27,15 @@
     },
     {
       "id": "selectedLambda",
-      "type": "computed",
-      "compute": "(data) => data.lambdas?.find(l => l.id === data.selectedLambdaId) || null",
-      "dependencies": ["lambdas", "selectedLambdaId"]
+      "type": "static",
+      "expression": "findById(data.lambdas, data.selectedLambdaId)",
+      "defaultValue": null
     },
     {
       "id": "lambdaCount",
-      "type": "computed",
-      "compute": "(data) => (data.lambdas || []).length",
-      "dependencies": ["lambdas"]
+      "type": "static",
+      "expression": "length(data.lambdas)",
+      "defaultValue": 0
     }
   ],
   "components": [

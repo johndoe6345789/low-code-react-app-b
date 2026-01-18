@@ -5,6 +5,8 @@ import { Progress } from '@/components/ui/progress'
 import { StatCard } from '@/components/atoms'
 import { cn } from '@/lib/utils'
 import { getIcon, resolveBinding } from './utils'
+import { evaluateBindingExpression } from '@/lib/json-ui/expression-helpers'
+import { evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 import { LegacyPageSchema, PageSectionConfig } from './types'
 
 interface PageSectionRendererProps {
@@ -107,8 +109,21 @@ function PageCard({ card, data, functions }: PageCardProps) {
   const icon = card.icon ? getIcon(card.icon) : null
 
   if (card.type === 'gradient-card') {
-    const computeFn = functions[card.dataSource?.compute]
-    const computedData = computeFn ? computeFn(data) : {}
+    const dataSource = card.dataSource
+    let computedData: Record<string, any> = {}
+
+    if (dataSource?.expression) {
+      const resolved = evaluateBindingExpression(dataSource.expression, data, {
+        fallback: {},
+        label: `dashboard card (${card.id})`,
+      })
+      computedData = resolved || {}
+    } else if (dataSource?.valueTemplate) {
+      computedData = evaluateTemplate(dataSource.valueTemplate, { data })
+    } else if (dataSource?.compute) {
+      const computeFn = functions[dataSource.compute]
+      computedData = computeFn ? computeFn(data) : {}
+    }
 
     return (
       <Card className={cn('bg-gradient-to-br border-primary/20', card.gradient)}>

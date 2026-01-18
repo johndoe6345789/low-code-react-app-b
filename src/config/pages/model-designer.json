@@ -28,15 +28,15 @@
     },
     {
       "id": "selectedModel",
-      "type": "computed",
-      "compute": "(data) => data.models?.find(m => m.id === data.selectedModelId) || null",
-      "dependencies": ["models", "selectedModelId"]
+      "type": "static",
+      "expression": "findById(data.models, data.selectedModelId)",
+      "defaultValue": null
     },
     {
       "id": "modelCount",
-      "type": "computed",
-      "compute": "(data) => (data.models || []).length",
-      "dependencies": ["models"]
+      "type": "static",
+      "expression": "length(data.models)",
+      "defaultValue": 0
     }
   ],
   "components": [

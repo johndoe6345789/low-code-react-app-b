@@ -7,6 +7,7 @@ import { useWorkflows } from '../data/use-workflows'
 import { useLambdas } from '../data/use-lambdas'
 import { useActions } from './use-actions'
 import { evaluateBindingExpression } from '@/lib/json-ui/expression-helpers'
+import { evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 
 export function usePage(schema: PageSchema) {
   const files = useFiles()
@@ -44,15 +45,24 @@ export function usePage(schema: PageSchema) {
   useEffect(() => {
     if (schema.data) {
       const computed: Record<string, any> = {}
+      const context = { ...dataContext }
       
       schema.data.forEach(source => {
-        if (source.type === 'computed' && source.compute) {
-          computed[source.id] = evaluateBindingExpression(source.compute, dataContext, {
-            fallback: undefined,
-            label: `computed data (${source.id})`,
-          })
-        } else if (source.type === 'static' && source.defaultValue !== undefined) {
-          computed[source.id] = source.defaultValue
+        if (source.type === 'static') {
+          if (source.expression) {
+            computed[source.id] = evaluateBindingExpression(source.expression, context, {
+              fallback: source.defaultValue,
+              label: `data source (${source.id})`,
+            })
+          } else if (source.valueTemplate) {
+            computed[source.id] = evaluateTemplate(source.valueTemplate, { data: context })
+          } else if (source.defaultValue !== undefined) {
+            computed[source.id] = source.defaultValue
+          }
+        }
+
+        if (computed[source.id] !== undefined) {
+          context[source.id] = computed[source.id]
         }
       })
       

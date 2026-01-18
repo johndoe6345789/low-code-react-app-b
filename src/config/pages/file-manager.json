@@ -133,9 +133,9 @@
   "data": [
     {
       "id": "activeFile",
-      "type": "computed",
-      "dependencies": ["files", "activeFileId"],
-      "compute": "context.files.find(f => f.id === context.activeFileId)"
+      "type": "static",
+      "expression": "findById(data.files, data.activeFileId)",
+      "defaultValue": null
     }
   ],
   "actions": [

@@ -17,15 +17,15 @@
     },
     {
       "id": "isRecent",
-      "type": "computed",
-      "compute": "(data) => { if (!data.lastSaved) return false; return Date.now() - data.lastSaved < 3000; }",
-      "dependencies": ["lastSaved", "currentTime"]
+      "type": "static",
+      "expression": "isRecentTimestamp(data.lastSaved, data.currentTime, 3000)",
+      "defaultValue": false
     },
     {
       "id": "timeAgo",
-      "type": "computed",
-      "compute": "(data) => { if (!data.lastSaved) return ''; const seconds = Math.floor((Date.now() - data.lastSaved) / 1000); if (seconds < 60) return 'just now'; if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`; if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`; return `${Math.floor(seconds / 86400)}d ago`; }",
-      "dependencies": ["lastSaved", "currentTime"]
+      "type": "static",
+      "expression": "timeAgo(data.lastSaved, data.currentTime)",
+      "defaultValue": ""
     }
   ],
   "type": "div",

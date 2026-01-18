@@ -1,7 +1,7 @@
 {
   "header": {
     "title": "Data Binding Designer",
-    "description": "Connect UI components to KV storage and computed values"
+    "description": "Connect UI components to KV storage and static values"
   },
   "bindingsCard": {
     "title": "Component Bindings",
@@ -13,7 +13,6 @@
     "title": "How It Works",
     "steps": [
       "Create data sources (KV store for persistence, static for constants)",
-      "Add computed sources to derive values from other sources",
       "Bind component properties to data sources for reactive updates"
     ]
   },
@@ -33,12 +32,6 @@
         "type": "kv",
         "key": "app-counter",
         "defaultValue": 0
-      },
-      {
-        "id": "displayName",
-        "type": "computed",
-        "dependencies": ["userProfile"],
-        "computeId": "displayName"
       }
     ],
     "components": [
@@ -50,7 +43,8 @@
         },
         "bindings": {
           "children": {
-            "source": "displayName"
+            "source": "userProfile",
+            "path": "name"
           }
         }
       },

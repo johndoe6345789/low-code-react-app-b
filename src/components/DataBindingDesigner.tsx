@@ -7,30 +7,9 @@ import { ComponentBindingsCard } from '@/components/data-binding-designer/Compon
 import { HowItWorksCard } from '@/components/data-binding-designer/HowItWorksCard'
 import dataBindingCopy from '@/data/data-binding-designer.json'
 
-interface SeedDataSource extends Omit<DataSource, 'compute'> {
-  computeId?: string
-}
-
-const computeRegistry: Record<string, (data: Record<string, any>) => any> = {
-  displayName: (data) => `Welcome, ${data.userProfile?.name || 'Guest'}!`,
-}
-
-const buildSeedDataSources = (sources: SeedDataSource[]): DataSource[] => {
-  return sources.map((source) => {
-    if (source.type === 'computed' && source.computeId) {
-      return {
-        ...source,
-        compute: computeRegistry[source.computeId],
-      }
-    }
-
-    return source
-  })
-}
-
 export function DataBindingDesigner() {
   const [dataSources, setDataSources] = useState<DataSource[]>(
-    buildSeedDataSources(dataBindingCopy.seed.dataSources as SeedDataSource[]),
+    dataBindingCopy.seed.dataSources as DataSource[],
   )
 
   const [mockComponents] = useState<UIComponent[]>(dataBindingCopy.seed.components)

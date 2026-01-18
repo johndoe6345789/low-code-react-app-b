@@ -32,15 +32,15 @@
     },
     {
       "id": "selectedWorkflow",
-      "type": "computed",
-      "compute": "(data) => data.workflows?.find(w => w.id === data.selectedWorkflowId) || null",
-      "dependencies": ["workflows", "selectedWorkflowId"]
+      "type": "static",
+      "expression": "findById(data.workflows, data.selectedWorkflowId)",
+      "defaultValue": null
     },
     {
       "id": "workflowCount",
-      "type": "computed",
-      "compute": "(data) => (data.workflows || []).length",
-      "dependencies": ["workflows"]
+      "type": "static",
+      "expression": "length(data.workflows)",
+      "defaultValue": 0
     }
   ],
   "components": [
