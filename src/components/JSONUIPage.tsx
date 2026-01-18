@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { JSONUIRenderer } from '@/lib/json-ui/renderer'
-import { UIComponent, EventHandler, Layout } from '@/lib/json-ui/schema'
+import { Action, UIComponent, Layout } from '@/lib/json-ui/schema'
 import { toast } from 'sonner'
 
 interface JSONUIPageProps {
@@ -34,88 +34,91 @@ export function JSONUIPage({ jsonConfig }: JSONUIPageProps) {
     }))
   }
 
-  const handleAction = (handler: EventHandler, event?: any) => {
-    console.log('Action triggered:', handler.action, handler.params, event)
-    
-    switch (handler.action) {
-      case 'refresh-data':
-        toast.success('Data refreshed')
-        break
-      case 'create-project':
-        toast.info('Create project clicked')
-        break
-      case 'deploy':
-        toast.info('Deploy clicked')
-        break
-      case 'view-logs':
-        toast.info('View logs clicked')
-        break
-      case 'settings':
-        toast.info('Settings clicked')
-        break
-      case 'add-project':
-        toast.info('Add project clicked')
-        break
-      case 'view-project':
-        toast.info(`View project: ${handler.params?.projectId}`)
-        break
-      case 'edit-project':
-        toast.info(`Edit project: ${handler.params?.projectId}`)
-        break
-      case 'delete-project':
-        toast.error(`Delete project: ${handler.params?.projectId}`)
-        break
-      case 'update-field':
-        if (event?.target) {
-          const { name, value } = event.target
-          updateDataField('formData', name, value)
-        }
-        break
-      case 'update-checkbox':
-        if (handler.params?.field) {
-          updateDataField('formData', handler.params.field, event)
-        }
-        break
-      case 'submit-form':
-        toast.success('Form submitted!')
-        console.log('Form data:', dataMap.formData)
-        break
-      case 'cancel-form':
-        toast.info('Form cancelled')
-        break
-      case 'toggle-dark-mode':
-        updateDataField('settings', 'darkMode', event)
-        toast.success(`Dark mode ${event ? 'enabled' : 'disabled'}`)
-        break
-      case 'toggle-auto-save':
-        updateDataField('settings', 'autoSave', event)
-        toast.success(`Auto-save ${event ? 'enabled' : 'disabled'}`)
-        break
-      case 'toggle-email-notifications':
-        updateDataField('notifications', 'email', event)
-        toast.success(`Email notifications ${event ? 'enabled' : 'disabled'}`)
-        break
-      case 'toggle-push-notifications':
-        updateDataField('notifications', 'push', event)
-        toast.success(`Push notifications ${event ? 'enabled' : 'disabled'}`)
-        break
-      case 'toggle-2fa':
-        updateDataField('security', 'twoFactor', event)
-        toast.success(`Two-factor auth ${event ? 'enabled' : 'disabled'}`)
-        break
-      case 'logout-all-sessions':
-        toast.success('All other sessions logged out')
-        break
-      case 'save-settings':
-        toast.success('Settings saved successfully')
-        console.log('Settings:', dataMap)
-        break
-      case 'reset-settings':
-        toast.info('Settings reset to defaults')
-        break
-      default:
-        console.log('Unhandled action:', handler.action)
-    }
+  const handleAction = (actions: Action[], event?: any) => {
+    actions.forEach((action) => {
+      const actionKey = action.type === 'custom' ? action.id : action.type
+      console.log('Action triggered:', actionKey, action.params, event)
+
+      switch (actionKey) {
+        case 'refresh-data':
+          toast.success('Data refreshed')
+          break
+        case 'create-project':
+          toast.info('Create project clicked')
+          break
+        case 'deploy':
+          toast.info('Deploy clicked')
+          break
+        case 'view-logs':
+          toast.info('View logs clicked')
+          break
+        case 'settings':
+          toast.info('Settings clicked')
+          break
+        case 'add-project':
+          toast.info('Add project clicked')
+          break
+        case 'view-project':
+          toast.info(`View project: ${action.params?.projectId}`)
+          break
+        case 'edit-project':
+          toast.info(`Edit project: ${action.params?.projectId}`)
+          break
+        case 'delete-project':
+          toast.error(`Delete project: ${action.params?.projectId}`)
+          break
+        case 'update-field':
+          if (event?.target) {
+            const { name, value } = event.target
+            updateDataField('formData', name, value)
+          }
+          break
+        case 'update-checkbox':
+          if (action.params?.field) {
+            updateDataField('formData', action.params.field, event)
+          }
+          break
+        case 'submit-form':
+          toast.success('Form submitted!')
+          console.log('Form data:', dataMap.formData)
+          break
+        case 'cancel-form':
+          toast.info('Form cancelled')
+          break
+        case 'toggle-dark-mode':
+          updateDataField('settings', 'darkMode', event)
+          toast.success(`Dark mode ${event ? 'enabled' : 'disabled'}`)
+          break
+        case 'toggle-auto-save':
+          updateDataField('settings', 'autoSave', event)
+          toast.success(`Auto-save ${event ? 'enabled' : 'disabled'}`)
+          break
+        case 'toggle-email-notifications':
+          updateDataField('notifications', 'email', event)
+          toast.success(`Email notifications ${event ? 'enabled' : 'disabled'}`)
+          break
+        case 'toggle-push-notifications':
+          updateDataField('notifications', 'push', event)
+          toast.success(`Push notifications ${event ? 'enabled' : 'disabled'}`)
+          break
+        case 'toggle-2fa':
+          updateDataField('security', 'twoFactor', event)
+          toast.success(`Two-factor auth ${event ? 'enabled' : 'disabled'}`)
+          break
+        case 'logout-all-sessions':
+          toast.success('All other sessions logged out')
+          break
+        case 'save-settings':
+          toast.success('Settings saved successfully')
+          console.log('Settings:', dataMap)
+          break
+        case 'reset-settings':
+          toast.info('Settings reset to defaults')
+          break
+        default:
+          console.log('Unhandled action:', actionKey)
+      }
+    })
   }
 
   if (!jsonConfig.layout) {

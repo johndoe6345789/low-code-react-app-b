@@ -36,9 +36,13 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
     
     if (component.events && onEvent) {
       component.events.forEach(handler => {
-        resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
+        const eventName = handler.event
+        const propName = eventName.startsWith('on')
+          ? eventName
+          : `on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`
+        resolved[propName] = (e: unknown) => {
           if (!handler.condition || handler.condition(data)) {
-            onEvent(component.id, handler.event, e)
+            onEvent(component.id, handler, e)
           }
         }
       })

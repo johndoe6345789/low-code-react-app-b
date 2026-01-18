@@ -35,6 +35,7 @@ export interface Action {
   target?: string
   path?: string
   value?: any
+  params?: Record<string, any>
   // Legacy: function-based compute
   compute?: (data: Record<string, any>, event?: any) => any
   // New: JSON-friendly expression (e.g., "event.target.value", "data.fieldName")
@@ -98,7 +99,7 @@ export interface JSONUIContext {
 export interface ComponentRendererProps {
   component: UIComponent
   data: Record<string, unknown>
-  onEvent?: (componentId: string, event: string, eventData: unknown) => void
+  onEvent?: (componentId: string, handler: EventHandler, eventData: unknown) => void
 }
 
 export type ComponentSchema = UIComponent
