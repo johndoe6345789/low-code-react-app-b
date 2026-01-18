@@ -120,6 +120,20 @@
     "defaultProps": { "placeholder": "0", "min": 0 }
   },
   {
+    "type": "DatePicker",
+    "label": "Date Picker",
+    "category": "input",
+    "icon": "Calendar",
+    "defaultProps": { "placeholder": "Pick a date" }
+  },
+  {
+    "type": "FileUpload",
+    "label": "File Upload",
+    "category": "input",
+    "icon": "Upload",
+    "defaultProps": { "multiple": false }
+  },
+  {
     "type": "Heading",
     "label": "Heading",
     "category": "display",

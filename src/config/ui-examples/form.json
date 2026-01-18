@@ -147,7 +147,8 @@
                         "id": "birthdate-input",
                         "type": "DatePicker",
                         "props": {
-                          "placeholder": "Select a date"
+                          "placeholder": "Select a date",
+                          "disabled": false
                         },
                         "dataBinding": "formData.birthDate",
                         "events": {
@@ -207,7 +208,9 @@
                         "id": "resume-upload",
                         "type": "FileUpload",
                         "props": {
-                          "accept": ".pdf,.doc,.docx"
+                          "accept": ".pdf,.doc,.docx",
+                          "multiple": false,
+                          "maxSize": 10485760
                         },
                         "events": {
                           "onFilesSelected": {
