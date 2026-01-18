@@ -20,6 +20,8 @@ class AutoSyncManager {
   private timer: ReturnType<typeof setTimeout> | null = null
   private lastSyncTime = 0
   private changeCounter = 0
+  private inFlight = false
+  private pendingSync = false
   private dispatch: any = null
 
   configure(config: Partial<AutoSyncConfig>) {
@@ -68,18 +70,33 @@ class AutoSyncManager {
 
   private async performSync() {
     if (!this.dispatch) return
+    if (this.inFlight) {
+      this.pendingSync = true
+      return
+    }
 
+    this.inFlight = true
     try {
       await this.dispatch(syncToFlaskBulk())
       this.lastSyncTime = Date.now()
       this.changeCounter = 0
     } catch (error) {
       console.error('[AutoSync] Sync failed:', error)
+    } finally {
+      this.inFlight = false
+    }
+
+    if (this.pendingSync) {
+      this.pendingSync = false
+      await this.performSync()
     }
   }
 
   trackChange() {
     this.changeCounter++
+    if (this.inFlight) {
+      this.pendingSync = true
+    }
     
     if (this.changeCounter >= this.config.maxQueueSize && this.config.syncOnChange) {
       this.performSync()
