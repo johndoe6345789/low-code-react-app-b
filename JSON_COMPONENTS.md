@@ -29,6 +29,35 @@ Use this checklist during every conversion to determine whether a component can 
 - **Pass data, not closures**: Event handlers should reference IDs, routes, or action payloads so the runtime can resolve them.
 - **Escalate complex logic**: If an event handler needs branching logic or side-effects, move that logic into an app-level action or wrapper component and keep JSON props declarative.
 
+## Naming & Value Conventions
+
+Use these conventions to keep JSON component schemas consistent and easy to validate.
+
+### Core naming rules
+- **`id`**: Required, unique within a page or component subtree. Use **kebab-case** (`panel-header`, `user-card`) so IDs remain stable across tools and scripts.
+- **`type`**: Must match a registered `ComponentType` or HTML element name exactly (case-sensitive). Avoid aliases or custom casing.
+- **`props` keys**: Use **camelCase** for prop names (`className`, `defaultValue`, `onClick`). Avoid nesting `children` under multiple keys.
+
+### `children` rules
+- **Accepted values**: Either a **string** (text-only) or an **array of component objects**.
+- **Do not mix**: If `children` is an array, text content should be represented by a nested `Text`/`Heading` component.
+- **Prefer `props.children` only for leaf text**: When a component has no nested child components, you can set `props.children` to a string. Do not set both `children` and `props.children` at the same time.
+
+### `variant` rules
+Use `variant` for style tokens rather than ad-hoc CSS classes.
+- **Shadcn-style variants (buttons, badges, dialog actions)**:  
+  `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`
+- **Feedback/status variants (alerts, toasts, status messaging)**:  
+  `success`, `error`, `info`, `warning`
+
+### `size` rules
+- **Dialog size**:  
+  `sm`, `md`, `lg`, `xl`, `full`
+- **Token-based sizes** (progress indicators, spinners, badges):  
+  `sm`, `md`, `lg`
+- **Numeric sizes** (icons or pixel-based controls):  
+  Use a number (e.g., `16`, `20`, `24`) when the component expects pixel sizes.
+
 ## Quick Start
 
 ### List All JSON-Compatible Components
