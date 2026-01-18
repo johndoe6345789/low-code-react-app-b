@@ -14,6 +14,8 @@ interface PWAState {
 }
 
 export function usePWA() {
+  const [isInstallPromptDismissed, setInstallPromptDismissed] = useState(false)
+  const [isInstallPromptVisible, setInstallPromptVisible] = useState(false)
   const [state, setState] = useState<PWAState>({
     isInstallable: false,
     isInstalled: false,
@@ -25,6 +27,10 @@ export function usePWA() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
+    const storedDismissed = window.localStorage.getItem('pwa-install-dismissed')
+    if (storedDismissed) {
+      setInstallPromptDismissed(true)
+    }
 
     const checkInstalled = () => {
       try {
@@ -52,6 +58,7 @@ export function usePWA() {
     const handleAppInstalled = () => {
       setState(prev => ({ ...prev, isInstalled: true, isInstallable: false }))
       setDeferredPrompt(null)
+      setInstallPromptVisible(false)
     }
 
     const handleOnline = () => {
@@ -104,10 +111,24 @@ export function usePWA() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!state.isInstallable || state.isInstalled || isInstallPromptDismissed) {
+      setInstallPromptVisible(false)
+      return
+    }
+
+    const timer = window.setTimeout(() => {
+      setInstallPromptVisible(true)
+    }, 3000)
+
+    return () => window.clearTimeout(timer)
+  }, [state.isInstallable, state.isInstalled, isInstallPromptDismissed])
+
   const installApp = async () => {
     if (!deferredPrompt) return false
 
     try {
+      setInstallPromptVisible(false)
       await deferredPrompt.prompt()
       const choiceResult = await deferredPrompt.userChoice
       
@@ -120,6 +141,14 @@ export function usePWA() {
     } catch (error) {
       console.error('[PWA] Install prompt failed:', error)
       return false
+    }
+  }
+
+  const dismissInstallPrompt = () => {
+    setInstallPromptDismissed(true)
+    setInstallPromptVisible(false)
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('pwa-install-dismissed', 'true')
     }
   }
 
@@ -165,7 +194,10 @@ export function usePWA() {
 
   return {
     ...state,
+    isInstallPromptDismissed,
+    isInstallPromptVisible,
     installApp,
+    dismissInstallPrompt,
     updateApp,
     clearCache,
     requestNotificationPermission,
