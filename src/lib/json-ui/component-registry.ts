@@ -136,10 +136,16 @@ export const shadcnComponents: UIComponentRegistry = {
   AvatarImage,
 }
 
-export const atomComponents: UIComponentRegistry = buildRegistryFromNames(
-  atomRegistryNames,
-  AtomComponents as Record<string, ComponentType<any>>
-)
+export const atomComponents: UIComponentRegistry = {
+  ...buildRegistryFromNames(
+    atomRegistryNames,
+    AtomComponents as Record<string, ComponentType<any>>
+  ),
+  DataList: (AtomComponents as Record<string, ComponentType<any>>).DataList,
+  DataTable: (AtomComponents as Record<string, ComponentType<any>>).DataTable,
+  MetricCard: (AtomComponents as Record<string, ComponentType<any>>).MetricCard,
+  Timeline: (AtomComponents as Record<string, ComponentType<any>>).Timeline,
+}
 
 export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
   moleculeRegistryNames,
