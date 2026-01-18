@@ -25,7 +25,7 @@
         "schemas:validate": "tsx scripts/validate-json-schemas.ts",
         "components:list": "node scripts/list-json-components.cjs",
         "components:scan": "node scripts/scan-and-update-registry.cjs",
-        "components:validate": "node scripts/validate-supported-components.cjs"
+        "components:validate": "node scripts/validate-supported-components.cjs && tsx scripts/validate-json-registry.ts"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
