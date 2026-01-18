@@ -37,27 +37,9 @@ import { CircularProgress, Divider, ProgressBar } from '@/components/atoms'
 import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
 import * as OrganismComponents from '@/components/organisms'
-import {
-  ComponentBindingDialogWrapper,
-  ComponentTreeWrapper,
-  DataSourceEditorDialogWrapper,
-  GitHubBuildStatusWrapper,
-  LazyBarChartWrapper,
-  LazyD3BarChartWrapper,
-  LazyLineChartWrapper,
-  SaveIndicatorWrapper,
-  SeedDataManagerWrapper,
-  StorageSettingsWrapper,
-} from '@/lib/json-ui/wrappers'
+import * as WrapperComponents from '@/lib/json-ui/wrappers'
 import jsonComponentsRegistry from '../../../json-components-registry.json'
-import { 
-  ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
-  Funnel, Download, Upload, PencilSimple, Trash, Eye, EyeClosed, 
-  CaretUp, CaretDown, CaretLeft, CaretRight,
-  Gear, User, Bell, Envelope, Calendar, Clock, Star,
-  Heart, ShareNetwork, LinkSimple, Copy, FloppyDisk, ArrowClockwise, WarningCircle,
-  Info, Question, House, List as ListIcon, DotsThreeVertical, DotsThree
-} from '@phosphor-icons/react'
+import * as IconComponents from '@phosphor-icons/react'
 
 export interface UIComponentRegistry {
   [key: string]: ComponentType<any>
@@ -72,6 +54,10 @@ interface JsonRegistryEntry {
   wrapperRequired?: boolean
   wrapperComponent?: string
   wrapperFor?: string
+  loadFrom?: {
+    module?: string
+    export?: string
+  }
   deprecated?: DeprecatedComponentInfo
 }
 
@@ -85,9 +71,13 @@ export interface DeprecatedComponentInfo {
 }
 
 const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
+const componentLoaders: Record<string, Record<string, ComponentType<any>>> = {
+  wrappers: WrapperComponents as Record<string, ComponentType<any>>,
+  icons: IconComponents as Record<string, ComponentType<any>>,
+}
 
 const getRegistryEntryName = (entry: JsonRegistryEntry): string | undefined =>
-  entry.export ?? entry.name ?? entry.type
+  entry.name ?? entry.type ?? entry.export
 
 const buildRegistryFromNames = (
   names: string[],
@@ -97,6 +87,27 @@ const buildRegistryFromNames = (
     const component = components[name]
     if (component) {
       registry[name] = component
+    }
+    return registry
+  }, {})
+}
+
+const resolveLoadedComponent = (entry: JsonRegistryEntry): ComponentType<any> | null => {
+  const moduleKey = entry.loadFrom?.module ?? entry.source
+  const exportName = entry.loadFrom?.export ?? getRegistryEntryName(entry)
+  if (!moduleKey || !exportName) {
+    return null
+  }
+  const moduleComponents = componentLoaders[moduleKey]
+  return moduleComponents?.[exportName] ?? null
+}
+
+const buildRegistryFromEntries = (entries: JsonRegistryEntry[]): UIComponentRegistry => {
+  return entries.reduce<UIComponentRegistry>((registry, entry) => {
+    const registryName = getRegistryEntryName(entry)
+    const component = resolveLoadedComponent(entry)
+    if (registryName && component) {
+      registry[registryName] = component
     }
     return registry
   }, {})
@@ -141,14 +152,8 @@ const shadcnRegistryNames = jsonRegistryEntries
   .filter((entry) => entry.source === 'ui')
   .map((entry) => getRegistryEntryName(entry))
   .filter((name): name is string => Boolean(name))
-const wrapperRegistryNames = jsonRegistryEntries
-  .filter((entry) => entry.source === 'wrappers')
-  .map((entry) => getRegistryEntryName(entry))
-  .filter((name): name is string => Boolean(name))
-const iconRegistryNames = jsonRegistryEntries
-  .filter((entry) => entry.source === 'icons')
-  .map((entry) => getRegistryEntryName(entry))
-  .filter((name): name is string => Boolean(name))
+const wrapperRegistryEntries = jsonRegistryEntries.filter((entry) => entry.source === 'wrappers')
+const iconRegistryEntries = jsonRegistryEntries.filter((entry) => entry.source === 'icons')
 
 export const primitiveComponents: UIComponentRegistry = {
   div: 'div' as any,
@@ -275,69 +280,11 @@ export const organismComponents: UIComponentRegistry = buildRegistryFromNames(
   OrganismComponents as Record<string, ComponentType<any>>
 )
 
-const wrapperComponentMap: Record<string, ComponentType<any>> = {
-  ComponentBindingDialogWrapper,
-  ComponentTreeWrapper,
-  DataSourceEditorDialogWrapper,
-  GitHubBuildStatusWrapper,
-  SaveIndicatorWrapper,
-  LazyBarChartWrapper,
-  LazyLineChartWrapper,
-  LazyD3BarChartWrapper,
-  SeedDataManagerWrapper,
-  StorageSettingsWrapper,
-}
-
-export const jsonWrapperComponents: UIComponentRegistry = buildRegistryFromNames(
-  wrapperRegistryNames,
-  wrapperComponentMap
+export const jsonWrapperComponents: UIComponentRegistry = buildRegistryFromEntries(
+  wrapperRegistryEntries
 )
 
-const iconComponentMap: Record<string, ComponentType<any>> = {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  X,
-  Plus,
-  Minus,
-  Search: MagnifyingGlass,
-  Filter: Funnel,
-  Download,
-  Upload,
-  Edit: PencilSimple,
-  Trash,
-  Eye,
-  EyeOff: EyeClosed,
-  ChevronUp: CaretUp,
-  ChevronDown: CaretDown,
-  ChevronLeft: CaretLeft,
-  ChevronRight: CaretRight,
-  Settings: Gear,
-  User,
-  Bell,
-  Mail: Envelope,
-  Calendar,
-  Clock,
-  Star,
-  Heart,
-  Share: ShareNetwork,
-  Link: LinkSimple,
-  Copy,
-  Save: FloppyDisk,
-  RefreshCw: ArrowClockwise,
-  AlertCircle: WarningCircle,
-  Info,
-  HelpCircle: Question,
-  Home: House,
-  Menu: ListIcon,
-  MoreVertical: DotsThreeVertical,
-  MoreHorizontal: DotsThree,
-}
-
-export const iconComponents: UIComponentRegistry = buildRegistryFromNames(
-  iconRegistryNames,
-  iconComponentMap
-)
+export const iconComponents: UIComponentRegistry = buildRegistryFromEntries(iconRegistryEntries)
 
 export const uiComponentRegistry: UIComponentRegistry = {
   ...primitiveComponents,

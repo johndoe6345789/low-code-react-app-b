@@ -80,7 +80,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "ComponentBindingDialog"
+      "wrapperFor": "ComponentBindingDialog",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "ComponentBindingDialogWrapper"
+      }
     },
     {
       "type": "Container",
@@ -122,7 +126,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "DataSourceEditorDialog"
+      "wrapperFor": "DataSourceEditorDialog",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "DataSourceEditorDialogWrapper"
+      }
     },
     {
       "type": "Dialog",
@@ -724,7 +732,11 @@
       "canHaveChildren": false,
       "description": "ArrowLeft icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "ArrowLeft"
+      }
     },
     {
       "type": "ArrowRight",
@@ -733,7 +745,11 @@
       "canHaveChildren": false,
       "description": "ArrowRight icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "ArrowRight"
+      }
     },
     {
       "type": "Check",
@@ -742,7 +758,11 @@
       "canHaveChildren": false,
       "description": "Check icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Check"
+      }
     },
     {
       "type": "X",
@@ -751,7 +771,11 @@
       "canHaveChildren": false,
       "description": "X icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "X"
+      }
     },
     {
       "type": "Plus",
@@ -760,7 +784,11 @@
       "canHaveChildren": false,
       "description": "Plus icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Plus"
+      }
     },
     {
       "type": "Minus",
@@ -769,7 +797,11 @@
       "canHaveChildren": false,
       "description": "Minus icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Minus"
+      }
     },
     {
       "type": "Search",
@@ -778,7 +810,11 @@
       "canHaveChildren": false,
       "description": "Search icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "MagnifyingGlass"
+      }
     },
     {
       "type": "Filter",
@@ -787,7 +823,11 @@
       "canHaveChildren": false,
       "description": "Filter icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Funnel"
+      }
     },
     {
       "type": "Download",
@@ -796,7 +836,11 @@
       "canHaveChildren": false,
       "description": "Download icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Download"
+      }
     },
     {
       "type": "Upload",
@@ -805,7 +849,11 @@
       "canHaveChildren": false,
       "description": "Upload icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Upload"
+      }
     },
     {
       "type": "Edit",
@@ -814,7 +862,11 @@
       "canHaveChildren": false,
       "description": "Edit icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "PencilSimple"
+      }
     },
     {
       "type": "Trash",
@@ -823,7 +875,11 @@
       "canHaveChildren": false,
       "description": "Trash icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Trash"
+      }
     },
     {
       "type": "Eye",
@@ -832,7 +888,11 @@
       "canHaveChildren": false,
       "description": "Eye icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Eye"
+      }
     },
     {
       "type": "EyeOff",
@@ -841,7 +901,11 @@
       "canHaveChildren": false,
       "description": "EyeOff icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "EyeClosed"
+      }
     },
     {
       "type": "ChevronUp",
@@ -850,7 +914,11 @@
       "canHaveChildren": false,
       "description": "ChevronUp icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "CaretUp"
+      }
     },
     {
       "type": "ChevronDown",
@@ -859,7 +927,11 @@
       "canHaveChildren": false,
       "description": "ChevronDown icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "CaretDown"
+      }
     },
     {
       "type": "ChevronLeft",
@@ -868,7 +940,11 @@
       "canHaveChildren": false,
       "description": "ChevronLeft icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "CaretLeft"
+      }
     },
     {
       "type": "ChevronRight",
@@ -877,7 +953,11 @@
       "canHaveChildren": false,
       "description": "ChevronRight icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "CaretRight"
+      }
     },
     {
       "type": "Settings",
@@ -886,7 +966,11 @@
       "canHaveChildren": false,
       "description": "Settings icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Gear"
+      }
     },
     {
       "type": "User",
@@ -895,7 +979,11 @@
       "canHaveChildren": false,
       "description": "User icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "User"
+      }
     },
     {
       "type": "Bell",
@@ -904,7 +992,11 @@
       "canHaveChildren": false,
       "description": "Bell icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Bell"
+      }
     },
     {
       "type": "Mail",
@@ -913,7 +1005,11 @@
       "canHaveChildren": false,
       "description": "Mail icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Envelope"
+      }
     },
     {
       "type": "Calendar",
@@ -922,7 +1018,11 @@
       "canHaveChildren": false,
       "description": "Calendar icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Calendar"
+      }
     },
     {
       "type": "Clock",
@@ -931,7 +1031,11 @@
       "canHaveChildren": false,
       "description": "Clock icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Clock"
+      }
     },
     {
       "type": "Star",
@@ -940,7 +1044,11 @@
       "canHaveChildren": false,
       "description": "Star icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Star"
+      }
     },
     {
       "type": "Heart",
@@ -949,7 +1057,11 @@
       "canHaveChildren": false,
       "description": "Heart icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Heart"
+      }
     },
     {
       "type": "Share",
@@ -958,7 +1070,11 @@
       "canHaveChildren": false,
       "description": "Share icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "ShareNetwork"
+      }
     },
     {
       "type": "Link",
@@ -967,7 +1083,11 @@
       "canHaveChildren": false,
       "description": "Link icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "LinkSimple"
+      }
     },
     {
       "type": "Copy",
@@ -976,7 +1096,11 @@
       "canHaveChildren": false,
       "description": "Copy icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Copy"
+      }
     },
     {
       "type": "Save",
@@ -985,7 +1109,11 @@
       "canHaveChildren": false,
       "description": "Save icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "FloppyDisk"
+      }
     },
     {
       "type": "RefreshCw",
@@ -994,7 +1122,11 @@
       "canHaveChildren": false,
       "description": "RefreshCw icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "ArrowClockwise"
+      }
     },
     {
       "type": "AlertCircle",
@@ -1003,7 +1135,11 @@
       "canHaveChildren": false,
       "description": "AlertCircle icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "WarningCircle"
+      }
     },
     {
       "type": "Info",
@@ -1012,7 +1148,11 @@
       "canHaveChildren": false,
       "description": "Info icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Info"
+      }
     },
     {
       "type": "HelpCircle",
@@ -1021,7 +1161,11 @@
       "canHaveChildren": false,
       "description": "HelpCircle icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "Question"
+      }
     },
     {
       "type": "Home",
@@ -1030,7 +1174,11 @@
       "canHaveChildren": false,
       "description": "Home icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "House"
+      }
     },
     {
       "type": "Menu",
@@ -1039,7 +1187,11 @@
       "canHaveChildren": false,
       "description": "Menu icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "List"
+      }
     },
     {
       "type": "MoreVertical",
@@ -1048,7 +1200,11 @@
       "canHaveChildren": false,
       "description": "MoreVertical icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "DotsThreeVertical"
+      }
     },
     {
       "type": "MoreHorizontal",
@@ -1057,7 +1213,11 @@
       "canHaveChildren": false,
       "description": "MoreHorizontal icon",
       "status": "supported",
-      "source": "icons"
+      "source": "icons",
+      "loadFrom": {
+        "module": "icons",
+        "export": "DotsThree"
+      }
     },
     {
       "type": "Breadcrumb",
@@ -1275,7 +1435,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "GitHubBuildStatus"
+      "wrapperFor": "GitHubBuildStatus",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "GitHubBuildStatusWrapper"
+      }
     },
     {
       "type": "InfoBox",
@@ -1437,7 +1601,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "LazyBarChart"
+      "wrapperFor": "LazyBarChart",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "LazyBarChartWrapper"
+      }
     },
     {
       "type": "LazyD3BarChart",
@@ -1460,7 +1628,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "LazyD3BarChart"
+      "wrapperFor": "LazyD3BarChart",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "LazyD3BarChartWrapper"
+      }
     },
     {
       "type": "LazyLineChart",
@@ -1483,7 +1655,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "LazyLineChart"
+      "wrapperFor": "LazyLineChart",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "LazyLineChartWrapper"
+      }
     },
     {
       "type": "List",
@@ -1542,7 +1718,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "SeedDataManager"
+      "wrapperFor": "SeedDataManager",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "SeedDataManagerWrapper"
+      }
     },
     {
       "type": "StatCard",
@@ -1829,7 +2009,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "ComponentTree"
+      "wrapperFor": "ComponentTree",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "ComponentTreeWrapper"
+      }
     },
     {
       "type": "ComponentTreeNode",
@@ -2072,7 +2256,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "SaveIndicator"
+      "wrapperFor": "SaveIndicator",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "SaveIndicatorWrapper"
+      }
     },
     {
       "type": "SchemaEditorCanvas",
@@ -2236,7 +2424,11 @@
       "status": "json-compatible",
       "source": "wrappers",
       "jsonCompatible": true,
-      "wrapperFor": "StorageSettings"
+      "wrapperFor": "StorageSettings",
+      "loadFrom": {
+        "module": "wrappers",
+        "export": "StorageSettingsWrapper"
+      }
     },
     {
       "type": "Timestamp",

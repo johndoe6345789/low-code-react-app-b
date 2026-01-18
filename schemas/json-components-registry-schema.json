@@ -73,6 +73,18 @@
           "wrapperFor": {
             "type": "string"
           },
+          "loadFrom": {
+            "type": "object",
+            "properties": {
+              "module": {
+                "type": "string"
+              },
+              "export": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
           "deprecated": {
             "type": "object",
             "properties": {
