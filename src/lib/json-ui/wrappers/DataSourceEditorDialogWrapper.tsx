@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { ComponentRenderer } from '@/lib/json-ui/component-renderer'
 import { cn } from '@/lib/utils'
-import { dataSourceEditorDialogDefinition } from './definitions'
+import dataSourceEditorDialogDefinition from './definitions/data-source-editor-dialog.json'
 import type { DataSourceEditorDialogWrapperProps } from './interfaces'
 
 export function DataSourceEditorDialogWrapper({

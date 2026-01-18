@@ -1,6 +1,6 @@
 import { ComponentRenderer } from '@/lib/json-ui/component-renderer'
 import { cn } from '@/lib/utils'
-import { gitHubBuildStatusDefinition } from './definitions'
+import gitHubBuildStatusDefinition from './definitions/github-build-status.json'
 import type { GitHubBuildStatusWrapperProps, GitHubBuildStatusWorkflowItem } from './interfaces'
 
 const getWorkflowStatus = (workflow: GitHubBuildStatusWorkflowItem) => {

@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { ComponentRenderer } from '@/lib/json-ui/component-renderer'
 import { cn } from '@/lib/utils'
-import { componentBindingDialogDefinition } from './definitions'
+import componentBindingDialogDefinition from './definitions/component-binding-dialog.json'
 import type { ComponentBindingDialogWrapperProps } from './interfaces'
 
 export function ComponentBindingDialogWrapper({
