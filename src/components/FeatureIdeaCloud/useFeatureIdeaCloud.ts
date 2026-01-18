@@ -1,93 +1,71 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { useKV } from '@/hooks/use-kv'
-import ReactFlow, {
-  Node,
-  Edge,
-  Controls,
-  Background,
-  BackgroundVariant,
-  useNodesState,
-  useEdgesState,
-  Connection as RFConnection,
-  MarkerType,
-  ConnectionMode,
-  Panel,
-  reconnectEdge,
-} from 'reactflow'
-import 'reactflow/dist/style.css'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Plus, Trash, Sparkle, Package } from '@phosphor-icons/react'
+import { MouseEvent as ReactMouseEvent, useState, useEffect, useCallback, useRef } from 'react'
+import { Edge, Node, useNodesState, useEdgesState, Connection as RFConnection, MarkerType, reconnectEdge } from 'reactflow'
 import { toast } from 'sonner'
-import { FeatureIdea, IdeaGroup, IdeaEdgeData } from './FeatureIdeaCloud/types'
-import { CONNECTION_STYLE } from './FeatureIdeaCloud/constants'
-import seedIdeasData from './FeatureIdeaCloud/data/seed-ideas.json'
-import categoriesData from './FeatureIdeaCloud/data/categories.json'
-import prioritiesData from './FeatureIdeaCloud/data/priorities.json'
-import statusesData from './FeatureIdeaCloud/data/statuses.json'
-import groupColorsData from './FeatureIdeaCloud/data/group-colors.json'
-import { nodeTypes } from './FeatureIdeaCloud/nodes'
-import { dispatchConnectionCountUpdate } from './FeatureIdeaCloud/dispatchConnectionCountUpdate'
+import { useKV } from '@/hooks/use-kv'
+import { FeatureIdea, IdeaGroup, IdeaEdgeData } from './types'
+import { CATEGORIES, CONNECTION_STYLE, GROUP_COLORS } from './constants'
+import { buildSeedEdges, buildSeedIdeas } from './seed-data'
 
-type SeedIdeaJson = Omit<FeatureIdea, 'createdAt'> & { createdAtOffsetMs: number }
+type SeedRef = {
+  ideas: FeatureIdea[]
+  edges: Edge<IdeaEdgeData>[]
+}
 
-const SEED_IDEAS: FeatureIdea[] = (seedIdeasData as SeedIdeaJson[]).map((idea) => {
-  const { createdAtOffsetMs, ...rest } = idea
-  return {
-    ...rest,
-    createdAt: Date.now() - createdAtOffsetMs,
+export type FeatureIdeaCloudState = {
+  nodes: Node[]
+  edges: Edge<IdeaEdgeData>[]
+  ideas: FeatureIdea[] | null
+  groups: IdeaGroup[] | null
+  safeIdeas: FeatureIdea[]
+  safeGroups: IdeaGroup[]
+  selectedIdea: FeatureIdea | null
+  selectedGroup: IdeaGroup | null
+  selectedEdge: Edge<IdeaEdgeData> | null
+  editDialogOpen: boolean
+  groupDialogOpen: boolean
+  viewDialogOpen: boolean
+  edgeDialogOpen: boolean
+  debugPanelOpen: boolean
+  setSelectedIdea: (idea: FeatureIdea | null) => void
+  setSelectedGroup: (group: IdeaGroup | null) => void
+  setSelectedEdge: (edge: Edge<IdeaEdgeData> | null) => void
+  setEditDialogOpen: (open: boolean) => void
+  setGroupDialogOpen: (open: boolean) => void
+  setViewDialogOpen: (open: boolean) => void
+  setEdgeDialogOpen: (open: boolean) => void
+  setDebugPanelOpen: (open: boolean) => void
+  onNodesChangeWrapper: (changes: any) => void
+  onEdgesChangeWrapper: (changes: any) => void
+  onConnect: (params: RFConnection) => void
+  onEdgeClick: (event: ReactMouseEvent, edge: Edge<IdeaEdgeData>) => void
+  onNodeDoubleClick: (event: ReactMouseEvent, node: Node<FeatureIdea>) => void
+  onReconnectStart: () => void
+  onReconnect: (oldEdge: Edge, newConnection: RFConnection) => void
+  onReconnectEnd: (_: MouseEvent | TouchEvent, edge: Edge) => void
+  handleAddIdea: () => void
+  handleAddGroup: () => void
+  handleSaveIdea: () => void
+  handleDeleteIdea: (id: string) => void
+  handleSaveGroup: () => void
+  handleDeleteGroup: (id: string) => void
+  handleDeleteEdge: (edgeId: string) => void
+  handleSaveEdge: () => void
+  handleGenerateIdeas: () => Promise<void>
+}
+
+export const useFeatureIdeaCloud = (): FeatureIdeaCloudState => {
+  const seedRef = useRef<SeedRef | null>(null)
+  if (!seedRef.current) {
+    seedRef.current = { ideas: buildSeedIdeas(), edges: buildSeedEdges() }
   }
-})
-const CATEGORIES = categoriesData as string[]
-const PRIORITIES = prioritiesData as FeatureIdea['priority'][]
-const STATUSES = statusesData as FeatureIdea['status'][]
-const GROUP_COLORS = groupColorsData as Array<{ name: string; value: string; bg: string; border: string }>
+  const seedIdeas = seedRef.current.ideas
+  const seedEdges = seedRef.current.edges
 
-export function FeatureIdeaCloud() {
-  const [ideas, setIdeas] = useKV<FeatureIdea[]>('feature-ideas', SEED_IDEAS)
+  const [ideas, setIdeas] = useKV<FeatureIdea[]>('feature-ideas', seedIdeas)
   const [groups, setGroups] = useKV<IdeaGroup[]>('feature-idea-groups', [])
-  const [savedEdges, setSavedEdges] = useKV<Edge<IdeaEdgeData>[]>('feature-idea-edges', [
-    {
-      id: 'edge-1',
-      source: 'idea-1',
-      target: 'idea-8',
-      sourceHandle: 'right-0',
-      targetHandle: 'left-0',
-      type: 'default',
-      animated: false,
-      data: { label: 'requires' },
-      markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
-      style: { stroke: '#a78bfa', strokeWidth: 2.5 },
-    },
-    {
-      id: 'edge-2',
-      source: 'idea-2',
-      target: 'idea-4',
-      sourceHandle: 'bottom-0',
-      targetHandle: 'top-0',
-      type: 'default',
-      data: { label: 'works with' },
-      markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
-      style: { stroke: '#a78bfa', strokeWidth: 2.5 },
-    },
-    {
-      id: 'edge-3',
-      source: 'idea-8',
-      target: 'idea-5',
-      sourceHandle: 'bottom-0',
-      targetHandle: 'left-0',
-      type: 'default',
-      data: { label: 'includes' },
-      markerEnd: { type: MarkerType.ArrowClosed, color: '#a78bfa', width: 20, height: 20 },
-      style: { stroke: '#a78bfa', strokeWidth: 2.5 },
-    },
-  ])
+  const [savedEdges, setSavedEdges] = useKV<Edge<IdeaEdgeData>[]>('feature-idea-edges', seedEdges)
   const [savedNodePositions, setSavedNodePositions] = useKV<Record<string, { x: number; y: number }>>('feature-idea-node-positions', {})
-  
+
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
   const [selectedIdea, setSelectedIdea] = useState<FeatureIdea | null>(null)
@@ -100,32 +78,32 @@ export function FeatureIdeaCloud() {
   const [debugPanelOpen, setDebugPanelOpen] = useState(false)
   const edgeReconnectSuccessful = useRef(true)
 
-  const safeIdeas = ideas || SEED_IDEAS
+  const safeIdeas = ideas || seedIdeas
   const safeGroups = groups || []
   const safeEdges = savedEdges || []
   const safeNodePositions = savedNodePositions || {}
 
-  const updateNodeConnectionCounts = useCallback((edges: Edge<IdeaEdgeData>[]) => {
+  const updateNodeConnectionCounts = useCallback((edgeList: Edge<IdeaEdgeData>[]) => {
     const nodeConnectionMap = new Map<string, Record<string, Set<string>>>()
-    
-    edges.forEach(edge => {
+
+    edgeList.forEach((edge) => {
       const sourceHandle = edge.sourceHandle || 'default'
       const targetHandle = edge.targetHandle || 'default'
-      
+
       if (!nodeConnectionMap.has(edge.source)) {
         nodeConnectionMap.set(edge.source, { left: new Set(), right: new Set(), top: new Set(), bottom: new Set() })
       }
       if (!nodeConnectionMap.has(edge.target)) {
         nodeConnectionMap.set(edge.target, { left: new Set(), right: new Set(), top: new Set(), bottom: new Set() })
       }
-      
+
       const sourceSide = sourceHandle.split('-')[0]
       const targetSide = targetHandle.split('-')[0]
-      
+
       nodeConnectionMap.get(edge.source)![sourceSide].add(sourceHandle)
       nodeConnectionMap.get(edge.target)![targetSide].add(targetHandle)
     })
-    
+
     nodeConnectionMap.forEach((connections, nodeId) => {
       const counts = {
         left: connections.left.size,
@@ -133,16 +111,19 @@ export function FeatureIdeaCloud() {
         top: connections.top.size,
         bottom: connections.bottom.size,
       }
-      
-      dispatchConnectionCountUpdate(nodeId, counts)
+
+      const event = new CustomEvent('updateConnectionCounts', {
+        detail: { nodeId, counts },
+      })
+      window.dispatchEvent(event)
     })
   }, [])
 
   useEffect(() => {
     if (!ideas || ideas.length === 0) {
-      setIdeas(SEED_IDEAS)
+      setIdeas(seedIdeas)
     }
-  }, [ideas, setIdeas])
+  }, [ideas, seedIdeas, setIdeas])
 
   useEffect(() => {
     const groupNodes: Node<IdeaGroup>[] = safeGroups.map((group) => ({
@@ -204,7 +185,7 @@ export function FeatureIdeaCloud() {
         setTimeout(() => {
           setNodes((currentNodes) => {
             const positions: Record<string, { x: number; y: number }> = {}
-            currentNodes.forEach(node => {
+            currentNodes.forEach((node) => {
               if (node.position) {
                 positions[node.id] = node.position
               }
@@ -236,78 +217,81 @@ export function FeatureIdeaCloud() {
     [onEdgesChange, setEdges, setSavedEdges, updateNodeConnectionCounts]
   )
 
-  const validateAndRemoveConflicts = useCallback((
-    edges: Edge<IdeaEdgeData>[],
-    sourceNodeId: string,
-    sourceHandleId: string,
-    targetNodeId: string,
-    targetHandleId: string,
-    excludeEdgeId?: string
-  ): { filteredEdges: Edge<IdeaEdgeData>[], removedCount: number, conflicts: string[] } => {
-    const edgesToRemove: string[] = []
-    const conflicts: string[] = []
-    
-    console.log('[Validator] Checking for conflicts:', {
-      newConnection: `${sourceNodeId}[${sourceHandleId}] -> ${targetNodeId}[${targetHandleId}]`,
-      existingEdges: edges.length,
-      excludeEdgeId
-    })
-    
-    edges.forEach(edge => {
-      if (excludeEdgeId && edge.id === excludeEdgeId) {
-        console.log('[Validator] Skipping excluded edge:', edge.id)
-        return
+  const validateAndRemoveConflicts = useCallback(
+    (
+      edgeList: Edge<IdeaEdgeData>[],
+      sourceNodeId: string,
+      sourceHandleId: string,
+      targetNodeId: string,
+      targetHandleId: string,
+      excludeEdgeId?: string
+    ): { filteredEdges: Edge<IdeaEdgeData>[]; removedCount: number; conflicts: string[] } => {
+      const edgesToRemove: string[] = []
+      const conflicts: string[] = []
+
+      console.log('[Validator] Checking for conflicts:', {
+        newConnection: `${sourceNodeId}[${sourceHandleId}] -> ${targetNodeId}[${targetHandleId}]`,
+        existingEdges: edgeList.length,
+        excludeEdgeId,
+      })
+
+      edgeList.forEach((edge) => {
+        if (excludeEdgeId && edge.id === excludeEdgeId) {
+          console.log('[Validator] Skipping excluded edge:', edge.id)
+          return
+        }
+
+        const edgeSourceHandle = edge.sourceHandle || 'default'
+        const edgeTargetHandle = edge.targetHandle || 'default'
+
+        const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
+        const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
+
+        if (hasSourceConflict && !edgesToRemove.includes(edge.id)) {
+          edgesToRemove.push(edge.id)
+          conflicts.push(`Source: ${edge.source}[${edgeSourceHandle}] was connected to ${edge.target}[${edgeTargetHandle}]`)
+          console.log('[Validator] SOURCE CONFLICT DETECTED:', edge.id, edge)
+        }
+
+        if (hasTargetConflict && !edgesToRemove.includes(edge.id)) {
+          edgesToRemove.push(edge.id)
+          conflicts.push(`Target: ${edge.target}[${edgeTargetHandle}] was connected from ${edge.source}[${edgeSourceHandle}]`)
+          console.log('[Validator] TARGET CONFLICT DETECTED:', edge.id, edge)
+        }
+      })
+
+      const filteredEdges = edgeList.filter((edge) => !edgesToRemove.includes(edge.id))
+
+      console.log('[Validator] Conflicts found:', conflicts.length, 'edges to remove:', edgesToRemove)
+
+      return {
+        filteredEdges,
+        removedCount: edgesToRemove.length,
+        conflicts,
       }
-      
-      const edgeSourceHandle = edge.sourceHandle || 'default'
-      const edgeTargetHandle = edge.targetHandle || 'default'
-      
-      const hasSourceConflict = edge.source === sourceNodeId && edgeSourceHandle === sourceHandleId
-      const hasTargetConflict = edge.target === targetNodeId && edgeTargetHandle === targetHandleId
-      
-      if (hasSourceConflict && !edgesToRemove.includes(edge.id)) {
-        edgesToRemove.push(edge.id)
-        conflicts.push(`Source: ${edge.source}[${edgeSourceHandle}] was connected to ${edge.target}[${edgeTargetHandle}]`)
-        console.log('[Validator] SOURCE CONFLICT DETECTED:', edge.id, edge)
-      }
-      
-      if (hasTargetConflict && !edgesToRemove.includes(edge.id)) {
-        edgesToRemove.push(edge.id)
-        conflicts.push(`Target: ${edge.target}[${edgeTargetHandle}] was connected from ${edge.source}[${edgeSourceHandle}]`)
-        console.log('[Validator] TARGET CONFLICT DETECTED:', edge.id, edge)
-      }
-    })
-    
-    const filteredEdges = edges.filter(e => !edgesToRemove.includes(e.id))
-    
-    console.log('[Validator] Conflicts found:', conflicts.length, 'edges to remove:', edgesToRemove)
-    
-    return { 
-      filteredEdges, 
-      removedCount: edgesToRemove.length,
-      conflicts
-    }
-  }, [])
+    },
+    []
+  )
 
   const onConnect = useCallback(
     (params: RFConnection) => {
       if (!params.source || !params.target) return
-      
+
       const sourceNodeId = params.source
       const sourceHandleId = params.sourceHandle || 'default'
       const targetNodeId = params.target
       const targetHandleId = params.targetHandle || 'default'
-      
+
       console.log('[Connection] ==== NEW CONNECTION ATTEMPT ====')
       console.log('[Connection] Source:', `${sourceNodeId}[${sourceHandleId}]`)
       console.log('[Connection] Target:', `${targetNodeId}[${targetHandleId}]`)
-      
+
       setEdges((eds) => {
         console.log('[Connection] Current edges BEFORE validation:', eds.length)
-        eds.forEach(e => {
-          console.log(`  - ${e.id}: ${e.source}[${e.sourceHandle || 'default'}] -> ${e.target}[${e.targetHandle || 'default'}]`)
+        eds.forEach((edge) => {
+          console.log(`  - ${edge.id}: ${edge.source}[${edge.sourceHandle || 'default'}] -> ${edge.target}[${edge.targetHandle || 'default'}]`)
         })
-        
+
         const { filteredEdges, removedCount, conflicts } = validateAndRemoveConflicts(
           eds,
           sourceNodeId,
@@ -315,9 +299,9 @@ export function FeatureIdeaCloud() {
           targetNodeId,
           targetHandleId
         )
-        
+
         console.log('[Connection] Edges AFTER conflict removal:', filteredEdges.length)
-        
+
         const newEdge: Edge<IdeaEdgeData> = {
           id: `edge-${Date.now()}`,
           source: sourceNodeId,
@@ -326,36 +310,36 @@ export function FeatureIdeaCloud() {
           targetHandle: targetHandleId,
           type: 'default',
           data: { label: 'relates to' },
-          markerEnd: { 
+          markerEnd: {
             type: MarkerType.ArrowClosed,
             color: CONNECTION_STYLE.stroke,
             width: 20,
-            height: 20
+            height: 20,
           },
-          style: { 
-            stroke: CONNECTION_STYLE.stroke, 
-            strokeWidth: CONNECTION_STYLE.strokeWidth
+          style: {
+            stroke: CONNECTION_STYLE.stroke,
+            strokeWidth: CONNECTION_STYLE.strokeWidth,
           },
           animated: false,
         }
-        
+
         console.log('[Connection] Creating new edge:', newEdge.id)
-        
+
         const updatedEdges = [...filteredEdges, newEdge]
-        
+
         console.log('[Connection] Total edges AFTER addition:', updatedEdges.length)
         console.log('[Connection] Final edge list:')
-        updatedEdges.forEach(e => {
-          console.log(`  - ${e.id}: ${e.source}[${e.sourceHandle || 'default'}] -> ${e.target}[${e.targetHandle || 'default'}]`)
+        updatedEdges.forEach((edge) => {
+          console.log(`  - ${edge.id}: ${edge.source}[${edge.sourceHandle || 'default'}] -> ${edge.target}[${edge.targetHandle || 'default'}]`)
         })
-        
+
         setSavedEdges(updatedEdges)
         updateNodeConnectionCounts(updatedEdges)
-        
+
         if (removedCount > 0) {
           setTimeout(() => {
             toast.success(`Connection remapped! (${removedCount} old connection${removedCount > 1 ? 's' : ''} removed)`, {
-              description: conflicts.join('\n')
+              description: conflicts.join('\n'),
             })
           }, 0)
         } else {
@@ -363,19 +347,19 @@ export function FeatureIdeaCloud() {
             toast.success('Ideas connected!')
           }, 0)
         }
-        
+
         return updatedEdges
       })
     },
     [setEdges, setSavedEdges, validateAndRemoveConflicts, updateNodeConnectionCounts]
   )
 
-  const onEdgeClick = useCallback((event: React.MouseEvent, edge: Edge<IdeaEdgeData>) => {
+  const onEdgeClick = useCallback((event: ReactMouseEvent, edge: Edge<IdeaEdgeData>) => {
     setSelectedEdge(edge)
     setEdgeDialogOpen(true)
   }, [])
 
-  const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node<FeatureIdea>) => {
+  const onNodeDoubleClick = useCallback((event: ReactMouseEvent, node: Node<FeatureIdea>) => {
     setSelectedIdea(node.data)
     setViewDialogOpen(true)
   }, [])
@@ -384,73 +368,82 @@ export function FeatureIdeaCloud() {
     edgeReconnectSuccessful.current = false
   }, [])
 
-  const onReconnect = useCallback((oldEdge: Edge, newConnection: RFConnection) => {
-    if (!newConnection.source || !newConnection.target) return
-    
-    const sourceNodeId = newConnection.source
-    const sourceHandleId = newConnection.sourceHandle || 'default'
-    const targetNodeId = newConnection.target
-    const targetHandleId = newConnection.targetHandle || 'default'
-    
-    console.log('[Reconnection] Remapping edge:', {
-      oldEdgeId: oldEdge.id,
-      oldSource: `${oldEdge.source}[${oldEdge.sourceHandle || 'default'}]`,
-      oldTarget: `${oldEdge.target}[${oldEdge.targetHandle || 'default'}]`,
-      newSource: `${sourceNodeId}[${sourceHandleId}]`,
-      newTarget: `${targetNodeId}[${targetHandleId}]`
-    })
-    
-    edgeReconnectSuccessful.current = true
-    
-    setEdges((els) => {
-      const { filteredEdges, removedCount, conflicts } = validateAndRemoveConflicts(
-        els,
-        sourceNodeId,
-        sourceHandleId,
-        targetNodeId,
-        targetHandleId,
-        oldEdge.id
-      )
-      
-      const updatedEdges = reconnectEdge(oldEdge, newConnection, filteredEdges)
-      
-      console.log('[Reconnection] Edge remapped successfully')
-      console.log('[Reconnection] Total edges after remapping:', updatedEdges.length)
-      console.log('[Reconnection] Edges by handle:', updatedEdges.map(e => ({
-        id: e.id,
-        source: `${e.source}[${e.sourceHandle || 'default'}]`,
-        target: `${e.target}[${e.targetHandle || 'default'}]`
-      })))
-      
-      setSavedEdges(updatedEdges)
-      updateNodeConnectionCounts(updatedEdges)
-      
-      if (removedCount > 0) {
-        setTimeout(() => {
-          toast.success(`Connection remapped! (${removedCount} conflicting connection${removedCount > 1 ? 's' : ''} removed)`, {
-            description: conflicts.join('\n')
-          })
-        }, 0)
-      } else {
-        setTimeout(() => {
-          toast.success('Connection remapped!')
-        }, 0)
-      }
-      
-      return updatedEdges
-    })
-  }, [setEdges, setSavedEdges, validateAndRemoveConflicts, updateNodeConnectionCounts])
+  const onReconnect = useCallback(
+    (oldEdge: Edge, newConnection: RFConnection) => {
+      if (!newConnection.source || !newConnection.target) return
 
-  const onReconnectEnd = useCallback((_: MouseEvent | TouchEvent, edge: Edge) => {
-    if (!edgeReconnectSuccessful.current) {
-      setEdges((eds) => {
-        const updatedEdges = eds.filter((e) => e.id !== edge.id)
+      const sourceNodeId = newConnection.source
+      const sourceHandleId = newConnection.sourceHandle || 'default'
+      const targetNodeId = newConnection.target
+      const targetHandleId = newConnection.targetHandle || 'default'
+
+      console.log('[Reconnection] Remapping edge:', {
+        oldEdgeId: oldEdge.id,
+        oldSource: `${oldEdge.source}[${oldEdge.sourceHandle || 'default'}]`,
+        oldTarget: `${oldEdge.target}[${oldEdge.targetHandle || 'default'}]`,
+        newSource: `${sourceNodeId}[${sourceHandleId}]`,
+        newTarget: `${targetNodeId}[${targetHandleId}]`,
+      })
+
+      edgeReconnectSuccessful.current = true
+
+      setEdges((els) => {
+        const { filteredEdges, removedCount, conflicts } = validateAndRemoveConflicts(
+          els,
+          sourceNodeId,
+          sourceHandleId,
+          targetNodeId,
+          targetHandleId,
+          oldEdge.id
+        )
+
+        const updatedEdges = reconnectEdge(oldEdge, newConnection, filteredEdges)
+
+        console.log('[Reconnection] Edge remapped successfully')
+        console.log('[Reconnection] Total edges after remapping:', updatedEdges.length)
+        console.log('[Reconnection] Edges by handle:', updatedEdges.map((edge) => ({
+          id: edge.id,
+          source: `${edge.source}[${edge.sourceHandle || 'default'}]`,
+          target: `${edge.target}[${edge.targetHandle || 'default'}]`,
+        })))
+
         setSavedEdges(updatedEdges)
+        updateNodeConnectionCounts(updatedEdges)
+
+        if (removedCount > 0) {
+          setTimeout(() => {
+            toast.success(
+              `Connection remapped! (${removedCount} conflicting connection${removedCount > 1 ? 's' : ''} removed)`,
+              {
+                description: conflicts.join('\n'),
+              }
+            )
+          }, 0)
+        } else {
+          setTimeout(() => {
+            toast.success('Connection remapped!')
+          }, 0)
+        }
+
         return updatedEdges
       })
-    }
-    edgeReconnectSuccessful.current = true
-  }, [setEdges, setSavedEdges])
+    },
+    [setEdges, setSavedEdges, validateAndRemoveConflicts, updateNodeConnectionCounts]
+  )
+
+  const onReconnectEnd = useCallback(
+    (_: MouseEvent | TouchEvent, edge: Edge) => {
+      if (!edgeReconnectSuccessful.current) {
+        setEdges((eds) => {
+          const updatedEdges = eds.filter((current) => current.id !== edge.id)
+          setSavedEdges(updatedEdges)
+          return updatedEdges
+        })
+      }
+      edgeReconnectSuccessful.current = true
+    },
+    [setEdges, setSavedEdges]
+  )
 
   const handleAddIdea = () => {
     const newIdea: FeatureIdea = {
@@ -484,15 +477,14 @@ export function FeatureIdeaCloud() {
     }
 
     setIdeas((currentIdeas) => {
-      const existing = (currentIdeas || []).find(i => i.id === selectedIdea.id)
+      const existing = (currentIdeas || []).find((idea) => idea.id === selectedIdea.id)
       if (existing) {
-        return (currentIdeas || []).map(i => i.id === selectedIdea.id ? selectedIdea : i)
-      } else {
-        return [...(currentIdeas || []), selectedIdea]
+        return (currentIdeas || []).map((idea) => (idea.id === selectedIdea.id ? selectedIdea : idea))
       }
+      return [...(currentIdeas || []), selectedIdea]
     })
 
-    if (!(ideas || []).find(i => i.id === selectedIdea.id)) {
+    if (!(ideas || []).find((idea) => idea.id === selectedIdea.id)) {
       const newPosition = { x: 400, y: 300 }
       const newNode: Node<FeatureIdea> = {
         id: selectedIdea.id,
@@ -501,7 +493,7 @@ export function FeatureIdeaCloud() {
         data: selectedIdea,
       }
       setNodes((nds) => [...nds, newNode])
-      
+
       setSavedNodePositions((currentPositions) => ({
         ...(currentPositions || {}),
         [selectedIdea.id]: newPosition,
@@ -514,20 +506,20 @@ export function FeatureIdeaCloud() {
   }
 
   const handleDeleteIdea = (id: string) => {
-    setIdeas((currentIdeas) => (currentIdeas || []).filter(i => i.id !== id))
-    setNodes((nds) => nds.filter(n => n.id !== id))
-    
+    setIdeas((currentIdeas) => (currentIdeas || []).filter((idea) => idea.id !== id))
+    setNodes((nds) => nds.filter((node) => node.id !== id))
+
     setSavedNodePositions((currentPositions) => {
       const newPositions = { ...(currentPositions || {}) }
       delete newPositions[id]
       return newPositions
     })
-    
-    const updatedEdges = edges.filter(e => e.source !== id && e.target !== id)
+
+    const updatedEdges = edges.filter((edge) => edge.source !== id && edge.target !== id)
     setEdges(updatedEdges)
     setSavedEdges(updatedEdges)
     updateNodeConnectionCounts(updatedEdges)
-    
+
     setEditDialogOpen(false)
     setViewDialogOpen(false)
     setSelectedIdea(null)
@@ -541,15 +533,14 @@ export function FeatureIdeaCloud() {
     }
 
     setGroups((currentGroups) => {
-      const existing = (currentGroups || []).find(g => g.id === selectedGroup.id)
+      const existing = (currentGroups || []).find((group) => group.id === selectedGroup.id)
       if (existing) {
-        return (currentGroups || []).map(g => g.id === selectedGroup.id ? selectedGroup : g)
-      } else {
-        return [...(currentGroups || []), selectedGroup]
+        return (currentGroups || []).map((group) => (group.id === selectedGroup.id ? selectedGroup : group))
       }
+      return [...(currentGroups || []), selectedGroup]
     })
 
-    if (!(groups || []).find(g => g.id === selectedGroup.id)) {
+    if (!(groups || []).find((group) => group.id === selectedGroup.id)) {
       const newPosition = { x: 200, y: 200 }
       const newNode: Node<IdeaGroup> = {
         id: selectedGroup.id,
@@ -561,7 +552,7 @@ export function FeatureIdeaCloud() {
         },
       }
       setNodes((nds) => [newNode, ...nds])
-      
+
       setSavedNodePositions((currentPositions) => ({
         ...(currentPositions || {}),
         [selectedGroup.id]: newPosition,
@@ -575,27 +566,25 @@ export function FeatureIdeaCloud() {
 
   const handleDeleteGroup = (id: string) => {
     setIdeas((currentIdeas) =>
-      (currentIdeas || []).map(idea =>
-        idea.parentGroup === id ? { ...idea, parentGroup: undefined } : idea
-      )
+      (currentIdeas || []).map((idea) => (idea.parentGroup === id ? { ...idea, parentGroup: undefined } : idea))
     )
-    
-    setGroups((currentGroups) => (currentGroups || []).filter(g => g.id !== id))
-    setNodes((nds) => nds.filter(n => n.id !== id))
-    
+
+    setGroups((currentGroups) => (currentGroups || []).filter((group) => group.id !== id))
+    setNodes((nds) => nds.filter((node) => node.id !== id))
+
     setSavedNodePositions((currentPositions) => {
       const newPositions = { ...(currentPositions || {}) }
       delete newPositions[id]
       return newPositions
     })
-    
+
     setGroupDialogOpen(false)
     setSelectedGroup(null)
     toast.success('Group deleted')
   }
 
   const handleDeleteEdge = (edgeId: string) => {
-    const updatedEdges = edges.filter(e => e.id !== edgeId)
+    const updatedEdges = edges.filter((edge) => edge.id !== edgeId)
     setEdges(updatedEdges)
     setSavedEdges(updatedEdges)
     updateNodeConnectionCounts(updatedEdges)
@@ -609,20 +598,20 @@ export function FeatureIdeaCloud() {
       const updatedEdge = {
         ...selectedEdge,
         data: selectedEdge.data,
-        markerEnd: { 
+        markerEnd: {
           type: MarkerType.ArrowClosed,
           color: CONNECTION_STYLE.stroke,
           width: 20,
-          height: 20
+          height: 20,
         },
-        style: { 
-          stroke: CONNECTION_STYLE.stroke, 
-          strokeWidth: CONNECTION_STYLE.strokeWidth
+        style: {
+          stroke: CONNECTION_STYLE.stroke,
+          strokeWidth: CONNECTION_STYLE.strokeWidth,
         },
         animated: false,
       }
-      
-      const updatedEdges = edges.map(e => e.id === selectedEdge.id ? updatedEdge : e)
+
+      const updatedEdges = edges.map((edge) => (edge.id === selectedEdge.id ? updatedEdge : edge))
       setEdges(updatedEdges)
       setSavedEdges(updatedEdges)
       setEdgeDialogOpen(false)
@@ -632,7 +621,7 @@ export function FeatureIdeaCloud() {
 
   const handleGenerateIdeas = async () => {
     toast.info('Generating ideas with AI...')
-    
+
     try {
       const categoryList = CATEGORIES.join('|')
       const promptText = `Generate 3 innovative feature ideas for a low-code application builder. Each idea should be practical and valuable. Return as JSON with this structure:
@@ -646,10 +635,10 @@ export function FeatureIdeaCloud() {
     }
   ]
 }`
-      
+
       const response = await window.spark.llm(promptText, 'gpt-4o-mini', true)
       const result = JSON.parse(response)
-      
+
       if (result.ideas && Array.isArray(result.ideas)) {
         const newIdeas: FeatureIdea[] = result.ideas.map((idea: any) => ({
           id: `idea-ai-${Date.now()}-${Math.random()}`,
@@ -660,12 +649,12 @@ export function FeatureIdeaCloud() {
           status: 'idea' as const,
           createdAt: Date.now(),
         }))
-        
+
         setIdeas((currentIdeas) => [...(currentIdeas || []), ...newIdeas])
-        
+
         const newPositions: Record<string, { x: number; y: number }> = {}
         const newNodes: Node<FeatureIdea>[] = newIdeas.map((idea, index) => {
-          const position = { x: 400 + (index * 250), y: 300 + (index * 150) }
+          const position = { x: 400 + index * 250, y: 300 + index * 150 }
           newPositions[idea.id] = position
           return {
             id: idea.id,
@@ -674,13 +663,13 @@ export function FeatureIdeaCloud() {
             data: idea,
           }
         })
-        
+
         setNodes((nds) => [...nds, ...newNodes])
         setSavedNodePositions((currentPositions) => ({
           ...(currentPositions || {}),
           ...newPositions,
         }))
-        
+
         toast.success(`Generated ${newIdeas.length} new ideas!`)
       }
     } catch (error) {
@@ -689,54 +678,45 @@ export function FeatureIdeaCloud() {
     }
   }
 
-  return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-background via-muted/20 to-background">
-      <FeatureIdeaCanvas
-        nodes={cloud.nodes}
-        edges={cloud.edges}
-        onNodesChangeWrapper={cloud.onNodesChangeWrapper}
-        onEdgesChangeWrapper={cloud.onEdgesChangeWrapper}
-        onConnect={cloud.onConnect}
-        onReconnect={cloud.onReconnect}
-        onReconnectStart={cloud.onReconnectStart}
-        onReconnectEnd={cloud.onReconnectEnd}
-        onEdgeClick={cloud.onEdgeClick}
-        onNodeDoubleClick={cloud.onNodeDoubleClick}
-        debugPanelOpen={cloud.debugPanelOpen}
-        setDebugPanelOpen={cloud.setDebugPanelOpen}
-        handleAddIdea={cloud.handleAddIdea}
-        handleAddGroup={cloud.handleAddGroup}
-        handleGenerateIdeas={cloud.handleGenerateIdeas}
-        safeIdeas={cloud.safeIdeas}
-      />
-
-      <FeatureIdeaDialogs
-        ideas={cloud.ideas}
-        groups={cloud.groups}
-        safeIdeas={cloud.safeIdeas}
-        safeGroups={cloud.safeGroups}
-        edges={cloud.edges}
-        selectedIdea={cloud.selectedIdea}
-        selectedGroup={cloud.selectedGroup}
-        selectedEdge={cloud.selectedEdge}
-        editDialogOpen={cloud.editDialogOpen}
-        groupDialogOpen={cloud.groupDialogOpen}
-        viewDialogOpen={cloud.viewDialogOpen}
-        edgeDialogOpen={cloud.edgeDialogOpen}
-        setSelectedIdea={cloud.setSelectedIdea}
-        setSelectedGroup={cloud.setSelectedGroup}
-        setSelectedEdge={cloud.setSelectedEdge}
-        setEditDialogOpen={cloud.setEditDialogOpen}
-        setGroupDialogOpen={cloud.setGroupDialogOpen}
-        setViewDialogOpen={cloud.setViewDialogOpen}
-        setEdgeDialogOpen={cloud.setEdgeDialogOpen}
-        handleSaveIdea={cloud.handleSaveIdea}
-        handleDeleteIdea={cloud.handleDeleteIdea}
-        handleSaveGroup={cloud.handleSaveGroup}
-        handleDeleteGroup={cloud.handleDeleteGroup}
-        handleDeleteEdge={cloud.handleDeleteEdge}
-        handleSaveEdge={cloud.handleSaveEdge}
-      />
-    </div>
-  )
+  return {
+    nodes,
+    edges,
+    ideas,
+    groups,
+    safeIdeas,
+    safeGroups,
+    selectedIdea,
+    selectedGroup,
+    selectedEdge,
+    editDialogOpen,
+    groupDialogOpen,
+    viewDialogOpen,
+    edgeDialogOpen,
+    debugPanelOpen,
+    setSelectedIdea,
+    setSelectedGroup,
+    setSelectedEdge,
+    setEditDialogOpen,
+    setGroupDialogOpen,
+    setViewDialogOpen,
+    setEdgeDialogOpen,
+    setDebugPanelOpen,
+    onNodesChangeWrapper,
+    onEdgesChangeWrapper,
+    onConnect,
+    onEdgeClick,
+    onNodeDoubleClick,
+    onReconnectStart,
+    onReconnect,
+    onReconnectEnd,
+    handleAddIdea,
+    handleAddGroup,
+    handleSaveIdea,
+    handleDeleteIdea,
+    handleSaveGroup,
+    handleDeleteGroup,
+    handleDeleteEdge,
+    handleSaveEdge,
+    handleGenerateIdeas,
+  }
 }
