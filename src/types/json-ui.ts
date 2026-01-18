@@ -7,6 +7,7 @@ export type ComponentType =
   | 'Link' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
+  | 'DataList' | 'DataTable' | 'MetricCard' | 'Timeline'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
 
 export type ActionType =
