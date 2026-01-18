@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -16,13 +15,7 @@ import {
   Gauge,
 } from '@phosphor-icons/react'
 import { usePersistence } from '@/hooks/use-persistence'
-import { useAppDispatch } from '@/store'
-import {
-  syncToFlaskBulk,
-  syncFromFlaskBulk,
-  checkFlaskConnection,
-} from '@/store/slices/syncSlice'
-import { toast } from 'sonner'
+import { usePersistenceDashboard } from '@/hooks/use-persistence-dashboard'
 import copy from '@/data/persistence-dashboard.json'
 
 const formatDuration = (ms: number) => {
@@ -286,58 +279,18 @@ const HowPersistenceWorksCard = () => (
 )
 
 export function PersistenceDashboard() {
-  const dispatch = useAppDispatch()
-  const { status, metrics, autoSyncStatus, syncNow, configureAutoSync } = usePersistence()
-  const [autoSyncEnabled, setAutoSyncEnabled] = useState(false)
-  const [syncing, setSyncing] = useState(false)
-
-  useEffect(() => {
-    dispatch(checkFlaskConnection())
-    const interval = setInterval(() => {
-      dispatch(checkFlaskConnection())
-    }, 10000)
-
-    return () => clearInterval(interval)
-  }, [dispatch])
-
-  const handleSyncToFlask = async () => {
-    setSyncing(true)
-    try {
-      await dispatch(syncToFlaskBulk()).unwrap()
-      toast.success(copy.toasts.syncToSuccess)
-    } catch (error: any) {
-      toast.error(copy.toasts.syncFailed.replace('{{error}}', String(error)))
-    } finally {
-      setSyncing(false)
-    }
-  }
-
-  const handleSyncFromFlask = async () => {
-    setSyncing(true)
-    try {
-      await dispatch(syncFromFlaskBulk()).unwrap()
-      toast.success(copy.toasts.syncFromSuccess)
-    } catch (error: any) {
-      toast.error(copy.toasts.syncFailed.replace('{{error}}', String(error)))
-    } finally {
-      setSyncing(false)
-    }
-  }
-
-  const handleAutoSyncToggle = (enabled: boolean) => {
-    setAutoSyncEnabled(enabled)
-    configureAutoSync({ enabled, syncOnChange: true })
-    toast.info(enabled ? copy.toasts.autoSyncEnabled : copy.toasts.autoSyncDisabled)
-  }
-
-  const handleManualSync = async () => {
-    try {
-      await syncNow()
-      toast.success(copy.toasts.manualSyncSuccess)
-    } catch (error: any) {
-      toast.error(copy.toasts.manualSyncFailed.replace('{{error}}', String(error)))
-    }
-  }
+  const {
+    status,
+    metrics,
+    autoSyncStatus,
+    autoSyncEnabled,
+    syncing,
+    handleSyncToFlask,
+    handleSyncFromFlask,
+    handleManualSync,
+    handleAutoSyncToggle,
+    handleCheckConnection,
+  } = usePersistenceDashboard()
 
   return (
     <div className="p-6 space-y-6">
@@ -357,7 +310,7 @@ export function PersistenceDashboard() {
         onSyncToFlask={handleSyncToFlask}
         onSyncFromFlask={handleSyncFromFlask}
         onManualSync={handleManualSync}
-        onCheckConnection={() => dispatch(checkFlaskConnection())}
+        onCheckConnection={handleCheckConnection}
         syncing={syncing}
         status={status}
         autoSyncStatus={autoSyncStatus}
