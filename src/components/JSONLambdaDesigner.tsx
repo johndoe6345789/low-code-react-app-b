@@ -1,16 +1,9 @@
-import { PageRenderer } from '@/lib/schema-renderer'
+import { PageRenderer } from '@/lib/json-ui/page-renderer'
 import lambdaDesignerSchema from '@/config/pages/lambda-designer.json'
-import { useKV } from '@/hooks/use-kv'
-import { Component as ComponentSchema } from '@/schemas/ui-schema'
+import { PageSchema } from '@/types/json-ui'
 
 export function JSONLambdaDesigner() {
-  const [lambdas] = useKV('app-lambdas', [])
-  
   return (
-    <PageRenderer 
-      schema={lambdaDesignerSchema as ComponentSchema} 
-      data={{ lambdas }}
-      functions={{}}
-    />
+    <PageRenderer schema={lambdaDesignerSchema as PageSchema} />
   )
 }
