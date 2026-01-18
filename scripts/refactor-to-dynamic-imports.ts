@@ -43,7 +43,6 @@ async function refactorFile(filePath: string): Promise<boolean> {
   let modified = false
 
   // Find all imports to replace
-  const importLines: string[] = []
   const componentsToLoad = new Set<string>()
 
   for (const [category, components] of Object.entries(targetComponents)) {
