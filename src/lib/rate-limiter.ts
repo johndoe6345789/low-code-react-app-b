@@ -26,30 +26,39 @@ class RateLimiter {
     fn: () => Promise<T>,
     priority: 'low' | 'medium' | 'high' = 'medium'
   ): Promise<T | null> {
-    const now = Date.now()
-    const record = this.requests.get(key)
+    const maxHighPriorityRetries = 5
+    let retryCount = 0
+    let record: RequestRecord | undefined
 
-    if (record) {
-      const timeElapsed = now - record.timestamp
+    while (true) {
+      const now = Date.now()
+      record = this.requests.get(key)
 
-      if (timeElapsed < this.config.windowMs) {
-        if (record.count >= this.config.maxRequests) {
-          console.warn(`Rate limit exceeded for ${key}. Try again in ${Math.ceil((this.config.windowMs - timeElapsed) / 1000)}s`)
-          
-          if (priority === 'high') {
-            await new Promise(resolve => setTimeout(resolve, this.config.retryDelay))
-            return this.throttle(key, fn, priority)
+      if (record) {
+        const timeElapsed = now - record.timestamp
+
+        if (timeElapsed < this.config.windowMs) {
+          if (record.count >= this.config.maxRequests) {
+            console.warn(`Rate limit exceeded for ${key}. Try again in ${Math.ceil((this.config.windowMs - timeElapsed) / 1000)}s`)
+
+            if (priority === 'high' && retryCount < maxHighPriorityRetries) {
+              retryCount++
+              await new Promise(resolve => setTimeout(resolve, this.config.retryDelay))
+              continue
+            }
+
+            return null
           }
-          
-          return null
+
+          record.count++
+        } else {
+          this.requests.set(key, { timestamp: now, count: 1 })
         }
-        
-        record.count++
       } else {
         this.requests.set(key, { timestamp: now, count: 1 })
       }
-    } else {
-      this.requests.set(key, { timestamp: now, count: 1 })
+
+      break
     }
 
     this.cleanup()
