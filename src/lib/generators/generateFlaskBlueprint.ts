@@ -1,4 +1,5 @@
 import { FlaskBlueprint } from '@/types/project'
+import { sanitizeIdentifier } from './sanitizeIdentifier'
 
 function toPythonIdentifier(value: string, fallback: string): string {
   const normalized = value
@@ -17,11 +18,11 @@ export function generateFlaskBlueprint(blueprint: FlaskBlueprint): string {
   let code = `from flask import Blueprint, request, jsonify\n`
   code += `from typing import Dict, Any\n\n`
 
-  const blueprintVarName = toPythonIdentifier(blueprint.name, 'blueprint')
+  const blueprintVarName = sanitizeIdentifier(blueprint.name, { fallback: 'blueprint' })
   code += `${blueprintVarName}_bp = Blueprint('${blueprintVarName}', __name__, url_prefix='${blueprint.urlPrefix}')\n\n`
 
   blueprint.endpoints.forEach(endpoint => {
-    const functionName = toPythonIdentifier(endpoint.name, 'endpoint')
+    const functionName = sanitizeIdentifier(endpoint.name, { fallback: 'endpoint' })
     code += `@${blueprintVarName}_bp.route('${endpoint.path}', methods=['${endpoint.method}'])\n`
     code += `def ${functionName}():\n`
     code += `    """\n`
@@ -44,13 +45,14 @@ export function generateFlaskBlueprint(blueprint: FlaskBlueprint): string {
 
     if (endpoint.queryParams && endpoint.queryParams.length > 0) {
       endpoint.queryParams.forEach(param => {
+        const paramVarName = sanitizeIdentifier(param.name, { fallback: 'param' })
         if (param.required) {
-          code += `    ${param.name} = request.args.get('${param.name}')\n`
-          code += `    if ${param.name} is None:\n`
+          code += `    ${paramVarName} = request.args.get('${param.name}')\n`
+          code += `    if ${paramVarName} is None:\n`
           code += `        return jsonify({'error': '${param.name} is required'}), 400\n\n`
         } else {
           const defaultVal = param.defaultValue || (param.type === 'string' ? "''" : param.type === 'number' ? '0' : 'None')
-          code += `    ${param.name} = request.args.get('${param.name}', ${defaultVal})\n`
+          code += `    ${paramVarName} = request.args.get('${param.name}', ${defaultVal})\n`
         }
       })
       code += `\n`
