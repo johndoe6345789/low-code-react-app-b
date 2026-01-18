@@ -19,20 +19,6 @@ class UnifiedStorage {
       const flaskEnvUrl = import.meta.env.VITE_FLASK_BACKEND_URL
       const preferSQLite = localStorage.getItem('codeforge-prefer-sqlite') === 'true'
 
-      if (typeof indexedDB !== 'undefined') {
-        try {
-          console.log('[Storage] Initializing default IndexedDB backend...')
-          const idbAdapter = new IndexedDBAdapter()
-          await idbAdapter.get('_health_check')
-          this.adapter = idbAdapter
-          this.backend = 'indexeddb'
-          console.log('[Storage] ✓ Using IndexedDB (default)')
-          return
-        } catch (error) {
-          console.warn('[Storage] IndexedDB not available:', error)
-        }
-      }
-
       if (preferFlask || flaskEnvUrl) {
         try {
           console.log('[Storage] Flask backend explicitly configured, attempting to initialize...')
@@ -46,10 +32,21 @@ class UnifiedStorage {
           console.log('[Storage] ✓ Using Flask backend')
           return
         } catch (error) {
-          console.warn('[Storage] Flask backend not available, already using IndexedDB:', error)
-          if (this.adapter && this.backend === 'indexeddb') {
-            return
-          }
+          console.warn('[Storage] Flask backend not available, falling back to IndexedDB:', error)
+        }
+      }
+
+      if (typeof indexedDB !== 'undefined') {
+        try {
+          console.log('[Storage] Initializing default IndexedDB backend...')
+          const idbAdapter = new IndexedDBAdapter()
+          await idbAdapter.get('_health_check')
+          this.adapter = idbAdapter
+          this.backend = 'indexeddb'
+          console.log('[Storage] ✓ Using IndexedDB (default)')
+          return
+        } catch (error) {
+          console.warn('[Storage] IndexedDB not available:', error)
         }
       }
 
