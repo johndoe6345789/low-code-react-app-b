@@ -1,8 +1,7 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import type { ChangeEvent } from 'react'
+import { ComponentRenderer } from '@/lib/json-ui/component-renderer'
 import { cn } from '@/lib/utils'
+import { dataSourceEditorDialogDefinition } from './definitions'
 import type { DataSourceEditorDialogWrapperProps } from './interfaces'
 
 export function DataSourceEditorDialogWrapper({
@@ -16,44 +15,29 @@ export function DataSourceEditorDialogWrapper({
   onOpenChange,
   className,
 }: DataSourceEditorDialogWrapperProps) {
+  const handleFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const fieldId = event.currentTarget?.dataset?.fieldId || event.target?.dataset?.fieldId
+    if (!fieldId) return
+    onFieldChange?.(fieldId, event.target.value)
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn('max-w-2xl', className)}>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4">
-          {fields.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No fields configured.</p>
-          ) : (
-            fields.map((field) => (
-              <div key={field.id} className="space-y-2">
-                <Label htmlFor={`field-${field.id}`}>{field.label}</Label>
-                <Input
-                  id={`field-${field.id}`}
-                  value={field.value ?? ''}
-                  placeholder={field.placeholder}
-                  onChange={(event) => onFieldChange?.(field.id, event.target.value)}
-                />
-                {field.helperText && (
-                  <p className="text-xs text-muted-foreground">{field.helperText}</p>
-                )}
-              </div>
-            ))
-          )}
-        </div>
-
-        <DialogFooter>
-          <Button variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
-          <Button onClick={onSave}>
-            Save
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <ComponentRenderer
+      component={dataSourceEditorDialogDefinition}
+      data={{
+        open,
+        title,
+        description,
+        fields,
+        emptyMessage: 'No fields configured.',
+        contentClassName: cn('max-w-2xl', className),
+        onFieldChange: handleFieldChange,
+        onSave,
+        onCancel,
+        onOpenChange,
+        cancelLabel: 'Cancel',
+        saveLabel: 'Save',
+      }}
+    />
   )
 }

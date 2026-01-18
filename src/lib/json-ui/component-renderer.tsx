@@ -205,6 +205,11 @@ export function ComponentRenderer({ component, data, context = {}, state, onEven
     return null
   }
 
+  const resolvedChildren = component.children ?? resolvedProps.children
+  if (resolvedChildren !== undefined && resolvedChildren !== component.children) {
+    delete resolvedProps.children
+  }
+
   if (component.loop) {
     const items = resolveDataBinding(component.loop.source, data, context, { state, bindings: context }) || []
     const loopChildren = items.map((item: unknown, index: number) => {
@@ -232,7 +237,7 @@ export function ComponentRenderer({ component, data, context = {}, state, onEven
 
       return (
         <Fragment key={`${component.id}-${index}`}>
-          {renderChildren(component.children, loopContext)}
+          {renderChildren(resolvedChildren as UIComponent[] | string | undefined, loopContext)}
         </Fragment>
       )
     })
@@ -254,5 +259,9 @@ export function ComponentRenderer({ component, data, context = {}, state, onEven
     }
   }
 
-  return createElement(Component, resolvedProps, renderChildren(component.children, context))
+  return createElement(
+    Component,
+    resolvedProps,
+    renderChildren(resolvedChildren as UIComponent[] | string | undefined, context)
+  )
 }
