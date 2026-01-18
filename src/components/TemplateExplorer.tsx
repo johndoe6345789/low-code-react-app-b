@@ -8,8 +8,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { useSeedTemplates } from '@/hooks/data/use-seed-templates'
 import { Copy, Download } from '@phosphor-icons/react'
-import { toast } from 'sonner'
 import templateUi from '@/config/template-ui.json'
+import { useTemplateExplorerActions } from '@/hooks/use-template-explorer-actions'
 
 const ui = templateUi.explorer
 
@@ -185,49 +185,11 @@ export function TemplateExplorer() {
 
   const currentTemplate = templates.find(t => t.id === selectedTemplate)
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-    toast.success(ui.toasts.copySuccess)
-  }
-
-  const downloadJSON = () => {
-    if (!currentTemplate) return
-
-    const dataStr = JSON.stringify(currentTemplate.data, null, 2)
-    const blob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `${currentTemplate.id}-template.json`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-
-    toast.success(ui.toasts.downloadSuccess)
-  }
-
-  const exportCurrentData = async () => {
-    const keys = await window.spark.kv.keys()
-    const data: Record<string, any> = {}
-
-    for (const key of keys) {
-      data[key] = await window.spark.kv.get(key)
-    }
-
-    const dataStr = JSON.stringify(data, null, 2)
-    const blob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'current-project-data.json'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-
-    toast.success(ui.toasts.exportSuccess)
-  }
+  const {
+    copyToClipboard,
+    downloadJSON,
+    exportCurrentData
+  } = useTemplateExplorerActions(currentTemplate)
 
   if (!currentTemplate) return null
 
