@@ -83,11 +83,11 @@ function checkComponentTree(
     seenIds.add(component.id)
   }
 
-  if (component.dataBinding && !component.dataBinding.source) {
+  if (component.dataBinding) {
     const bindingPath = typeof component.dataBinding === 'string'
       ? component.dataBinding.split('.')[0]
-      : ''
-    
+      : component.dataBinding.source?.split('.')[0]
+
     if (bindingPath) {
       result.warnings.push({
         path: `${path}.${component.id}`,

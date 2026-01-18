@@ -109,7 +109,8 @@ Render lists from arrays:
 {
   "loop": {
     "source": "items",
-    "itemVar": "item"
+    "itemVar": "item",
+    "indexVar": "index"
   },
   "children": [...]
 }
@@ -125,6 +126,107 @@ Show/hide based on conditions:
     "if": "user.isAdmin",
     "then": {...},
     "else": {...}
+  }
+}
+```
+
+## 🧭 Schema Patterns & Examples
+
+### Conditional Branches
+
+Conditionals can return a single component, an array of components, or a string payload:
+
+```json
+{
+  "id": "admin-greeting",
+  "type": "div",
+  "conditional": {
+    "if": "user.isAdmin",
+    "then": [
+      { "id": "admin-title", "type": "h2", "children": "Welcome, Admin!" },
+      { "id": "admin-subtitle", "type": "p", "children": "You have full access." }
+    ],
+    "else": "You do not have access."
+  }
+}
+```
+
+### Loop Templates (itemVar/indexVar)
+
+Loop containers render once and repeat their children as the template. The `itemVar` and
+`indexVar` values are available in bindings and expressions inside the loop:
+
+```json
+{
+  "id": "activity-list",
+  "type": "div",
+  "className": "space-y-2",
+  "loop": {
+    "source": "activities",
+    "itemVar": "activity",
+    "indexVar": "idx"
+  },
+  "children": [
+    {
+      "id": "activity-row",
+      "type": "div",
+      "children": [
+        { "id": "activity-index", "type": "span", "dataBinding": "idx" },
+        { "id": "activity-text", "type": "span", "dataBinding": "activity.text" }
+      ]
+    }
+  ]
+}
+```
+
+### Dot-Path Bindings
+
+Bindings support `foo.bar` access for both `dataBinding` and `bindings`:
+
+```json
+{
+  "id": "profile-name",
+  "type": "p",
+  "dataBinding": "user.profile.fullName"
+}
+```
+
+```json
+{
+  "id": "profile-avatar",
+  "type": "Avatar",
+  "bindings": {
+    "src": { "source": "user", "path": "profile.avatarUrl" },
+    "alt": { "source": "user.profile.fullName" }
+  }
+}
+```
+
+### Transforms
+
+Transforms can be applied to bindings for light formatting in JSON:
+
+```json
+{
+  "id": "user-score",
+  "type": "span",
+  "dataBinding": {
+    "source": "user",
+    "path": "score",
+    "transform": "data ?? 0"
+  }
+}
+```
+
+```json
+{
+  "id": "user-initials",
+  "type": "Badge",
+  "bindings": {
+    "children": {
+      "source": "user.profile.fullName",
+      "transform": "data.split(' ').map(part => part[0]).join('')"
+    }
   }
 }
 ```

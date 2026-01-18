@@ -1,25 +1,10 @@
-import { createElement, useMemo } from 'react'
+import { createElement, useMemo, Fragment } from 'react'
 import { UIComponent, Binding, ComponentRendererProps } from '@/types/json-ui'
 import { getUIComponent } from './component-registry'
-import { transformData } from './utils'
+import { resolveDataBinding, evaluateCondition } from './utils'
 
 function resolveBinding(binding: Binding, data: Record<string, unknown>): unknown {
-  const sourceValue = binding.source.includes('.')
-    ? getNestedValue(data, binding.source)
-    : data[binding.source]
-  let value: unknown = sourceValue
-  
-  if (binding.path) {
-    value = getNestedValue(value, binding.path)
-  }
-  
-  if (binding.transform) {
-    value = typeof binding.transform === 'string'
-      ? transformData(value, binding.transform)
-      : binding.transform(value)
-  }
-  
-  return value
+  return resolveDataBinding(binding, data)
 }
 
 export function ComponentRenderer({ component, data, context = {}, onEvent }: ComponentRendererProps) {
@@ -32,15 +17,37 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
         resolved[propName] = resolveBinding(binding, mergedData)
       })
     }
+
+    if (component.dataBinding) {
+      const boundData = resolveDataBinding(component.dataBinding, mergedData)
+      if (boundData !== undefined) {
+        resolved.value = boundData
+        resolved.data = boundData
+      }
+    }
     
     if (component.events && onEvent) {
       component.events.forEach(handler => {
         resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
-          if (!handler.condition || handler.condition(mergedData as Record<string, any>)) {
-            onEvent(component.id, handler.event, e)
+          const conditionMet = !handler.condition
+            || (typeof handler.condition === 'function'
+              ? handler.condition(mergedData as Record<string, any>)
+              : evaluateCondition(handler.condition, mergedData as Record<string, any>))
+          if (conditionMet) {
+            onEvent(component.id, handler, e)
           }
         }
       })
+    }
+
+    if (component.className) {
+      resolved.className = resolved.className
+        ? `${resolved.className} ${component.className}`
+        : component.className
+    }
+
+    if (component.style) {
+      resolved.style = { ...(resolved.style as Record<string, unknown>), ...component.style }
     }
     
     return resolved
@@ -53,22 +60,128 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
     return null
   }
   
+  const renderChildren = (
+    children: UIComponent[] | string | undefined,
+    renderContext: Record<string, unknown>
+  ) => {
+    if (!children) return null
+    if (typeof children === 'string') {
+      return children
+    }
+
+    return children.map((child, index) => (
+      <Fragment key={typeof child === 'string' ? `text-${index}` : child.id || index}>
+        {typeof child === 'string'
+          ? child
+          : (
+            <ComponentRenderer
+              component={child}
+              data={data}
+              context={renderContext}
+              onEvent={onEvent}
+            />
+          )}
+      </Fragment>
+    ))
+  }
+
+  const renderBranch = (
+    branch: UIComponent | (UIComponent | string)[] | string | undefined,
+    renderContext: Record<string, unknown>
+  ) => {
+    if (branch === undefined) return null
+    if (typeof branch === 'string') {
+      return branch
+    }
+    if (Array.isArray(branch)) {
+      return branch.map((child, index) => (
+        <Fragment key={typeof child === 'string' ? `text-${index}` : child.id || index}>
+          {typeof child === 'string'
+            ? child
+            : (
+              <ComponentRenderer
+                component={child}
+                data={data}
+                context={renderContext}
+                onEvent={onEvent}
+              />
+            )}
+        </Fragment>
+      ))
+    }
+    return (
+      <ComponentRenderer
+        component={branch}
+        data={data}
+        context={renderContext}
+        onEvent={onEvent}
+      />
+    )
+  }
+
+  const renderConditionalContent = (renderContext: Record<string, unknown>) => {
+    if (!component.conditional) return undefined
+    const conditionMet = evaluateCondition(component.conditional.if, { ...data, ...renderContext } as Record<string, any>)
+    if (conditionMet) {
+      if (component.conditional.then !== undefined) {
+        return renderBranch(component.conditional.then as UIComponent | (UIComponent | string)[] | string, renderContext)
+      }
+      return undefined
+    }
+    if (component.conditional.else !== undefined) {
+      return renderBranch(component.conditional.else as UIComponent | (UIComponent | string)[] | string, renderContext)
+    }
+    return null
+  }
+
+  if (component.loop) {
+    const items = resolveDataBinding(component.loop.source, mergedData) || []
+    const loopChildren = items.map((item: unknown, index: number) => {
+      const loopContext = {
+        ...context,
+        [component.loop!.itemVar]: item,
+        ...(component.loop!.indexVar ? { [component.loop!.indexVar]: index } : {}),
+      }
+
+      if (component.conditional) {
+        const conditionalContent = renderConditionalContent(loopContext)
+        if (conditionalContent !== undefined) {
+          return (
+            <Fragment key={`${component.id}-${index}`}>{conditionalContent}</Fragment>
+          )
+        }
+      }
+
+      if (component.condition) {
+        const conditionValue = resolveBinding(component.condition, { ...data, ...loopContext })
+        if (!conditionValue) {
+          return null
+        }
+      }
+
+      return (
+        <Fragment key={`${component.id}-${index}`}>
+          {renderChildren(component.children, loopContext)}
+        </Fragment>
+      )
+    })
+
+    return createElement(Component, resolvedProps, loopChildren)
+  }
+
+  if (component.conditional) {
+    const conditionalContent = renderConditionalContent(mergedData)
+    if (conditionalContent !== undefined) {
+      return conditionalContent
+    }
+  }
+
   if (component.condition) {
     const conditionValue = resolveBinding(component.condition, mergedData)
     if (!conditionValue) {
       return null
     }
   }
-  
-  const children = component.children?.map((child, index) => (
-    <ComponentRenderer
-      key={child.id || index}
-      component={child}
-      data={data}
-      context={context}
-      onEvent={onEvent}
-    />
-  ))
-  
-  return createElement(Component, resolvedProps, children)
+
+  return createElement(Component, resolvedProps, renderChildren(component.children, context))
 }
