@@ -1,14 +1,27 @@
 import { FlaskBlueprint } from '@/types/project'
 
+function toPythonIdentifier(value: string, fallback: string): string {
+  const normalized = value
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '')
+  let safe = normalized || fallback
+  if (/^[0-9]/.test(safe)) {
+    safe = `_${safe}`
+  }
+  return safe
+}
+
 export function generateFlaskBlueprint(blueprint: FlaskBlueprint): string {
   let code = `from flask import Blueprint, request, jsonify\n`
   code += `from typing import Dict, Any\n\n`
 
-  const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+  const blueprintVarName = toPythonIdentifier(blueprint.name, 'blueprint')
   code += `${blueprintVarName}_bp = Blueprint('${blueprintVarName}', __name__, url_prefix='${blueprint.urlPrefix}')\n\n`
 
   blueprint.endpoints.forEach(endpoint => {
-    const functionName = endpoint.name.toLowerCase().replace(/\s+/g, '_')
+    const functionName = toPythonIdentifier(endpoint.name, 'endpoint')
     code += `@${blueprintVarName}_bp.route('${endpoint.path}', methods=['${endpoint.method}'])\n`
     code += `def ${functionName}():\n`
     code += `    """\n`
