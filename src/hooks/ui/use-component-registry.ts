@@ -1,11 +1,5 @@
 import { useMemo } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-import { Progress } from '@/components/ui/progress'
+import { uiComponentRegistry, iconComponents } from '@/lib/json-ui/component-registry'
 import * as Icons from '@phosphor-icons/react'
 
 interface ComponentRegistryOptions {
@@ -15,17 +9,7 @@ interface ComponentRegistryOptions {
 export function useComponentRegistry({ customComponents = {} }: ComponentRegistryOptions = {}) {
   const registry = useMemo(
     () => ({
-      Card,
-      CardHeader,
-      CardTitle,
-      CardDescription,
-      CardContent,
-      Button,
-      Badge,
-      Input,
-      Label,
-      Separator,
-      Progress,
+      ...uiComponentRegistry,
       ...customComponents,
     }),
     [customComponents]
@@ -36,7 +20,7 @@ export function useComponentRegistry({ customComponents = {} }: ComponentRegistr
   }
 
   const getIcon = (iconName: string, props?: any): React.ReactElement | null => {
-    const IconComponent = (Icons as any)[iconName]
+    const IconComponent = iconComponents[iconName as keyof typeof iconComponents] || (Icons as any)[iconName]
     if (!IconComponent) return null
     return IconComponent({ size: 24, weight: "duotone", ...props })
   }
