@@ -268,7 +268,7 @@
     "category": "display",
     "canHaveChildren": false,
     "description": "Visual section divider",
-    "status": "planned"
+    "status": "supported"
   },
   {
     "type": "Progress",
@@ -284,7 +284,7 @@
     "category": "display",
     "canHaveChildren": false,
     "description": "Linear progress bar",
-    "status": "planned"
+    "status": "supported"
   },
   {
     "type": "CircularProgress",
@@ -292,7 +292,7 @@
     "category": "display",
     "canHaveChildren": false,
     "description": "Circular progress indicator",
-    "status": "planned"
+    "status": "supported"
   },
   {
     "type": "Spinner",
