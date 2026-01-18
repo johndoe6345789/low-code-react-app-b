@@ -1,7 +1,7 @@
 import { UIComponent } from '@/types/json-ui'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { getComponentDef } from '@/lib/component-definitions-utils'
+import { getComponentDef } from '@/lib/component-definition-utils'
 import { PropertyEditorEmptyState } from '@/components/molecules/property-editor/PropertyEditorEmptyState'
 import { propertyEditorConfig } from '@/components/molecules/property-editor/propertyEditorConfig'
 import { PropertyEditorHeader } from '@/components/molecules/property-editor/PropertyEditorHeader'

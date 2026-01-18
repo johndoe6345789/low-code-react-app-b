@@ -1,5 +1,5 @@
 import { UIComponent } from '@/types/json-ui'
-import { getComponentDef } from '@/lib/component-definitions-utils'
+import { getComponentDef } from '@/lib/component-definition-utils'
 import { cn } from '@/lib/utils'
 import * as Icons from '@phosphor-icons/react'
 

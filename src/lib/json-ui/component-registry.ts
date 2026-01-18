@@ -147,6 +147,11 @@ export const atomComponents: UIComponentRegistry = {
   Timeline: (AtomComponents as Record<string, ComponentType<any>>).Timeline,
 }
 
+const breadcrumbComponent = AtomComponents.Breadcrumb ?? AtomComponents.BreadcrumbNav
+if (breadcrumbComponent) {
+  atomComponents.Breadcrumb = breadcrumbComponent as ComponentType<any>
+}
+
 export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
   moleculeRegistryNames,
   MoleculeComponents as Record<string, ComponentType<any>>

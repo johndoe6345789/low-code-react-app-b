@@ -54,7 +54,7 @@ export { Timestamp } from './Timestamp'
 export { ScrollArea } from './ScrollArea'
 
 export { Tag } from './Tag'
-export { BreadcrumbNav } from './Breadcrumb'
+export { Breadcrumb, BreadcrumbNav } from './Breadcrumb'
 export { IconText } from './IconText'
 export { TextArea } from './TextArea'
 export { Input } from './Input'
@@ -118,4 +118,3 @@ export { MetricDisplay } from './MetricDisplay'
 export { KeyValue } from './KeyValue'
 export { EmptyMessage } from './EmptyMessage'
 export { StepIndicator } from './StepIndicator'
-

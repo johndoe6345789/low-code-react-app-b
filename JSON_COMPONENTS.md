@@ -92,8 +92,8 @@ Form inputs and interactive controls:
 - `Switch` - Toggle switch
 - `Slider` - Numeric range slider
 - `NumberInput` - Numeric input with increment/decrement
-- `DatePicker` - Date selection (planned)
-- `FileUpload` - File upload control (planned)
+- `DatePicker` - Date selection
+- `FileUpload` - File upload control
 
 ### Display Components (16)
 Presentation and visual elements:
@@ -110,9 +110,9 @@ Presentation and visual elements:
 - `Spinner` - Loading spinner
 - `Skeleton` - Loading placeholder
 - `Separator` - Visual divider
-- `CircularProgress` - Circular indicator (planned)
-- `ProgressBar` - Linear progress (planned)
-- `Divider` - Section divider (planned)
+- `CircularProgress` - Circular indicator
+- `ProgressBar` - Linear progress
+- `Divider` - Section divider
 
 ### Navigation Components (3)
 Navigation and routing:

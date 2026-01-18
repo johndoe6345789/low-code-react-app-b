@@ -1,5 +1,5 @@
 import { ComponentPalette } from '@/components/molecules/ComponentPalette'
-import { ComponentDefinition } from '@/lib/component-definitions-utils'
+import { ComponentDefinition } from '@/lib/component-definition-types'
 
 interface SchemaEditorSidebarProps {
   onDragStart: (component: ComponentDefinition, e: React.DragEvent) => void
