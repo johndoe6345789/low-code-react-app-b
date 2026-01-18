@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { PageSchema } from '@/types/json-ui'
 import { useDataSources } from '@/hooks/data/use-data-sources'
 import { useActionExecutor } from '@/hooks/ui/use-action-executor'
+import { useAppSelector } from '@/store'
 import { ComponentRenderer } from './component-renderer'
 
 interface PageRendererProps {
@@ -11,6 +12,7 @@ interface PageRendererProps {
 
 export function PageRenderer({ schema, onCustomAction }: PageRendererProps) {
   const { data, updateData, updatePath } = useDataSources(schema.dataSources)
+  const state = useAppSelector((rootState) => rootState)
   
   const context = {
     data,
@@ -32,6 +34,7 @@ export function PageRenderer({ schema, onCustomAction }: PageRendererProps) {
           key={component.id || index}
           component={component}
           data={data}
+          state={state}
           onEvent={handleEvent}
         />
       ))}

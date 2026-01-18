@@ -18,6 +18,9 @@ export type ActionType =
 export type DataSourceType =
   | 'kv' | 'computed' | 'static'
 
+export type BindingSourceType =
+  | 'data' | 'bindings' | 'state'
+
 export interface DataSource {
   id: string
   type: DataSourceType
@@ -46,6 +49,7 @@ export interface Action {
 
 export interface Binding {
   source: string
+  sourceType?: BindingSourceType
   path?: string
   transform?: string | ((value: any) => any)
 }
@@ -115,6 +119,7 @@ export interface ComponentRendererProps {
   component: UIComponent
   data: Record<string, unknown>
   context?: Record<string, unknown>
+  state?: Record<string, unknown>
   onEvent?: (componentId: string, handler: EventHandler, eventData: unknown) => void
 }
 
