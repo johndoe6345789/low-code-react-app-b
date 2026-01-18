@@ -1,0 +1,59 @@
+{
+  "defaultExampleKey": "dashboard",
+  "header": {
+    "title": "JSON UI System",
+    "description": "Build complex UIs from declarative JSON configurations",
+    "badge": "EXPERIMENTAL"
+  },
+  "tabs": {
+    "showJsonLabel": "Show JSON",
+    "showPreviewLabel": "Show Preview",
+    "jsonTitle": "JSON Configuration"
+  },
+  "examples": [
+    {
+      "key": "dashboard",
+      "name": "Dashboard",
+      "description": "Complete dashboard with stats, activity feed, and quick actions",
+      "icon": "ChartBar",
+      "configKey": "dashboard"
+    },
+    {
+      "key": "form",
+      "name": "Form",
+      "description": "Dynamic form with validation and data binding",
+      "icon": "ListBullets",
+      "configKey": "form"
+    },
+    {
+      "key": "table",
+      "name": "Data Table",
+      "description": "Interactive table with row actions and looping",
+      "icon": "Table",
+      "configKey": "table"
+    },
+    {
+      "key": "settings",
+      "name": "Settings",
+      "description": "Tabbed settings panel with switches and selections",
+      "icon": "Gear",
+      "configKey": "settings"
+    }
+  ],
+  "footer": {
+    "items": [
+      {
+        "label": "Fully declarative - no React code needed",
+        "colorClass": "bg-green-500"
+      },
+      {
+        "label": "Data binding with automatic updates",
+        "colorClass": "bg-blue-500"
+      },
+      {
+        "label": "Event handlers and actions",
+        "colorClass": "bg-purple-500"
+      }
+    ]
+  }
+}
