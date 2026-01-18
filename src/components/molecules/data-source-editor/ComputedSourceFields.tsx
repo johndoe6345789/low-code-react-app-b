@@ -6,9 +6,12 @@ import { DataSource } from '@/types/json-ui'
 import { X } from '@phosphor-icons/react'
 
 interface ComputedSourceFieldsCopy {
-  computeLabel: string
-  computePlaceholder: string
-  computeHelp: string
+  expressionLabel: string
+  expressionPlaceholder: string
+  expressionHelp: string
+  valueTemplateLabel: string
+  valueTemplatePlaceholder: string
+  valueTemplateHelp: string
   dependenciesLabel: string
   availableSourcesLabel: string
   emptyDependencies: string
@@ -38,22 +41,37 @@ export function ComputedSourceFields({
   return (
     <>
       <div className="space-y-2">
-        <Label>{copy.computeLabel}</Label>
+        <Label>{copy.expressionLabel}</Label>
         <Textarea
-          value={editingSource.compute?.toString() || ''}
+          value={editingSource.expression || ''}
           onChange={(e) => {
-            try {
-              const fn = new Function('data', `return (${e.target.value})`)()
-              onUpdateField('compute', fn)
-            } catch (err) {
-              // Invalid function
-            }
+            onUpdateField('expression', e.target.value)
           }}
-          placeholder={copy.computePlaceholder}
+          placeholder={copy.expressionPlaceholder}
           className="font-mono text-sm h-24"
         />
         <p className="text-xs text-muted-foreground">
-          {copy.computeHelp}
+          {copy.expressionHelp}
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <Label>{copy.valueTemplateLabel}</Label>
+        <Textarea
+          value={editingSource.valueTemplate ? JSON.stringify(editingSource.valueTemplate, null, 2) : ''}
+          onChange={(e) => {
+            try {
+              const template = JSON.parse(e.target.value)
+              onUpdateField('valueTemplate', template)
+            } catch (err) {
+              // Invalid JSON
+            }
+          }}
+          placeholder={copy.valueTemplatePlaceholder}
+          className="font-mono text-sm h-24"
+        />
+        <p className="text-xs text-muted-foreground">
+          {copy.valueTemplateHelp}
         </p>
       </div>
 

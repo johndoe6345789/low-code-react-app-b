@@ -35,7 +35,6 @@ export const ActionSchema = z.object({
   path: z.string().optional(),
   value: z.any().optional(),
   params: z.record(z.string(), z.any()).optional(),
-  compute: z.any().optional(),
   expression: z.string().optional(),
   valueTemplate: z.record(z.string(), z.any()).optional(),
   message: z.string().optional(),
@@ -45,14 +44,14 @@ export const ActionSchema = z.object({
 export const EventHandlerSchema = z.object({
   event: z.string(),
   actions: z.array(ActionSchema),
-  condition: z.any().optional(),
+  condition: z.string().optional(),
 })
 
 export const JSONEventDefinitionSchema = z.object({
   action: z.string().optional(),
   actions: z.array(ActionSchema).optional(),
   payload: z.record(z.string(), z.any()).optional(),
-  condition: z.any().optional(),
+  condition: z.string().optional(),
 })
 
 export const JSONEventMapSchema = z.record(

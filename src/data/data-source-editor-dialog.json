@@ -19,9 +19,12 @@
     "valuePlaceholder": "{\"key\": \"value\"}"
   },
   "computed": {
-    "computeLabel": "Compute Function",
-    "computePlaceholder": "(data) => data.source1 + data.source2",
-    "computeHelp": "Function that computes the value from other data sources",
+    "expressionLabel": "Expression",
+    "expressionPlaceholder": "data.source1",
+    "expressionHelp": "Expression that computes the value from other data sources",
+    "valueTemplateLabel": "Value Template (JSON)",
+    "valueTemplatePlaceholder": "{\n  \"total\": \"data.items.length\"\n}",
+    "valueTemplateHelp": "Template object with expressions for computed fields",
     "dependenciesLabel": "Dependencies",
     "availableSourcesLabel": "Available Sources",
     "emptyDependencies": "No data sources available. Create KV or static sources first."

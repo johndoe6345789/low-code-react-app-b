@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { DataSource } from '@/types/json-ui'
+import { evaluateExpression, evaluateTemplate } from '@/lib/json-ui/expression-evaluator'
 
 export function useDataSources(dataSources: DataSource[]) {
   const [data, setData] = useState<Record<string, any>>({})
@@ -54,8 +55,17 @@ export function useDataSources(dataSources: DataSource[]) {
     const result: Record<string, any> = {}
     
     computedSources.forEach((ds) => {
-      if (ds.compute && typeof ds.compute === 'function') {
-        result[ds.id] = ds.compute(data)
+      const evaluationContext = { data }
+      if (ds.expression) {
+        result[ds.id] = evaluateExpression(ds.expression, evaluationContext)
+        return
+      }
+      if (ds.valueTemplate) {
+        result[ds.id] = evaluateTemplate(ds.valueTemplate, evaluationContext)
+        return
+      }
+      if (ds.defaultValue !== undefined) {
+        result[ds.id] = ds.defaultValue
       }
     })
     

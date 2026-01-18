@@ -56,10 +56,7 @@ export function useActionExecutor(context: JSONUIContext) {
           const currentData = data[action.target] || []
           
           let newValue
-          if (action.compute) {
-            // Legacy: compute function
-            newValue = action.compute(data, event)
-          } else if (action.expression) {
+          if (action.expression) {
             // New: JSON expression
             newValue = evaluateExpression(action.expression, evaluationContext)
           } else if (action.valueTemplate) {
@@ -79,9 +76,7 @@ export function useActionExecutor(context: JSONUIContext) {
           if (!targetParts) return
           
           let newValue
-          if (action.compute) {
-            newValue = action.compute(data, event)
-          } else if (action.expression) {
+          if (action.expression) {
             newValue = evaluateExpression(action.expression, evaluationContext)
           } else if (action.valueTemplate) {
             newValue = evaluateTemplate(action.valueTemplate, evaluationContext)
@@ -102,9 +97,7 @@ export function useActionExecutor(context: JSONUIContext) {
           const currentData = data[action.target] || []
           
           let selectorValue
-          if (action.compute) {
-            selectorValue = action.compute(data, event)
-          } else if (action.expression) {
+          if (action.expression) {
             selectorValue = evaluateExpression(action.expression, evaluationContext)
           } else if (action.valueTemplate) {
             selectorValue = evaluateTemplate(action.valueTemplate, evaluationContext)
@@ -129,9 +122,7 @@ export function useActionExecutor(context: JSONUIContext) {
           if (!targetParts) return
           
           let newValue
-          if (action.compute) {
-            newValue = action.compute(data, event)
-          } else if (action.expression) {
+          if (action.expression) {
             newValue = evaluateExpression(action.expression, evaluationContext)
           } else if (action.valueTemplate) {
             newValue = evaluateTemplate(action.valueTemplate, evaluationContext)

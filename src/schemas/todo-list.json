@@ -23,7 +23,11 @@
     {
       "id": "stats",
       "type": "computed",
-      "compute": "computeTodoStats",
+      "valueTemplate": {
+        "total": "data.todos.length",
+        "completed": "data.todos.filter(completed === true).length",
+        "remaining": "data.todos.filter(completed === false).length"
+      },
       "dependencies": ["todos"]
     }
   ],
@@ -194,7 +198,7 @@
                               "id": "update-input",
                               "type": "set-value",
                               "target": "newTodo",
-                              "compute": "updateNewTodo"
+                              "expression": "event.target.value"
                             }
                           ]
                         }
@@ -212,7 +216,11 @@
                               "id": "add-todo",
                               "type": "create",
                               "target": "todos",
-                              "compute": "computeAddTodo"
+                              "valueTemplate": {
+                                "id": "Date.now()",
+                                "text": "data.newTodo",
+                                "completed": false
+                              }
                             },
                             {
                               "id": "clear-input",
@@ -227,7 +235,7 @@
                               "variant": "success"
                             }
                           ],
-                          "condition": "checkCanAddTodo"
+                          "condition": "data.newTodo.length > 0"
                         }
                       ]
                     }
