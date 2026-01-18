@@ -17,40 +17,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Skeleton as ShadcnSkeleton } from '@/components/ui/skeleton'
 import { Progress } from '@/components/ui/progress'
 import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Heading } from '@/components/atoms/Heading'
-import { Text } from '@/components/atoms/Text'
-import { TextArea } from '@/components/atoms/TextArea'
-import { List as ListComponent } from '@/components/atoms/List'
-import { Grid } from '@/components/atoms/Grid'
-import { Stack } from '@/components/atoms/Stack'
-import { Flex } from '@/components/atoms/Flex'
-import { Container } from '@/components/atoms/Container'
-import { Link } from '@/components/atoms/Link'
-import { Image } from '@/components/atoms/Image'
-import { Avatar as AtomAvatar } from '@/components/atoms/Avatar'
-import { Code } from '@/components/atoms/Code'
-import { Tag } from '@/components/atoms/Tag'
-import { Spinner } from '@/components/atoms/Spinner'
-import { Skeleton as AtomSkeleton } from '@/components/atoms/Skeleton'
-import { Slider } from '@/components/atoms/Slider'
-import { NumberInput } from '@/components/atoms/NumberInput'
-import { Radio } from '@/components/atoms/Radio'
-import { Alert as AtomAlert } from '@/components/atoms/Alert'
-import { InfoBox } from '@/components/atoms/InfoBox'
-import { EmptyState } from '@/components/atoms/EmptyState'
-import { Table as AtomTable } from '@/components/atoms/Table'
-import { KeyValue } from '@/components/atoms/KeyValue'
-import { StatCard } from '@/components/atoms/StatCard'
-import { StatusBadge } from '@/components/atoms/StatusBadge'
-import { DataCard } from '@/components/molecules/DataCard'
-import { SearchInput } from '@/components/molecules/SearchInput'
-import { ActionBar } from '@/components/molecules/ActionBar'
-import { AppBranding } from '@/components/molecules/AppBranding'
-import { LabelWithBadge } from '@/components/molecules/LabelWithBadge'
-import { EmptyEditorState } from '@/components/molecules/EmptyEditorState'
-import { LoadingFallback } from '@/components/molecules/LoadingFallback'
-import { LoadingState } from '@/components/molecules/LoadingState'
-import { NavigationGroupHeader } from '@/components/molecules/NavigationGroupHeader'
+import * as AtomComponents from '@/components/atoms'
+import * as MoleculeComponents from '@/components/molecules'
+import jsonComponentsRegistry from '../../../json-components-registry.json'
 import { 
   ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
   Funnel, Download, Upload, PencilSimple, Trash, Eye, EyeClosed, 
@@ -63,6 +32,42 @@ import {
 export interface UIComponentRegistry {
   [key: string]: ComponentType<any>
 }
+
+interface JsonRegistryEntry {
+  name?: string
+  type?: string
+  export?: string
+  source?: string
+}
+
+interface JsonComponentRegistry {
+  components?: JsonRegistryEntry[]
+}
+
+const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
+
+const buildRegistryFromNames = (
+  names: string[],
+  components: Record<string, ComponentType<any>>
+): UIComponentRegistry => {
+  return names.reduce<UIComponentRegistry>((registry, name) => {
+    const component = components[name]
+    if (component) {
+      registry[name] = component
+    }
+    return registry
+  }, {})
+}
+
+const jsonRegistryEntries = jsonRegistry.components ?? []
+const atomRegistryNames = jsonRegistryEntries
+  .filter((entry) => entry.source === 'atoms')
+  .map((entry) => entry.export ?? entry.name ?? entry.type)
+  .filter((name): name is string => Boolean(name))
+const moleculeRegistryNames = jsonRegistryEntries
+  .filter((entry) => entry.source === 'molecules')
+  .map((entry) => entry.export ?? entry.name ?? entry.type)
+  .filter((name): name is string => Boolean(name))
 
 export const primitiveComponents: UIComponentRegistry = {
   div: 'div' as any,
@@ -131,45 +136,15 @@ export const shadcnComponents: UIComponentRegistry = {
   AvatarImage,
 }
 
-export const atomComponents: UIComponentRegistry = {
-  Heading,
-  Text,
-  TextArea,
-  List: ListComponent,
-  Grid,
-  Stack,
-  Flex,
-  Container,
-  Link,
-  Image,
-  Avatar: AtomAvatar,
-  Code,
-  Tag,
-  Spinner,
-  Skeleton: AtomSkeleton,
-  Slider,
-  NumberInput,
-  Radio,
-  Alert: AtomAlert,
-  InfoBox,
-  EmptyState,
-  Table: AtomTable,
-  KeyValue,
-  StatCard,
-  StatusBadge,
-}
+export const atomComponents: UIComponentRegistry = buildRegistryFromNames(
+  atomRegistryNames,
+  AtomComponents as Record<string, ComponentType<any>>
+)
 
-export const moleculeComponents: UIComponentRegistry = {
-  DataCard,
-  SearchInput,
-  ActionBar,
-  AppBranding,
-  LabelWithBadge,
-  EmptyEditorState,
-  LoadingFallback,
-  LoadingState,
-  NavigationGroupHeader,
-}
+export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
+  moleculeRegistryNames,
+  MoleculeComponents as Record<string, ComponentType<any>>
+)
 
 export const iconComponents: UIComponentRegistry = {
   ArrowLeft,
