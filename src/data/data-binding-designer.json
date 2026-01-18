@@ -38,7 +38,7 @@
         "id": "displayName",
         "type": "computed",
         "dependencies": ["userProfile"],
-        "computeId": "displayName"
+        "expression": "data.userProfile.name"
       }
     ],
     "components": [

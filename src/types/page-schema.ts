@@ -30,7 +30,8 @@ export const DataSourceSchema = z.object({
   key: z.string().optional(),
   defaultValue: z.any().optional(),
   dependencies: z.array(z.string()).optional(),
-  compute: z.string().optional(),
+  expression: z.string().optional(),
+  valueTemplate: z.record(z.string(), z.any()).optional(),
 })
 
 export const ActionConfigSchema = z.object({

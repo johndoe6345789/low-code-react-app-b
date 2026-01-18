@@ -23,13 +23,17 @@
     {
       "id": "filteredUsers",
       "type": "computed",
-      "compute": "computeFilteredUsers",
+      "expression": "data.users",
       "dependencies": ["users", "filterQuery"]
     },
     {
       "id": "stats",
       "type": "computed",
-      "compute": "computeStats",
+      "valueTemplate": {
+        "total": "data.users.length",
+        "active": "data.users.filter(status === 'active').length",
+        "inactive": "data.users.filter(status === 'inactive').length"
+      },
       "dependencies": ["users"]
     }
   ],
@@ -193,7 +197,7 @@
                       "bindings": {
                         "children": {
                           "source": "filteredUsers",
-                          "transform": "transformFilteredUsers"
+                          "path": "length"
                         }
                       }
                     }
@@ -227,7 +231,7 @@
                               "id": "update-filter",
                               "type": "set-value",
                               "target": "filterQuery",
-                              "compute": "updateFilterQuery"
+                              "expression": "event.target.value"
                             }
                           ]
                         }
@@ -239,12 +243,75 @@
                   "id": "users-list",
                   "type": "div",
                   "props": { "className": "space-y-4" },
-                  "bindings": {
-                    "children": {
-                      "source": "filteredUsers",
-                      "transform": "transformUserList"
+                  "loop": {
+                    "source": "filteredUsers",
+                    "itemVar": "user",
+                    "indexVar": "userIndex"
+                  },
+                  "children": [
+                    {
+                      "id": "user-card",
+                      "type": "Card",
+                      "props": {
+                        "className": "bg-background/50 hover:bg-background/80 transition-colors border-l-4 border-l-primary"
+                      },
+                      "children": [
+                        {
+                          "id": "user-card-content",
+                          "type": "CardContent",
+                          "props": { "className": "pt-6" },
+                          "children": [
+                            {
+                              "id": "user-card-row",
+                              "type": "div",
+                              "props": { "className": "flex items-start justify-between" },
+                              "children": [
+                                {
+                                  "id": "user-card-info",
+                                  "type": "div",
+                                  "props": { "className": "flex-1" },
+                                  "children": [
+                                    {
+                                      "id": "user-card-name",
+                                      "type": "div",
+                                      "props": { "className": "font-semibold text-lg mb-1" },
+                                      "bindings": {
+                                        "children": { "source": "user", "path": "name" }
+                                      }
+                                    },
+                                    {
+                                      "id": "user-card-email",
+                                      "type": "div",
+                                      "props": { "className": "text-sm text-muted-foreground" },
+                                      "bindings": {
+                                        "children": { "source": "user", "path": "email" }
+                                      }
+                                    },
+                                    {
+                                      "id": "user-card-joined",
+                                      "type": "div",
+                                      "props": { "className": "text-xs text-muted-foreground mt-2" },
+                                      "bindings": {
+                                        "children": { "source": "user", "path": "joined" }
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "user-card-status",
+                                  "type": "Badge",
+                                  "props": { "variant": "secondary" },
+                                  "bindings": {
+                                    "children": { "source": "user", "path": "status" }
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
                     }
-                  }
+                  ]
                 }
               ]
             }
