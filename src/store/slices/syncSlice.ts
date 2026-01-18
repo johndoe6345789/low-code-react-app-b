@@ -9,6 +9,8 @@ import { db } from '@/lib/db'
 
 export type SyncStatus = 'idle' | 'syncing' | 'success' | 'error'
 
+const SYNCABLE_STORES = new Set(['files', 'models', 'components', 'workflows'])
+
 interface SyncState {
   status: SyncStatus
   lastSyncedAt: number | null
@@ -68,37 +70,50 @@ export const syncFromFlaskBulk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const data = await fetchAllFromFlask()
-
-      const validStoreNames = ['files', 'models', 'components', 'workflows'] as const
-      const remoteIdsByStore = new Map<(typeof validStoreNames)[number], Set<string>>()
+      const allowedStoreNames = new Set(['files', 'models', 'components', 'workflows'])
+      const serverIdsByStore = {
+        files: new Set<string>(),
+        models: new Set<string>(),
+        components: new Set<string>(),
+        workflows: new Set<string>(),
+      }
 
       for (const [key, value] of Object.entries(data)) {
-        const keyParts = key.split(':')
-        if (keyParts.length !== 2) continue
-
-        const [storeName, id] = keyParts
-
-        if (!validStoreNames.includes(storeName as (typeof validStoreNames)[number])) {
+        const [storeName, id] = key.split(':')
+        
+        if (SYNCABLE_STORES.has(storeName)) {
+          await db.put(storeName as any, value)
+        if (typeof key !== 'string') {
           continue
         }
 
-        if (!id) continue
+        const parts = key.split(':')
+        if (parts.length !== 2) {
+          continue
+        }
 
+        const [storeName, id] = parts
+        if (!storeName || !id) {
+          continue
+        }
+
+        if (!allowedStoreNames.has(storeName)) {
+          continue
+        }
+
+        serverIdsByStore[storeName as keyof typeof serverIdsByStore].add(id)
         await db.put(storeName as any, value)
-
-        const ids = remoteIdsByStore.get(storeName as any) ?? new Set<string>()
-        ids.add(id)
-        remoteIdsByStore.set(storeName as any, ids)
       }
 
-      for (const storeName of validStoreNames) {
-        const localItems = await db.getAll(storeName)
-        const remoteIds = remoteIdsByStore.get(storeName) ?? new Set<string>()
-
-        for (const item of localItems) {
-          if (!item?.id) continue
-          if (!remoteIds.has(item.id)) {
-            await db.delete(storeName, item.id)
+      // Explicit merge strategy: server is source of truth; delete local records missing from server response.
+      const storeNames = Array.from(allowedStoreNames)
+      for (const storeName of storeNames) {
+        const localRecords = await db.getAll(storeName as any)
+        for (const record of localRecords) {
+          const recordId = record?.id
+          const recordIdString = recordId == null ? '' : String(recordId)
+          if (!serverIdsByStore[storeName as keyof typeof serverIdsByStore].has(recordIdString)) {
+            await db.delete(storeName as any, recordId)
           }
         }
       }

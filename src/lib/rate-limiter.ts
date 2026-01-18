@@ -2,6 +2,7 @@ interface RateLimitConfig {
   maxRequests: number
   windowMs: number
   retryDelay: number
+  maxRetries?: number
 }
 
 interface RequestRecord {
@@ -9,14 +10,15 @@ interface RequestRecord {
   count: number
 }
 
-class RateLimiter {
+export class RateLimiter {
   private requests: Map<string, RequestRecord> = new Map()
   private config: RateLimitConfig
 
   constructor(config: RateLimitConfig = {
     maxRequests: 5,
     windowMs: 60000,
-    retryDelay: 2000
+    retryDelay: 2000,
+    maxRetries: 3
   }) {
     this.config = config
   }
@@ -26,49 +28,60 @@ class RateLimiter {
     fn: () => Promise<T>,
     priority: 'low' | 'medium' | 'high' = 'medium'
   ): Promise<T | null> {
-    const now = Date.now()
-    const record = this.requests.get(key)
+    const maxRetries = this.config.maxRetries ?? 3
+    let attempts = 0
 
-    if (record) {
-      const timeElapsed = now - record.timestamp
+    while (true) {
+      const now = Date.now()
+      const record = this.requests.get(key)
+      let isLimited = false
 
-      if (timeElapsed < this.config.windowMs) {
-        if (record.count >= this.config.maxRequests) {
-          console.warn(`Rate limit exceeded for ${key}. Try again in ${Math.ceil((this.config.windowMs - timeElapsed) / 1000)}s`)
-          
-          if (priority === 'high') {
-            await new Promise(resolve => setTimeout(resolve, this.config.retryDelay))
-            return this.throttle(key, fn, priority)
+      if (record) {
+        const timeElapsed = now - record.timestamp
+
+        if (timeElapsed < this.config.windowMs) {
+          if (record.count >= this.config.maxRequests) {
+            console.warn(`Rate limit exceeded for ${key}. Try again in ${Math.ceil((this.config.windowMs - timeElapsed) / 1000)}s`)
+            isLimited = true
+          } else {
+            record.count++
           }
-          
-          return null
+        } else {
+          this.requests.set(key, { timestamp: now, count: 1 })
         }
-        
-        record.count++
       } else {
         this.requests.set(key, { timestamp: now, count: 1 })
       }
-    } else {
-      this.requests.set(key, { timestamp: now, count: 1 })
-    }
 
-    this.cleanup()
+      this.cleanup()
 
-    try {
-      return await fn()
-    } catch (error) {
-      if (error instanceof Error && (
-        error.message.includes('502') || 
-        error.message.includes('Bad Gateway') ||
-        error.message.includes('429') ||
-        error.message.includes('rate limit')
-      )) {
-        console.error(`Gateway error for ${key}:`, error.message)
-        if (record) {
-          record.count = this.config.maxRequests
+      if (isLimited) {
+        if (priority === 'high' && attempts < maxRetries) {
+          attempts += 1
+          await new Promise(resolve => setTimeout(resolve, this.config.retryDelay))
+          continue
         }
+
+        return null
       }
-      throw error
+
+      try {
+        return await fn()
+      } catch (error) {
+        if (error instanceof Error && (
+          error.message.includes('502') || 
+          error.message.includes('Bad Gateway') ||
+          error.message.includes('429') ||
+          error.message.includes('rate limit')
+        )) {
+          console.error(`Gateway error for ${key}:`, error.message)
+          const updatedRecord = this.requests.get(key)
+          if (updatedRecord) {
+            updatedRecord.count = this.config.maxRequests
+          }
+        }
+        throw error
+      }
     }
   }
 
