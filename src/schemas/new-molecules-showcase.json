@@ -6,14 +6,53 @@
   },
   "dataSources": [
     {
+      "id": "appTitle",
+      "type": "static",
+      "defaultValue": "Nova Workspace"
+    },
+    {
+      "id": "appSubtitle",
+      "type": "static",
+      "defaultValue": "Operational Control Center"
+    },
+    {
       "id": "itemCount",
       "type": "static",
       "defaultValue": 42
     },
     {
+      "id": "overdueCount",
+      "type": "static",
+      "defaultValue": 3
+    },
+    {
       "id": "isLoading",
       "type": "static",
       "defaultValue": false
+    },
+    {
+      "id": "loadingMessage",
+      "type": "static",
+      "defaultValue": "Syncing workspace assets..."
+    },
+    {
+      "id": "loadingSize",
+      "type": "static",
+      "defaultValue": "lg"
+    },
+    {
+      "id": "fallbackMessage",
+      "type": "static",
+      "defaultValue": "Fetching editor state..."
+    },
+    {
+      "id": "navGroup",
+      "type": "static",
+      "defaultValue": {
+        "label": "Workspace",
+        "count": 12,
+        "isExpanded": true
+      }
     }
   ],
   "components": [
@@ -80,9 +119,9 @@
                     {
                       "id": "branding-demo",
                       "type": "AppBranding",
-                      "props": {
-                        "title": "My Amazing App",
-                        "subtitle": "Built with JSON-Powered Components"
+                      "bindings": {
+                        "title": { "source": "appTitle" },
+                        "subtitle": { "source": "appSubtitle" }
                       }
                     }
                   ]
@@ -118,7 +157,8 @@
                       "id": "label-badge-demo-1",
                       "type": "LabelWithBadge",
                       "props": {
-                        "label": "Total Items"
+                        "label": "Total Items",
+                        "badgeVariant": "secondary"
                       },
                       "bindings": {
                         "badge": { "source": "itemCount" }
@@ -128,9 +168,11 @@
                       "id": "label-badge-demo-2",
                       "type": "LabelWithBadge",
                       "props": {
-                        "label": "Warning",
-                        "badge": "3",
+                        "label": "Overdue Tasks",
                         "badgeVariant": "destructive"
+                      },
+                      "bindings": {
+                        "badge": { "source": "overdueCount" }
                       }
                     },
                     {
@@ -212,8 +254,8 @@
                         {
                           "id": "loading-fallback-demo",
                           "type": "LoadingFallback",
-                          "props": {
-                            "message": "Loading your data..."
+                          "bindings": {
+                            "message": { "source": "fallbackMessage" }
                           }
                         }
                       ]
@@ -251,16 +293,18 @@
                       "id": "loading-state-demo",
                       "type": "LoadingState",
                       "props": {
-                        "message": "Processing request...",
                         "size": "sm"
+                      },
+                      "bindings": {
+                        "message": { "source": "loadingMessage" }
                       }
                     },
                     {
                       "id": "loading-state-demo-lg",
                       "type": "LoadingState",
-                      "props": {
-                        "message": "Syncing workspace...",
-                        "size": "lg"
+                      "bindings": {
+                        "message": { "source": "loadingMessage" },
+                        "size": { "source": "loadingSize" }
                       }
                     }
                   ]
@@ -295,10 +339,10 @@
                     {
                       "id": "nav-header-demo",
                       "type": "NavigationGroupHeader",
-                      "props": {
-                        "label": "Components",
-                        "count": 24,
-                        "isExpanded": true
+                      "bindings": {
+                        "label": { "source": "navGroup", "path": "label" },
+                        "count": { "source": "navGroup", "path": "count" },
+                        "isExpanded": { "source": "navGroup", "path": "isExpanded" }
                       }
                     }
                   ]
