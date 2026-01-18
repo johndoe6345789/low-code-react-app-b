@@ -3,13 +3,7 @@ import { UIComponent, EventHandler } from './schema'
 import { getUIComponent } from './component-registry'
 import { resolveDataBinding, evaluateCondition, mergeClassNames } from './utils'
 import { cn } from '@/lib/utils'
-
-export interface JSONUIRendererProps {
-  component: UIComponent
-  dataMap?: Record<string, any>
-  onAction?: (handler: EventHandler, event?: any) => void
-  context?: Record<string, any>
-}
+import type { JSONUIRendererProps, JSONFormRendererProps } from './types'
 
 export function JSONUIRenderer({ 
   component, 
@@ -123,16 +117,9 @@ export function JSONUIRenderer({
   )
 }
 
-export interface JSONFormRendererProps {
-  formData: any
-  fields: any[]
-  onSubmit: (data: any) => void
-  onChange?: (data: any) => void
-}
-
 export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONFormRendererProps) {
-  const handleFieldChange = useCallback((fieldName: string, value: any) => {
-    const newData = { ...formData, [fieldName]: value }
+  const handleFieldChange = useCallback((fieldName: string, value: unknown) => {
+    const newData: Record<string, unknown> = { ...formData, [fieldName]: value }
     onChange?.(newData)
   }, [formData, onChange])
 
@@ -152,7 +139,7 @@ export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONF
             placeholder: field.placeholder,
             required: field.required,
             type: field.type,
-            value: formData[field.name] || field.defaultValue || '',
+            value: formData[field.name] ?? field.defaultValue ?? '',
           },
           events: {
             onChange: {
@@ -175,7 +162,8 @@ export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONF
               dataMap={{}}
               onAction={(handler, event) => {
                 if (handler.action === 'field-change') {
-                  handleFieldChange(field.name, event.target.value)
+                  const target = (event as { target?: { value?: unknown } } | null)?.target
+                  handleFieldChange(field.name, target?.value ?? '')
                 }
               }}
             />

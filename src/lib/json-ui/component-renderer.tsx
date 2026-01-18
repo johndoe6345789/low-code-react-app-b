@@ -1,14 +1,9 @@
 import { createElement, useMemo } from 'react'
-import { UIComponent, Binding } from '@/types/json-ui'
+import { Binding } from '@/types/json-ui'
 import { getUIComponent } from './component-registry'
+import type { ComponentRendererProps } from './types'
 
-interface ComponentRendererProps {
-  component: UIComponent
-  data: Record<string, any>
-  onEvent?: (componentId: string, event: string, eventData: any) => void
-}
-
-function resolveBinding(binding: Binding, data: Record<string, any>): any {
+function resolveBinding(binding: Binding, data: Record<string, unknown>): unknown {
   let value = data[binding.source]
   
   if (binding.path) {
@@ -42,7 +37,7 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
     
     if (component.events && onEvent) {
       component.events.forEach(handler => {
-        resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: any) => {
+        resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
           if (!handler.condition || handler.condition(data)) {
             onEvent(component.id, handler.event, e)
           }

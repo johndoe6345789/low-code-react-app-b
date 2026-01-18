@@ -1,13 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useKV } from '@/hooks/use-kv'
-
-export interface DataSourceConfig {
-  type: 'kv' | 'api' | 'computed' | 'static'
-  key?: string
-  url?: string
-  defaultValue?: any
-  transform?: (data: any) => any
-}
+import type { DataSourceConfig } from './types'
 
 export function useJSONDataSource(id: string, config: DataSourceConfig) {
   const [kvValue, setKVValue] = useKV(config.key || id, config.defaultValue)
@@ -82,19 +75,17 @@ export function useJSONDataSource(id: string, config: DataSourceConfig) {
 }
 
 export function useJSONDataSources(sources: Record<string, DataSourceConfig>) {
-  const [dataMap, setDataMap] = useState<Record<string, any>>({})
+  const [dataMap, setDataMap] = useState<Record<string, unknown>>({})
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({})
   const [errorMap, setErrorMap] = useState<Record<string, Error | null>>({})
 
   const sourceIds = Object.keys(sources)
 
-  const updateData = useCallback((id: string, value: any) => {
+  const updateData = useCallback((id: string, value: unknown) => {
     setDataMap((prev) => ({ ...prev, [id]: value }))
   }, [])
 
-  const getData = useCallback((id: string) => {
-    return dataMap[id]
-  }, [dataMap])
+  const getData = useCallback((id: string) => dataMap[id], [dataMap])
 
   useEffect(() => {
     sourceIds.forEach((id) => {
