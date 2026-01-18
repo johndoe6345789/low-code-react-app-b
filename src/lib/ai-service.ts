@@ -2,6 +2,101 @@
 
 import { PrismaModel, ComponentNode, ThemeConfig, ProjectFile } from '@/types/project'
 import { ProtectedLLMService } from './protected-llm-service'
+import { toast } from 'sonner'
+import { z } from 'zod'
+
+const componentNodeSchema: z.ZodType<ComponentNode> = z.lazy(() => z.object({
+  id: z.string(),
+  type: z.string(),
+  name: z.string(),
+  props: z.record(z.any()),
+  children: z.array(componentNodeSchema)
+}))
+
+const prismaFieldSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.string(),
+  isRequired: z.boolean(),
+  isUnique: z.boolean(),
+  isArray: z.boolean(),
+  defaultValue: z.string().optional(),
+  relation: z.string().optional()
+})
+
+const prismaModelSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  fields: z.array(prismaFieldSchema)
+})
+
+const themeSchema = z.object({
+  primaryColor: z.string(),
+  secondaryColor: z.string(),
+  errorColor: z.string(),
+  warningColor: z.string(),
+  successColor: z.string(),
+  fontFamily: z.string(),
+  fontSize: z.object({
+    small: z.number(),
+    medium: z.number(),
+    large: z.number()
+  }),
+  spacing: z.number(),
+  borderRadius: z.number()
+})
+
+const projectFileSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  path: z.string(),
+  content: z.string(),
+  language: z.string()
+})
+
+const componentResponseSchema = z.object({ component: componentNodeSchema })
+const prismaModelResponseSchema = z.object({ model: prismaModelSchema })
+const themeResponseSchema = z.object({ theme: themeSchema })
+const suggestFieldsResponseSchema = z.object({ fields: z.array(z.string()) })
+const completeAppResponseSchema = z.object({
+  files: z.array(projectFileSchema),
+  models: z.array(prismaModelSchema),
+  theme: themeSchema
+})
+
+const parseAndValidateJson = <T,>(
+  result: string,
+  schema: z.ZodType<T>,
+  context: string,
+  toastMessage: string
+): T | null => {
+  let parsed: unknown
+
+  try {
+    parsed = JSON.parse(result)
+  } catch (error) {
+    console.error('AI response JSON parse failed', {
+      context,
+      error: error instanceof Error ? error.message : String(error),
+      rawResponse: result
+    })
+    toast.error(toastMessage)
+    return null
+  }
+
+  const validation = schema.safeParse(parsed)
+  if (!validation.success) {
+    console.error('AI response validation failed', {
+      context,
+      issues: validation.error.issues,
+      rawResponse: parsed
+    })
+    toast.error(toastMessage)
+    return null
+  }
+
+  return validation.data
+}
 
 export class AIService {
   static async generateComponent(description: string): Promise<ComponentNode | null> {
@@ -29,8 +124,13 @@ Make sure to use appropriate Material UI components and props. Keep the structur
       )
 
       if (result) {
-        const parsed = JSON.parse(result)
-        return parsed.component
+        const parsed = parseAndValidateJson(
+          result,
+          componentResponseSchema,
+          'generate-component',
+          'AI component response was invalid. Please retry or clarify your description.'
+        )
+        return parsed ? parsed.component : null
       }
       return null
     } catch (error) {
@@ -80,8 +180,13 @@ Return a valid JSON object with a single property "model" containing the model s
       )
 
       if (result) {
-        const parsed = JSON.parse(result)
-        return parsed.model
+        const parsed = parseAndValidateJson(
+          result,
+          prismaModelResponseSchema,
+          'generate-model',
+          'AI model response was invalid. Please retry or describe the model differently.'
+        )
+        return parsed ? parsed.model : null
       }
       return null
     } catch (error) {
@@ -172,8 +277,13 @@ Return a valid JSON object with a single property "theme" containing:
       )
 
       if (result) {
-        const parsed = JSON.parse(result)
-        return parsed.theme
+        const parsed = parseAndValidateJson(
+          result,
+          themeResponseSchema,
+          'generate-theme',
+          'AI theme response was invalid. Please retry or specify the theme requirements.'
+        )
+        return parsed ? parsed.theme : null
       }
       return null
     } catch (error) {
@@ -202,8 +312,13 @@ Suggest 3-5 common fields that would be useful for this model type. Use camelCas
       )
 
       if (result) {
-        const parsed = JSON.parse(result)
-        return parsed.fields
+        const parsed = parseAndValidateJson(
+          result,
+          suggestFieldsResponseSchema,
+          'suggest-fields',
+          'AI field suggestions were invalid. Please retry with a clearer model name.'
+        )
+        return parsed ? parsed.fields : null
       }
       return null
     } catch (error) {
@@ -284,7 +399,12 @@ Create 2-4 essential files for the app structure. Include appropriate Prisma mod
       )
 
       if (result) {
-        return JSON.parse(result)
+        return parseAndValidateJson(
+          result,
+          completeAppResponseSchema,
+          'generate-app',
+          'AI app generation response was invalid. Please retry with more detail.'
+        )
       }
       return null
     } catch (error) {
