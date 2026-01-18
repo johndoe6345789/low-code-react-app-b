@@ -5,8 +5,8 @@ export function AgentsPromptEngineering() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Prompt Engineering</CardTitle>
-        <CardDescription>How we optimize AI interactions</CardDescription>
+        <CardTitle>{agentsData.promptEngineeringTitle}</CardTitle>
+        <CardDescription>{agentsData.promptEngineeringDescription}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {agentsData.promptEngineering.map((item) => (

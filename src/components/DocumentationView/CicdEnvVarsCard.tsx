@@ -5,8 +5,8 @@ export function CicdEnvVarsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Environment Variables</CardTitle>
-        <CardDescription>Required configuration for CI/CD platforms</CardDescription>
+        <CardTitle>{cicdData.envVarsTitle}</CardTitle>
+        <CardDescription>{cicdData.envVarsDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -14,9 +14,9 @@ export function CicdEnvVarsCard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-2 pr-4 font-semibold">Variable</th>
-                  <th className="text-left py-2 pr-4 font-semibold">Description</th>
-                  <th className="text-left py-2 font-semibold">Required</th>
+                  {cicdData.envVarsColumns.map((column) => (
+                    <th key={column} className="text-left py-2 pr-4 font-semibold">{column}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="text-muted-foreground">

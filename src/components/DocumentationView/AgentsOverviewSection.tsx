@@ -14,7 +14,7 @@ export function AgentsOverviewSection() {
       <Separator />
 
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold">AI Service Architecture</h2>
+        <h2 className="text-2xl font-semibold">{agentsData.overviewTitle}</h2>
         <p className="text-foreground/90 leading-relaxed">{agentsData.overview}</p>
       </div>
     </div>

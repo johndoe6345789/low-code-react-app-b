@@ -6,8 +6,8 @@ export function SassComponentsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Available Components</CardTitle>
-        <CardDescription>Custom Material UI components built with Sass</CardDescription>
+        <CardTitle>{sassData.componentsTitle}</CardTitle>
+        <CardDescription>{sassData.componentsDescription}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-4 md:grid-cols-2">

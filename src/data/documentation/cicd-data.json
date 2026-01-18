@@ -1,6 +1,22 @@
 {
   "title": "CI/CD Guide",
   "subtitle": "Complete deployment automation for multiple platforms",
+  "overviewTitle": "Overview",
+  "platformsTitle": "Available Configurations",
+  "platformsFeaturesLabel": "Key Features:",
+  "pipelineTitle": "Pipeline Stages",
+  "dockerTitle": "Docker Configuration",
+  "dockerDescription": "Containerization for production deployment",
+  "dockerFilesTitle": "Files Included",
+  "dockerCommandsTitle": "Docker Commands",
+  "dockerFeaturesTitle": "Features",
+  "envVarsTitle": "Environment Variables",
+  "envVarsDescription": "Required configuration for CI/CD platforms",
+  "envVarsColumns": ["Variable", "Description", "Required"],
+  "branchStrategyTitle": "Branch Strategy",
+  "quickStartTitle": "Quick Start",
+  "bestPracticesTitle": "Best Practices",
+  "resourcesTitle": "Additional Resources",
   "overview": "CodeForge includes production-ready CI/CD configurations for GitHub Actions, GitLab CI, Jenkins, and CircleCI. Each pipeline includes linting, testing, security scanning, Docker image building, and automated deployment workflows.",
   "platforms": [
     {

@@ -8,7 +8,7 @@ export function AgentsFutureEnhancements() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Package size={20} weight="duotone" />
-          Future AI Enhancements
+          {agentsData.futureEnhancementsTitle}
         </CardTitle>
       </CardHeader>
       <CardContent>

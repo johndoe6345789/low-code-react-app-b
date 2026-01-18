@@ -2,25 +2,22 @@ import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
-import {
-  BookOpen,
-  FileCode,
-  GitBranch,
-  MagnifyingGlass,
-  GitBranch,
-  FileCode,
-  Sparkle,
-  CheckCircle
-} from '@phosphor-icons/react'
-import { AIFeatureCard } from './DocumentationView/AIFeatureCard'
-import { AgentFileItem } from './DocumentationView/AgentFileItem'
-import { AnimationItem } from './DocumentationView/AnimationItem'
-import { CICDPlatformItem } from './DocumentationView/CICDPlatformItem'
-import { FeatureItem } from './DocumentationView/FeatureItem'
-import { IntegrationPoint } from './DocumentationView/IntegrationPoint'
-import { PipelineStageCard } from './DocumentationView/PipelineStageCard'
-import { RoadmapItem } from './DocumentationView/RoadmapItem'
-import { SassComponentItem } from './DocumentationView/SassComponentItem'
+import { BookOpen, GitBranch, MagnifyingGlass, MapPin, Sparkle, PaintBrush, Rocket } from '@phosphor-icons/react'
+import { AgentsTab } from './DocumentationView/AgentsTab'
+import { CicdTab } from './DocumentationView/CicdTab'
+import { PwaTab } from './DocumentationView/PwaTab'
+import { ReadmeTab } from './DocumentationView/ReadmeTab'
+import { RoadmapTab } from './DocumentationView/RoadmapTab'
+import { SassTab } from './DocumentationView/SassTab'
+
+const tabs = [
+  { value: 'readme', label: 'README', icon: <BookOpen size={16} /> },
+  { value: 'roadmap', label: 'Roadmap', icon: <MapPin size={16} /> },
+  { value: 'agents', label: 'Agents', icon: <Sparkle size={16} /> },
+  { value: 'pwa', label: 'PWA', icon: <Rocket size={16} /> },
+  { value: 'sass', label: 'Sass', icon: <PaintBrush size={16} /> },
+  { value: 'cicd', label: 'CI/CD', icon: <GitBranch size={16} /> }
+]
 
 export function DocumentationView() {
   const [activeTab, setActiveTab] = useState('readme')

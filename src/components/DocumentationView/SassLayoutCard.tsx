@@ -7,8 +7,8 @@ export function SassLayoutCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Layout Components</CardTitle>
-        <CardDescription>Sass-powered layout utilities</CardDescription>
+        <CardTitle>{sassData.layoutTitle}</CardTitle>
+        <CardDescription>{sassData.layoutDescription}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         {sassData.layoutComponents.map((item) => (

@@ -7,12 +7,12 @@ export function CicdDockerCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Docker Configuration</CardTitle>
-        <CardDescription>Containerization for production deployment</CardDescription>
+        <CardTitle>{cicdData.dockerTitle}</CardTitle>
+        <CardDescription>{cicdData.dockerDescription}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <h3 className="font-semibold">Files Included</h3>
+          <h3 className="font-semibold">{cicdData.dockerFilesTitle}</h3>
           <div className="space-y-2 ml-4">
             {cicdData.docker.files.map((file) => (
               <div key={file.name} className="space-y-1">
@@ -26,14 +26,14 @@ export function CicdDockerCard() {
         <Separator />
 
         <div className="space-y-2">
-          <h3 className="font-semibold">Docker Commands</h3>
+          <h3 className="font-semibold">{cicdData.dockerCommandsTitle}</h3>
           <pre className="custom-mui-code-block">{cicdData.docker.commands}</pre>
         </div>
 
         <Separator />
 
         <div className="space-y-2">
-          <h3 className="font-semibold">Features</h3>
+          <h3 className="font-semibold">{cicdData.dockerFeaturesTitle}</h3>
           <ul className="space-y-2 text-sm">
             {cicdData.docker.features.map((feature) => (
               <li key={feature} className="flex items-start gap-2">

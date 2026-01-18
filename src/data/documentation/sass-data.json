@@ -1,6 +1,18 @@
 {
   "title": "Sass Styles Guide",
   "subtitle": "Custom Material UI components with Sass",
+  "overviewTitle": "Overview",
+  "fileStructureTitle": "File Structure",
+  "componentsTitle": "Available Components",
+  "componentsDescription": "Custom Material UI components built with Sass",
+  "layoutTitle": "Layout Components",
+  "layoutDescription": "Sass-powered layout utilities",
+  "utilitiesTitle": "Sass Utilities & Mixins",
+  "utilitiesDescription": "Reusable functions for custom styling",
+  "animationsTitle": "Animation Classes",
+  "animationsDescription": "Pre-built animation utilities",
+  "quickStartTitle": "Quick Start Example",
+  "bestPracticesTitle": "Best Practices",
   "overview": "CodeForge includes a comprehensive Sass-based styling system for non-standard Material UI components. This system provides pre-built components, utilities, mixins, and animations that extend beyond the standard Material UI component library.",
   "fileStructure": [
     {

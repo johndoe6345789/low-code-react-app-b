@@ -8,7 +8,7 @@ export function SassBestPracticesCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Target size={20} weight="duotone" />
-          Best Practices
+          {sassData.bestPracticesTitle}
         </CardTitle>
       </CardHeader>
       <CardContent>

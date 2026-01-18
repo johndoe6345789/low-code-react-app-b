@@ -6,12 +6,13 @@ export function CicdPlatformsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Available Configurations</CardTitle>
+        <CardTitle>{cicdData.platformsTitle}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {cicdData.platforms.map((platform) => (
           <CICDPlatformItem
             key={platform.name}
+            featureLabel={cicdData.platformsFeaturesLabel}
             name={platform.name}
             file={platform.file}
             description={platform.description}

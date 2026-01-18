@@ -5,14 +5,12 @@ import pwaData from '@/data/documentation/pwa-data.json'
 export function PwaSettingsCard() {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">PWA Settings</h2>
-      <p className="text-foreground/90 leading-relaxed">
-        Navigate to the <strong>PWA</strong> tab to manage all Progressive Web App features:
-      </p>
+      <h2 className="text-2xl font-semibold">{pwaData.settingsTitle}</h2>
+      <p className="text-foreground/90 leading-relaxed">{pwaData.settingsDescription}</p>
 
       <Card>
         <CardHeader>
-          <CardTitle>Available Controls</CardTitle>
+          <CardTitle>{pwaData.settingsCardTitle}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {pwaData.settings.map((setting, index) => (

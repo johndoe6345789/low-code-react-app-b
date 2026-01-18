@@ -8,7 +8,7 @@ export function CicdResourcesCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Package size={20} weight="duotone" />
-          Additional Resources
+          {cicdData.resourcesTitle}
         </CardTitle>
       </CardHeader>
       <CardContent>

@@ -6,8 +6,8 @@ export function AgentsIntegrationPoints() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>AI Integration Points</CardTitle>
-        <CardDescription>Features enhanced by AI capabilities</CardDescription>
+        <CardTitle>{agentsData.integrationPointsTitle}</CardTitle>
+        <CardDescription>{agentsData.integrationPointsDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">

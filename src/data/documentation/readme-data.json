@@ -1,6 +1,17 @@
 {
   "title": "CodeForge",
   "subtitle": "Low-Code Next.js App Builder with AI",
+  "sections": {
+    "overviewTitle": "Overview",
+    "featuresTitle": "Key Features",
+    "gettingStartedTitle": "Getting Started",
+    "aiFeaturesTitle": "AI-Powered Features",
+    "aiFeaturesDescription": "CodeForge integrates OpenAI across every designer to accelerate development:",
+    "techStackTitle": "Technology Stack",
+    "techStackFrontendTitle": "Frontend",
+    "techStackBackendTitle": "Backend & Tools",
+    "proTipsTitle": "Pro Tips"
+  },
   "overview": "CodeForge is a comprehensive visual low-code platform for generating production-ready Next.js applications. It combines the power of visual designers with direct code editing, AI-powered generation, and a complete full-stack development toolkit.",
   "features": [
     {

@@ -8,7 +8,7 @@ export function PwaProTipsCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Lightbulb size={20} weight="duotone" className="text-accent" />
-          Pro Tips
+          {pwaData.proTipsTitle}
         </CardTitle>
       </CardHeader>
       <CardContent>

@@ -6,13 +6,14 @@ export function AgentsCoreServices() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Core AI Services</CardTitle>
-        <CardDescription>Primary modules handling AI operations</CardDescription>
+        <CardTitle>{agentsData.coreServicesTitle}</CardTitle>
+        <CardDescription>{agentsData.coreServicesDescription}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {agentsData.coreServices.map((service) => (
           <AgentFileItem
             key={service.filename}
+            featureLabel={agentsData.coreServicesFeaturesLabel}
             filename={service.filename}
             path={service.path}
             description={service.description}

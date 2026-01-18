@@ -7,8 +7,8 @@ export function SassUtilitiesCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sass Utilities & Mixins</CardTitle>
-        <CardDescription>Reusable functions for custom styling</CardDescription>
+        <CardTitle>{sassData.utilitiesTitle}</CardTitle>
+        <CardDescription>{sassData.utilitiesDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
