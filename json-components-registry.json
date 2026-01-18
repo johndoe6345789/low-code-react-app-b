@@ -1170,7 +1170,11 @@
       "description": "Action button toolbar",
       "status": "maybe-json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: stateless layout molecule; bindings/events supported in json-ui component types."
+      }
     },
     {
       "type": "AppBranding",
@@ -1348,7 +1352,11 @@
       "description": "Custom data display card",
       "status": "maybe-json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: presentational molecule with conditional rendering only; bindings supported in json-ui component types."
+      }
     },
     {
       "type": "DetailRow",
