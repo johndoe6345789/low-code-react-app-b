@@ -645,6 +645,19 @@ CodeForge is a comprehensive low-code development platform for building producti
 - [ ] Migration guides
 - [ ] Best practices guide
 
+#### Molecule/Organism Refactors
+- [ ] Identify 3-5 molecule components that can be expressed as JSON schemas with hooks, types, and actions (target: ComponentTree, PropertyEditor, DataSourceCard, SchemaEditorCanvas, NavigationMenu).
+- [ ] Create JSON schemas for selected molecules and wire them through `JSONUIRenderer` while keeping existing props contracts stable.
+- [ ] Convert at least one organism (e.g., DataSourceManager) into JSON-driven layout with nested molecule schemas.
+- [ ] Document the JSON schema patterns for molecule/organism composition (bindings, events, actions) with real examples.
+
+#### JSON UI Framework Improvements
+- [ ] Fix conditional rendering to honor `conditional.then` when conditions pass.
+- [ ] Fix loop rendering to avoid self-recursion and render loop children templates.
+- [ ] Add data binding support for dot-path string bindings and loop context variables.
+- [ ] Apply data binding transforms consistently (support `transform` in JSON schemas).
+- [ ] Align JSON UI event/action typings across `src/lib/json-ui` and `src/types/json-ui.ts`.
+
 #### Security
 - [ ] Regular dependency updates
 - [ ] Security audit with npm audit
