@@ -1500,7 +1500,11 @@
       "canHaveChildren": true,
       "description": "Chart component",
       "status": "supported",
-      "source": "ui"
+      "source": "ui",
+      "load": {
+        "path": "@/components/ui/chart/chart-container.tsx",
+        "export": "ChartContainer"
+      }
     },
     {
       "type": "DataList",
@@ -2047,7 +2051,11 @@
       "description": "JSONUIShowcase organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "load": {
+        "path": "@/components/JSONUIShowcase.tsx",
+        "export": "JSONUIShowcase"
+      }
     },
     {
       "type": "Kbd",
@@ -2104,7 +2112,11 @@
       "canHaveChildren": true,
       "description": "PageHeader component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "load": {
+        "path": "@/components/atoms/PageHeader.tsx",
+        "export": "BasicPageHeader"
+      }
     },
     {
       "type": "PageHeaderContent",
@@ -2187,7 +2199,11 @@
       "canHaveChildren": true,
       "description": "Resizable component",
       "status": "supported",
-      "source": "ui"
+      "source": "ui",
+      "load": {
+        "path": "@/components/ui/resizable.tsx",
+        "export": "ResizablePanelGroup"
+      }
     },
     {
       "type": "SaveIndicator",
@@ -2291,7 +2307,11 @@
       "canHaveChildren": false,
       "description": "Search input with icon",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "load": {
+        "path": "@/components/atoms/SearchInput.tsx",
+        "export": "BasicSearchInput"
+      }
     },
     {
       "type": "Sheet",

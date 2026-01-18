@@ -1,7 +1,6 @@
 import { ComponentType } from 'react'
 import * as PhosphorIcons from '@phosphor-icons/react'
 import jsonComponentsRegistry from '../../../json-components-registry.json'
-import { JSONUIShowcase } from '@/components/JSONUIShowcase'
 
 export interface UIComponentRegistry {
   [key: string]: ComponentType<any>
@@ -17,6 +16,7 @@ interface JsonRegistryEntry {
   wrapperComponent?: string
   wrapperFor?: string
   load?: {
+    path?: string
     export?: string
   }
   deprecated?: DeprecatedComponentInfo
@@ -94,6 +94,10 @@ const moleculeModules = import.meta.glob('@/components/molecules/*.tsx', { eager
 const organismModules = import.meta.glob('@/components/organisms/*.tsx', { eager: true })
 const uiModules = import.meta.glob('@/components/ui/**/*.{ts,tsx}', { eager: true })
 const wrapperModules = import.meta.glob('@/lib/json-ui/wrappers/*.tsx', { eager: true })
+const explicitModules = import.meta.glob(
+  ['@/components/**/*.tsx', '@/lib/json-ui/wrappers/**/*.tsx'],
+  { eager: true }
+)
 
 const atomComponentMap = buildComponentMapFromModules(atomModules)
 const moleculeComponentMap = buildComponentMapFromModules(moleculeModules)
@@ -102,28 +106,26 @@ const uiComponentMap = buildComponentMapFromModules(uiModules)
 const wrapperComponentMap = buildComponentMapFromModules(wrapperModules)
 const iconComponentMap = buildComponentMapFromExports(PhosphorIcons)
 
-const sourceAliases: Record<string, Record<string, string>> = {
-  atoms: {
-    PageHeader: 'BasicPageHeader',
-    SearchInput: 'BasicSearchInput',
-  },
-  molecules: {},
-  organisms: {},
-  ui: {
-    Chart: 'ChartContainer',
-    Resizable: 'ResizablePanelGroup',
-  },
-  wrappers: {},
-}
-
-const explicitComponentAllowlist: Record<string, ComponentType<any>> = {
-  JSONUIShowcase,
+const resolveComponentFromExplicitPath = (
+  entry: JsonRegistryEntry,
+  entryExportName: string
+): ComponentType<any> | undefined => {
+  if (!entry.load?.path) {
+    return undefined
+  }
+  const moduleExports = explicitModules[entry.load.path]
+  if (!moduleExports || typeof moduleExports !== 'object') {
+    return undefined
+  }
+  const explicitComponents = buildComponentMapFromExports(
+    moduleExports as Record<string, unknown>
+  )
+  return explicitComponents[entryExportName]
 }
 
 const buildRegistryFromEntries = (
   source: string,
-  componentMap: Record<string, ComponentType<any>>,
-  aliases: Record<string, string> = {}
+  componentMap: Record<string, ComponentType<any>>
 ): UIComponentRegistry => {
   return jsonRegistryEntries
     .filter((entry) => entry.source === source)
@@ -133,11 +135,9 @@ const buildRegistryFromEntries = (
       if (!entryKey || !entryExportName) {
         return registry
       }
-      const aliasName = aliases[entryKey]
       const component =
-        componentMap[entryExportName] ??
-        (aliasName ? componentMap[aliasName] : undefined) ??
-        explicitComponentAllowlist[entryKey]
+        resolveComponentFromExplicitPath(entry, entryExportName) ??
+        componentMap[entryExportName]
       if (component) {
         registry[entryKey] = component
       }
@@ -166,32 +166,27 @@ export const primitiveComponents: UIComponentRegistry = {
 
 export const shadcnComponents: UIComponentRegistry = buildRegistryFromEntries(
   'ui',
-  uiComponentMap,
-  sourceAliases.ui
+  uiComponentMap
 )
 
 export const atomComponents: UIComponentRegistry = buildRegistryFromEntries(
   'atoms',
-  atomComponentMap,
-  sourceAliases.atoms
+  atomComponentMap
 )
 
 export const moleculeComponents: UIComponentRegistry = buildRegistryFromEntries(
   'molecules',
-  moleculeComponentMap,
-  sourceAliases.molecules
+  moleculeComponentMap
 )
 
 export const organismComponents: UIComponentRegistry = buildRegistryFromEntries(
   'organisms',
-  organismComponentMap,
-  sourceAliases.organisms
+  organismComponentMap
 )
 
 export const jsonWrapperComponents: UIComponentRegistry = buildRegistryFromEntries(
   'wrappers',
-  wrapperComponentMap,
-  sourceAliases.wrappers
+  wrapperComponentMap
 )
 
 export const iconComponents: UIComponentRegistry = buildRegistryFromEntries(
