@@ -1,6 +1,6 @@
 import { UIComponent } from '@/types/json-ui'
 import { getUIComponent } from '@/lib/json-ui/component-registry'
-import { getComponentDef } from '@/lib/component-definitions'
+import { getComponentDef } from '@/lib/component-definition-utils'
 import { cn } from '@/lib/utils'
 import { createElement, ReactNode } from 'react'
 
