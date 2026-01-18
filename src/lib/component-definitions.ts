@@ -7,6 +7,23 @@ export interface ComponentDefinition {
   icon: string
   defaultProps?: Record<string, any>
   canHaveChildren?: boolean
+  props?: ComponentPropDefinition[]
+  events?: ComponentEventDefinition[]
+}
+
+export interface ComponentPropDefinition {
+  name: string
+  type: string
+  description: string
+  required?: boolean
+  defaultValue?: string
+  options?: string[]
+  supportsBinding?: boolean
+}
+
+export interface ComponentEventDefinition {
+  name: string
+  description: string
 }
 
 export const componentDefinitions: ComponentDefinition[] = [
@@ -255,6 +272,107 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'feedback',
     icon: 'Circle',
     defaultProps: { status: 'active', children: 'Active' }
+  },
+  {
+    type: 'ErrorBadge',
+    label: 'Error Badge',
+    category: 'feedback',
+    icon: 'WarningCircle',
+    defaultProps: { count: 3, variant: 'destructive', size: 'md' },
+    props: [
+      {
+        name: 'count',
+        type: 'number',
+        description: 'Number of errors to display. Hidden when set to 0.',
+        required: true,
+        supportsBinding: true,
+      },
+      {
+        name: 'variant',
+        type: 'string',
+        description: 'Visual variant for the badge.',
+        defaultValue: 'destructive',
+        options: ['default', 'destructive'],
+      },
+      {
+        name: 'size',
+        type: 'string',
+        description: 'Badge size.',
+        defaultValue: 'md',
+        options: ['sm', 'md'],
+      },
+    ],
+  },
+  {
+    type: 'Notification',
+    label: 'Notification',
+    category: 'feedback',
+    icon: 'Info',
+    defaultProps: { type: 'info', title: 'Notification', message: 'Details go here.' },
+    props: [
+      {
+        name: 'type',
+        type: 'string',
+        description: 'Notification style variant.',
+        required: true,
+        options: ['info', 'success', 'warning', 'error'],
+      },
+      {
+        name: 'title',
+        type: 'string',
+        description: 'Primary notification title.',
+        required: true,
+        supportsBinding: true,
+      },
+      {
+        name: 'message',
+        type: 'string',
+        description: 'Optional supporting message text.',
+        supportsBinding: true,
+      },
+      {
+        name: 'className',
+        type: 'string',
+        description: 'Optional custom classes for spacing or layout tweaks.',
+      },
+    ],
+    events: [
+      {
+        name: 'onClose',
+        description: 'Fires when the close button is clicked. Bind to dismiss or trigger an action.',
+      },
+    ],
+  },
+  {
+    type: 'StatusIcon',
+    label: 'Status Icon',
+    category: 'feedback',
+    icon: 'CheckCircle',
+    defaultProps: { type: 'saved', size: 14, animate: false },
+    props: [
+      {
+        name: 'type',
+        type: 'string',
+        description: 'Status icon style.',
+        required: true,
+        supportsBinding: true,
+        options: ['saved', 'synced'],
+      },
+      {
+        name: 'size',
+        type: 'number',
+        description: 'Icon size in pixels.',
+        defaultValue: '14',
+        supportsBinding: true,
+      },
+      {
+        name: 'animate',
+        type: 'boolean',
+        description: 'Applies entry animation when true.',
+        defaultValue: 'false',
+        supportsBinding: true,
+      },
+    ],
   },
   // Data Components
   {
