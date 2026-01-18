@@ -20,7 +20,6 @@ test('debug page load', async ({ page }) => {
   await page.waitForTimeout(2000)
 
   // Get page content
-  const html = await page.content()
   const rootHTML = await page.locator('#root').innerHTML().catch(() => 'ERROR GETTING ROOT')
 
   console.log('=== PAGE ERRORS ===')
