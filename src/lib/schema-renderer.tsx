@@ -2,6 +2,7 @@ import { createElement, type ComponentType, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Component as ComponentSchema, Layout } from '@/schemas/ui-schema'
 import { useDataBinding, useEventHandlers, useComponentRegistry } from '@/hooks/ui'
+import { getDeprecatedComponentInfo } from '@/lib/json-ui/component-registry'
 
 interface SchemaRendererProps {
   schema: ComponentSchema
@@ -13,6 +14,26 @@ interface SchemaRendererProps {
 interface LayoutRendererProps {
   layout: Layout
   children: ReactNode
+}
+
+const warnedDeprecatedComponents = new Set<string>()
+
+const warnDeprecatedComponent = (schema: ComponentSchema) => {
+  const deprecatedInfo = getDeprecatedComponentInfo(schema.type)
+  if (!deprecatedInfo || warnedDeprecatedComponents.has(schema.type)) {
+    return
+  }
+
+  const idSuffix = schema.id ? ` (id: ${schema.id})` : ''
+  const replacementHint = deprecatedInfo.replacedBy
+    ? ` Replace with "${deprecatedInfo.replacedBy}".`
+    : ''
+  const extraMessage = deprecatedInfo.message ? ` ${deprecatedInfo.message}` : ''
+
+  console.warn(
+    `[SchemaRenderer] Deprecated component "${schema.type}" detected in schema${idSuffix}.${replacementHint}${extraMessage}`
+  )
+  warnedDeprecatedComponents.add(schema.type)
 }
 
 function LayoutRenderer({ layout, children }: LayoutRendererProps) {
@@ -84,6 +105,8 @@ export function SchemaRenderer({ schema, data, functions = {}, componentRegistry
       </>
     )
   }
+
+  warnDeprecatedComponent(schema)
 
   const props = resolveProps(schema.props || {})
   const events = resolveEvents(schema.events)

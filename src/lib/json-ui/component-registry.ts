@@ -47,10 +47,17 @@ interface JsonRegistryEntry {
   type?: string
   export?: string
   source?: string
+  status?: string
+  deprecated?: DeprecatedComponentInfo
 }
 
 interface JsonComponentRegistry {
   components?: JsonRegistryEntry[]
+}
+
+export interface DeprecatedComponentInfo {
+  replacedBy?: string
+  message?: string
 }
 
 const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
@@ -69,6 +76,19 @@ const buildRegistryFromNames = (
 }
 
 const jsonRegistryEntries = jsonRegistry.components ?? []
+const deprecatedComponentInfo = jsonRegistryEntries.reduce<Record<string, DeprecatedComponentInfo>>(
+  (acc, entry) => {
+    const entryName = entry.export ?? entry.name ?? entry.type
+    if (!entryName) {
+      return acc
+    }
+    if (entry.status === 'deprecated' || entry.deprecated) {
+      acc[entryName] = entry.deprecated ?? {}
+    }
+    return acc
+  },
+  {}
+)
 const atomRegistryNames = jsonRegistryEntries
   .filter((entry) => entry.source === 'atoms')
   .map((entry) => entry.export ?? entry.name ?? entry.type)
@@ -236,4 +256,8 @@ export function getUIComponent(type: string): ComponentType<any> | string | null
 
 export function hasComponent(type: string): boolean {
   return type in uiComponentRegistry
+}
+
+export function getDeprecatedComponentInfo(type: string): DeprecatedComponentInfo | null {
+  return deprecatedComponentInfo[type] ?? null
 }

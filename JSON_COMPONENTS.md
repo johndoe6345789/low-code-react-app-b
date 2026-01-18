@@ -229,6 +229,29 @@ Priority for migration:
 3. Components with good atomic design
 4. Components without complex state management
 
+## Deprecation & JSON Migration Process
+
+Use this process when retiring legacy components or renaming JSON component types.
+
+### Deprecation workflow
+1. **Assess usage**: Identify schemas and component usage (search in `src/config/schemas` or project JSON). Flag any external consumers.
+2. **Define a replacement**: Ensure a supported JSON-safe replacement exists (or create a wrapper) and document prop differences.
+3. **Mark deprecated in the registry**: Update `json-components-registry.json` with `"status": "deprecated"` and optional `"deprecated"` metadata:
+   - `replacedBy`: the new component type to use.
+   - `message`: extra guidance for migrations.
+4. **Update definitions**: If needed, adjust `src/lib/component-definitions.ts` to align defaults and prop expectations for the replacement.
+5. **Communicate the change**: Add a note to release documentation or changelog and note the replacement.
+6. **Set a removal window**: Target the next minor/major release for removal once migration is complete.
+
+### JSON migration checklist
+- [ ] Replace deprecated component types in schemas with their replacements.
+- [ ] Validate props against the replacement component definition.
+- [ ] Run JSON renderer previews to confirm layout and bindings.
+- [ ] Remove any legacy bindings or props that are no longer supported.
+
+### Runtime warning mechanism
+The schema renderer emits a `console.warn` when a deprecated component type appears in a JSON schema. This warning uses the metadata in `json-components-registry.json` to suggest replacements and highlight remediation guidance.
+
 ## Related Documentation
 
 - [PRD.md](./PRD.md) - Product requirements document
