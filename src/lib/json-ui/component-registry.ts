@@ -19,6 +19,13 @@ import { Progress } from '@/components/ui/progress'
 import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
+import { Breadcrumb } from './wrappers/Breadcrumb'
+import { SaveIndicator } from './wrappers/SaveIndicator'
+import { LazyBarChart } from './wrappers/LazyBarChart'
+import { LazyLineChart } from './wrappers/LazyLineChart'
+import { LazyD3BarChart } from './wrappers/LazyD3BarChart'
+import { SeedDataManager } from './wrappers/SeedDataManager'
+import { StorageSettings } from './wrappers/StorageSettings'
 import jsonComponentsRegistry from '../../../json-components-registry.json'
 import { 
   ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
@@ -66,6 +73,10 @@ const atomRegistryNames = jsonRegistryEntries
   .filter((name): name is string => Boolean(name))
 const moleculeRegistryNames = jsonRegistryEntries
   .filter((entry) => entry.source === 'molecules')
+  .map((entry) => entry.export ?? entry.name ?? entry.type)
+  .filter((name): name is string => Boolean(name))
+const wrapperRegistryNames = jsonRegistryEntries
+  .filter((entry) => entry.source === 'json-ui-wrappers')
   .map((entry) => entry.export ?? entry.name ?? entry.type)
   .filter((name): name is string => Boolean(name))
 
@@ -146,6 +157,19 @@ export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
   MoleculeComponents as Record<string, ComponentType<any>>
 )
 
+export const wrapperComponents: UIComponentRegistry = buildRegistryFromNames(
+  wrapperRegistryNames,
+  {
+    Breadcrumb,
+    SaveIndicator,
+    LazyBarChart,
+    LazyLineChart,
+    LazyD3BarChart,
+    SeedDataManager,
+    StorageSettings,
+  } as Record<string, ComponentType<any>>
+)
+
 export const iconComponents: UIComponentRegistry = {
   ArrowLeft,
   ArrowRight,
@@ -192,6 +216,7 @@ export const uiComponentRegistry: UIComponentRegistry = {
   ...shadcnComponents,
   ...atomComponents,
   ...moleculeComponents,
+  ...wrapperComponents,
   ...iconComponents,
 }
 

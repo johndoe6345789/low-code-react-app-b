@@ -147,6 +147,9 @@ export function JSONUIRenderer({
 
     if (component.bindings) {
       Object.entries(component.bindings).forEach(([propName, binding]) => {
+        if (propName === 'children') {
+          return
+        }
         props[propName] = resolveDataBinding(binding, dataMap, renderContext)
       })
     }
@@ -200,14 +203,17 @@ export function JSONUIRenderer({
 
     const props = resolveProps(renderContext)
     applyEventHandlers(props, renderContext)
+    const boundChildren = component.bindings?.children
+      ? resolveDataBinding(component.bindings.children, dataMap, renderContext)
+      : component.children
 
     if (typeof Component === 'string') {
-      return React.createElement(Component, props, renderChildren(component.children, renderContext))
+      return React.createElement(Component, props, renderChildren(boundChildren, renderContext))
     }
 
     return (
       <Component {...props}>
-        {renderChildren(component.children, renderContext)}
+        {renderChildren(boundChildren, renderContext)}
       </Component>
     )
   }
@@ -231,7 +237,10 @@ export function JSONUIRenderer({
         ...(component.loop!.indexVar ? { [component.loop!.indexVar]: index } : {}),
       }
 
-      let content = renderChildren(component.children, loopContext)
+      const loopChildrenBinding = component.bindings?.children
+        ? resolveDataBinding(component.bindings.children, dataMap, loopContext)
+        : component.children
+      let content = renderChildren(loopChildrenBinding, loopContext)
 
       if (component.conditional) {
         const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...loopContext })

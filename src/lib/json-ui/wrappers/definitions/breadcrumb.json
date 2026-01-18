@@ -1,0 +1,106 @@
+{
+  "id": "breadcrumb-root",
+  "type": "nav",
+  "className": "overflow-x-auto",
+  "props": {
+    "aria-label": "Breadcrumb"
+  },
+  "bindings": {
+    "className": {
+      "source": "className"
+    }
+  },
+  "children": [
+    {
+      "id": "breadcrumb-row",
+      "type": "div",
+      "className": "flex items-center gap-2 text-sm",
+      "loop": {
+        "source": "items",
+        "itemVar": "item",
+        "indexVar": "itemIndex"
+      },
+      "children": [
+        {
+          "id": "breadcrumb-link-last",
+          "type": "Link",
+          "conditional": {
+            "if": "(item.href || item.onClick) && itemIndex === items.length - 1"
+          },
+          "props": {
+            "variant": "default",
+            "className": "text-foreground font-medium"
+          },
+          "bindings": {
+            "href": {
+              "source": "item.href"
+            },
+            "onClick": {
+              "source": "item.onClick"
+            },
+            "children": {
+              "source": "item.label"
+            }
+          }
+        },
+        {
+          "id": "breadcrumb-link",
+          "type": "Link",
+          "conditional": {
+            "if": "(item.href || item.onClick) && itemIndex < items.length - 1"
+          },
+          "props": {
+            "variant": "muted",
+            "className": "text-muted-foreground hover:text-foreground"
+          },
+          "bindings": {
+            "href": {
+              "source": "item.href"
+            },
+            "onClick": {
+              "source": "item.onClick"
+            },
+            "children": {
+              "source": "item.label"
+            }
+          }
+        },
+        {
+          "id": "breadcrumb-text-last",
+          "type": "span",
+          "conditional": {
+            "if": "!item.href && !item.onClick && itemIndex === items.length - 1"
+          },
+          "className": "text-foreground font-medium",
+          "bindings": {
+            "children": {
+              "source": "item.label"
+            }
+          }
+        },
+        {
+          "id": "breadcrumb-text",
+          "type": "span",
+          "conditional": {
+            "if": "!item.href && !item.onClick && itemIndex < items.length - 1"
+          },
+          "className": "text-muted-foreground",
+          "bindings": {
+            "children": {
+              "source": "item.label"
+            }
+          }
+        },
+        {
+          "id": "breadcrumb-separator",
+          "type": "span",
+          "conditional": {
+            "if": "itemIndex < items.length - 1"
+          },
+          "className": "text-muted-foreground",
+          "children": "/"
+        }
+      ]
+    }
+  ]
+}

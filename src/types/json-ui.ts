@@ -8,6 +8,7 @@ export type ComponentType =
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
+  | 'Breadcrumb' | 'SaveIndicator' | 'LazyBarChart' | 'LazyD3BarChart' | 'LazyLineChart' | 'SeedDataManager' | 'StorageSettings'
 
 export type ActionType =
   | 'create' | 'update' | 'delete' | 'navigate'

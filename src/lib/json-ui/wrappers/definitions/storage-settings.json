@@ -1,0 +1,331 @@
+{
+  "id": "storage-settings-root",
+  "type": "div",
+  "className": "space-y-6",
+  "children": [
+    {
+      "id": "storage-backend-card",
+      "type": "Card",
+      "children": [
+        {
+          "id": "storage-backend-header",
+          "type": "CardHeader",
+          "children": [
+            {
+              "id": "storage-backend-title",
+              "type": "CardTitle",
+              "bindings": {
+                "children": {
+                  "source": "title"
+                }
+              }
+            },
+            {
+              "id": "storage-backend-description",
+              "type": "CardDescription",
+              "bindings": {
+                "children": {
+                  "source": "description"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "storage-backend-content",
+          "type": "CardContent",
+          "className": "space-y-4",
+          "children": [
+            {
+              "id": "storage-backend-current",
+              "type": "div",
+              "className": "flex items-center gap-2",
+              "children": [
+                {
+                  "id": "storage-backend-current-label",
+                  "type": "span",
+                  "className": "text-sm text-muted-foreground",
+                  "bindings": {
+                    "children": {
+                      "source": "currentBackendLabel"
+                    }
+                  }
+                },
+                {
+                  "id": "storage-backend-current-badge",
+                  "type": "Badge",
+                  "props": {
+                    "variant": "secondary",
+                    "className": "flex items-center gap-1"
+                  },
+                  "bindings": {
+                    "children": {
+                      "source": "backendBadge"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "storage-backend-form",
+              "type": "div",
+              "className": "grid gap-4",
+              "children": [
+                {
+                  "id": "storage-backend-flask",
+                  "type": "div",
+                  "className": "space-y-2",
+                  "children": [
+                    {
+                      "id": "storage-backend-flask-label",
+                      "type": "Label",
+                      "props": {
+                        "htmlFor": "flask-url"
+                      },
+                      "bindings": {
+                        "children": {
+                          "source": "flaskUrlLabel"
+                        }
+                      }
+                    },
+                    {
+                      "id": "storage-backend-flask-row",
+                      "type": "div",
+                      "className": "flex gap-2",
+                      "children": [
+                        {
+                          "id": "storage-backend-flask-input",
+                          "type": "Input",
+                          "bindings": {
+                            "value": {
+                              "source": "flaskUrl"
+                            },
+                            "onChange": {
+                              "source": "onFlaskUrlChange"
+                            },
+                            "disabled": {
+                              "source": "flaskUrlDisabled"
+                            },
+                            "placeholder": {
+                              "source": "flaskUrlPlaceholder"
+                            }
+                          },
+                          "props": {
+                            "id": "flask-url"
+                          }
+                        },
+                        {
+                          "id": "storage-backend-flask-button",
+                          "type": "Button",
+                          "bindings": {
+                            "onClick": {
+                              "source": "onSwitchToFlask"
+                            },
+                            "disabled": {
+                              "source": "flaskButtonDisabled"
+                            },
+                            "variant": {
+                              "source": "flaskButtonVariant"
+                            },
+                            "children": {
+                              "source": "flaskButtonLabel"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "storage-backend-flask-help",
+                      "type": "p",
+                      "className": "text-xs text-muted-foreground",
+                      "bindings": {
+                        "children": {
+                          "source": "flaskHelp"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "storage-backend-options",
+                  "type": "div",
+                  "className": "flex gap-2",
+                  "children": [
+                    {
+                      "id": "storage-backend-indexeddb",
+                      "type": "Button",
+                      "props": {
+                        "className": "flex-1"
+                      },
+                      "bindings": {
+                        "onClick": {
+                          "source": "onSwitchToIndexedDB"
+                        },
+                        "disabled": {
+                          "source": "indexedDbDisabled"
+                        },
+                        "variant": {
+                          "source": "indexedDbVariant"
+                        },
+                        "children": {
+                          "source": "indexedDbLabel"
+                        }
+                      }
+                    },
+                    {
+                      "id": "storage-backend-sqlite",
+                      "type": "Button",
+                      "props": {
+                        "className": "flex-1"
+                      },
+                      "bindings": {
+                        "onClick": {
+                          "source": "onSwitchToSQLite"
+                        },
+                        "disabled": {
+                          "source": "sqliteDisabled"
+                        },
+                        "variant": {
+                          "source": "sqliteVariant"
+                        },
+                        "children": {
+                          "source": "sqliteLabel"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "storage-backend-details",
+                  "type": "div",
+                  "className": "text-xs text-muted-foreground space-y-1",
+                  "children": [
+                    {
+                      "id": "storage-backend-details-indexeddb",
+                      "type": "p",
+                      "bindings": {
+                        "children": {
+                          "source": "indexedDbDetails"
+                        }
+                      }
+                    },
+                    {
+                      "id": "storage-backend-details-sqlite",
+                      "type": "p",
+                      "bindings": {
+                        "children": {
+                          "source": "sqliteDetails"
+                        }
+                      }
+                    },
+                    {
+                      "id": "storage-backend-details-flask",
+                      "type": "p",
+                      "bindings": {
+                        "children": {
+                          "source": "flaskDetails"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "storage-data-card",
+      "type": "Card",
+      "children": [
+        {
+          "id": "storage-data-header",
+          "type": "CardHeader",
+          "children": [
+            {
+              "id": "storage-data-title",
+              "type": "CardTitle",
+              "bindings": {
+                "children": {
+                  "source": "dataTitle"
+                }
+              }
+            },
+            {
+              "id": "storage-data-description",
+              "type": "CardDescription",
+              "bindings": {
+                "children": {
+                  "source": "dataDescription"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "storage-data-content",
+          "type": "CardContent",
+          "className": "space-y-4",
+          "children": [
+            {
+              "id": "storage-data-actions",
+              "type": "div",
+              "className": "flex gap-2",
+              "children": [
+                {
+                  "id": "storage-data-export",
+                  "type": "Button",
+                  "props": {
+                    "variant": "outline",
+                    "className": "flex-1"
+                  },
+                  "bindings": {
+                    "onClick": {
+                      "source": "onExport"
+                    },
+                    "disabled": {
+                      "source": "exportDisabled"
+                    },
+                    "children": {
+                      "source": "exportLabel"
+                    }
+                  }
+                },
+                {
+                  "id": "storage-data-import",
+                  "type": "Button",
+                  "props": {
+                    "variant": "outline",
+                    "className": "flex-1"
+                  },
+                  "bindings": {
+                    "onClick": {
+                      "source": "onImport"
+                    },
+                    "disabled": {
+                      "source": "importDisabled"
+                    },
+                    "children": {
+                      "source": "importLabel"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "storage-data-help",
+              "type": "p",
+              "className": "text-xs text-muted-foreground",
+              "bindings": {
+                "children": {
+                  "source": "dataHelp"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

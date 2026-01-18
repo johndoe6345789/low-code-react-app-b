@@ -847,7 +847,7 @@
       "canHaveChildren": false,
       "description": "Navigation breadcrumb trail",
       "status": "json-compatible",
-      "source": "molecules",
+      "source": "json-ui-wrappers",
       "jsonCompatible": true
     },
     {
@@ -1257,7 +1257,7 @@
       "canHaveChildren": true,
       "description": "LazyBarChart component",
       "status": "json-compatible",
-      "source": "molecules",
+      "source": "json-ui-wrappers",
       "jsonCompatible": true
     },
     {
@@ -1267,7 +1267,7 @@
       "canHaveChildren": true,
       "description": "LazyD3BarChart component",
       "status": "json-compatible",
-      "source": "molecules",
+      "source": "json-ui-wrappers",
       "jsonCompatible": true
     },
     {
@@ -1277,7 +1277,7 @@
       "canHaveChildren": true,
       "description": "LazyLineChart component",
       "status": "json-compatible",
-      "source": "molecules",
+      "source": "json-ui-wrappers",
       "jsonCompatible": true
     },
     {
@@ -1319,11 +1319,11 @@
     {
       "type": "SeedDataManager",
       "name": "SeedDataManager",
-      "category": "data",
+      "category": "custom",
       "canHaveChildren": true,
       "description": "SeedDataManager component",
       "status": "json-compatible",
-      "source": "molecules",
+      "source": "json-ui-wrappers",
       "jsonCompatible": true
     },
     {
@@ -1826,11 +1826,11 @@
     {
       "type": "SaveIndicator",
       "name": "SaveIndicator",
-      "category": "custom",
+      "category": "feedback",
       "canHaveChildren": true,
       "description": "SaveIndicator component",
       "status": "json-compatible",
-      "source": "molecules",
+      "source": "json-ui-wrappers",
       "jsonCompatible": true
     },
     {
@@ -2000,7 +2000,7 @@
       "canHaveChildren": true,
       "description": "StorageSettings component",
       "status": "json-compatible",
-      "source": "molecules",
+      "source": "json-ui-wrappers",
       "jsonCompatible": true
     },
     {

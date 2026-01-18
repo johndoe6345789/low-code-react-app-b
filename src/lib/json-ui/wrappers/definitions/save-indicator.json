@@ -1,0 +1,36 @@
+{
+  "id": "save-indicator-root",
+  "type": "div",
+  "className": "flex items-center gap-1.5 text-xs text-muted-foreground",
+  "bindings": {
+    "className": {
+      "source": "className"
+    }
+  },
+  "children": [
+    {
+      "id": "save-indicator-icon",
+      "type": "StatusIcon",
+      "bindings": {
+        "type": {
+          "source": "status"
+        },
+        "animate": {
+          "source": "animate"
+        }
+      }
+    },
+    {
+      "id": "save-indicator-label",
+      "type": "span",
+      "conditional": {
+        "if": "showLabel"
+      },
+      "bindings": {
+        "children": {
+          "source": "label"
+        }
+      }
+    }
+  ]
+}

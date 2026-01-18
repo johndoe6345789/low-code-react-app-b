@@ -1,0 +1,157 @@
+{
+  "id": "seed-data-manager",
+  "type": "Card",
+  "children": [
+    {
+      "id": "seed-data-header",
+      "type": "CardHeader",
+      "children": [
+        {
+          "id": "seed-data-title",
+          "type": "CardTitle",
+          "bindings": {
+            "children": {
+              "source": "title"
+            }
+          }
+        },
+        {
+          "id": "seed-data-description",
+          "type": "CardDescription",
+          "bindings": {
+            "children": {
+              "source": "description"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "seed-data-content",
+      "type": "CardContent",
+      "className": "flex flex-col gap-4",
+      "children": [
+        {
+          "id": "seed-data-alert",
+          "type": "Alert",
+          "conditional": {
+            "if": "isLoaded"
+          },
+          "children": [
+            {
+              "id": "seed-data-alert-description",
+              "type": "AlertDescription",
+              "bindings": {
+                "children": {
+                  "source": "statusLoaded"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "seed-data-actions-block",
+          "type": "div",
+          "className": "flex flex-col gap-3",
+          "children": [
+            {
+              "id": "seed-data-actions",
+              "type": "div",
+              "className": "flex gap-2 flex-wrap",
+              "children": [
+                {
+                  "id": "seed-data-load",
+                  "type": "Button",
+                  "props": {
+                    "variant": "default"
+                  },
+                  "bindings": {
+                    "onClick": {
+                      "source": "onLoadSeedData"
+                    },
+                    "disabled": {
+                      "source": "loadDisabled"
+                    },
+                    "children": {
+                      "source": "loadButtonText"
+                    }
+                  }
+                },
+                {
+                  "id": "seed-data-reset",
+                  "type": "Button",
+                  "props": {
+                    "variant": "outline"
+                  },
+                  "bindings": {
+                    "onClick": {
+                      "source": "onResetSeedData"
+                    },
+                    "disabled": {
+                      "source": "resetDisabled"
+                    },
+                    "children": {
+                      "source": "resetButtonText"
+                    }
+                  }
+                },
+                {
+                  "id": "seed-data-clear",
+                  "type": "Button",
+                  "props": {
+                    "variant": "destructive"
+                  },
+                  "bindings": {
+                    "onClick": {
+                      "source": "onClearAllData"
+                    },
+                    "disabled": {
+                      "source": "clearDisabled"
+                    },
+                    "children": {
+                      "source": "clearButtonText"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "seed-data-help",
+              "type": "div",
+              "className": "text-sm text-muted-foreground space-y-1",
+              "children": [
+                {
+                  "id": "seed-data-help-load",
+                  "type": "p",
+                  "bindings": {
+                    "children": {
+                      "source": "helpLoad"
+                    }
+                  }
+                },
+                {
+                  "id": "seed-data-help-reset",
+                  "type": "p",
+                  "bindings": {
+                    "children": {
+                      "source": "helpReset"
+                    }
+                  }
+                },
+                {
+                  "id": "seed-data-help-clear",
+                  "type": "p",
+                  "bindings": {
+                    "children": {
+                      "source": "helpClear"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

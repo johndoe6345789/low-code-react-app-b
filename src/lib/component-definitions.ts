@@ -224,6 +224,19 @@ export const componentDefinitions: ComponentDefinition[] = [
     canHaveChildren: true,
     defaultProps: { href: '#', children: 'Link' }
   },
+  {
+    type: 'Breadcrumb',
+    label: 'Breadcrumb',
+    category: 'navigation',
+    icon: 'Path',
+    defaultProps: {
+      items: [
+        { label: 'Home', href: '/' },
+        { label: 'Section', href: '/section' },
+        { label: 'Current Page' },
+      ],
+    },
+  },
   // Feedback Components
   {
     type: 'Alert',
@@ -256,6 +269,13 @@ export const componentDefinitions: ComponentDefinition[] = [
     icon: 'Circle',
     defaultProps: { status: 'active', children: 'Active' }
   },
+  {
+    type: 'SaveIndicator',
+    label: 'Save Indicator',
+    category: 'feedback',
+    icon: 'FloppyDisk',
+    defaultProps: { status: 'saved', label: 'Saved' }
+  },
   // Data Components
   {
     type: 'List',
@@ -285,6 +305,46 @@ export const componentDefinitions: ComponentDefinition[] = [
     icon: 'ChartBar',
     defaultProps: { title: 'Metric', value: '0' }
   },
+  {
+    type: 'LazyBarChart',
+    label: 'Bar Chart',
+    category: 'data',
+    icon: 'ChartBar',
+    defaultProps: {
+      data: [
+        { label: 'Jan', value: 30 },
+        { label: 'Feb', value: 45 },
+      ],
+      xKey: 'label',
+      yKey: 'value',
+    },
+  },
+  {
+    type: 'LazyLineChart',
+    label: 'Line Chart',
+    category: 'data',
+    icon: 'ChartLine',
+    defaultProps: {
+      data: [
+        { label: 'Jan', value: 10 },
+        { label: 'Feb', value: 25 },
+      ],
+      xKey: 'label',
+      yKey: 'value',
+    },
+  },
+  {
+    type: 'LazyD3BarChart',
+    label: 'D3 Bar Chart',
+    category: 'data',
+    icon: 'ChartBar',
+    defaultProps: {
+      data: [
+        { label: 'A', value: 12 },
+        { label: 'B', value: 18 },
+      ],
+    },
+  },
   // Custom Components
   {
     type: 'DataCard',
@@ -307,6 +367,23 @@ export const componentDefinitions: ComponentDefinition[] = [
     icon: 'Toolbox',
     canHaveChildren: true,
     defaultProps: { actions: [] }
+  },
+  {
+    type: 'SeedDataManager',
+    label: 'Seed Data Manager',
+    category: 'custom',
+    icon: 'Database',
+    defaultProps: { isLoaded: false, isLoading: false }
+  },
+  {
+    type: 'StorageSettings',
+    label: 'Storage Settings',
+    category: 'custom',
+    icon: 'Gear',
+    defaultProps: {
+      backend: 'indexeddb',
+      flaskUrl: 'http://localhost:5001',
+    },
   },
 ]
 
