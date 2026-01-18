@@ -32,18 +32,81 @@
       ]
     },
     {
-      "filename": "generators.ts",
-      "path": "/src/lib/generators.ts",
-      "description": "Code generation utilities for project export",
+      "filename": "generateNextJSProject.ts",
+      "path": "/src/lib/generators/generateNextJSProject.ts",
+      "description": "Generates Next.js project scaffolding",
       "features": [
         "Next.js project structure generation",
-        "Prisma schema file generation",
-        "Material UI theme configuration",
-        "Playwright test file generation",
-        "Storybook story file generation",
-        "Unit test file generation",
-        "Flask application structure",
-        "Package.json configuration"
+        "Package.json defaults and scripts",
+        "Prisma schema wiring for data models",
+        "Material UI theme bootstrap",
+        "README and environment defaults"
+      ]
+    },
+    {
+      "filename": "generatePrismaSchema.ts",
+      "path": "/src/lib/generators/generatePrismaSchema.ts",
+      "description": "Creates Prisma schema files from models",
+      "features": [
+        "Model definition generation",
+        "Field-level attributes and defaults",
+        "Datasource and client config",
+        "Array and optional field handling"
+      ]
+    },
+    {
+      "filename": "generateMUITheme.ts",
+      "path": "/src/lib/generators/generateMUITheme.ts",
+      "description": "Builds Material UI theme configuration",
+      "features": [
+        "Light and dark palette generation",
+        "Typography and spacing configuration",
+        "Shape/border radius settings",
+        "Theme export defaults"
+      ]
+    },
+    {
+      "filename": "generatePlaywrightTests.ts",
+      "path": "/src/lib/generators/generatePlaywrightTests.ts",
+      "description": "Generates Playwright test suites",
+      "features": [
+        "Test suite scaffolding",
+        "Step-by-step action scripts",
+        "Assertion generation",
+        "Default test fallback"
+      ]
+    },
+    {
+      "filename": "generateStorybookStories.ts",
+      "path": "/src/lib/generators/generateStorybookStories.ts",
+      "description": "Creates Storybook story files",
+      "features": [
+        "Stories grouped by component",
+        "Meta configuration generation",
+        "Args mapping for variants",
+        "Story file structure"
+      ]
+    },
+    {
+      "filename": "generateUnitTests.ts",
+      "path": "/src/lib/generators/generateUnitTests.ts",
+      "description": "Generates unit test files",
+      "features": [
+        "Component, hook, and module tests",
+        "Test setup and teardown blocks",
+        "Assertion generation",
+        "Dynamic test naming"
+      ]
+    },
+    {
+      "filename": "generateFlaskApp.ts",
+      "path": "/src/lib/generators/generateFlaskApp.ts",
+      "description": "Creates Flask backend scaffolding",
+      "features": [
+        "App factory generation",
+        "Blueprint registration",
+        "Environment and requirements files",
+        "README and setup instructions"
       ]
     }
   ],
