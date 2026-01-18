@@ -95,4 +95,10 @@ export interface JSONUIContext {
   executeAction: (action: Action, event?: any) => Promise<void>
 }
 
+export interface ComponentRendererProps {
+  component: UIComponent
+  data: Record<string, unknown>
+  onEvent?: (componentId: string, event: string, eventData: unknown) => void
+}
+
 export type ComponentSchema = UIComponent
