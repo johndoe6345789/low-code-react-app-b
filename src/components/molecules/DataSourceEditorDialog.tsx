@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { DataSource } from '@/types/json-ui'
@@ -8,6 +7,7 @@ import { KvSourceFields } from '@/components/molecules/data-source-editor/KvSour
 import { StaticSourceFields } from '@/components/molecules/data-source-editor/StaticSourceFields'
 import { ComputedSourceFields } from '@/components/molecules/data-source-editor/ComputedSourceFields'
 import dataSourceEditorCopy from '@/data/data-source-editor-dialog.json'
+import { useDataSourceEditor } from '@/hooks/use-data-source-editor'
 
 interface DataSourceEditorDialogProps {
   open: boolean
@@ -24,45 +24,23 @@ export function DataSourceEditorDialog({
   onOpenChange,
   onSave,
 }: DataSourceEditorDialogProps) {
-  const [editingSource, setEditingSource] = useState<DataSource | null>(dataSource)
-
-  useEffect(() => {
-    setEditingSource(dataSource)
-  }, [dataSource])
-
-  const handleSave = () => {
-    if (!editingSource) return
-    onSave(editingSource)
-    onOpenChange(false)
-  }
-
-  const updateField = <K extends keyof DataSource>(field: K, value: DataSource[K]) => {
-    if (!editingSource) return
-    setEditingSource({ ...editingSource, [field]: value })
-  }
-
-  const addDependency = (depId: string) => {
-    if (!editingSource || editingSource.type !== 'computed') return
-    const deps = editingSource.dependencies || []
-    if (!deps.includes(depId)) {
-      updateField('dependencies', [...deps, depId])
-    }
-  }
-
-  const removeDependency = (depId: string) => {
-    if (!editingSource || editingSource.type !== 'computed') return
-    const deps = editingSource.dependencies || []
-    updateField('dependencies', deps.filter(d => d !== depId))
-  }
+  const {
+    editingSource,
+    updateField,
+    addDependency,
+    removeDependency,
+    handleSave,
+    availableDeps,
+    selectedDeps,
+    unselectedDeps,
+  } = useDataSourceEditor({
+    dataSource,
+    allDataSources,
+    onSave,
+    onOpenChange,
+  })
 
   if (!editingSource) return null
-
-  const availableDeps = allDataSources.filter(
-    ds => ds.id !== editingSource.id && ds.type !== 'computed',
-  )
-
-  const selectedDeps = editingSource.dependencies || []
-  const unselectedDeps = availableDeps.filter(ds => !selectedDeps.includes(ds.id))
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

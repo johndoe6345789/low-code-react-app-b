@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BindingEditor } from '@/components/molecules/BindingEditor'
 import { DataSource, UIComponent } from '@/types/json-ui'
 import { Link } from '@phosphor-icons/react'
+import { useComponentBindingDialog } from '@/hooks/use-component-binding-dialog'
 
 interface ComponentBindingDialogProps {
   open: boolean
@@ -21,18 +21,11 @@ export function ComponentBindingDialog({
   onOpenChange,
   onSave,
 }: ComponentBindingDialogProps) {
-  const [editingComponent, setEditingComponent] = useState<UIComponent | null>(component)
-
-  const handleSave = () => {
-    if (!editingComponent) return
-    onSave(editingComponent)
-    onOpenChange(false)
-  }
-
-  const updateBindings = (bindings: Record<string, any>) => {
-    if (!editingComponent) return
-    setEditingComponent({ ...editingComponent, bindings })
-  }
+  const { editingComponent, handleSave, updateBindings } = useComponentBindingDialog({
+    component,
+    onSave,
+    onOpenChange,
+  })
 
   if (!editingComponent) return null
 
