@@ -1,0 +1,77 @@
+import type { StorageAdapter } from './types'
+
+export class FlaskBackendAdapter implements StorageAdapter {
+  private baseUrl: string
+  private readonly TIMEOUT_MS = 2000
+
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl || localStorage.getItem('codeforge-flask-url') || import.meta.env.VITE_FLASK_BACKEND_URL || 'http://localhost:5001'
+  }
+
+  private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS)
+
+    try {
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options?.headers,
+        },
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({ error: response.statusText }))
+        throw new Error(error.error || `HTTP ${response.status}`)
+      }
+
+      return response.json()
+    } catch (error: any) {
+      clearTimeout(timeoutId)
+      if (error.name === 'AbortError') {
+        throw new Error(`Request timeout after ${this.TIMEOUT_MS}ms`)
+      }
+      throw error
+    }
+  }
+
+  async get<T>(key: string): Promise<T | undefined> {
+    try {
+      const result = await this.request<{ value: T }>(`/api/storage/${encodeURIComponent(key)}`)
+      return result.value
+    } catch (error: any) {
+      if (error.message?.includes('404') || error.message?.includes('not found')) {
+        return undefined
+      }
+      throw error
+    }
+  }
+
+  async set<T>(key: string, value: T): Promise<void> {
+    await this.request(`/api/storage/${encodeURIComponent(key)}`, {
+      method: 'PUT',
+      body: JSON.stringify({ value }),
+    })
+  }
+
+  async delete(key: string): Promise<void> {
+    await this.request(`/api/storage/${encodeURIComponent(key)}`, {
+      method: 'DELETE',
+    })
+  }
+
+  async keys(): Promise<string[]> {
+    const result = await this.request<{ keys: string[] }>('/api/storage/keys')
+    return result.keys
+  }
+
+  async clear(): Promise<void> {
+    await this.request('/api/storage/clear', {
+      method: 'POST',
+    })
+  }
+}
