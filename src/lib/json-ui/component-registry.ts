@@ -24,6 +24,7 @@ interface JsonRegistryEntry {
 
 interface JsonComponentRegistry {
   components?: JsonRegistryEntry[]
+  sourceRoots?: Record<string, string[]>
 }
 
 export interface DeprecatedComponentInfo {
@@ -32,6 +33,15 @@ export interface DeprecatedComponentInfo {
 }
 
 const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
+const sourceRoots = jsonRegistry.sourceRoots ?? {}
+const moduleMapsBySource = Object.fromEntries(
+  Object.entries(sourceRoots).map(([source, patterns]) => {
+    if (!patterns || patterns.length === 0) {
+      return [source, {}]
+    }
+    return [source, import.meta.glob(patterns, { eager: true })]
+  })
+) as Record<string, Record<string, unknown>>
 
 const getRegistryEntryKey = (entry: JsonRegistryEntry): string | undefined =>
   entry.name ?? entry.type
@@ -89,17 +99,11 @@ const buildComponentMapFromModules = (
   }, {})
 }
 
-const atomModules = import.meta.glob('@/components/atoms/*.tsx', { eager: true })
-const moleculeModules = import.meta.glob('@/components/molecules/*.tsx', { eager: true })
-const organismModules = import.meta.glob('@/components/organisms/*.tsx', { eager: true })
-const uiModules = import.meta.glob('@/components/ui/**/*.{ts,tsx}', { eager: true })
-const wrapperModules = import.meta.glob('@/lib/json-ui/wrappers/*.tsx', { eager: true })
-
-const atomComponentMap = buildComponentMapFromModules(atomModules)
-const moleculeComponentMap = buildComponentMapFromModules(moleculeModules)
-const organismComponentMap = buildComponentMapFromModules(organismModules)
-const uiComponentMap = buildComponentMapFromModules(uiModules)
-const wrapperComponentMap = buildComponentMapFromModules(wrapperModules)
+const atomComponentMap = buildComponentMapFromModules(moduleMapsBySource.atoms ?? {})
+const moleculeComponentMap = buildComponentMapFromModules(moduleMapsBySource.molecules ?? {})
+const organismComponentMap = buildComponentMapFromModules(moduleMapsBySource.organisms ?? {})
+const uiComponentMap = buildComponentMapFromModules(moduleMapsBySource.ui ?? {})
+const wrapperComponentMap = buildComponentMapFromModules(moduleMapsBySource.wrappers ?? {})
 const iconComponentMap = buildComponentMapFromExports(PhosphorIcons)
 
 const sourceAliases: Record<string, Record<string, string>> = {
