@@ -194,10 +194,15 @@ if (breadcrumbComponent) {
   atomComponents.Breadcrumb = breadcrumbComponent as ComponentType<any>
 }
 
-export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
-  moleculeRegistryNames,
-  MoleculeComponents as Record<string, ComponentType<any>>
-)
+export const moleculeComponents: UIComponentRegistry = {
+  ...buildRegistryFromNames(
+    moleculeRegistryNames,
+    MoleculeComponents as Record<string, ComponentType<any>>
+  ),
+  AppBranding: (MoleculeComponents as Record<string, ComponentType<any>>).AppBranding,
+  LabelWithBadge: (MoleculeComponents as Record<string, ComponentType<any>>).LabelWithBadge,
+  NavigationGroupHeader: (MoleculeComponents as Record<string, ComponentType<any>>).NavigationGroupHeader,
+}
 
 export const organismComponents: UIComponentRegistry = buildRegistryFromNames(
   organismRegistryNames,

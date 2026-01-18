@@ -295,6 +295,17 @@
     "defaultProps": { "status": "active", "children": "Active" }
   },
   {
+    "type": "LabelWithBadge",
+    "label": "Label With Badge",
+    "category": "feedback",
+    "icon": "Tag",
+    "defaultProps": {
+      "label": "Total Items",
+      "badge": 24,
+      "badgeVariant": "secondary"
+    }
+  },
+  {
     "type": "ErrorBadge",
     "label": "Error Badge",
     "category": "feedback",
@@ -796,6 +807,17 @@
     }
   },
   {
+    "type": "NavigationGroupHeader",
+    "label": "Navigation Group Header",
+    "category": "navigation",
+    "icon": "CaretDown",
+    "defaultProps": {
+      "label": "Components",
+      "count": 12,
+      "isExpanded": true
+    }
+  },
+  {
     "type": "EmptyCanvasState",
     "label": "Empty Canvas State",
     "category": "feedback",
@@ -839,6 +861,16 @@
     "defaultProps": {
       "trees": [],
       "selectedTreeId": null
+    }
+  },
+  {
+    "type": "AppBranding",
+    "label": "App Branding",
+    "category": "custom",
+    "icon": "Layout",
+    "defaultProps": {
+      "title": "CodeForge",
+      "subtitle": "Low-Code Next.js App Builder"
     }
   },
   {

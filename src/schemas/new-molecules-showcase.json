@@ -115,6 +115,7 @@
                 {
                   "id": "branding-content",
                   "type": "CardContent",
+                  "props": { "className": "space-y-4" },
                   "children": [
                     {
                       "id": "branding-demo",
@@ -123,6 +124,10 @@
                         "title": { "source": "appTitle" },
                         "subtitle": { "source": "appSubtitle" }
                       }
+                    },
+                    {
+                      "id": "branding-demo-default",
+                      "type": "AppBranding"
                     }
                   ]
                 }
@@ -335,6 +340,7 @@
                 {
                   "id": "nav-header-content",
                   "type": "CardContent",
+                  "props": { "className": "space-y-2" },
                   "children": [
                     {
                       "id": "nav-header-demo",
@@ -343,6 +349,15 @@
                         "label": { "source": "navGroup", "path": "label" },
                         "count": { "source": "navGroup", "path": "count" },
                         "isExpanded": { "source": "navGroup", "path": "isExpanded" }
+                      }
+                    },
+                    {
+                      "id": "nav-header-demo-collapsed",
+                      "type": "NavigationGroupHeader",
+                      "props": {
+                        "label": "Workflows",
+                        "count": 6,
+                        "isExpanded": false
                       }
                     }
                   ]
