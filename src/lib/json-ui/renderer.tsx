@@ -25,6 +25,27 @@ export function JSONUIRenderer({
     }
   }
 
+  const renderChildren = (
+    children: UIComponent[] | string | undefined,
+    renderContext: Record<string, unknown>
+  ) => {
+    if (!children) return null
+    
+    if (typeof children === 'string') {
+      return children
+    }
+    
+    return children.map((child, index) => (
+      <JSONUIRenderer
+        key={child.id || `child-${index}`}
+        component={child}
+        dataMap={dataMap}
+        onAction={onAction}
+        context={renderContext}
+      />
+    ))
+  }
+
   if (component.loop) {
     const items = resolveDataBinding(component.loop.source, dataMap) || []
     return (
@@ -36,14 +57,10 @@ export function JSONUIRenderer({
             ...(component.loop!.indexVar ? { [component.loop!.indexVar]: index } : {}),
           }
           return (
-            <JSONUIRenderer
-              key={`${component.id}-${index}`}
-              component={component}
-              dataMap={dataMap}
-              onAction={onAction}
-              context={loopContext}
-            />
-          )}
+            <React.Fragment key={`${component.id}-${index}`}>
+              {renderChildren(component.children, loopContext)}
+            </React.Fragment>
+          )
         })}
       </>
     )
@@ -87,31 +104,13 @@ export function JSONUIRenderer({
     props.style = { ...props.style, ...component.style }
   }
 
-  const renderChildren = () => {
-    if (!component.children) return null
-    
-    if (typeof component.children === 'string') {
-      return component.children
-    }
-    
-    return component.children.map((child, index) => (
-      <JSONUIRenderer
-        key={child.id || `child-${index}`}
-        component={child}
-        dataMap={dataMap}
-        onAction={onAction}
-        context={context}
-      />
-    ))
-  }
-
   if (typeof Component === 'string') {
-    return React.createElement(Component, props, renderChildren())
+    return React.createElement(Component, props, renderChildren(component.children, context))
   }
 
   return (
     <Component {...props}>
-      {renderChildren()}
+      {renderChildren(component.children, context)}
     </Component>
   )
 }
