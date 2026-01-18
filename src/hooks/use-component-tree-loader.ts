@@ -1,10 +1,14 @@
 /// <reference path="../global.d.ts" />
 
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ComponentTree } from '@/types/project'
 import componentTreesData from '@/config/component-trees'
 
-export function useComponentTreeLoader() {
+type ComponentTreeLoaderOptions = {
+  autoLoad?: boolean
+}
+
+export function useComponentTreeLoader({ autoLoad = true }: ComponentTreeLoaderOptions = {}) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
@@ -105,8 +109,10 @@ export function useComponentTreeLoader() {
   }, [])
 
   useEffect(() => {
-    loadComponentTrees()
-  }, [])
+    if (autoLoad) {
+      loadComponentTrees()
+    }
+  }, [autoLoad, loadComponentTrees])
 
   return {
     isLoaded,
