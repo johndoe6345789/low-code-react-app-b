@@ -4,6 +4,8 @@
 
 The JSON UI System is a declarative framework for building React user interfaces from JSON configurations. Instead of writing React components, you define your UI structure, data sources, and event handlers in JSON files, which are then rendered dynamically.
 
+This document now serves as the consolidated reference for the JSON UI system. Legacy notes like `JSON_COMPONENTS.md`, `JSON_EXPRESSION_SYSTEM.md`, `JSON_COMPATIBILITY_IMPLEMENTATION.md`, the component usage report, and the old `json-components-list.json` artifact have been retired in favor of keeping the guidance in one place.
+
 ## Key Features
 
 - **Fully Declarative**: Define complete UIs without writing React code
