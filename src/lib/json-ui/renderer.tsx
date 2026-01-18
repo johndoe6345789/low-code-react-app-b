@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import type { EventHandler, JSONFormRendererProps, JSONUIRendererProps, UIComponent } from './types'
+import type { Action, EventHandler, JSONFormRendererProps, JSONUIRendererProps, UIComponent } from './types'
 import { getUIComponent } from './component-registry'
 import { resolveDataBinding, evaluateCondition, mergeClassNames } from './utils'
 import { cn } from '@/lib/utils'
@@ -157,15 +157,68 @@ export function JSONUIRenderer({
     }
   }
 
-  if (component.events) {
-    Object.entries(component.events).forEach(([eventName, handler]) => {
-      props[eventName] = (event?: any) => {
-        if (onAction) {
-          const eventHandler = typeof handler === 'string' 
-            ? { action: handler } as EventHandler
-            : handler as EventHandler
-          onAction(eventHandler, event)
+  const normalizeEventName = (eventName: string) =>
+    eventName.startsWith('on') && eventName.length > 2
+      ? `${eventName.charAt(2).toLowerCase()}${eventName.slice(3)}`
+      : eventName
+
+  const getEventPropName = (eventName: string) =>
+    eventName.startsWith('on')
+      ? eventName
+      : `on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`
+
+  const normalizeLegacyHandler = (eventName: string, handler: any): EventHandler | null => {
+    if (!handler) return null
+
+    if (typeof handler === 'string') {
+      return {
+        event: normalizeEventName(eventName),
+        actions: [{ id: handler, type: 'custom' }],
+      }
+    }
+
+    if (handler.actions && Array.isArray(handler.actions)) {
+      return {
+        event: normalizeEventName(eventName),
+        actions: handler.actions as Action[],
+        condition: handler.condition,
+      }
+    }
+
+    if (typeof handler === 'object' && handler.action) {
+      return {
+        event: normalizeEventName(eventName),
+        actions: [
+          {
+            id: handler.action,
+            type: 'custom',
+            target: handler.target,
+            params: handler.params,
+          },
+        ],
+      }
+    }
+
+    return null
+  }
+
+  const eventHandlers: EventHandler[] = Array.isArray(component.events)
+    ? component.events
+    : component.events
+      ? Object.entries(component.events).map(([eventName, handler]) =>
+        normalizeLegacyHandler(eventName, handler)
+      ).filter(Boolean) as EventHandler[]
+      : []
+
+  if (eventHandlers.length > 0) {
+    eventHandlers.forEach((handler) => {
+      const propName = getEventPropName(handler.event)
+      props[propName] = (event?: any) => {
+        if (handler.condition && typeof handler.condition === 'function') {
+          const conditionMet = handler.condition({ ...dataMap, ...context })
+          if (!conditionMet) return
         }
+        onAction?.(handler.actions, event)
       }
     })
   }
@@ -213,12 +266,18 @@ export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONF
             type: field.type,
             value: formData[field.name] || field.defaultValue || '',
           },
-          events: {
-            onChange: {
-              action: 'field-change',
-              params: { field: field.name },
+          events: [
+            {
+              event: 'change',
+              actions: [
+                {
+                  id: `field-change-${field.name}`,
+                  type: 'set-value',
+                  target: field.name,
+                },
+              ],
             },
-          },
+          ],
         }
 
         return (
@@ -232,11 +291,13 @@ export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONF
             <JSONUIRenderer
               component={fieldComponent}
               dataMap={{}}
-              onAction={(handler, event) => {
-                if (handler.action === 'field-change') {
-                  const targetValue = (event as { target?: { value?: unknown } } | undefined)?.target?.value
-                  handleFieldChange(field.name, targetValue)
-                }
+              onAction={(actions, event) => {
+                actions.forEach((action) => {
+                  if (action.type === 'set-value' && action.target === field.name) {
+                    const targetValue = (event as { target?: { value?: unknown } } | undefined)?.target?.value
+                    handleFieldChange(field.name, targetValue)
+                  }
+                })
               }}
             />
           </div>

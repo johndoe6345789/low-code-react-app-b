@@ -49,12 +49,18 @@ const buildTodoItem = (todo: TodoItem, copy: DemoCopy): UIComponent => ({
       props: {
         checked: todo.completed,
       },
-      events: {
-        onCheckedChange: {
-          action: 'toggle-todo',
-          params: { id: todo.id },
+      events: [
+        {
+          event: 'checkedChange',
+          actions: [
+            {
+              id: 'toggle-todo',
+              type: 'custom',
+              params: { id: todo.id },
+            },
+          ],
         },
-      },
+      ],
     },
     {
       id: `text-${todo.id}`,
@@ -72,12 +78,18 @@ const buildTodoItem = (todo: TodoItem, copy: DemoCopy): UIComponent => ({
         size: 'sm',
         children: copy.deleteButtonLabel,
       },
-      events: {
-        onClick: {
-          action: 'delete-todo',
-          params: { id: todo.id },
+      events: [
+        {
+          event: 'click',
+          actions: [
+            {
+              id: 'delete-todo',
+              type: 'custom',
+              params: { id: todo.id },
+            },
+          ],
         },
-      },
+      ],
     },
   ],
 })

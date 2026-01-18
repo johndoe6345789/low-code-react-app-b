@@ -1,11 +1,11 @@
-import type { EventHandler, FormField, UIComponent } from './schema'
+import type { Action, EventHandler, FormField, UIComponent } from './schema'
 
-export type { EventHandler, FormField, UIComponent }
+export type { Action, EventHandler, FormField, UIComponent }
 
 export interface JSONUIRendererProps {
   component: UIComponent
   dataMap?: Record<string, unknown>
-  onAction?: (handler: EventHandler, event?: unknown) => void
+  onAction?: (actions: Action[], event?: unknown) => void
   context?: Record<string, unknown>
 }
 

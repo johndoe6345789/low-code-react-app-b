@@ -20,17 +20,10 @@ export function PageRenderer({ schema, onCustomAction }: PageRendererProps) {
   
   const { executeActions } = useActionExecutor(context)
   
-  const handleEvent = useCallback((componentId: string, event: string, eventData: any) => {
-    const component = findComponentById(schema.components, componentId)
-    if (!component) return
-    
-    const handler = component.events?.find(h => h.event === event)
-    if (!handler) return
-    
-    if (handler.condition && !handler.condition(data)) return
-    
+  const handleEvent = useCallback((_componentId: string, handler: { actions: any[] }, eventData: any) => {
+    if (!handler?.actions?.length) return
     executeActions(handler.actions, eventData)
-  }, [schema.components, data, executeActions])
+  }, [executeActions])
   
   return (
     <div className="h-full w-full">
@@ -44,15 +37,4 @@ export function PageRenderer({ schema, onCustomAction }: PageRendererProps) {
       ))}
     </div>
   )
-}
-
-function findComponentById(components: any[], id: string): any {
-  for (const component of components) {
-    if (component.id === id) return component
-    if (component.children) {
-      const found = findComponentById(component.children, id)
-      if (found) return found
-    }
-  }
-  return null
 }

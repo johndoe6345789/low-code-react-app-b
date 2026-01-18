@@ -15,10 +15,37 @@ export const DataBindingSchema = z.object({
   transform: z.string().optional(),
 })
 
-export const EventHandlerSchema = z.object({
-  action: z.string(),
+export const ActionSchema = z.object({
+  id: z.string(),
+  type: z.enum([
+    'create',
+    'update',
+    'delete',
+    'navigate',
+    'show-toast',
+    'open-dialog',
+    'close-dialog',
+    'set-value',
+    'toggle-value',
+    'increment',
+    'decrement',
+    'custom',
+  ]),
   target: z.string().optional(),
+  path: z.string().optional(),
+  value: z.any().optional(),
   params: z.record(z.string(), z.any()).optional(),
+  compute: z.any().optional(),
+  expression: z.string().optional(),
+  valueTemplate: z.record(z.string(), z.any()).optional(),
+  message: z.string().optional(),
+  variant: z.enum(['success', 'error', 'info', 'warning']).optional(),
+})
+
+export const EventHandlerSchema = z.object({
+  event: z.string(),
+  actions: z.array(ActionSchema),
+  condition: z.any().optional(),
 })
 
 export const ConditionalSchema = z.object({
@@ -42,10 +69,7 @@ export const UIComponentSchema: any = z.object({
     z.string(),
     DataBindingSchema,
   ]).optional(),
-  events: z.record(z.string(), z.union([
-    z.string(),
-    EventHandlerSchema,
-  ])).optional(),
+  events: z.array(EventHandlerSchema).optional(),
   conditional: ConditionalSchema.optional(),
   loop: z.object({
     source: z.string(),
@@ -216,6 +240,7 @@ export type DataSourceConfig<T = unknown> =
 
 export type UIValue = z.infer<typeof UIValueSchema>
 export type DataBinding = z.infer<typeof DataBindingSchema>
+export type Action = z.infer<typeof ActionSchema>
 export type EventHandler = z.infer<typeof EventHandlerSchema>
 export type Conditional = z.infer<typeof ConditionalSchema>
 export type UIComponent = z.infer<typeof UIComponentSchema>
