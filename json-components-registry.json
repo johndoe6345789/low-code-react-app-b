@@ -1052,7 +1052,11 @@
       "description": "Empty state placeholder",
       "status": "maybe-json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: presentational molecule without hooks/side effects; bindings supported in json-ui component types."
+      }
     },
     {
       "type": "EmptyStateIcon",
@@ -1324,7 +1328,11 @@
       "description": "Statistic card display",
       "status": "maybe-json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: pure props-driven display molecule; bindings supported in json-ui component types."
+      }
     },
     {
       "type": "Table",
@@ -1399,7 +1407,11 @@
       "description": "Action button toolbar",
       "status": "maybe-json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: stateless layout molecule; bindings/events supported in json-ui component types."
+      }
     },
     {
       "type": "AppBranding",
@@ -1586,7 +1598,11 @@
       "description": "Custom data display card",
       "status": "maybe-json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: presentational molecule with conditional rendering only; bindings supported in json-ui component types."
+      }
     },
     {
       "type": "DetailRow",
@@ -1909,7 +1925,11 @@
       "description": "Search input with icon",
       "status": "maybe-json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: controlled input component; event bindings supported in json-ui component types."
+      }
     },
     {
       "type": "Sheet",
