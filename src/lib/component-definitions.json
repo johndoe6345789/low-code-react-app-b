@@ -376,6 +376,13 @@
     ]
   },
   {
+    "type": "SaveIndicator",
+    "label": "Save Indicator",
+    "category": "feedback",
+    "icon": "FloppyDisk",
+    "defaultProps": { "status": "saved", "label": "Saved", "showLabel": true, "animate": true }
+  },
+  {
     "type": "List",
     "label": "List",
     "category": "data",
@@ -473,6 +480,66 @@
     }
   },
   {
+    "type": "LazyBarChart",
+    "label": "Bar Chart",
+    "category": "data",
+    "icon": "ChartBar",
+    "defaultProps": {
+      "data": [
+        { "name": "Q1", "value": 400 },
+        { "name": "Q2", "value": 300 },
+        { "name": "Q3", "value": 500 },
+        { "name": "Q4", "value": 280 }
+      ],
+      "xKey": "name",
+      "yKey": "value",
+      "height": 300,
+      "color": "#8884d8"
+    }
+  },
+  {
+    "type": "LazyLineChart",
+    "label": "Line Chart",
+    "category": "data",
+    "icon": "ChartLine",
+    "defaultProps": {
+      "data": [
+        { "name": "Jan", "value": 120 },
+        { "name": "Feb", "value": 260 },
+        { "name": "Mar", "value": 180 },
+        { "name": "Apr", "value": 320 }
+      ],
+      "xKey": "name",
+      "yKey": "value",
+      "height": 300,
+      "color": "#38bdf8"
+    }
+  },
+  {
+    "type": "LazyD3BarChart",
+    "label": "Simple Bar Chart",
+    "category": "data",
+    "icon": "ChartBar",
+    "defaultProps": {
+      "data": [
+        { "label": "Mon", "value": 12 },
+        { "label": "Tue", "value": 18 },
+        { "label": "Wed", "value": 9 },
+        { "label": "Thu", "value": 22 }
+      ],
+      "width": 600,
+      "height": 300,
+      "color": "#22c55e"
+    }
+  },
+  {
+    "type": "SeedDataManager",
+    "label": "Seed Data Manager",
+    "category": "data",
+    "icon": "Database",
+    "defaultProps": { "isLoaded": false, "isLoading": false }
+  },
+  {
     "type": "DataCard",
     "label": "Data Card",
     "category": "custom",
@@ -493,5 +560,19 @@
     "icon": "Toolbox",
     "canHaveChildren": true,
     "defaultProps": { "actions": [] }
+  },
+  {
+    "type": "StorageSettings",
+    "label": "Storage Settings",
+    "category": "custom",
+    "icon": "Database",
+    "defaultProps": {
+      "backend": "indexeddb",
+      "flaskUrl": "http://localhost:5000",
+      "isLoading": false,
+      "isSwitching": false,
+      "isExporting": false,
+      "isImporting": false
+    }
   }
 ]

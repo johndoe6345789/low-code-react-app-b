@@ -19,6 +19,15 @@ import { Progress } from '@/components/ui/progress'
 import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
+import {
+  BreadcrumbWrapper,
+  LazyBarChartWrapper,
+  LazyD3BarChartWrapper,
+  LazyLineChartWrapper,
+  SaveIndicatorWrapper,
+  SeedDataManagerWrapper,
+  StorageSettingsWrapper,
+} from '@/lib/json-ui/wrappers'
 import jsonComponentsRegistry from '../../../json-components-registry.json'
 import { 
   ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
@@ -157,6 +166,16 @@ export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
   MoleculeComponents as Record<string, ComponentType<any>>
 )
 
+export const jsonWrapperComponents: UIComponentRegistry = {
+  Breadcrumb: BreadcrumbWrapper,
+  SaveIndicator: SaveIndicatorWrapper,
+  LazyBarChart: LazyBarChartWrapper,
+  LazyLineChart: LazyLineChartWrapper,
+  LazyD3BarChart: LazyD3BarChartWrapper,
+  SeedDataManager: SeedDataManagerWrapper,
+  StorageSettings: StorageSettingsWrapper,
+}
+
 export const iconComponents: UIComponentRegistry = {
   ArrowLeft,
   ArrowRight,
@@ -203,6 +222,7 @@ export const uiComponentRegistry: UIComponentRegistry = {
   ...shadcnComponents,
   ...atomComponents,
   ...moleculeComponents,
+  ...jsonWrapperComponents,
   ...iconComponents,
 }
 
