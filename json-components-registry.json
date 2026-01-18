@@ -761,7 +761,7 @@
       "category": "navigation",
       "canHaveChildren": true,
       "description": "NavigationGroupHeader component",
-      "status": "json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -910,7 +910,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "LabelWithBadge component",
-      "status": "json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1186,7 +1186,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "AppBranding component",
-      "status": "json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },

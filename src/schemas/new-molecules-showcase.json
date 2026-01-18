@@ -76,6 +76,7 @@
                 {
                   "id": "branding-content",
                   "type": "CardContent",
+                  "props": { "className": "space-y-4" },
                   "children": [
                     {
                       "id": "branding-demo",
@@ -84,6 +85,10 @@
                         "title": "My Amazing App",
                         "subtitle": "Built with JSON-Powered Components"
                       }
+                    },
+                    {
+                      "id": "branding-demo-default",
+                      "type": "AppBranding"
                     }
                   ]
                 }
@@ -291,6 +296,7 @@
                 {
                   "id": "nav-header-content",
                   "type": "CardContent",
+                  "props": { "className": "space-y-2" },
                   "children": [
                     {
                       "id": "nav-header-demo",
@@ -299,6 +305,15 @@
                         "label": "Components",
                         "count": 24,
                         "isExpanded": true
+                      }
+                    },
+                    {
+                      "id": "nav-header-demo-collapsed",
+                      "type": "NavigationGroupHeader",
+                      "props": {
+                        "label": "Workflows",
+                        "count": 6,
+                        "isExpanded": false
                       }
                     }
                   ]

@@ -13,7 +13,7 @@ export type ComponentType =
   | 'DataList' | 'DataTable' | 'MetricCard' | 'Timeline'
   | 'LazyBarChart' | 'LazyLineChart' | 'LazyD3BarChart' | 'SeedDataManager'
   | 'SaveIndicator' | 'StorageSettings'
-  | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
+  | 'AppBranding' | 'LabelWithBadge' | 'NavigationGroupHeader' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState'
   | 'CodeExplanationDialog' | 'ComponentBindingDialog' | 'DataSourceCard' | 'DataSourceEditorDialog' | 'TreeCard' | 'TreeFormDialog'
   | 'ToolbarButton'
   | 'SchemaCodeViewer'
