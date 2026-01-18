@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
@@ -9,6 +8,7 @@ import { PwaTab } from './DocumentationView/PwaTab'
 import { ReadmeTab } from './DocumentationView/ReadmeTab'
 import { RoadmapTab } from './DocumentationView/RoadmapTab'
 import { SassTab } from './DocumentationView/SassTab'
+import { useDocumentationViewState } from './DocumentationView/useDocumentationViewState'
 
 const tabs = [
   { value: 'readme', label: 'README', icon: <BookOpen size={16} /> },
@@ -20,8 +20,7 @@ const tabs = [
 ]
 
 export function DocumentationView() {
-  const [activeTab, setActiveTab] = useState('readme')
-  const [searchQuery, setSearchQuery] = useState('')
+  const { activeTab, setActiveTab, searchQuery, handleSearchChange } = useDocumentationViewState()
 
   return (
     <div className="h-full flex flex-col bg-background">
@@ -40,7 +39,7 @@ export function DocumentationView() {
             <Input
               placeholder="Search documentation..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               className="pl-10"
             />
           </div>
