@@ -1,6 +1,19 @@
 import { FlaskBlueprint } from '@/types/project'
 import { sanitizeIdentifier } from './sanitizeIdentifier'
 
+function toPythonIdentifier(value: string, fallback: string): string {
+  const normalized = value
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '')
+  let safe = normalized || fallback
+  if (/^[0-9]/.test(safe)) {
+    safe = `_${safe}`
+  }
+  return safe
+}
+
 export function generateFlaskBlueprint(blueprint: FlaskBlueprint): string {
   let code = `from flask import Blueprint, request, jsonify\n`
   code += `from typing import Dict, Any\n\n`
