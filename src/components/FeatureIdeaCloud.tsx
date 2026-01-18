@@ -24,9 +24,28 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Plus, Trash, Sparkle, Package } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { FeatureIdea, IdeaGroup, IdeaEdgeData } from './FeatureIdeaCloud/types'
-import { SEED_IDEAS, CATEGORIES, PRIORITIES, STATUSES, CONNECTION_STYLE, GROUP_COLORS } from './FeatureIdeaCloud/constants'
+import { CONNECTION_STYLE } from './FeatureIdeaCloud/constants'
+import seedIdeasData from './FeatureIdeaCloud/data/seed-ideas.json'
+import categoriesData from './FeatureIdeaCloud/data/categories.json'
+import prioritiesData from './FeatureIdeaCloud/data/priorities.json'
+import statusesData from './FeatureIdeaCloud/data/statuses.json'
+import groupColorsData from './FeatureIdeaCloud/data/group-colors.json'
 import { nodeTypes } from './FeatureIdeaCloud/nodes'
 import { dispatchConnectionCountUpdate } from './FeatureIdeaCloud/dispatchConnectionCountUpdate'
+
+type SeedIdeaJson = Omit<FeatureIdea, 'createdAt'> & { createdAtOffsetMs: number }
+
+const SEED_IDEAS: FeatureIdea[] = (seedIdeasData as SeedIdeaJson[]).map((idea) => {
+  const { createdAtOffsetMs, ...rest } = idea
+  return {
+    ...rest,
+    createdAt: Date.now() - createdAtOffsetMs,
+  }
+})
+const CATEGORIES = categoriesData as string[]
+const PRIORITIES = prioritiesData as FeatureIdea['priority'][]
+const STATUSES = statusesData as FeatureIdea['status'][]
+const GROUP_COLORS = groupColorsData as Array<{ name: string; value: string; bg: string; border: string }>
 
 export function FeatureIdeaCloud() {
   const [ideas, setIdeas] = useKV<FeatureIdea[]>('feature-ideas', SEED_IDEAS)
