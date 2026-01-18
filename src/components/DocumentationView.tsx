@@ -23,19 +23,20 @@ import {
   Target,
   Lightbulb,
   MagnifyingGlass,
-  GitBranch
+  GitBranch,
+  FileCode,
+  Sparkle,
+  CheckCircle
 } from '@phosphor-icons/react'
-import {
-  FeatureItem,
-  AIFeatureCard,
-  RoadmapItem,
-  AgentFileItem,
-  IntegrationPoint,
-  CICDPlatformItem,
-  PipelineStageCard,
-  SassComponentItem,
-  AnimationItem
-} from './DocumentationView/DocComponents'
+import { AIFeatureCard } from './DocumentationView/AIFeatureCard'
+import { AgentFileItem } from './DocumentationView/AgentFileItem'
+import { AnimationItem } from './DocumentationView/AnimationItem'
+import { CICDPlatformItem } from './DocumentationView/CICDPlatformItem'
+import { FeatureItem } from './DocumentationView/FeatureItem'
+import { IntegrationPoint } from './DocumentationView/IntegrationPoint'
+import { PipelineStageCard } from './DocumentationView/PipelineStageCard'
+import { RoadmapItem } from './DocumentationView/RoadmapItem'
+import { SassComponentItem } from './DocumentationView/SassComponentItem'
 
 export function DocumentationView() {
   const [activeTab, setActiveTab] = useState('readme')
