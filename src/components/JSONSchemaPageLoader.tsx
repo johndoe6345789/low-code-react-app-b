@@ -4,9 +4,11 @@ import { useSchemaLoader } from '@/hooks/use-schema-loader'
 
 interface JSONSchemaPageLoaderProps {
   schemaPath: string
+  data?: Record<string, any>
+  functions?: Record<string, any>
 }
 
-export function JSONSchemaPageLoader({ schemaPath }: JSONSchemaPageLoaderProps) {
+export function JSONSchemaPageLoader({ schemaPath, data, functions }: JSONSchemaPageLoaderProps) {
   const { schema, loading, error } = useSchemaLoader(schemaPath)
 
   if (loading) {
@@ -21,5 +23,5 @@ export function JSONSchemaPageLoader({ schemaPath }: JSONSchemaPageLoaderProps) 
     )
   }
 
-  return <PageRenderer schema={schema} />
+  return <PageRenderer schema={schema} data={data} functions={functions} />
 }

@@ -153,44 +153,53 @@ export function validatePageConfig(): ValidationError[] {
     }
     
     if (page.props) {
-      if (page.props.state) {
-        page.props.state.forEach(stateKey => {
-          const [, contextKey] = stateKey.includes(':') 
-            ? stateKey.split(':') 
+      const validateStateKeys = (keys: string[] | undefined, field: string) => {
+        if (!keys) return
+        keys.forEach(stateKey => {
+          const [, contextKey] = stateKey.includes(':')
+            ? stateKey.split(':')
             : [stateKey, stateKey]
-          
+
           if (!validStateKeys.includes(contextKey)) {
             errors.push({
               page: page.id || 'Unknown',
-              field: 'props.state',
+              field,
               message: `Unknown state key: ${contextKey}. Valid keys: ${validStateKeys.join(', ')}`,
               severity: 'error',
             })
           }
         })
       }
-      
-      if (page.props.actions) {
-        page.props.actions.forEach(actionKey => {
-          const [, contextKey] = actionKey.split(':')
-          
+
+      const validateActionKeys = (keys: string[] | undefined, field: string) => {
+        if (!keys) return
+        keys.forEach(actionKey => {
+          const [, contextKey] = actionKey.includes(':')
+            ? actionKey.split(':')
+            : [actionKey, actionKey]
+
           if (!contextKey) {
             errors.push({
               page: page.id || 'Unknown',
-              field: 'props.actions',
+              field,
               message: `Action key must use format "propName:functionName". Got: ${actionKey}`,
               severity: 'error',
             })
           } else if (!validActionKeys.includes(contextKey)) {
             errors.push({
               page: page.id || 'Unknown',
-              field: 'props.actions',
+              field,
               message: `Unknown action key: ${contextKey}. Valid keys: ${validActionKeys.join(', ')}`,
               severity: 'error',
             })
           }
         })
       }
+
+      validateStateKeys(page.props.state, 'props.state')
+      validateActionKeys(page.props.actions, 'props.actions')
+      validateStateKeys(page.props.data, 'props.data')
+      validateActionKeys(page.props.functions, 'props.functions')
     }
     
     if (page.requiresResizable) {
