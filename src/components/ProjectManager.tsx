@@ -1,4 +1,5 @@
 import { useProjectManager } from '@/hooks/use-project-manager'
+import { useProjectManagerDialogs } from '@/hooks/use-project-manager-dialogs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -23,6 +24,9 @@ export function ProjectManager({ currentProject, onProjectLoad }: ProjectManager
   const {
     projects,
     isLoading,
+    loadProjectsList,
+  } = useProjectManager()
+  const {
     currentProjectId,
     projectName,
     projectDescription,
@@ -49,7 +53,7 @@ export function ProjectManager({ currentProject, onProjectLoad }: ProjectManager
     handleExportProject,
     handleImportProject,
     handleNewProject,
-  } = useProjectManager({ currentProject, onProjectLoad })
+  } = useProjectManagerDialogs({ currentProject, onProjectLoad, loadProjectsList })
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleString()
