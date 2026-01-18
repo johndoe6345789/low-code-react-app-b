@@ -48,7 +48,7 @@ export interface Action {
 export interface Binding {
   source: string
   path?: string
-  transform?: (value: any) => any
+  transform?: string | ((value: any) => any)
 }
 
 export interface EventHandler {

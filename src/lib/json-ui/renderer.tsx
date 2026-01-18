@@ -86,6 +86,12 @@ export function JSONUIRenderer({
 
   const props: Record<string, any> = { ...component.props }
 
+  if (component.bindings) {
+    Object.entries(component.bindings).forEach(([propName, binding]) => {
+      props[propName] = resolveDataBinding(binding, dataMap, context)
+    })
+  }
+
   if (component.dataBinding) {
     const boundData = resolveDataBinding(component.dataBinding, dataMap, context)
     if (boundData !== undefined) {
