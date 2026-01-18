@@ -25,11 +25,28 @@ export class FlaskBackendAdapter implements StorageAdapter {
       clearTimeout(timeoutId)
 
       if (!response.ok) {
-        const error = await response.json().catch(() => ({ error: response.statusText }))
-        throw new Error(error.error || `HTTP ${response.status}`)
+        let errorMessage = response.statusText
+        try {
+          const errorText = await response.text()
+          if (errorText) {
+            try {
+              const parsed = JSON.parse(errorText) as { error?: string }
+              errorMessage = parsed.error || errorText
+            } catch {
+              errorMessage = errorText
+            }
+          }
+        } catch {
+          // ignore error parsing failures
+        }
+        throw new Error(errorMessage || `HTTP ${response.status}`)
       }
 
-      return response.json()
+      const responseText = await response.text()
+      if (!responseText) {
+        return undefined as T
+      }
+      return JSON.parse(responseText) as T
     } catch (error: any) {
       clearTimeout(timeoutId)
       if (error.name === 'AbortError') {
