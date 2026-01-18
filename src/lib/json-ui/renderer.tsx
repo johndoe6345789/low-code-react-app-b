@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import type { Action, EventHandler, JSONFormRendererProps, JSONUIRendererProps, UIComponent } from './types'
 import { getUIComponent } from './component-registry'
-import { resolveDataBinding, evaluateCondition, mergeClassNames } from './utils'
+import { resolveDataBinding, evaluateCondition } from './utils'
 import { cn } from '@/lib/utils'
 
 export function JSONUIRenderer({ 
@@ -15,146 +15,58 @@ export function JSONUIRenderer({
     renderContext: Record<string, unknown>
   ) => {
     if (!children) return null
-    
+
     if (typeof children === 'string') {
       return children
     }
-    
+
     return children.map((child, index) => (
+      <React.Fragment key={child.id || `child-${index}`}>
+        {renderNode(child, renderContext)}
+      </React.Fragment>
+    ))
+  }
+
+  const renderNode = (
+    node: UIComponent | string,
+    renderContext: Record<string, unknown>
+  ) => {
+    if (typeof node === 'string') {
+      return node
+    }
+
+    return (
       <JSONUIRenderer
-        key={child.id || `child-${index}`}
-        component={child}
+        component={node}
         dataMap={dataMap}
         onAction={onAction}
         context={renderContext}
       />
-    ))
+    )
   }
 
-  const renderConditionalBranch = (
-    branch: UIComponent | UIComponent[] | string | undefined,
+  const renderBranch = (
+    branch: UIComponent | (UIComponent | string)[] | string | undefined,
     renderContext: Record<string, unknown>
   ) => {
     if (branch === undefined) return null
 
-    if (typeof branch === 'string' || Array.isArray(branch)) {
-      return renderChildren(branch, renderContext)
+    if (Array.isArray(branch)) {
+      return branch.map((item, index) => (
+        <React.Fragment key={typeof item === 'string' ? `text-${index}` : item.id || `branch-${index}`}>
+          {renderNode(item, renderContext)}
+        </React.Fragment>
+      ))
     }
 
-    return (
-      <JSONUIRenderer 
-        component={branch as UIComponent} 
-        dataMap={dataMap} 
-        onAction={onAction}
-        context={renderContext}
-      />
-    )
+    return renderNode(branch, renderContext)
   }
 
-  if (component.conditional) {
-    const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...context })
-    if (conditionMet) {
-      if (component.conditional.then !== undefined) {
-        return renderConditionalBranch(
-          component.conditional.then as UIComponent | UIComponent[] | string,
-          context
-        )
-      }
-    } else {
-      if (component.conditional.else !== undefined) {
-        return renderConditionalBranch(
-          component.conditional.else as UIComponent | UIComponent[] | string,
-          context
-        )
-      }
-      return null
-    }
-  }
-
-  if (component.loop) {
-    const items = resolveDataBinding(component.loop.source, dataMap, context) || []
-    const Component = getUIComponent(component.type)
-
-    if (!Component) {
-      console.warn(`Component type "${component.type}" not found in registry`)
-      return null
-    }
-
-    return (
-      <>
-        {items.map((item: any, index: number) => {
-          const loopContext = {
-            ...context,
-            [component.loop!.itemVar]: item,
-            ...(component.loop!.indexVar ? { [component.loop!.indexVar]: index } : {}),
-          }
-          const props: Record<string, any> = { ...component.props }
-
-          if (component.dataBinding) {
-            const boundData = resolveDataBinding(component.dataBinding, dataMap, loopContext)
-            if (boundData !== undefined) {
-              props.value = boundData
-              props.data = boundData
-            }
-          }
-
-          if (component.events) {
-            Object.entries(component.events).forEach(([eventName, handler]) => {
-              props[eventName] = (event?: any) => {
-                if (onAction) {
-                  const eventHandler = typeof handler === 'string' 
-                    ? { action: handler } as EventHandler
-                    : handler as EventHandler
-                  onAction(eventHandler, event)
-                }
-              }
-            })
-          }
-
-          if (component.className) {
-            props.className = cn(props.className, component.className)
-          }
-
-          if (component.style) {
-            props.style = { ...props.style, ...component.style }
-          }
-          return (
-            <React.Fragment key={`${component.id}-${index}`}>
-              {typeof Component === 'string'
-                ? React.createElement(Component, props, renderChildren(component.children, loopContext))
-                : (
-                  <Component {...props}>
-                    {renderChildren(component.children, loopContext)}
-                  </Component>
-                )}
-            </React.Fragment>
-          )
-        })}
-      </>
-    )
-  }
-
-  const Component = getUIComponent(component.type)
-  
-  if (!Component) {
-    console.warn(`Component type "${component.type}" not found in registry`)
-    return null
-  }
-
-  const props: Record<string, any> = { ...component.props }
-
-  if (component.bindings) {
-    Object.entries(component.bindings).forEach(([propName, binding]) => {
-      props[propName] = resolveDataBinding(binding, dataMap, context)
-    })
-  }
-
-  if (component.dataBinding) {
-    const boundData = resolveDataBinding(component.dataBinding, dataMap, context)
-    if (boundData !== undefined) {
-      props.value = boundData
-      props.data = boundData
-    }
+  const renderConditionalBranch = (
+    branch: UIComponent | (UIComponent | string)[] | string | undefined,
+    renderContext: Record<string, unknown>
+  ) => {
+    return renderBranch(branch, renderContext)
   }
 
   const normalizeEventName = (eventName: string) =>
@@ -202,44 +114,165 @@ export function JSONUIRenderer({
     return null
   }
 
-  const eventHandlers: EventHandler[] = Array.isArray(component.events)
-    ? component.events
-    : component.events
-      ? Object.entries(component.events).map(([eventName, handler]) =>
-        normalizeLegacyHandler(eventName, handler)
-      ).filter(Boolean) as EventHandler[]
-      : []
+  const applyEventHandlers = (
+    props: Record<string, any>,
+    renderContext: Record<string, unknown>
+  ) => {
+    const eventHandlers: EventHandler[] = Array.isArray(component.events)
+      ? component.events
+      : component.events
+        ? Object.entries(component.events).map(([eventName, handler]) =>
+          normalizeLegacyHandler(eventName, handler)
+        ).filter(Boolean) as EventHandler[]
+        : []
 
-  if (eventHandlers.length > 0) {
-    eventHandlers.forEach((handler) => {
-      const propName = getEventPropName(handler.event)
-      props[propName] = (event?: any) => {
-        if (handler.condition && typeof handler.condition === 'function') {
-          const conditionMet = handler.condition({ ...dataMap, ...context })
-          if (!conditionMet) return
+    if (eventHandlers.length > 0) {
+      eventHandlers.forEach((handler) => {
+        const propName = getEventPropName(handler.event)
+        props[propName] = (event?: any) => {
+          if (handler.condition) {
+            const conditionMet = typeof handler.condition === 'function'
+              ? handler.condition({ ...dataMap, ...renderContext })
+              : evaluateCondition(handler.condition, { ...dataMap, ...renderContext })
+            if (!conditionMet) return
+          }
+          onAction?.(handler.actions, event)
         }
-        onAction?.(handler.actions, event)
+      })
+    }
+  }
+
+  const resolveProps = (renderContext: Record<string, unknown>) => {
+    const props: Record<string, any> = { ...component.props }
+
+    if (component.bindings) {
+      Object.entries(component.bindings).forEach(([propName, binding]) => {
+        props[propName] = resolveDataBinding(binding, dataMap, renderContext)
+      })
+    }
+
+    if (component.dataBinding) {
+      const boundData = resolveDataBinding(component.dataBinding, dataMap, renderContext)
+      if (boundData !== undefined) {
+        props.value = boundData
+        props.data = boundData
       }
+    }
+
+    if (component.className) {
+      props.className = cn(props.className, component.className)
+    }
+
+    if (component.style) {
+      props.style = { ...props.style, ...component.style }
+    }
+
+    return props
+  }
+
+  const renderWithContext = (renderContext: Record<string, unknown>) => {
+    if (component.conditional) {
+      const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...renderContext })
+      if (conditionMet) {
+        if (component.conditional.then !== undefined) {
+          return renderConditionalBranch(
+            component.conditional.then as UIComponent | (UIComponent | string)[] | string,
+            renderContext
+          )
+        }
+      } else {
+        if (component.conditional.else !== undefined) {
+          return renderConditionalBranch(
+            component.conditional.else as UIComponent | (UIComponent | string)[] | string,
+            renderContext
+          )
+        }
+        return null
+      }
+    }
+
+    const Component = getUIComponent(component.type)
+    
+    if (!Component) {
+      console.warn(`Component type "${component.type}" not found in registry`)
+      return null
+    }
+
+    const props = resolveProps(renderContext)
+    applyEventHandlers(props, renderContext)
+
+    if (typeof Component === 'string') {
+      return React.createElement(Component, props, renderChildren(component.children, renderContext))
+    }
+
+    return (
+      <Component {...props}>
+        {renderChildren(component.children, renderContext)}
+      </Component>
+    )
+  }
+
+  if (component.loop) {
+    const items = resolveDataBinding(component.loop.source, dataMap, context) || []
+    const Component = getUIComponent(component.type)
+
+    if (!Component) {
+      console.warn(`Component type "${component.type}" not found in registry`)
+      return null
+    }
+
+    const containerProps = resolveProps(context)
+    applyEventHandlers(containerProps, context)
+
+    const loopChildren = items.map((item: any, index: number) => {
+      const loopContext = {
+        ...context,
+        [component.loop!.itemVar]: item,
+        ...(component.loop!.indexVar ? { [component.loop!.indexVar]: index } : {}),
+      }
+
+      let content = renderChildren(component.children, loopContext)
+
+      if (component.conditional) {
+        const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...loopContext })
+        if (conditionMet) {
+          if (component.conditional.then !== undefined) {
+            content = renderConditionalBranch(
+              component.conditional.then as UIComponent | (UIComponent | string)[] | string,
+              loopContext
+            )
+          }
+        } else {
+          if (component.conditional.else !== undefined) {
+            content = renderConditionalBranch(
+              component.conditional.else as UIComponent | (UIComponent | string)[] | string,
+              loopContext
+            )
+          } else {
+            content = null
+          }
+        }
+      }
+
+      return (
+        <React.Fragment key={`${component.id}-${index}`}>
+          {content}
+        </React.Fragment>
+      )
     })
+
+    if (typeof Component === 'string') {
+      return React.createElement(Component, containerProps, loopChildren)
+    }
+
+    return (
+      <Component {...containerProps}>
+        {loopChildren}
+      </Component>
+    )
   }
 
-  if (component.className) {
-    props.className = cn(props.className, component.className)
-  }
-
-  if (component.style) {
-    props.style = { ...props.style, ...component.style }
-  }
-
-  if (typeof Component === 'string') {
-    return React.createElement(Component, props, renderChildren(component.children, context))
-  }
-
-  return (
-    <Component {...props}>
-      {renderChildren(component.children, context)}
-    </Component>
-  )
+  return renderWithContext(context)
 }
 
 export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONFormRendererProps) {

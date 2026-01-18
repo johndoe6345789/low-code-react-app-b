@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-
 export type ComponentType = 
   | 'div' | 'section' | 'article' | 'header' | 'footer' | 'main'
   | 'Button' | 'Card' | 'CardHeader' | 'CardTitle' | 'CardDescription' | 'CardContent' | 'CardFooter'
@@ -37,7 +35,7 @@ export interface Action {
   value?: any
   params?: Record<string, any>
   // Legacy: function-based compute
-  compute?: (data: Record<string, any>, event?: any) => any
+  compute?: ((data: Record<string, any>, event?: any) => any) | string
   // New: JSON-friendly expression (e.g., "event.target.value", "data.fieldName")
   expression?: string
   // New: JSON template with dynamic values
@@ -55,17 +53,34 @@ export interface Binding {
 export interface EventHandler {
   event: string
   actions: Action[]
-  condition?: (data: Record<string, any>) => boolean
+  condition?: string | ((data: Record<string, any>) => boolean)
+}
+
+export interface Conditional {
+  if: string
+  then?: UIComponent | (UIComponent | string)[] | string
+  else?: UIComponent | (UIComponent | string)[] | string
+}
+
+export interface Loop {
+  source: string
+  itemVar: string
+  indexVar?: string
 }
 
 export interface UIComponent {
   id: string
   type: ComponentType
   props?: Record<string, any>
+  className?: string
+  style?: Record<string, any>
   bindings?: Record<string, Binding>
+  dataBinding?: string | Binding
   events?: EventHandler[]
-  children?: UIComponent[]
+  children?: UIComponent[] | string
   condition?: Binding
+  conditional?: Conditional
+  loop?: Loop
 }
 
 export interface Layout {
@@ -100,7 +115,7 @@ export interface ComponentRendererProps {
   component: UIComponent
   data: Record<string, unknown>
   context?: Record<string, unknown>
-  onEvent?: (componentId: string, event: string, eventData: unknown) => void
+  onEvent?: (componentId: string, handler: EventHandler, eventData: unknown) => void
 }
 
 export type ComponentSchema = UIComponent

@@ -1,5 +1,7 @@
+type BindingTransform = string | ((data: unknown) => unknown)
+
 export function resolveDataBinding(
-  binding: string | { source: string; path?: string; transform?: string },
+  binding: string | { source: string; path?: string; transform?: BindingTransform },
   dataMap: Record<string, any>,
   context: Record<string, any> = {},
 ): any {
@@ -13,10 +15,24 @@ export function resolveDataBinding(
   }
   
   const { source, path, transform } = binding
-  const data = mergedContext[source]
-  const resolvedValue = path ? getNestedValue(data, path) : data
+  const sourceValue = source.includes('.')
+    ? getNestedValue(mergedContext, source)
+    : mergedContext[source]
+  const resolvedValue = path ? getNestedValue(sourceValue, path) : sourceValue
 
-  return transform ? transformData(resolvedValue, transform) : resolvedValue
+  return applyTransform(resolvedValue, transform)
+}
+
+function applyTransform(value: unknown, transform?: BindingTransform) {
+  if (!transform) {
+    return value
+  }
+
+  if (typeof transform === 'function') {
+    return transform(value)
+  }
+
+  return transformData(value, transform)
 }
 
 export function getNestedValue(obj: any, path: string): any {
