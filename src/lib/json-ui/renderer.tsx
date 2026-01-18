@@ -10,32 +10,6 @@ export function JSONUIRenderer({
   onAction, 
   context = {} 
 }: JSONUIRendererProps) {
-  
-  if (component.conditional) {
-    const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...context })
-    if (conditionMet) {
-      if (component.conditional.then) {
-        return (
-          <JSONUIRenderer 
-            component={component.conditional.then as UIComponent} 
-            dataMap={dataMap} 
-            onAction={onAction}
-            context={context}
-          />
-        )
-      }
-    } else {
-      return component.conditional.else ? (
-        <JSONUIRenderer 
-          component={component.conditional.else as UIComponent} 
-          dataMap={dataMap} 
-          onAction={onAction}
-          context={context}
-        />
-      ) : null
-    }
-  }
-
   const renderChildren = (
     children: UIComponent[] | string | undefined,
     renderContext: Record<string, unknown>
@@ -57,8 +31,55 @@ export function JSONUIRenderer({
     ))
   }
 
+  const renderConditionalBranch = (
+    branch: UIComponent | UIComponent[] | string | undefined,
+    renderContext: Record<string, unknown>
+  ) => {
+    if (branch === undefined) return null
+
+    if (typeof branch === 'string' || Array.isArray(branch)) {
+      return renderChildren(branch, renderContext)
+    }
+
+    return (
+      <JSONUIRenderer 
+        component={branch as UIComponent} 
+        dataMap={dataMap} 
+        onAction={onAction}
+        context={renderContext}
+      />
+    )
+  }
+
+  if (component.conditional) {
+    const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...context })
+    if (conditionMet) {
+      if (component.conditional.then !== undefined) {
+        return renderConditionalBranch(
+          component.conditional.then as UIComponent | UIComponent[] | string,
+          context
+        )
+      }
+    } else {
+      if (component.conditional.else !== undefined) {
+        return renderConditionalBranch(
+          component.conditional.else as UIComponent | UIComponent[] | string,
+          context
+        )
+      }
+      return null
+    }
+  }
+
   if (component.loop) {
     const items = resolveDataBinding(component.loop.source, dataMap, context) || []
+    const Component = getUIComponent(component.type)
+
+    if (!Component) {
+      console.warn(`Component type "${component.type}" not found in registry`)
+      return null
+    }
+
     return (
       <>
         {items.map((item: any, index: number) => {
@@ -67,9 +88,45 @@ export function JSONUIRenderer({
             [component.loop!.itemVar]: item,
             ...(component.loop!.indexVar ? { [component.loop!.indexVar]: index } : {}),
           }
+          const props: Record<string, any> = { ...component.props }
+
+          if (component.dataBinding) {
+            const boundData = resolveDataBinding(component.dataBinding, dataMap, loopContext)
+            if (boundData !== undefined) {
+              props.value = boundData
+              props.data = boundData
+            }
+          }
+
+          if (component.events) {
+            Object.entries(component.events).forEach(([eventName, handler]) => {
+              props[eventName] = (event?: any) => {
+                if (onAction) {
+                  const eventHandler = typeof handler === 'string' 
+                    ? { action: handler } as EventHandler
+                    : handler as EventHandler
+                  onAction(eventHandler, event)
+                }
+              }
+            })
+          }
+
+          if (component.className) {
+            props.className = cn(props.className, component.className)
+          }
+
+          if (component.style) {
+            props.style = { ...props.style, ...component.style }
+          }
           return (
             <React.Fragment key={`${component.id}-${index}`}>
-              {renderChildren(component.children, loopContext)}
+              {typeof Component === 'string'
+                ? React.createElement(Component, props, renderChildren(component.children, loopContext))
+                : (
+                  <Component {...props}>
+                    {renderChildren(component.children, loopContext)}
+                  </Component>
+                )}
             </React.Fragment>
           )
         })}
@@ -85,6 +142,12 @@ export function JSONUIRenderer({
   }
 
   const props: Record<string, any> = { ...component.props }
+
+  if (component.bindings) {
+    Object.entries(component.bindings).forEach(([propName, binding]) => {
+      props[propName] = resolveDataBinding(binding, dataMap, context)
+    })
+  }
 
   if (component.dataBinding) {
     const boundData = resolveDataBinding(component.dataBinding, dataMap, context)

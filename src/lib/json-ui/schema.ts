@@ -60,6 +60,7 @@ export const UIComponentSchema: any = z.object({
   props: z.record(z.string(), z.any()).optional(),
   className: z.string().optional(),
   style: z.record(z.string(), z.any()).optional(),
+  bindings: z.record(z.string(), DataBindingSchema).optional(),
   children: z.union([
     z.string(),
     z.array(z.lazy(() => UIComponentSchema)),

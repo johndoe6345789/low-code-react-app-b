@@ -49,7 +49,7 @@ export interface Action {
 export interface Binding {
   source: string
   path?: string
-  transform?: (value: any) => any
+  transform?: string | ((value: any) => any)
 }
 
 export interface EventHandler {
@@ -99,7 +99,8 @@ export interface JSONUIContext {
 export interface ComponentRendererProps {
   component: UIComponent
   data: Record<string, unknown>
-  onEvent?: (componentId: string, handler: EventHandler, eventData: unknown) => void
+  context?: Record<string, unknown>
+  onEvent?: (componentId: string, event: string, eventData: unknown) => void
 }
 
 export type ComponentSchema = UIComponent
