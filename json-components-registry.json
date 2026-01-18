@@ -4118,8 +4118,8 @@
       "icons": 38,
       "organisms": 16,
       "primitive": 6,
-      "wrappers": 10,
-      "custom": 20
+      "custom": 20,
+      "wrappers": 10
     }
   }
 }

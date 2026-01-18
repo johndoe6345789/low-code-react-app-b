@@ -34,12 +34,11 @@ export interface DeprecatedComponentInfo {
 
 const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
 const sourceRoots = jsonRegistry.sourceRoots ?? {}
+// Note: import.meta.glob requires literal patterns, cannot use variables
+// Disabled for now since we're using explicit glob imports below
 const moduleMapsBySource = Object.fromEntries(
-  Object.entries(sourceRoots).map(([source, patterns]) => {
-    if (!patterns || patterns.length === 0) {
-      return [source, {}]
-    }
-    return [source, import.meta.glob(patterns, { eager: true })]
+  Object.entries(sourceRoots).map(([source]) => {
+    return [source, {}]
   })
 ) as Record<string, Record<string, unknown>>
 

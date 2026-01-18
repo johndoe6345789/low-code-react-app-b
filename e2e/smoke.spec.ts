@@ -4,8 +4,12 @@ test.describe('CodeForge - Smoke Tests', () => {
   test('app loads successfully', async ({ page }) => {
     test.setTimeout(20000)
     await page.goto('/', { waitUntil: 'networkidle', timeout: 15000 })
-    
-    await expect(page.locator('body')).toBeVisible({ timeout: 5000 })
+
+    // Check that the app has rendered content (more reliable than checking visibility)
+    const root = page.locator('#root')
+    await expect(root).toHaveCount(1, { timeout: 5000 })
+    // Wait for any content to be rendered
+    await page.waitForSelector('#root > *', { timeout: 10000 })
   })
 
   test('can navigate to dashboard tab', async ({ page }) => {

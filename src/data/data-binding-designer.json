@@ -32,7 +32,7 @@
         "type": "kv",
         "key": "app-counter",
         "defaultValue": 0
-      },
+      }
     ],
     "components": [
       {

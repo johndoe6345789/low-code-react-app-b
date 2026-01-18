@@ -4,7 +4,26 @@
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(grep:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(for file in accordion alert aspect-ratio avatar badge button card checkbox collapsible dialog hover-card input label popover progress radio-group resizable scroll-area separator skeleton sheet switch tabs textarea toggle tooltip)",
+      "Bash(do)",
+      "Bash([ -f \"src/config/pages/ui/$file.json\" ])",
+      "Bash(echo:*)",
+      "Bash(done)",
+      "Bash(for file in data-source-card editor-toolbar empty-editor-state monaco-editor-panel search-bar)",
+      "Bash([ -f \"src/config/pages/molecules/$file.json\" ])",
+      "Bash(for file in empty-canvas-state page-header schema-editor-canvas schema-editor-properties-panel schema-editor-sidebar schema-editor-status-bar schema-editor-toolbar toolbar-actions)",
+      "Bash([ -f \"src/config/pages/organisms/$file.json\" ])",
+      "Bash([ -f \"src/config/pages/atoms/input.json\" ])",
+      "Bash(npm run tsx:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npm run test:e2e:*)",
+      "Bash(npx playwright:*)",
+      "Bash(timeout 15 npm run dev:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(xargs:*)"
     ]
   }
 }

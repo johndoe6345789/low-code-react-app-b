@@ -8,7 +8,10 @@ test.describe('CodeForge - Core Functionality', () => {
   })
 
   test('should load the application successfully', async ({ page }) => {
-    await expect(page.locator('body')).toBeVisible()
+    // Check root has children (content rendered)
+    await page.waitForSelector('#root > *', { timeout: 10000 })
+    const root = page.locator('#root')
+    await expect(root).toHaveCount(1)
   })
 
   test('should display main navigation', async ({ page }) => {
@@ -50,8 +53,8 @@ test.describe('CodeForge - Responsive Design', () => {
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 10000 })
     await page.waitForLoadState('networkidle', { timeout: 5000 })
-    
-    await expect(page.locator('body')).toBeVisible()
+
+    await page.waitForSelector('#root > *', { timeout: 10000 })
   })
 
   test('should work on tablet viewport', async ({ page }) => {
@@ -59,7 +62,7 @@ test.describe('CodeForge - Responsive Design', () => {
     await page.setViewportSize({ width: 768, height: 1024 })
     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 10000 })
     await page.waitForLoadState('networkidle', { timeout: 5000 })
-    
-    await expect(page.locator('body')).toBeVisible()
+
+    await page.waitForSelector('#root > *', { timeout: 10000 })
   })
 })

@@ -27,6 +27,9 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5000,
     strictPort: false,
+    hmr: {
+      overlay: false,
+    },
   },
   preview: {
     host: '0.0.0.0',
