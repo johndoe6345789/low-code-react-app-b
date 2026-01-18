@@ -10,32 +10,6 @@ export function JSONUIRenderer({
   onAction, 
   context = {} 
 }: JSONUIRendererProps) {
-  
-  if (component.conditional) {
-    const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...context })
-    if (conditionMet) {
-      if (component.conditional.then) {
-        return (
-          <JSONUIRenderer 
-            component={component.conditional.then as UIComponent} 
-            dataMap={dataMap} 
-            onAction={onAction}
-            context={context}
-          />
-        )
-      }
-    } else {
-      return component.conditional.else ? (
-        <JSONUIRenderer 
-          component={component.conditional.else as UIComponent} 
-          dataMap={dataMap} 
-          onAction={onAction}
-          context={context}
-        />
-      ) : null
-    }
-  }
-
   const renderChildren = (
     children: UIComponent[] | string | undefined,
     renderContext: Record<string, unknown>
@@ -55,6 +29,46 @@ export function JSONUIRenderer({
         context={renderContext}
       />
     ))
+  }
+
+  const renderConditionalBranch = (
+    branch: UIComponent | UIComponent[] | string | undefined,
+    renderContext: Record<string, unknown>
+  ) => {
+    if (branch === undefined) return null
+
+    if (typeof branch === 'string' || Array.isArray(branch)) {
+      return renderChildren(branch, renderContext)
+    }
+
+    return (
+      <JSONUIRenderer 
+        component={branch as UIComponent} 
+        dataMap={dataMap} 
+        onAction={onAction}
+        context={renderContext}
+      />
+    )
+  }
+
+  if (component.conditional) {
+    const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...context })
+    if (conditionMet) {
+      if (component.conditional.then !== undefined) {
+        return renderConditionalBranch(
+          component.conditional.then as UIComponent | UIComponent[] | string,
+          context
+        )
+      }
+    } else {
+      if (component.conditional.else !== undefined) {
+        return renderConditionalBranch(
+          component.conditional.else as UIComponent | UIComponent[] | string,
+          context
+        )
+      }
+      return null
+    }
   }
 
   if (component.loop) {
