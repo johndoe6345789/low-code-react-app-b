@@ -3,18 +3,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  GitBranch, 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
+import {
+  GitBranch,
+  CheckCircle,
+  XCircle,
+  Clock,
   ArrowSquareOut,
   Warning,
   Copy,
-  CheckSquare
+  CheckSquare,
 } from '@phosphor-icons/react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from 'sonner'
+import copy from '@/data/github-build-status.json'
 
 interface WorkflowRun {
   id: number
@@ -45,6 +46,219 @@ interface GitHubBuildStatusProps {
   defaultBranch?: string
 }
 
+interface WorkflowRunStatusProps {
+  status: string
+  conclusion: string | null
+}
+
+interface WorkflowRunDetailsProps {
+  branch: string
+  updatedAt: string
+  event: string
+}
+
+interface WorkflowRunItemProps {
+  workflow: WorkflowRun
+  renderStatus: (status: string, conclusion: string | null) => React.ReactNode
+  renderBadge: (status: string, conclusion: string | null) => React.ReactNode
+  formatTime: (dateString: string) => string
+}
+
+interface WorkflowBadgeListProps {
+  workflows: Workflow[]
+  copiedBadge: string | null
+  onCopyBadge: (workflowPath: string, workflowName: string, branch?: string) => void
+  getBadgeUrl: (workflowPath: string, branch?: string) => string
+  getBadgeMarkdown: (workflowPath: string, workflowName: string, branch?: string) => string
+}
+
+interface BranchBadgeListProps {
+  branches: string[]
+  workflows: Workflow[]
+  copiedBadge: string | null
+  onCopyBadge: (workflowPath: string, workflowName: string, branch: string) => void
+  getBadgeUrl: (workflowPath: string, branch?: string) => string
+}
+
+const formatWithCount = (template: string, count: number) =>
+  template.replace('{count}', count.toString())
+
+const WorkflowRunStatus = ({ status, conclusion }: WorkflowRunStatusProps) => {
+  const getStatusIcon = () => {
+    if (status === 'completed') {
+      if (conclusion === 'success') {
+        return <CheckCircle size={20} weight="fill" className="text-green-500" />
+      }
+      if (conclusion === 'failure') {
+        return <XCircle size={20} weight="fill" className="text-red-500" />
+      }
+      if (conclusion === 'cancelled') {
+        return <Warning size={20} weight="fill" className="text-yellow-500" />
+      }
+    }
+    return <Clock size={20} weight="duotone" className="text-blue-500 animate-pulse" />
+  }
+
+  return <div className="flex items-center">{getStatusIcon()}</div>
+}
+
+const WorkflowRunBadge = ({ status, conclusion }: WorkflowRunStatusProps) => {
+  if (status === 'completed') {
+    if (conclusion === 'success') {
+      return (
+        <Badge className="bg-green-500/10 text-green-500 border-green-500/20">
+          {copy.status.success}
+        </Badge>
+      )
+    }
+    if (conclusion === 'failure') {
+      return <Badge variant="destructive">{copy.status.failed}</Badge>
+    }
+    if (conclusion === 'cancelled') {
+      return <Badge variant="secondary">{copy.status.cancelled}</Badge>
+    }
+  }
+  return (
+    <Badge variant="outline" className="border-blue-500/50 text-blue-500">
+      {copy.status.running}
+    </Badge>
+  )
+}
+
+const WorkflowRunDetails = ({ branch, updatedAt, event }: WorkflowRunDetailsProps) => (
+  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+    <span className="truncate">{branch}</span>
+    <span>•</span>
+    <span>{updatedAt}</span>
+    <span>•</span>
+    <span className="truncate">{event}</span>
+  </div>
+)
+
+const WorkflowRunItem = ({ workflow, renderStatus, renderBadge, formatTime }: WorkflowRunItemProps) => (
+  <div
+    className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors"
+  >
+    <div className="flex items-center gap-3 flex-1 min-w-0">
+      {renderStatus(workflow.status, workflow.conclusion)}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-medium truncate">{workflow.name}</p>
+          {renderBadge(workflow.status, workflow.conclusion)}
+        </div>
+        <WorkflowRunDetails
+          branch={workflow.head_branch}
+          updatedAt={formatTime(workflow.updated_at)}
+          event={workflow.event}
+        />
+      </div>
+    </div>
+    <Button size="sm" variant="ghost" asChild className="ml-2">
+      <a
+        href={workflow.html_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-1"
+      >
+        <ArrowSquareOut size={16} />
+      </a>
+    </Button>
+  </div>
+)
+
+const WorkflowBadgeList = ({
+  workflows,
+  copiedBadge,
+  onCopyBadge,
+  getBadgeUrl,
+  getBadgeMarkdown,
+}: WorkflowBadgeListProps) => (
+  <div>
+    <h3 className="text-sm font-medium mb-3">{copy.sections.workflowBadges}</h3>
+    <div className="space-y-3">
+      {workflows.map((workflow) => (
+        <div
+          key={workflow.id}
+          className="p-3 border border-border rounded-lg space-y-2"
+        >
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">{workflow.name}</p>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onCopyBadge(workflow.path, workflow.name)}
+              className="h-7 text-xs"
+            >
+              {copiedBadge === `${workflow.path}-default` ? (
+                <CheckSquare size={14} className="text-green-500" />
+              ) : (
+                <Copy size={14} />
+              )}
+            </Button>
+          </div>
+          <img
+            src={getBadgeUrl(workflow.path)}
+            alt={`${workflow.name} status`}
+            className="h-5"
+          />
+          <p className="text-xs text-muted-foreground font-mono break-all">
+            {getBadgeMarkdown(workflow.path, workflow.name)}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+const BranchBadgeList = ({
+  branches,
+  workflows,
+  copiedBadge,
+  onCopyBadge,
+  getBadgeUrl,
+}: BranchBadgeListProps) => (
+  <div>
+    <h3 className="text-sm font-medium mb-3">{copy.sections.branchBadges}</h3>
+    <div className="space-y-3">
+      {branches.slice(0, 3).map((branch) => (
+        <div key={branch} className="space-y-2">
+          <div className="flex items-center gap-2">
+            <GitBranch size={16} weight="duotone" />
+            <p className="text-sm font-medium">{branch}</p>
+          </div>
+          {workflows.slice(0, 2).map((workflow) => (
+            <div
+              key={`${workflow.id}-${branch}`}
+              className="p-3 border border-border rounded-lg space-y-2 ml-6"
+            >
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted-foreground">{workflow.name}</p>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onCopyBadge(workflow.path, workflow.name, branch)}
+                  className="h-7 text-xs"
+                >
+                  {copiedBadge === `${workflow.path}-${branch}` ? (
+                    <CheckSquare size={14} className="text-green-500" />
+                  ) : (
+                    <Copy size={14} />
+                  )}
+                </Button>
+              </div>
+              <img
+                src={getBadgeUrl(workflow.path, branch)}
+                alt={`${workflow.name} status on ${branch}`}
+                className="h-5"
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
 export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHubBuildStatusProps) {
   const [workflows, setWorkflows] = useState<WorkflowRun[]>([])
   const [allWorkflows, setAllWorkflows] = useState<Workflow[]>([])
@@ -60,14 +274,14 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
     try {
       setLoading(true)
       setError(null)
-      
+
       const [runsResponse, workflowsResponse] = await Promise.all([
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/runs?per_page=5`, {
-          headers: { 'Accept': 'application/vnd.github.v3+json' },
+          headers: { Accept: 'application/vnd.github.v3+json' },
         }),
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows`, {
-          headers: { 'Accept': 'application/vnd.github.v3+json' },
-        })
+          headers: { Accept: 'application/vnd.github.v3+json' },
+        }),
       ])
 
       if (!runsResponse.ok || !workflowsResponse.ok) {
@@ -76,7 +290,7 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
 
       const runsData = await runsResponse.json()
       const workflowsData = await workflowsResponse.json()
-      
+
       setWorkflows(runsData.workflow_runs || [])
       setAllWorkflows(workflowsData.workflows || [])
     } catch (err) {
@@ -105,38 +319,8 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
     navigator.clipboard.writeText(markdown)
     const key = `${workflowPath}-${branch || 'default'}`
     setCopiedBadge(key)
-    toast.success('Badge markdown copied to clipboard')
+    toast.success(copy.toast.badgeCopied)
     setTimeout(() => setCopiedBadge(null), 2000)
-  }
-
-  const getStatusIcon = (status: string, conclusion: string | null) => {
-    if (status === 'completed') {
-      if (conclusion === 'success') {
-        return <CheckCircle size={20} weight="fill" className="text-green-500" />
-      }
-      if (conclusion === 'failure') {
-        return <XCircle size={20} weight="fill" className="text-red-500" />
-      }
-      if (conclusion === 'cancelled') {
-        return <Warning size={20} weight="fill" className="text-yellow-500" />
-      }
-    }
-    return <Clock size={20} weight="duotone" className="text-blue-500 animate-pulse" />
-  }
-
-  const getStatusBadge = (status: string, conclusion: string | null) => {
-    if (status === 'completed') {
-      if (conclusion === 'success') {
-        return <Badge className="bg-green-500/10 text-green-500 border-green-500/20">Success</Badge>
-      }
-      if (conclusion === 'failure') {
-        return <Badge variant="destructive">Failed</Badge>
-      }
-      if (conclusion === 'cancelled') {
-        return <Badge variant="secondary">Cancelled</Badge>
-      }
-    }
-    return <Badge variant="outline" className="border-blue-500/50 text-blue-500">Running</Badge>
   }
 
   const formatTime = (dateString: string) => {
@@ -147,10 +331,10 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
     const hours = Math.floor(minutes / 60)
     const days = Math.floor(hours / 24)
 
-    if (days > 0) return `${days}d ago`
-    if (hours > 0) return `${hours}h ago`
-    if (minutes > 0) return `${minutes}m ago`
-    return 'just now'
+    if (days > 0) return formatWithCount(copy.time.daysAgo, days)
+    if (hours > 0) return formatWithCount(copy.time.hoursAgo, hours)
+    if (minutes > 0) return formatWithCount(copy.time.minutesAgo, minutes)
+    return copy.time.justNow
   }
 
   if (loading) {
@@ -159,9 +343,9 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <GitBranch size={24} weight="duotone" />
-            GitHub Actions
+            {copy.title}
           </CardTitle>
-          <CardDescription>Recent workflow runs</CardDescription>
+          <CardDescription>{copy.loading.description}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {[...Array(3)].map((_, i) => (
@@ -187,22 +371,17 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <GitBranch size={24} weight="duotone" />
-            GitHub Actions
+            {copy.title}
           </CardTitle>
-          <CardDescription>Unable to fetch workflow status</CardDescription>
+          <CardDescription>{copy.error.description}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-start gap-3">
             <XCircle size={20} weight="fill" className="text-red-500 mt-0.5" />
             <div className="flex-1 space-y-2">
               <p className="text-sm text-red-500">{error}</p>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                onClick={fetchData}
-                className="text-xs"
-              >
-                Try Again
+              <Button size="sm" variant="outline" onClick={fetchData} className="text-xs">
+                {copy.error.retry}
               </Button>
             </div>
           </div>
@@ -217,20 +396,18 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <GitBranch size={24} weight="duotone" />
-            GitHub Actions
+            {copy.title}
           </CardTitle>
-          <CardDescription>No workflow runs found</CardDescription>
+          <CardDescription>{copy.empty.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">
-            No GitHub Actions workflows have been run yet.
-          </p>
+          <p className="text-sm text-muted-foreground">{copy.empty.body}</p>
         </CardContent>
       </Card>
     )
   }
 
-  const uniqueBranches = Array.from(new Set(workflows.map(w => w.head_branch)))
+  const uniqueBranches = Array.from(new Set(workflows.map((workflow) => workflow.head_branch)))
 
   return (
     <Card>
@@ -239,164 +416,66 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
           <div>
             <CardTitle className="flex items-center gap-2">
               <GitBranch size={24} weight="duotone" />
-              GitHub Actions
+              {copy.title}
             </CardTitle>
-            <CardDescription>Build status badges and recent workflow runs</CardDescription>
+            <CardDescription>{copy.header.description}</CardDescription>
           </div>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={fetchData}
-            className="text-xs"
-          >
-            Refresh
+          <Button size="sm" variant="ghost" onClick={fetchData} className="text-xs">
+            {copy.header.refresh}
           </Button>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
         <Tabs defaultValue="badges" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="badges">Status Badges</TabsTrigger>
-            <TabsTrigger value="runs">Recent Runs</TabsTrigger>
+            <TabsTrigger value="badges">{copy.tabs.badges}</TabsTrigger>
+            <TabsTrigger value="runs">{copy.tabs.runs}</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="badges" className="space-y-4 mt-4">
             <div className="space-y-4">
-              <div>
-                <h3 className="text-sm font-medium mb-3">Workflow Badges</h3>
-                <div className="space-y-3">
-                  {allWorkflows.map((workflow) => (
-                    <div
-                      key={workflow.id}
-                      className="p-3 border border-border rounded-lg space-y-2"
-                    >
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium">{workflow.name}</p>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => copyBadgeMarkdown(workflow.path, workflow.name)}
-                          className="h-7 text-xs"
-                        >
-                          {copiedBadge === `${workflow.path}-default` ? (
-                            <CheckSquare size={14} className="text-green-500" />
-                          ) : (
-                            <Copy size={14} />
-                          )}
-                        </Button>
-                      </div>
-                      <img
-                        src={getBadgeUrl(workflow.path)}
-                        alt={`${workflow.name} status`}
-                        className="h-5"
-                      />
-                      <p className="text-xs text-muted-foreground font-mono break-all">
-                        {getBadgeMarkdown(workflow.path, workflow.name)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <WorkflowBadgeList
+                workflows={allWorkflows}
+                copiedBadge={copiedBadge}
+                onCopyBadge={copyBadgeMarkdown}
+                getBadgeUrl={getBadgeUrl}
+                getBadgeMarkdown={getBadgeMarkdown}
+              />
 
               {uniqueBranches.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-medium mb-3">Branch-Specific Badges</h3>
-                  <div className="space-y-3">
-                    {uniqueBranches.slice(0, 3).map((branch) => (
-                      <div key={branch} className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <GitBranch size={16} weight="duotone" />
-                          <p className="text-sm font-medium">{branch}</p>
-                        </div>
-                        {allWorkflows.slice(0, 2).map((workflow) => (
-                          <div
-                            key={`${workflow.id}-${branch}`}
-                            className="p-3 border border-border rounded-lg space-y-2 ml-6"
-                          >
-                            <div className="flex items-center justify-between">
-                              <p className="text-xs text-muted-foreground">{workflow.name}</p>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => copyBadgeMarkdown(workflow.path, workflow.name, branch)}
-                                className="h-7 text-xs"
-                              >
-                                {copiedBadge === `${workflow.path}-${branch}` ? (
-                                  <CheckSquare size={14} className="text-green-500" />
-                                ) : (
-                                  <Copy size={14} />
-                                )}
-                              </Button>
-                            </div>
-                            <img
-                              src={getBadgeUrl(workflow.path, branch)}
-                              alt={`${workflow.name} status on ${branch}`}
-                              className="h-5"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <BranchBadgeList
+                  branches={uniqueBranches}
+                  workflows={allWorkflows}
+                  copiedBadge={copiedBadge}
+                  onCopyBadge={copyBadgeMarkdown}
+                  getBadgeUrl={getBadgeUrl}
+                />
               )}
             </div>
           </TabsContent>
 
           <TabsContent value="runs" className="space-y-3 mt-4">
             {workflows.map((workflow) => (
-              <div
+              <WorkflowRunItem
                 key={workflow.id}
-                className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors"
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  {getStatusIcon(workflow.status, workflow.conclusion)}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium truncate">
-                        {workflow.name}
-                      </p>
-                      {getStatusBadge(workflow.status, workflow.conclusion)}
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
-                      <span className="truncate">{workflow.head_branch}</span>
-                      <span>•</span>
-                      <span>{formatTime(workflow.updated_at)}</span>
-                      <span>•</span>
-                      <span className="truncate">{workflow.event}</span>
-                    </div>
-                  </div>
-                </div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  asChild
-                  className="ml-2"
-                >
-                  <a
-                    href={workflow.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                  >
-                    <ArrowSquareOut size={16} />
-                  </a>
-                </Button>
-              </div>
+                workflow={workflow}
+                renderStatus={(status, conclusion) => (
+                  <WorkflowRunStatus status={status} conclusion={conclusion} />
+                )}
+                renderBadge={(status, conclusion) => (
+                  <WorkflowRunBadge status={status} conclusion={conclusion} />
+                )}
+                formatTime={formatTime}
+              />
             ))}
-            <Button
-              size="sm"
-              variant="outline"
-              asChild
-              className="w-full text-xs"
-            >
+            <Button size="sm" variant="outline" asChild className="w-full text-xs">
               <a
                 href={`https://github.com/${owner}/${repo}/actions`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"
               >
-                View All Workflows
+                {copy.actions.viewAllWorkflows}
                 <ArrowSquareOut size={14} />
               </a>
             </Button>
