@@ -78,6 +78,16 @@ export function JSONUIPage({ jsonConfig }: JSONUIPageProps) {
             updateDataField('formData', action.params.field, event)
           }
           break
+        case 'update-date':
+          if (action.params?.field) {
+            updateDataField('formData', action.params.field, event)
+          }
+          break
+        case 'update-files':
+          if (action.params?.field) {
+            updateDataField('formData', action.params.field, event)
+          }
+          break
         case 'submit-form':
           toast.success('Form submitted!')
           console.log('Form data:', dataMap.formData)

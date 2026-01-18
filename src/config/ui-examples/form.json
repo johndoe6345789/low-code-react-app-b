@@ -131,6 +131,37 @@
                     ]
                   },
                   {
+                    "id": "birthdate-field",
+                    "type": "div",
+                    "className": "space-y-2",
+                    "children": [
+                      {
+                        "id": "birthdate-label",
+                        "type": "Label",
+                        "props": {
+                          "htmlFor": "birthDate"
+                        },
+                        "children": "Birth date"
+                      },
+                      {
+                        "id": "birthdate-input",
+                        "type": "DatePicker",
+                        "props": {
+                          "placeholder": "Select a date"
+                        },
+                        "dataBinding": "formData.birthDate",
+                        "events": {
+                          "onChange": {
+                            "action": "update-date",
+                            "payload": {
+                              "field": "birthDate"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
                     "id": "bio-field",
                     "type": "div",
                     "className": "space-y-2",
@@ -155,6 +186,36 @@
                         "dataBinding": "formData.bio",
                         "events": {
                           "onChange": "update-field"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "resume-field",
+                    "type": "div",
+                    "className": "space-y-2",
+                    "children": [
+                      {
+                        "id": "resume-label",
+                        "type": "Label",
+                        "props": {
+                          "htmlFor": "resume"
+                        },
+                        "children": "Resume"
+                      },
+                      {
+                        "id": "resume-upload",
+                        "type": "FileUpload",
+                        "props": {
+                          "accept": ".pdf,.doc,.docx"
+                        },
+                        "events": {
+                          "onFilesSelected": {
+                            "action": "update-files",
+                            "payload": {
+                              "field": "resumeFiles"
+                            }
+                          }
                         }
                       }
                     ]
@@ -234,6 +295,8 @@
         "email": "",
         "password": "",
         "bio": "",
+        "birthDate": null,
+        "resumeFiles": [],
         "subscribe": false
       }
     }
