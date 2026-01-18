@@ -46,7 +46,7 @@ Replaced all imports of `@github/spark/hooks` with the local `@/hooks/use-kv` im
 
 ### Config Files
 - `src/config/orchestration/data-source-manager.ts`
-- `src/lib/json-ui/hooks.ts`
+- `src/lib/json-ui/hooks.ts` (re-exported via `@/lib/json-ui`)
 
 ## Change Pattern
 All instances of:
