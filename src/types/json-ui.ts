@@ -10,6 +10,8 @@ export type ComponentType =
   | 'ErrorBadge' | 'Notification' | 'StatusIcon'
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
   | 'DataList' | 'DataTable' | 'MetricCard' | 'Timeline'
+  | 'LazyBarChart' | 'LazyLineChart' | 'LazyD3BarChart' | 'SeedDataManager'
+  | 'SaveIndicator' | 'StorageSettings'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
 
 export type ActionType =
