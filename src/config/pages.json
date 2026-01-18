@@ -366,6 +366,16 @@
       "props": {}
     },
     {
+      "id": "json-ui-schema",
+      "title": "JSON UI (Schema)",
+      "icon": "Code",
+      "type": "json",
+      "schemaPath": "json-ui-page.json",
+      "enabled": true,
+      "order": 22.2,
+      "props": {}
+    },
+    {
       "id": "json-conversion-showcase",
       "title": "JSON Conversion Showcase",
       "icon": "BookOpen",
