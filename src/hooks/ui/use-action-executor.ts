@@ -17,6 +17,38 @@ export function useActionExecutor(context: JSONUIContext) {
   const executeAction = useCallback(async (action: Action, event?: any) => {
     try {
       const evaluationContext = { data, event }
+      const updateByPath = (sourceId: string, path: string, value: any) => {
+        if (updatePath) {
+          updatePath(sourceId, path, value)
+          return
+        }
+
+        const sourceData = data[sourceId] ?? {}
+        const pathParts = path.split('.')
+        const newData = { ...sourceData }
+        let current: any = newData
+
+        for (let i = 0; i < pathParts.length - 1; i++) {
+          const key = pathParts[i]
+          current[key] = typeof current[key] === 'object' && current[key] !== null ? { ...current[key] } : {}
+          current = current[key]
+        }
+
+        current[pathParts[pathParts.length - 1]] = value
+        updateData(sourceId, newData)
+      }
+
+      const resolveDialogTarget = () => {
+        const defaultSourceId = 'uiState'
+        const hasExplicitTarget = Boolean(action.target && action.path)
+        const sourceId = hasExplicitTarget ? action.target : defaultSourceId
+        const dialogId = action.path ?? action.target
+
+        if (!dialogId) return null
+
+        const dialogPath = dialogId.startsWith('dialogs.') ? dialogId : `dialogs.${dialogId}`
+        return { sourceId, dialogPath }
+      }
 
       switch (action.type) {
         case 'create': {
@@ -179,6 +211,20 @@ export function useActionExecutor(context: JSONUIContext) {
           if (action.path) {
             window.location.hash = action.path
           }
+          break
+        }
+
+        case 'open-dialog': {
+          const dialogTarget = resolveDialogTarget()
+          if (!dialogTarget) return
+          updateByPath(dialogTarget.sourceId, dialogTarget.dialogPath, true)
+          break
+        }
+
+        case 'close-dialog': {
+          const dialogTarget = resolveDialogTarget()
+          if (!dialogTarget) return
+          updateByPath(dialogTarget.sourceId, dialogTarget.dialogPath, false)
           break
         }
 
