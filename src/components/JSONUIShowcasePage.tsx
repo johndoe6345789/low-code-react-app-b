@@ -25,6 +25,7 @@ export function JSONUIShowcasePage() {
           </div>
           <TabsList className="w-full justify-start">
             <TabsTrigger value="atomic">Atomic Components</TabsTrigger>
+            <TabsTrigger value="feedback">Feedback Atoms</TabsTrigger>
             <TabsTrigger value="molecules">New Molecules</TabsTrigger>
             <TabsTrigger value="data-components">Data Components</TabsTrigger>
             <TabsTrigger value="dashboard">JSON Dashboard</TabsTrigger>
@@ -35,6 +36,10 @@ export function JSONUIShowcasePage() {
         <div className="flex-1 overflow-hidden">
           <TabsContent value="atomic" className="h-full m-0 data-[state=active]:block">
             <AtomicComponentDemo />
+          </TabsContent>
+
+          <TabsContent value="feedback" className="h-full m-0 data-[state=active]:block">
+            <PageRenderer schema={feedbackAtomsDemoSchema} />
           </TabsContent>
           
           <TabsContent value="molecules" className="h-full m-0 data-[state=active]:block">

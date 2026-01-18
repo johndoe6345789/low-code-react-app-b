@@ -1088,7 +1088,7 @@
       "category": "feedback",
       "canHaveChildren": false,
       "description": "Error state badge",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1164,7 +1164,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Toast notification",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1201,7 +1201,7 @@
       "category": "feedback",
       "canHaveChildren": false,
       "description": "Status indicator icon",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {

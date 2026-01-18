@@ -6,6 +6,7 @@ export type ComponentType =
   | 'Text' | 'Heading' | 'Label' | 'List' | 'Grid' | 'Stack' | 'Flex' | 'Container'
   | 'Link' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
   | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
+  | 'ErrorBadge' | 'Notification' | 'StatusIcon'
   | 'Table' | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
   | 'DataList' | 'DataTable' | 'MetricCard' | 'Timeline'
   | 'AppBranding' | 'LabelWithBadge' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState' | 'NavigationGroupHeader'
