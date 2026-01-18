@@ -410,6 +410,14 @@
     "defaultProps": { "items": [], "emptyMessage": "No items" }
   },
   {
+    "type": "ListItem",
+    "label": "List Item",
+    "category": "data",
+    "icon": "List",
+    "canHaveChildren": true,
+    "defaultProps": { "children": "List item" }
+  },
+  {
     "type": "DataList",
     "label": "Data List",
     "category": "data",
@@ -426,6 +434,46 @@
     "category": "data",
     "icon": "Table",
     "defaultProps": { "data": [], "columns": [] }
+  },
+  {
+    "type": "TableHeader",
+    "label": "Table Header",
+    "category": "data",
+    "icon": "Table",
+    "canHaveChildren": true,
+    "defaultProps": {}
+  },
+  {
+    "type": "TableBody",
+    "label": "Table Body",
+    "category": "data",
+    "icon": "Table",
+    "canHaveChildren": true,
+    "defaultProps": {}
+  },
+  {
+    "type": "TableRow",
+    "label": "Table Row",
+    "category": "data",
+    "icon": "Table",
+    "canHaveChildren": true,
+    "defaultProps": {}
+  },
+  {
+    "type": "TableCell",
+    "label": "Table Cell",
+    "category": "data",
+    "icon": "Table",
+    "canHaveChildren": true,
+    "defaultProps": { "children": "Cell" }
+  },
+  {
+    "type": "TableHead",
+    "label": "Table Head",
+    "category": "data",
+    "icon": "Table",
+    "canHaveChildren": true,
+    "defaultProps": { "children": "Header" }
   },
   {
     "type": "DataTable",

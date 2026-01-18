@@ -33,6 +33,13 @@
       "configKey": "table"
     },
     {
+      "key": "bindings",
+      "name": "Bindings",
+      "description": "List, table, and timeline bindings with shared data sources",
+      "icon": "Clock",
+      "configKey": "list-table-timeline"
+    },
+    {
       "key": "settings",
       "name": "Settings",
       "description": "Tabbed settings panel with switches and selections",

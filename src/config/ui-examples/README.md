@@ -63,6 +63,17 @@ A comprehensive settings panel featuring:
 - Separator components for visual organization
 - Multiple independent data sources
 
+### 5. List/Table/Timeline Bindings (`list-table-timeline.json`)
+A binding-focused layout that highlights:
+- **List loops**: ListItem rows rendered from a data source
+- **Data table bindings**: Columns and rows bound to JSON data
+- **Timeline bindings**: Timeline items pulled from a structured array
+
+**Key Features Demonstrated:**
+- Loop contexts with `itemVar` and `indexVar`
+- Property bindings for component props
+- Shared data sources across multiple components
+
 ## How to Use These Examples
 
 1. **View in the UI**: Navigate to the "JSON UI" page in the application to see live previews
