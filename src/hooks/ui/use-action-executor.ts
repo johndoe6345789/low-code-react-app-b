@@ -98,13 +98,27 @@ export function useActionExecutor(context: JSONUIContext) {
         }
 
         case 'delete': {
-          if (!action.target || !action.value) return
+          if (!action.target) return
           const currentData = data[action.target] || []
+          
+          let selectorValue
+          if (action.compute) {
+            selectorValue = action.compute(data, event)
+          } else if (action.expression) {
+            selectorValue = evaluateExpression(action.expression, evaluationContext)
+          } else if (action.valueTemplate) {
+            selectorValue = evaluateTemplate(action.valueTemplate, evaluationContext)
+          } else {
+            selectorValue = action.value
+          }
+
+          if (selectorValue === undefined) return
+
           const filtered = currentData.filter((item: any) => {
             if (action.path) {
-              return item[action.path] !== action.value
+              return getNestedValue(item, action.path) !== selectorValue
             }
-            return item !== action.value
+            return item !== selectorValue
           })
           updateData(action.target, filtered)
           break
