@@ -22,6 +22,15 @@
         "type": "string"
       }
     },
+    "sourceRoots": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
     "components": {
       "type": "array",
       "items": {
