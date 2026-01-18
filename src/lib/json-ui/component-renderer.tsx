@@ -1,6 +1,7 @@
 import { createElement, useMemo } from 'react'
 import { UIComponent, Binding, ComponentRendererProps } from '@/types/json-ui'
 import { getUIComponent } from './component-registry'
+import { transformData } from './utils'
 
 function resolveBinding(binding: Binding, data: Record<string, unknown>): unknown {
   let value: unknown = data[binding.source]
@@ -18,7 +19,9 @@ function resolveBinding(binding: Binding, data: Record<string, unknown>): unknow
   }
   
   if (binding.transform) {
-    value = binding.transform(value)
+    value = typeof binding.transform === 'string'
+      ? transformData(value, binding.transform)
+      : binding.transform(value)
   }
   
   return value
