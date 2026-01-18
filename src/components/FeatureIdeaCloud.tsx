@@ -26,6 +26,7 @@ import { toast } from 'sonner'
 import { FeatureIdea, IdeaGroup, IdeaEdgeData } from './FeatureIdeaCloud/types'
 import { SEED_IDEAS, CATEGORIES, PRIORITIES, STATUSES, CONNECTION_STYLE, GROUP_COLORS } from './FeatureIdeaCloud/constants'
 import { nodeTypes } from './FeatureIdeaCloud/nodes'
+import { dispatchConnectionCountUpdate } from './FeatureIdeaCloud/dispatchConnectionCountUpdate'
 
 export function FeatureIdeaCloud() {
   const [ideas, setIdeas] = useKV<FeatureIdea[]>('feature-ideas', SEED_IDEAS)
@@ -114,10 +115,7 @@ export function FeatureIdeaCloud() {
         bottom: connections.bottom.size,
       }
       
-      const event = new CustomEvent('updateConnectionCounts', {
-        detail: { nodeId, counts }
-      })
-      window.dispatchEvent(event)
+      dispatchConnectionCountUpdate(nodeId, counts)
     })
   }, [])
 
