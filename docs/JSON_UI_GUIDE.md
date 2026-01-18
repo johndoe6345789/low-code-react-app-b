@@ -326,6 +326,241 @@ With transformations:
 }
 ```
 
+## Component Pattern Templates
+
+Use these patterns as starting points when authoring JSON schemas. Each example includes
+recommended prop shapes and binding strategies for predictable rendering and data flow.
+
+### Form Pattern (Create/Edit)
+
+**Recommended prop shape**
+- `name`: field identifier used in data mappings.
+- `label`: user-facing label.
+- `placeholder`: optional hint text.
+- `type`: input type (`text`, `email`, `number`, `date`, etc.).
+- `required`: boolean for validation UI.
+
+**Schema example**
+```typescript
+{
+  id: 'profile-form',
+  type: 'form',
+  props: {
+    className: 'space-y-4'
+  },
+  children: [
+    {
+      id: 'first-name',
+      type: 'Input',
+      props: {
+        name: 'firstName',
+        label: 'First name',
+        placeholder: 'Ada',
+        required: true
+      },
+      bindings: {
+        value: { source: 'formState', path: 'firstName' }
+      },
+      events: [
+        {
+          event: 'change',
+          actions: [
+            {
+              type: 'set-value',
+              target: 'formState',
+              path: 'firstName',
+              compute: (data, event) => event.target.value
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'email',
+      type: 'Input',
+      props: {
+        name: 'email',
+        label: 'Email',
+        placeholder: 'ada@lovelace.dev',
+        type: 'email'
+      },
+      bindings: {
+        value: { source: 'formState', path: 'email' }
+      },
+      events: [
+        {
+          event: 'change',
+          actions: [
+            {
+              type: 'set-value',
+              target: 'formState',
+              path: 'email',
+              compute: (data, event) => event.target.value
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'save-profile',
+      type: 'Button',
+      props: { children: 'Save profile' },
+      events: [
+        {
+          event: 'click',
+          actions: [
+            {
+              type: 'create',
+              target: 'profiles',
+              compute: (data) => ({
+                id: Date.now(),
+                ...data.formState
+              })
+            },
+            {
+              type: 'set-value',
+              target: 'formState',
+              value: { firstName: '', email: '' }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Recommended bindings**
+- Use `bindings.value` for inputs and update a single `formState` data source.
+- Use `set-value` with `path` to update individual fields and avoid cloning the whole object.
+
+### Card Pattern (Summary/Stat)
+
+**Recommended prop shape**
+- `title`: primary label.
+- `description`: supporting copy.
+- `badge`: optional status tag.
+- `icon`: optional leading icon name or component id.
+
+**Schema example**
+```typescript
+{
+  id: 'stats-card',
+  type: 'Card',
+  props: { className: 'p-4' },
+  children: [
+    {
+      id: 'card-header',
+      type: 'div',
+      props: { className: 'flex items-center justify-between' },
+      children: [
+        {
+          id: 'card-title',
+          type: 'h3',
+          bindings: {
+            children: { source: 'stats', path: 'title' }
+          },
+          props: { className: 'text-lg font-semibold' }
+        },
+        {
+          id: 'card-badge',
+          type: 'Badge',
+          bindings: {
+            children: { source: 'stats', path: 'status' },
+            variant: {
+              source: 'stats',
+              path: 'status',
+              transform: (value) => (value === 'Active' ? 'success' : 'secondary')
+            }
+          }
+        }
+      ]
+    },
+    {
+      id: 'card-description',
+      type: 'p',
+      props: { className: 'text-sm text-muted-foreground' },
+      bindings: {
+        children: { source: 'stats', path: 'description' }
+      }
+    }
+  ]
+}
+```
+
+**Recommended bindings**
+- Bind the card text fields directly to a `stats` data source.
+- Use `transform` for simple presentation mappings (status to badge variant).
+
+### List Pattern (Collection + Row Actions)
+
+**Recommended prop shape**
+- `items`: array data source bound at the list container.
+- `keyField`: unique field for list keys.
+- `primary`: main text content (usually `name` or `title`).
+- `secondary`: supporting text (optional).
+- `actions`: array of action configs for row-level events.
+
+**Schema example**
+```typescript
+{
+  id: 'task-list',
+  type: 'div',
+  bindings: {
+    children: {
+      source: 'tasks',
+      transform: (items) =>
+        items.map((item) => ({
+          id: `task-${item.id}`,
+          type: 'div',
+          props: { className: 'flex items-center justify-between py-2' },
+          children: [
+            {
+              id: `task-name-${item.id}`,
+              type: 'span',
+              bindings: {
+                children: { source: 'item', path: 'name' }
+              }
+            },
+            {
+              id: `task-toggle-${item.id}`,
+              type: 'Button',
+              props: { size: 'sm', variant: 'outline' },
+              bindings: {
+                children: {
+                  source: 'item',
+                  path: 'completed',
+                  transform: (value) => (value ? 'Undo' : 'Complete')
+                }
+              },
+              events: [
+                {
+                  event: 'click',
+                  actions: [
+                    {
+                      type: 'update',
+                      target: 'tasks',
+                      id: item.id,
+                      compute: (data) => ({
+                        ...item,
+                        completed: !item.completed
+                      })
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }))
+    }
+  }
+}
+```
+
+**Recommended bindings**
+- Use a `transform` to map collection items into child component schemas.
+- Use `{ source: 'item', path: 'field' }` when binding inside the item loop for clarity and efficiency.
+
 ## Event Handling
 
 ### Simple Event
