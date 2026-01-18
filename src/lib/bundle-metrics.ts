@@ -87,7 +87,12 @@ export function analyzePerformance() {
     return null
   }
   
-  const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+  const navigation = performance.getEntriesByType('navigation')[0] as
+    | PerformanceNavigationTiming
+    | undefined
+  if (!navigation) {
+    console.warn('[BUNDLE] ⚠️ Navigation performance entry not available')
+  }
   const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[]
   
   const jsResources = resources.filter(r => r.name.endsWith('.js'))
@@ -97,9 +102,11 @@ export function analyzePerformance() {
   const totalCssSize = cssResources.reduce((sum, r) => sum + (r.transferSize || 0), 0)
   
   const analysis = {
-    domContentLoaded: navigation.domContentLoadedEventEnd - navigation.fetchStart,
-    loadComplete: navigation.loadEventEnd - navigation.fetchStart,
-    ttfb: navigation.responseStart - navigation.fetchStart,
+    domContentLoaded: navigation
+      ? navigation.domContentLoadedEventEnd - navigation.fetchStart
+      : NaN,
+    loadComplete: navigation ? navigation.loadEventEnd - navigation.fetchStart : NaN,
+    ttfb: navigation ? navigation.responseStart - navigation.fetchStart : NaN,
     resources: {
       js: {
         count: jsResources.length,

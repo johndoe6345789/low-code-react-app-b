@@ -69,6 +69,12 @@ export function usePWA() {
       setState(prev => ({ ...prev, isOnline: false }))
     }
 
+    const handleServiceWorkerMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'CACHE_CLEARED') {
+        window.location.reload()
+      }
+    }
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
     window.addEventListener('online', handleOnline)
@@ -96,11 +102,7 @@ export function usePWA() {
           console.error('[PWA] Service Worker registration failed:', error)
         })
 
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'CACHE_CLEARED') {
-          window.location.reload()
-        }
-      })
+      navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage)
     }
 
     return () => {
@@ -108,6 +110,9 @@ export function usePWA() {
       window.removeEventListener('appinstalled', handleAppInstalled)
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage)
+      }
     }
   }, [])
 
