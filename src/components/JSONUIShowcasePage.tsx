@@ -3,12 +3,13 @@ import { AtomicComponentDemo } from '@/components/AtomicComponentDemo'
 import { DashboardDemoPage } from '@/components/DashboardDemoPage'
 import { PageRenderer } from '@/lib/json-ui/page-renderer'
 import { hydrateSchema } from '@/schemas/schema-loader'
-import { dataComponentsDemoSchema } from '@/schemas/page-schemas'
+import pageSchemasJson from '@/schemas/page-schemas.json'
 import todoListJson from '@/schemas/todo-list.json'
 import newMoleculesShowcaseJson from '@/schemas/new-molecules-showcase.json'
 
 const todoListSchema = hydrateSchema(todoListJson)
 const newMoleculesShowcaseSchema = hydrateSchema(newMoleculesShowcaseJson)
+const dataComponentsDemoSchema = hydrateSchema(pageSchemasJson.dataComponentsDemoSchema)
 
 export function JSONUIShowcasePage() {
   return (
