@@ -24,22 +24,18 @@ export class FlaskBackendAdapter implements StorageAdapter {
 
       clearTimeout(timeoutId)
 
+      const contentLength = response.headers.get('content-length')
+      const contentType = response.headers.get('content-type')
+      const hasJsonBody = contentLength !== '0' && contentType?.includes('application/json')
+
       if (!response.ok) {
-        let errorMessage = response.statusText
-        try {
-          const errorText = await response.text()
-          if (errorText) {
-            try {
-              const parsed = JSON.parse(errorText) as { error?: string }
-              errorMessage = parsed.error || errorText
-            } catch {
-              errorMessage = errorText
-            }
-          }
-        } catch {
-          // ignore error parsing failures
-        }
-        throw new Error(errorMessage || `HTTP ${response.status}`)
+        const errorPayload = hasJsonBody ? await response.json().catch(() => null) : null
+        const errorMessage = errorPayload?.error || response.statusText || `HTTP ${response.status}`
+        throw new Error(errorMessage)
+      }
+
+      if (response.status === 204 || !hasJsonBody) {
+        return undefined as T
       }
 
       const responseText = await response.text()
