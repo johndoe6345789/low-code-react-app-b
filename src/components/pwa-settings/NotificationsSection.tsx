@@ -4,7 +4,7 @@ import { Switch } from '@/components/ui/switch'
 import { Bell, CheckCircle, Question, XCircle } from '@phosphor-icons/react'
 
 interface NotificationsSectionProps {
-  permission: NotificationPermission
+  permission: NotificationPermission | 'unsupported'
   onToggle: (enabled: boolean) => void
   copy: {
     title: string
@@ -12,6 +12,7 @@ interface NotificationsSectionProps {
     label: string
     permissionLabel: string
     blocked: string
+    unsupported: string
   }
 }
 
@@ -22,6 +23,8 @@ export function NotificationsSection({ permission, onToggle, copy }: Notificatio
         return <CheckCircle size={16} className="text-accent" weight="fill" />
       case 'denied':
         return <XCircle size={16} className="text-destructive" weight="fill" />
+      case 'unsupported':
+        return <XCircle size={16} className="text-muted-foreground" weight="fill" />
       default:
         return <Question size={16} className="text-muted-foreground" weight="fill" />
     }
@@ -51,13 +54,19 @@ export function NotificationsSection({ permission, onToggle, copy }: Notificatio
           <Switch
             checked={permission === 'granted'}
             onCheckedChange={onToggle}
-            disabled={permission === 'denied'}
+            disabled={permission === 'denied' || permission === 'unsupported'}
           />
         </div>
 
         {permission === 'denied' && (
           <div className="text-xs text-destructive bg-destructive/10 p-3 rounded-md">
             {copy.blocked}
+          </div>
+        )}
+
+        {permission === 'unsupported' && (
+          <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-md">
+            {copy.unsupported}
           </div>
         )}
       </div>
