@@ -1,5 +1,5 @@
 import { createElement, useMemo, Fragment } from 'react'
-import { UIComponent, Binding, ComponentRendererProps } from '@/types/json-ui'
+import { UIComponent, Binding, ComponentRendererProps, EventHandler, JSONEventDefinition, JSONEventMap } from '@/types/json-ui'
 import { getUIComponent } from './component-registry'
 import { resolveDataBinding, evaluateCondition } from './utils'
 
@@ -9,6 +9,69 @@ function resolveBinding(binding: Binding, data: Record<string, unknown>): unknow
 
 export function ComponentRenderer({ component, data, context = {}, onEvent }: ComponentRendererProps) {
   const mergedData = useMemo(() => ({ ...data, ...context }), [data, context])
+  const resolvedEventHandlers = useMemo(() => {
+    const normalizeEventName = (eventName: string) =>
+      eventName.startsWith('on') && eventName.length > 2
+        ? `${eventName.charAt(2).toLowerCase()}${eventName.slice(3)}`
+        : eventName
+
+    const normalizeDefinition = (eventName: string, definition: JSONEventDefinition | string): EventHandler | null => {
+      if (!definition) return null
+      const normalizedEventName = normalizeEventName(eventName)
+      if (typeof definition === 'string') {
+        return {
+          event: normalizedEventName,
+          actions: [{ id: definition, type: 'custom' }],
+        }
+      }
+
+      if (definition.actions?.length) {
+        const actions = definition.payload
+          ? definition.actions.map((action) => ({
+            ...action,
+            params: action.params ?? definition.payload,
+          }))
+          : definition.actions
+        return {
+          event: normalizedEventName,
+          actions,
+          condition: definition.condition,
+        }
+      }
+
+      if (definition.action) {
+        return {
+          event: normalizedEventName,
+          actions: [{ id: definition.action, type: 'custom', params: definition.payload }],
+          condition: definition.condition,
+        }
+      }
+
+      return null
+    }
+
+    if (!component.events) {
+      return [] as EventHandler[]
+    }
+
+    if (Array.isArray(component.events)) {
+      return component.events.map((handler) => ({
+        ...handler,
+        event: normalizeEventName(handler.event),
+      }))
+    }
+
+    const eventMap = component.events as JSONEventMap
+    return Object.entries(eventMap).flatMap(([eventName, definition]) => {
+      if (Array.isArray(definition)) {
+        return definition
+          .map((entry) => normalizeDefinition(eventName, entry))
+          .filter(Boolean) as EventHandler[]
+      }
+      const normalized = normalizeDefinition(eventName, definition)
+      return normalized ? [normalized] : []
+    })
+  }, [component.events])
   const resolvedProps = useMemo(() => {
     const resolved: Record<string, unknown> = { ...component.props }
     
@@ -26,8 +89,8 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
       }
     }
     
-    if (component.events && onEvent) {
-      component.events.forEach(handler => {
+    if (resolvedEventHandlers.length > 0 && onEvent) {
+      resolvedEventHandlers.forEach(handler => {
         resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
           const conditionMet = !handler.condition
             || (typeof handler.condition === 'function'

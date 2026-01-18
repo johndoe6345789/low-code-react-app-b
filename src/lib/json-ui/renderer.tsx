@@ -1,5 +1,13 @@
 import React, { useCallback } from 'react'
-import type { Action, EventHandler, JSONFormRendererProps, JSONUIRendererProps, UIComponent } from './types'
+import type {
+  Action,
+  EventHandler,
+  JSONEventDefinition,
+  JSONEventMap,
+  JSONFormRendererProps,
+  JSONUIRendererProps,
+  UIComponent,
+} from './types'
 import { getUIComponent } from './component-registry'
 import { resolveDataBinding, evaluateCondition } from './utils'
 import { cn } from '@/lib/utils'
@@ -79,35 +87,39 @@ export function JSONUIRenderer({
       ? eventName
       : `on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`
 
-  const normalizeLegacyHandler = (eventName: string, handler: any): EventHandler | null => {
-    if (!handler) return null
+  const normalizeEventDefinition = (
+    eventName: string,
+    definition: JSONEventDefinition | string
+  ): EventHandler | null => {
+    if (!definition) return null
+    const normalizedEvent = normalizeEventName(eventName)
 
-    if (typeof handler === 'string') {
+    if (typeof definition === 'string') {
       return {
-        event: normalizeEventName(eventName),
-        actions: [{ id: handler, type: 'custom' }],
+        event: normalizedEvent,
+        actions: [{ id: definition, type: 'custom' }],
       }
     }
 
-    if (handler.actions && Array.isArray(handler.actions)) {
+    if (definition.actions && Array.isArray(definition.actions)) {
+      const actions = definition.payload
+        ? definition.actions.map((action) => ({
+          ...action,
+          params: action.params ?? definition.payload,
+        }))
+        : definition.actions
       return {
-        event: normalizeEventName(eventName),
-        actions: handler.actions as Action[],
-        condition: handler.condition,
+        event: normalizedEvent,
+        actions,
+        condition: definition.condition,
       }
     }
 
-    if (typeof handler === 'object' && handler.action) {
+    if (definition.action) {
       return {
-        event: normalizeEventName(eventName),
-        actions: [
-          {
-            id: handler.action,
-            type: 'custom',
-            target: handler.target,
-            params: handler.params,
-          },
-        ],
+        event: normalizedEvent,
+        actions: [{ id: definition.action, type: 'custom', params: definition.payload }],
+        condition: definition.condition,
       }
     }
 
@@ -119,11 +131,20 @@ export function JSONUIRenderer({
     renderContext: Record<string, unknown>
   ) => {
     const eventHandlers: EventHandler[] = Array.isArray(component.events)
-      ? component.events
+      ? component.events.map((handler) => ({
+        ...handler,
+        event: normalizeEventName(handler.event),
+      }))
       : component.events
-        ? Object.entries(component.events).map(([eventName, handler]) =>
-          normalizeLegacyHandler(eventName, handler)
-        ).filter(Boolean) as EventHandler[]
+        ? Object.entries(component.events as JSONEventMap).flatMap(([eventName, handler]) => {
+          if (Array.isArray(handler)) {
+            return handler
+              .map((entry) => normalizeEventDefinition(eventName, entry))
+              .filter(Boolean) as EventHandler[]
+          }
+          const normalized = normalizeEventDefinition(eventName, handler)
+          return normalized ? [normalized] : []
+        })
         : []
 
     if (eventHandlers.length > 0) {

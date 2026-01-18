@@ -48,6 +48,22 @@ export const EventHandlerSchema = z.object({
   condition: z.any().optional(),
 })
 
+export const JSONEventDefinitionSchema = z.object({
+  action: z.string().optional(),
+  actions: z.array(ActionSchema).optional(),
+  payload: z.record(z.string(), z.any()).optional(),
+  condition: z.any().optional(),
+})
+
+export const JSONEventMapSchema = z.record(
+  z.string(),
+  z.union([
+    z.string(),
+    JSONEventDefinitionSchema,
+    z.array(JSONEventDefinitionSchema),
+  ])
+)
+
 export const ConditionalSchema = z.object({
   if: z.string(),
   then: z.any().optional(),
@@ -69,7 +85,7 @@ export const UIComponentSchema: any = z.object({
     z.string(),
     DataBindingSchema,
   ]).optional(),
-  events: z.array(EventHandlerSchema).optional(),
+  events: z.union([z.array(EventHandlerSchema), JSONEventMapSchema]).optional(),
   conditional: ConditionalSchema.optional(),
   loop: z.object({
     source: z.string(),
@@ -242,6 +258,8 @@ export type UIValue = z.infer<typeof UIValueSchema>
 export type DataBinding = z.infer<typeof DataBindingSchema>
 export type Action = z.infer<typeof ActionSchema>
 export type EventHandler = z.infer<typeof EventHandlerSchema>
+export type JSONEventDefinition = z.infer<typeof JSONEventDefinitionSchema>
+export type JSONEventMap = z.infer<typeof JSONEventMapSchema>
 export type Conditional = z.infer<typeof ConditionalSchema>
 export type UIComponent = z.infer<typeof UIComponentSchema>
 export type FormField = z.infer<typeof FormFieldSchema>

@@ -1,6 +1,6 @@
-import type { Action, EventHandler, FormField, UIComponent } from './schema'
+import type { Action, EventHandler, FormField, JSONEventDefinition, JSONEventMap, UIComponent } from './schema'
 
-export type { Action, EventHandler, FormField, UIComponent }
+export type { Action, EventHandler, FormField, JSONEventDefinition, JSONEventMap, UIComponent }
 
 export interface JSONUIRendererProps {
   component: UIComponent
