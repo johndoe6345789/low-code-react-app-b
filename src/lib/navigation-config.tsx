@@ -153,6 +153,11 @@ export const tabInfo: Record<string, TabInfo> = {
     icon: <Code size={24} weight="duotone" />,
     description: 'JSON-driven UI examples',
   },
+  'json-conversion-showcase': {
+    title: 'JSON Conversion Showcase',
+    icon: <BookOpen size={24} weight="duotone" />,
+    description: 'JSON conversion showcase overview',
+  },
   'atomic-library': {
     title: 'Atomic Components',
     icon: <Atom size={24} weight="duotone" />,
@@ -331,6 +336,12 @@ export const navigationGroups: NavigationGroup[] = [
         icon: <FileText size={18} />,
         value: 'docs',
         featureKey: 'documentation',
+      },
+      {
+        id: 'json-conversion-showcase',
+        label: 'JSON Conversion Showcase',
+        icon: <BookOpen size={18} />,
+        value: 'json-conversion-showcase',
       },
       {
         id: 'settings',

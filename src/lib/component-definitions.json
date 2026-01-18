@@ -199,14 +199,20 @@
     "label": "Progress Bar",
     "category": "display",
     "icon": "ChartBar",
-    "defaultProps": { "value": 65, "size": "md", "variant": "default", "showLabel": false }
+    "defaultProps": {
+      "value": 65,
+      "max": 100,
+      "size": "md",
+      "variant": "default",
+      "showLabel": false
+    }
   },
   {
     "type": "CircularProgress",
     "label": "Circular Progress",
     "category": "display",
     "icon": "CircleNotch",
-    "defaultProps": { "value": 65, "size": "md", "showLabel": true }
+    "defaultProps": { "value": 65, "max": 100, "size": "md", "showLabel": true }
   },
   {
     "type": "Spinner",
@@ -234,7 +240,7 @@
     "label": "Divider",
     "category": "display",
     "icon": "Minus",
-    "defaultProps": { "orientation": "horizontal", "decorative": true }
+    "defaultProps": { "orientation": "horizontal", "decorative": true, "className": "" }
   },
   {
     "type": "Link",

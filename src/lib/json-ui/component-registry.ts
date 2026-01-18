@@ -17,6 +17,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Skeleton as ShadcnSkeleton } from '@/components/ui/skeleton'
 import { Progress } from '@/components/ui/progress'
 import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CircularProgress, Divider, ProgressBar } from '@/components/atoms'
 import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
 import * as OrganismComponents from '@/components/organisms'
@@ -178,10 +179,13 @@ export const atomComponents: UIComponentRegistry = {
   ),
   DatePicker: atomComponentMap.DatePicker,
   FileUpload: atomComponentMap.FileUpload,
-  DataList: atomComponentMap.DataList,
-  DataTable: atomComponentMap.DataTable,
-  MetricCard: atomComponentMap.MetricCard,
-  Timeline: atomComponentMap.Timeline,
+  CircularProgress,
+  Divider,
+  ProgressBar,
+  DataList: (AtomComponents as Record<string, ComponentType<any>>).DataList,
+  DataTable: (AtomComponents as Record<string, ComponentType<any>>).DataTable,
+  MetricCard: (AtomComponents as Record<string, ComponentType<any>>).MetricCard,
+  Timeline: (AtomComponents as Record<string, ComponentType<any>>).Timeline,
 }
 
 const breadcrumbComponent = AtomComponents.Breadcrumb ?? AtomComponents.BreadcrumbNav
@@ -264,12 +268,20 @@ export function registerComponent(name: string, component: ComponentType<any>) {
   uiComponentRegistry[name] = component
 }
 
+const resolveWrapperComponent = (type: string): ComponentType<any> | null => {
+  const entry = registryEntryByType.get(type)
+  if (entry?.wrapperRequired && entry.wrapperComponent) {
+    return uiComponentRegistry[entry.wrapperComponent] || null
+  }
+  return null
+}
+
 export function getUIComponent(type: string): ComponentType<any> | string | null {
-  return uiComponentRegistry[type] || null
+  return resolveWrapperComponent(type) ?? uiComponentRegistry[type] ?? null
 }
 
 export function hasComponent(type: string): boolean {
-  return type in uiComponentRegistry
+  return Boolean(resolveWrapperComponent(type) ?? uiComponentRegistry[type])
 }
 
 export function getDeprecatedComponentInfo(type: string): DeprecatedComponentInfo | null {

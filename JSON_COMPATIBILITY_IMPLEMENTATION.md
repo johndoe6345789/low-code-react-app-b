@@ -32,7 +32,7 @@ The following components have been successfully integrated into the JSON UI syst
 
 ### 4. Created Showcase Schema
 
-**File: `src/schemas/page-schemas.ts`**
+**File: `src/schemas/new-molecules-showcase.json`**
 - Created `newMoleculesShowcaseSchema` - A comprehensive demonstration page
 - Showcases each new component with realistic use cases
 - Includes data bindings and multiple variants
@@ -166,7 +166,7 @@ Here's how to use the new components in JSON schemas:
 - Implementation summary: `JSON_COMPATIBILITY_IMPLEMENTATION.md` (this file)
 - Component registry: `src/lib/json-ui/component-registry.tsx`
 - Type definitions: `src/types/json-ui.ts`
-- Showcase schema: `src/schemas/page-schemas.ts`
+- Showcase schema: `src/schemas/new-molecules-showcase.json`
 - Live demo: Navigate to JSON UI Showcase → "New Molecules" tab
 
 ## ✨ Key Achievements

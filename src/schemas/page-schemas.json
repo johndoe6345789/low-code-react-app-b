@@ -208,5 +208,81 @@
         ]
       }
     ]
+  },
+  "progressComponentsDemoSchema": {
+    "id": "progress-components-demo",
+    "name": "Progress Components Demo",
+    "layout": {
+      "type": "single"
+    },
+    "dataSources": [
+      {
+        "id": "progressValues",
+        "type": "static",
+        "defaultValue": {
+          "linear": 72,
+          "circular": 48,
+          "max": 100
+        }
+      }
+    ],
+    "components": [
+      {
+        "id": "progress-components-root",
+        "type": "div",
+        "props": {
+          "className": "space-y-6 rounded-lg border border-border bg-card p-6"
+        },
+        "children": [
+          {
+            "id": "progress-components-title",
+            "type": "Heading",
+            "props": {
+              "className": "text-xl font-semibold",
+              "children": "Progress Indicators"
+            }
+          },
+          {
+            "id": "progress-components-divider-top",
+            "type": "Divider",
+            "props": {
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "id": "progress-components-linear",
+            "type": "ProgressBar",
+            "props": {
+              "size": "md",
+              "variant": "accent",
+              "showLabel": true
+            },
+            "bindings": {
+              "value": { "source": "progressValues", "sourceType": "data", "path": "linear" },
+              "max": { "source": "progressValues", "sourceType": "data", "path": "max" }
+            }
+          },
+          {
+            "id": "progress-components-divider-middle",
+            "type": "Divider",
+            "props": {
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "id": "progress-components-circular",
+            "type": "CircularProgress",
+            "props": {
+              "size": "md",
+              "showLabel": true
+            },
+            "bindings": {
+              "value": { "source": "progressValues", "sourceType": "data", "path": "circular" },
+              "max": { "source": "progressValues", "sourceType": "data", "path": "max" }
+            }
+          }
+        ]
+      }
+    ]
   }
 }

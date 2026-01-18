@@ -27,6 +27,7 @@ import { PWASettings } from '@/components/PWASettings'
 import { FaviconDesigner } from '@/components/FaviconDesigner'
 import { FeatureIdeaCloud } from '@/components/FeatureIdeaCloud'
 import { JSONUIShowcase } from '@/components/JSONUIShowcase'
+import { JSONConversionShowcase } from '@/components/JSONConversionShowcase'
 
 export const ComponentRegistry: Record<string, ComponentType<any>> = {
   Button,
@@ -61,6 +62,7 @@ export const ComponentRegistry: Record<string, ComponentType<any>> = {
   FaviconDesigner,
   FeatureIdeaCloud,
   JSONUIShowcase,
+  JSONConversionShowcase,
 }
 
 export function getComponent(name: string): ComponentType<any> | null {

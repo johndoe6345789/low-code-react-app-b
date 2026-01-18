@@ -1,4 +1,5 @@
 import type { StorageBackendKey } from '@/components/storage/storageSettingsConfig'
+import type { UIComponent } from '@/types/json-ui'
 
 export interface BreadcrumbItem {
   label: string
@@ -88,4 +89,76 @@ export interface StorageSettingsWrapperProps {
   isImporting?: boolean
   onExport?: () => void
   onImport?: () => void
+}
+
+export interface GitHubBuildStatusWorkflowItem {
+  id: string
+  name: string
+  status?: string
+  conclusion?: string | null
+  branch?: string
+  updatedAt?: string
+  event?: string
+  url?: string
+}
+
+export interface GitHubBuildStatusWrapperProps {
+  title?: string
+  description?: string
+  workflows?: GitHubBuildStatusWorkflowItem[]
+  isLoading?: boolean
+  errorMessage?: string
+  emptyMessage?: string
+  footerLinkLabel?: string
+  footerLinkUrl?: string
+  className?: string
+}
+
+export interface ComponentBindingField {
+  id: string
+  label: string
+  value?: string
+  placeholder?: string
+}
+
+export interface ComponentBindingDialogWrapperProps {
+  open?: boolean
+  title?: string
+  description?: string
+  componentType?: string
+  componentId?: string
+  bindings?: ComponentBindingField[]
+  onBindingChange?: (id: string, value: string) => void
+  onSave?: () => void
+  onCancel?: () => void
+  onOpenChange?: (open: boolean) => void
+  className?: string
+}
+
+export interface DataSourceField {
+  id: string
+  label: string
+  value?: string
+  placeholder?: string
+  helperText?: string
+}
+
+export interface DataSourceEditorDialogWrapperProps {
+  open?: boolean
+  title?: string
+  description?: string
+  fields?: DataSourceField[]
+  onFieldChange?: (id: string, value: string) => void
+  onSave?: () => void
+  onCancel?: () => void
+  onOpenChange?: (open: boolean) => void
+  className?: string
+}
+
+export interface ComponentTreeWrapperProps {
+  components?: UIComponent[]
+  selectedId?: string | null
+  emptyMessage?: string
+  onSelect?: (id: string) => void
+  className?: string
 }
