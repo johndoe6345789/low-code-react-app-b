@@ -7,25 +7,20 @@ import {
   FileCode,
   GitBranch,
   MagnifyingGlass,
-  MapPin,
-  PaintBrush,
-  Rocket
+  GitBranch,
+  FileCode,
+  Sparkle,
+  CheckCircle
 } from '@phosphor-icons/react'
-import { ReadmeTab } from './DocumentationView/ReadmeTab'
-import { RoadmapTab } from './DocumentationView/RoadmapTab'
-import { AgentsTab } from './DocumentationView/AgentsTab'
-import { PwaTab } from './DocumentationView/PwaTab'
-import { SassTab } from './DocumentationView/SassTab'
-import { CicdTab } from './DocumentationView/CicdTab'
-
-const tabs = [
-  { value: 'readme', label: 'README', icon: <BookOpen size={18} /> },
-  { value: 'roadmap', label: 'Roadmap', icon: <MapPin size={18} /> },
-  { value: 'agents', label: 'Agents Files', icon: <FileCode size={18} /> },
-  { value: 'pwa', label: 'PWA Guide', icon: <Rocket size={18} /> },
-  { value: 'sass', label: 'Sass Styles Guide', icon: <PaintBrush size={18} /> },
-  { value: 'cicd', label: 'CI/CD Guide', icon: <GitBranch size={18} /> }
-]
+import { AIFeatureCard } from './DocumentationView/AIFeatureCard'
+import { AgentFileItem } from './DocumentationView/AgentFileItem'
+import { AnimationItem } from './DocumentationView/AnimationItem'
+import { CICDPlatformItem } from './DocumentationView/CICDPlatformItem'
+import { FeatureItem } from './DocumentationView/FeatureItem'
+import { IntegrationPoint } from './DocumentationView/IntegrationPoint'
+import { PipelineStageCard } from './DocumentationView/PipelineStageCard'
+import { RoadmapItem } from './DocumentationView/RoadmapItem'
+import { SassComponentItem } from './DocumentationView/SassComponentItem'
 
 export function DocumentationView() {
   const [activeTab, setActiveTab] = useState('readme')
