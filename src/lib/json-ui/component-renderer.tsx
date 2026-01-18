@@ -3,11 +3,16 @@ import { UIComponent, Binding, ComponentRendererProps, EventHandler, JSONEventDe
 import { getUIComponent } from './component-registry'
 import { resolveDataBinding, evaluateCondition } from './utils'
 
-function resolveBinding(binding: Binding, data: Record<string, unknown>): unknown {
-  return resolveDataBinding(binding, data)
+function resolveBinding(
+  binding: Binding,
+  data: Record<string, unknown>,
+  context: Record<string, unknown>,
+  state?: Record<string, unknown>
+): unknown {
+  return resolveDataBinding(binding, data, context, { state, bindings: context })
 }
 
-export function ComponentRenderer({ component, data, context = {}, onEvent }: ComponentRendererProps) {
+export function ComponentRenderer({ component, data, context = {}, state, onEvent }: ComponentRendererProps) {
   const mergedData = useMemo(() => ({ ...data, ...context }), [data, context])
   const resolvedEventHandlers = useMemo(() => {
     const normalizeEventName = (eventName: string) =>
@@ -77,12 +82,12 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
     
     if (component.bindings) {
       Object.entries(component.bindings).forEach(([propName, binding]) => {
-        resolved[propName] = resolveBinding(binding, mergedData)
+        resolved[propName] = resolveBinding(binding, data, context, state)
       })
     }
 
     if (component.dataBinding) {
-      const boundData = resolveDataBinding(component.dataBinding, mergedData)
+      const boundData = resolveDataBinding(component.dataBinding, data, context, { state, bindings: context })
       if (boundData !== undefined) {
         resolved.value = boundData
         resolved.data = boundData
@@ -114,7 +119,7 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
     }
     
     return resolved
-  }, [component, mergedData, onEvent])
+  }, [component, data, context, state, mergedData, onEvent])
   
   const Component = getUIComponent(component.type)
   
@@ -141,6 +146,7 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
               component={child}
               data={data}
               context={renderContext}
+              state={state}
               onEvent={onEvent}
             />
           )}
@@ -166,6 +172,7 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
                 component={child}
                 data={data}
                 context={renderContext}
+                state={state}
                 onEvent={onEvent}
               />
             )}
@@ -177,6 +184,7 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
         component={branch}
         data={data}
         context={renderContext}
+        state={state}
         onEvent={onEvent}
       />
     )
@@ -198,7 +206,7 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
   }
 
   if (component.loop) {
-    const items = resolveDataBinding(component.loop.source, mergedData) || []
+    const items = resolveDataBinding(component.loop.source, data, context, { state, bindings: context }) || []
     const loopChildren = items.map((item: unknown, index: number) => {
       const loopContext = {
         ...context,
@@ -216,7 +224,7 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
       }
 
       if (component.condition) {
-        const conditionValue = resolveBinding(component.condition, { ...data, ...loopContext })
+        const conditionValue = resolveBinding(component.condition, data, loopContext, state)
         if (!conditionValue) {
           return null
         }
@@ -240,7 +248,7 @@ export function ComponentRenderer({ component, data, context = {}, onEvent }: Co
   }
 
   if (component.condition) {
-    const conditionValue = resolveBinding(component.condition, mergedData)
+    const conditionValue = resolveBinding(component.condition, data, context, state)
     if (!conditionValue) {
       return null
     }

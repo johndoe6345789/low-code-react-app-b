@@ -1,23 +1,43 @@
 type BindingTransform = string | ((data: unknown) => unknown)
 
+interface BindingSourceOptions {
+  state?: Record<string, any>
+  bindings?: Record<string, any>
+}
+
 export function resolveDataBinding(
-  binding: string | { source: string; path?: string; transform?: BindingTransform },
+  binding: string | { source: string; sourceType?: 'data' | 'bindings' | 'state'; path?: string; transform?: BindingTransform },
   dataMap: Record<string, any>,
   context: Record<string, any> = {},
+  options: BindingSourceOptions = {},
 ): any {
   const mergedContext = { ...dataMap, ...context }
+  const stateSource = options.state ?? {}
+  const bindingsSource = options.bindings ?? context
 
   if (typeof binding === 'string') {
+    if (binding.startsWith('state.')) {
+      return getNestedValue(stateSource, binding.slice('state.'.length))
+    }
+    if (binding.startsWith('bindings.')) {
+      return getNestedValue(bindingsSource, binding.slice('bindings.'.length))
+    }
     if (binding.includes('.')) {
       return getNestedValue(mergedContext, binding)
     }
     return mergedContext[binding]
   }
   
-  const { source, path, transform } = binding
+  const { source, sourceType, path, transform } = binding
+  const sourceContext =
+    sourceType === 'state'
+      ? stateSource
+      : sourceType === 'bindings'
+        ? bindingsSource
+        : mergedContext
   const sourceValue = source.includes('.')
-    ? getNestedValue(mergedContext, source)
-    : mergedContext[source]
+    ? getNestedValue(sourceContext, source)
+    : sourceContext[source]
   const resolvedValue = path ? getNestedValue(sourceValue, path) : sourceValue
 
   return applyTransform(resolvedValue, transform)
