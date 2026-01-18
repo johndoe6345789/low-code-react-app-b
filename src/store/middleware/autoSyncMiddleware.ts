@@ -9,7 +9,7 @@ interface AutoSyncConfig {
   maxQueueSize: number
 }
 
-class AutoSyncManager {
+export class AutoSyncManager {
   private config: AutoSyncConfig = {
     enabled: false,
     intervalMs: 30000,
@@ -21,6 +21,8 @@ class AutoSyncManager {
   private lastSyncTime = 0
   private changeCounter = 0
   private dispatch: any = null
+  private syncInFlight: Promise<void> | null = null
+  private pendingSync = false
 
   configure(config: Partial<AutoSyncConfig>) {
     this.config = { ...this.config, ...config }
@@ -69,12 +71,32 @@ class AutoSyncManager {
   private async performSync() {
     if (!this.dispatch) return
 
+    if (this.syncInFlight) {
+      this.pendingSync = true
+      return
+    }
+
+    const syncPromise = (async () => {
+      try {
+        await this.dispatch(syncToFlaskBulk())
+        this.lastSyncTime = Date.now()
+        this.changeCounter = 0
+      } catch (error) {
+        console.error('[AutoSync] Sync failed:', error)
+      }
+    })()
+
+    this.syncInFlight = syncPromise
+
     try {
-      await this.dispatch(syncToFlaskBulk())
-      this.lastSyncTime = Date.now()
-      this.changeCounter = 0
-    } catch (error) {
-      console.error('[AutoSync] Sync failed:', error)
+      await syncPromise
+    } finally {
+      this.syncInFlight = null
+    }
+
+    if (this.pendingSync) {
+      this.pendingSync = false
+      await this.performSync()
     }
   }
 
