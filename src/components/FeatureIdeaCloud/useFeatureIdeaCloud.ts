@@ -5,6 +5,7 @@ import { useKV } from '@/hooks/use-kv'
 import { FeatureIdea, IdeaGroup, IdeaEdgeData } from './types'
 import { CATEGORIES, CONNECTION_STYLE, GROUP_COLORS } from './constants'
 import { buildSeedEdges, buildSeedIdeas } from './seed-data'
+import { dispatchConnectionCountUpdate } from './dispatchConnectionCountUpdate'
 
 type SeedRef = {
   ideas: FeatureIdea[]
@@ -112,10 +113,7 @@ export const useFeatureIdeaCloud = (): FeatureIdeaCloudState => {
         bottom: connections.bottom.size,
       }
 
-      const event = new CustomEvent('updateConnectionCounts', {
-        detail: { nodeId, counts },
-      })
-      window.dispatchEvent(event)
+      dispatchConnectionCountUpdate(nodeId, counts)
     })
   }, [])
 
