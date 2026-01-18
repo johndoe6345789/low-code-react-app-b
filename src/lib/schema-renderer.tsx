@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Component as ComponentSchema, Layout } from '@/schemas/ui-schema'
 import { useDataBinding, useEventHandlers, useComponentRegistry } from '@/hooks/ui'
@@ -7,6 +7,7 @@ interface SchemaRendererProps {
   schema: ComponentSchema
   data: Record<string, any>
   functions?: Record<string, (...args: any[]) => any>
+  componentRegistry?: Record<string, ComponentType<any>>
 }
 
 interface LayoutRendererProps {
@@ -51,10 +52,10 @@ function LayoutRenderer({ layout, children }: LayoutRendererProps) {
   return <div className={getLayoutClasses()}>{children}</div>
 }
 
-export function SchemaRenderer({ schema, data, functions = {} }: SchemaRendererProps) {
+export function SchemaRenderer({ schema, data, functions = {}, componentRegistry }: SchemaRendererProps) {
   const { resolveCondition, resolveProps, resolveBinding } = useDataBinding({ data })
   const { resolveEvents } = useEventHandlers({ functions })
-  const { getComponent, getIcon } = useComponentRegistry()
+  const { getComponent, getIcon } = useComponentRegistry({ customComponents: componentRegistry })
 
   if (schema.condition && !resolveCondition(schema.condition)) {
     return null
@@ -76,11 +77,23 @@ export function SchemaRenderer({ schema, data, functions = {} }: SchemaRendererP
               schema={{ ...schema, repeat: undefined }}
               data={itemData}
               functions={functions}
+              componentRegistry={componentRegistry}
             />
           )
         })}
       </>
     )
+  }
+
+  const props = resolveProps(schema.props || {})
+  const events = resolveEvents(schema.events)
+  const combinedProps = { ...props, ...events }
+
+  if (schema.binding) {
+    const iconName = resolveBinding(schema.binding)
+    if (iconName && schema.type === 'Icon') {
+      return getIcon(iconName, combinedProps)
+    }
   }
 
   const Component = getComponent(schema.type)
@@ -96,23 +109,13 @@ export function SchemaRenderer({ schema, data, functions = {} }: SchemaRendererP
     )
   }
 
-  const props = resolveProps(schema.props || {})
-  const events = resolveEvents(schema.events)
-  const combinedProps = { ...props, ...events }
-
-  if (schema.binding) {
-    const iconName = resolveBinding(schema.binding)
-    if (iconName && schema.type === 'Icon') {
-      return getIcon(iconName, props)
-    }
-  }
-
   const children = schema.children?.map((child, index) => (
     <SchemaRenderer
       key={child.id || index}
       schema={child}
       data={data}
       functions={functions}
+      componentRegistry={componentRegistry}
     />
   ))
 
@@ -129,9 +132,10 @@ interface PageRendererProps {
   }
   data: Record<string, any>
   functions?: Record<string, (...args: any[]) => any>
+  componentRegistry?: Record<string, ComponentType<any>>
 }
 
-export function PageRenderer({ schema, data, functions = {} }: PageRendererProps) {
+export function PageRenderer({ schema, data, functions = {}, componentRegistry }: PageRendererProps) {
   return (
     <LayoutRenderer layout={schema.layout}>
       {schema.components.map((component) => (
@@ -140,6 +144,7 @@ export function PageRenderer({ schema, data, functions = {} }: PageRendererProps
           schema={component}
           data={data}
           functions={functions}
+          componentRegistry={componentRegistry}
         />
       ))}
     </LayoutRenderer>
