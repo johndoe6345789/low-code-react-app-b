@@ -1,21 +1,11 @@
 /// <reference path="../../global.d.ts" />
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { DataSource } from '@/types/json-ui'
 
 export function useDataSources(dataSources: DataSource[]) {
   const [data, setData] = useState<Record<string, any>>({})
   const [loading, setLoading] = useState(true)
-
-  const staticSources = useMemo(
-    () => dataSources.filter((ds) => ds.type === 'static'),
-    [dataSources]
-  )
-
-  const computedSources = useMemo(
-    () => dataSources.filter((ds) => ds.type === 'computed'),
-    [dataSources]
-  )
 
   useEffect(() => {
     const loadData = async () => {
@@ -50,25 +40,8 @@ export function useDataSources(dataSources: DataSource[]) {
     }
   }, [dataSources])
 
-  const computedData = useMemo(() => {
-    const result: Record<string, any> = {}
-    
-    computedSources.forEach((ds) => {
-      if (ds.compute && typeof ds.compute === 'function') {
-        result[ds.id] = ds.compute(data)
-      }
-    })
-    
-    return result
-  }, [computedSources, data])
-
-  const allData = useMemo(
-    () => ({ ...data, ...computedData }),
-    [data, computedData]
-  )
-
   return {
-    data: allData,
+    data,
     loading,
     updateDataSource,
   }

@@ -24,18 +24,6 @@
       "id": "editDialogOpen",
       "type": "static",
       "defaultValue": false
-    },
-    {
-      "id": "selectedLambda",
-      "type": "computed",
-      "compute": "(data) => data.lambdas?.find(l => l.id === data.selectedLambdaId) || null",
-      "dependencies": ["lambdas", "selectedLambdaId"]
-    },
-    {
-      "id": "lambdaCount",
-      "type": "computed",
-      "compute": "(data) => (data.lambdas || []).length",
-      "dependencies": ["lambdas"]
     }
   ],
   "components": [
@@ -80,7 +68,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "lambdaCount"
+                          "source": "lambdas",
+                          "transform": "(data || []).length"
                         }
                       }
                     }
@@ -128,7 +117,7 @@
                     "className": "space-y-2"
                   },
                   "conditional": {
-                    "if": "lambdaCount > 0"
+                    "if": "(lambdas || []).length > 0"
                   },
                   "children": [
                     {
@@ -143,7 +132,7 @@
                     "className": "flex flex-col items-center justify-center py-12 px-4 text-center"
                   },
                   "conditional": {
-                    "if": "lambdaCount === 0"
+                    "if": "(lambdas || []).length === 0"
                   },
                   "children": [
                     {
@@ -187,7 +176,7 @@
                 "className": "flex-1 flex items-center justify-center p-8"
               },
               "conditional": {
-                "if": "selectedLambda"
+                "if": "(lambdas || []).find((lambda) => lambda.id === selectedLambdaId)"
               },
               "children": [
                 {
@@ -210,25 +199,25 @@
                               "props": {
                                 "className": "text-3xl font-bold"
                               },
-                              "bindings": {
-                                "children": {
-                                  "source": "selectedLambda",
-                                  "path": "name"
-                                }
-                              }
-                            },
+                                  "bindings": {
+                                    "children": {
+                                      "source": "lambdas",
+                                      "transform": "(lambdas, context) => (lambdas || []).find((lambda) => lambda.id === context.selectedLambdaId)?.name"
+                                    }
+                                  }
+                                },
                             {
                               "type": "p",
                               "props": {
                                 "className": "text-muted-foreground"
                               },
-                              "bindings": {
-                                "children": {
-                                  "source": "selectedLambda",
-                                  "path": "description"
+                                  "bindings": {
+                                    "children": {
+                                      "source": "lambdas",
+                                      "transform": "(lambdas, context) => (lambdas || []).find((lambda) => lambda.id === context.selectedLambdaId)?.description"
+                                    }
+                                  }
                                 }
-                              }
-                            }
                           ]
                         }
                       ]
@@ -243,7 +232,7 @@
                 "className": "flex-1 flex items-center justify-center p-8"
               },
               "conditional": {
-                "if": "!selectedLambda"
+                "if": "!(lambdas || []).find((lambda) => lambda.id === selectedLambdaId)"
               },
               "children": [
                 {

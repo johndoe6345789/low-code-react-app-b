@@ -1,4 +1,4 @@
-export { useKVDataSource, useComputedDataSource, useStaticDataSource, useMultipleDataSources } from './use-data-source'
+export { useKVDataSource, useStaticDataSource, useMultipleDataSources } from './use-data-source'
 export { useCRUD } from './use-crud'
 export { useSearchFilter } from './use-search-filter'
 export { useSort } from './use-sort'

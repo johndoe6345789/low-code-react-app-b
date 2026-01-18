@@ -16,7 +16,7 @@ export * from './ai/use-ai-generation'
 
 export * from './data/use-seed-data'
 export * from './data/use-seed-templates'
-export { useKVDataSource, useComputedDataSource, useStaticDataSource, useMultipleDataSources } from './data/use-data-source'
+export { useKVDataSource, useStaticDataSource, useMultipleDataSources } from './data/use-data-source'
 export { useCRUD } from './data/use-crud'
 export { useSearchFilter } from './data/use-search-filter'
 export { useSort } from './data/use-sort'

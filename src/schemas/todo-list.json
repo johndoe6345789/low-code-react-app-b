@@ -19,12 +19,6 @@
       "id": "newTodo",
       "type": "static",
       "defaultValue": ""
-    },
-    {
-      "id": "stats",
-      "type": "computed",
-      "compute": "computeTodoStats",
-      "dependencies": ["todos"]
     }
   ],
   "components": [
@@ -83,7 +77,7 @@
                       "type": "div",
                       "props": { "className": "text-3xl font-bold" },
                       "bindings": {
-                        "children": { "source": "stats", "path": "total" }
+                        "children": { "source": "todos", "transform": "(data || []).length" }
                       }
                     }
                   ]
@@ -110,7 +104,7 @@
                       "type": "div",
                       "props": { "className": "text-3xl font-bold text-accent" },
                       "bindings": {
-                        "children": { "source": "stats", "path": "completed" }
+                        "children": { "source": "todos", "transform": "(data || []).filter((todo) => todo.completed).length" }
                       }
                     }
                   ]
@@ -137,7 +131,7 @@
                       "type": "div",
                       "props": { "className": "text-3xl font-bold text-primary" },
                       "bindings": {
-                        "children": { "source": "stats", "path": "remaining" }
+                        "children": { "source": "todos", "transform": "(data || []).filter((todo) => !todo.completed).length" }
                       }
                     }
                   ]

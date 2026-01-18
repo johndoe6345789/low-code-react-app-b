@@ -14,18 +14,6 @@
         "interval": 10000,
         "update": "() => Date.now()"
       }
-    },
-    {
-      "id": "isRecent",
-      "type": "computed",
-      "compute": "(data) => { if (!data.lastSaved) return false; return Date.now() - data.lastSaved < 3000; }",
-      "dependencies": ["lastSaved", "currentTime"]
-    },
-    {
-      "id": "timeAgo",
-      "type": "computed",
-      "compute": "(data) => { if (!data.lastSaved) return ''; const seconds = Math.floor((Date.now() - data.lastSaved) / 1000); if (seconds < 60) return 'just now'; if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`; if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`; return `${Math.floor(seconds / 86400)}d ago`; }",
-      "dependencies": ["lastSaved", "currentTime"]
     }
   ],
   "type": "div",
@@ -41,11 +29,12 @@
       "type": "StatusIcon",
       "dataBinding": {
         "type": {
-          "source": "isRecent",
-          "transform": "isRecent => isRecent ? 'saved' : 'synced'"
+          "source": "currentTime",
+          "transform": "(value, context) => { if (!context.lastSaved) return 'synced'; return Date.now() - context.lastSaved < 3000 ? 'saved' : 'synced'; }"
         },
         "animate": {
-          "source": "isRecent"
+          "source": "currentTime",
+          "transform": "(value, context) => Boolean(context.lastSaved && Date.now() - context.lastSaved < 3000)"
         }
       }
     },
@@ -57,9 +46,8 @@
       },
       "dataBinding": {
         "children": {
-          "source": "isRecent",
-          "path": null,
-          "transform": "(isRecent, data) => isRecent ? 'Saved' : data.timeAgo"
+          "source": "currentTime",
+          "transform": "(value, context) => { if (!context.lastSaved) return ''; const diffSeconds = Math.floor((Date.now() - context.lastSaved) / 1000); if (diffSeconds < 3) return 'Saved'; if (diffSeconds < 60) return 'just now'; if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)}m ago`; if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)}h ago`; return `${Math.floor(diffSeconds / 86400)}d ago`; }"
         }
       }
     }

@@ -24,6 +24,11 @@
       "defaultValue": null
     },
     {
+      "id": "selectedBlueprint",
+      "type": "static",
+      "defaultValue": null
+    },
+    {
       "id": "createBlueprintDialogOpen",
       "type": "static",
       "defaultValue": false
@@ -32,30 +37,6 @@
       "id": "createEndpointDialogOpen",
       "type": "static",
       "defaultValue": false
-    },
-    {
-      "id": "selectedBlueprint",
-      "type": "computed",
-      "compute": "(data) => { const config = data.flaskConfig || {}; const blueprints = config.blueprints || []; return blueprints.find(b => b.id === data.selectedBlueprintId) || null; }",
-      "dependencies": ["flaskConfig", "selectedBlueprintId"]
-    },
-    {
-      "id": "blueprintCount",
-      "type": "computed",
-      "compute": "(data) => ((data.flaskConfig || {}).blueprints || []).length",
-      "dependencies": ["flaskConfig"]
-    },
-    {
-      "id": "endpointCount",
-      "type": "computed",
-      "compute": "(data) => { const bp = data.selectedBlueprint; return bp ? (bp.endpoints || []).length : 0; }",
-      "dependencies": ["selectedBlueprint"]
-    },
-    {
-      "id": "totalEndpoints",
-      "type": "computed",
-      "compute": "(data) => { const config = data.flaskConfig || {}; const blueprints = config.blueprints || []; return blueprints.reduce((sum, bp) => sum + (bp.endpoints || []).length, 0); }",
-      "dependencies": ["flaskConfig"]
     }
   ],
   "components": [
@@ -101,7 +82,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "blueprintCount"
+                          "source": "flaskConfig",
+                          "transform": "(data?.blueprints || []).length"
                         }
                       }
                     }
@@ -150,7 +132,7 @@
                     "className": "p-4 space-y-2"
                   },
                   "conditional": {
-                    "if": "blueprintCount > 0"
+                    "if": "(flaskConfig?.blueprints || []).length > 0"
                   },
                   "children": [
                     {
@@ -175,6 +157,11 @@
                                 "type": "set-value",
                                 "target": "selectedBlueprintId",
                                 "expression": "event.item.id"
+                              },
+                              {
+                                "type": "set-value",
+                                "target": "selectedBlueprint",
+                                "expression": "event.item"
                               }
                             ]
                           }
@@ -324,7 +311,7 @@
                     "className": "flex flex-col items-center justify-center h-full p-8 text-center"
                   },
                   "conditional": {
-                    "if": "blueprintCount === 0"
+                    "if": "(flaskConfig?.blueprints || []).length === 0"
                   },
                   "children": [
                     {
@@ -582,7 +569,8 @@
                                       },
                                       "bindings": {
                                         "children": {
-                                          "source": "endpointCount"
+                                          "source": "selectedBlueprint",
+                                          "transform": "(data?.endpoints || []).length"
                                         }
                                       }
                                     },
@@ -636,7 +624,8 @@
                                   },
                                   "bindings": {
                                     "children": {
-                                      "source": "endpointCount"
+                                      "source": "selectedBlueprint",
+                                      "transform": "(data?.endpoints || []).length"
                                     }
                                   }
                                 }
@@ -653,7 +642,7 @@
                                 "className": "space-y-3"
                               },
                               "conditional": {
-                                "if": "endpointCount > 0"
+                                "if": "(selectedBlueprint?.endpoints || []).length > 0"
                               },
                               "children": [
                                 {
@@ -793,7 +782,7 @@
                                 "className": "text-center py-12"
                               },
                               "conditional": {
-                                "if": "endpointCount === 0"
+                                "if": "(selectedBlueprint?.endpoints || []).length === 0"
                               },
                               "children": [
                                 {

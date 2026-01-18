@@ -30,18 +30,6 @@
       "id": "newTreeDescription",
       "type": "static",
       "defaultValue": ""
-    },
-    {
-      "id": "selectedTree",
-      "type": "computed",
-      "compute": "(data) => data.trees?.find(t => t.id === data.selectedTreeId) || null",
-      "dependencies": ["trees", "selectedTreeId"]
-    },
-    {
-      "id": "treeCount",
-      "type": "computed",
-      "compute": "(data) => (data.trees || []).length",
-      "dependencies": ["trees"]
     }
   ],
   "components": [
@@ -89,7 +77,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "treeCount"
+                          "source": "trees",
+                          "transform": "(data || []).length"
                         }
                       }
                     }
@@ -142,8 +131,8 @@
                 "className": "flex-1 flex items-center justify-center"
               },
               "condition": {
-                "source": "selectedTree",
-                "transform": "(val) => !val"
+                "source": "trees",
+                "transform": "(trees, context) => !(trees || []).find((tree) => tree.id === context.selectedTreeId)"
               },
               "children": [
                 {
@@ -201,8 +190,8 @@
                 "className": "flex-1 p-6 overflow-auto"
               },
               "condition": {
-                "source": "selectedTree",
-                "transform": "(val) => !!val"
+                "source": "trees",
+                "transform": "(trees, context) => !!(trees || []).find((tree) => tree.id === context.selectedTreeId)"
               },
               "children": [
                 {
@@ -220,8 +209,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedTree",
-                          "path": "name"
+                          "source": "trees",
+                          "transform": "(trees, context) => (trees || []).find((tree) => tree.id === context.selectedTreeId)?.name"
                         }
                       }
                     },
@@ -233,8 +222,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedTree",
-                          "path": "description"
+                          "source": "trees",
+                          "transform": "(trees, context) => (trees || []).find((tree) => tree.id === context.selectedTreeId)?.description"
                         }
                       }
                     }

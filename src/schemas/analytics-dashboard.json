@@ -19,18 +19,6 @@
       "id": "filterQuery",
       "type": "static",
       "defaultValue": ""
-    },
-    {
-      "id": "filteredUsers",
-      "type": "computed",
-      "compute": "computeFilteredUsers",
-      "dependencies": ["users", "filterQuery"]
-    },
-    {
-      "id": "stats",
-      "type": "computed",
-      "compute": "computeStats",
-      "dependencies": ["users"]
     }
   ],
   "components": [
@@ -89,7 +77,7 @@
                       "type": "div",
                       "props": { "className": "text-4xl font-bold text-primary" },
                       "bindings": {
-                        "children": { "source": "stats", "path": "total" }
+                        "children": { "source": "users", "transform": "(data || []).length" }
                       }
                     },
                     {
@@ -121,7 +109,7 @@
                       "type": "div",
                       "props": { "className": "text-4xl font-bold text-green-600" },
                       "bindings": {
-                        "children": { "source": "stats", "path": "active" }
+                        "children": { "source": "users", "transform": "(data || []).filter((user) => user.status === 'active').length" }
                       }
                     },
                     {
@@ -153,7 +141,7 @@
                       "type": "div",
                       "props": { "className": "text-4xl font-bold text-orange-600" },
                       "bindings": {
-                        "children": { "source": "stats", "path": "inactive" }
+                        "children": { "source": "users", "transform": "(data || []).filter((user) => user.status === 'inactive').length" }
                       }
                     },
                     {
@@ -192,7 +180,7 @@
                       "props": { "variant": "secondary" },
                       "bindings": {
                         "children": {
-                          "source": "filteredUsers",
+                          "source": "users",
                           "transform": "transformFilteredUsers"
                         }
                       }
@@ -241,7 +229,7 @@
                   "props": { "className": "space-y-4" },
                   "bindings": {
                     "children": {
-                      "source": "filteredUsers",
+                      "source": "users",
                       "transform": "transformUserList"
                     }
                   }

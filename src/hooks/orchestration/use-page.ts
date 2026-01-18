@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { PageSchema, DataSource } from '@/types/page-schema'
 import { useFiles } from '../data/use-files'
 import { useModels } from '../data/use-models'
@@ -14,7 +14,7 @@ export function usePage(schema: PageSchema) {
   const workflows = useWorkflows()
   const lambdas = useLambdas()
   
-  const [computedData, setComputedData] = useState<Record<string, any>>({})
+  const [staticData, setStaticData] = useState<Record<string, any>>({})
   
   const dataContext = useMemo(() => {
     const context: Record<string, any> = {
@@ -28,7 +28,7 @@ export function usePage(schema: PageSchema) {
       setComponents: components.addComponent,
       setWorkflows: workflows.addWorkflow,
       setLambdas: lambdas.addLambda,
-      ...computedData,
+      ...staticData,
     }
     
     if (schema.seedData) {
@@ -36,28 +36,19 @@ export function usePage(schema: PageSchema) {
     }
     
     return context
-  }, [files, models, components, workflows, lambdas, computedData, schema.seedData])
+  }, [files, models, components, workflows, lambdas, staticData, schema.seedData])
   
   const { execute, isExecuting, handlers } = useActions(schema.actions, dataContext)
   
   useEffect(() => {
     if (schema.data) {
-      const computed: Record<string, any> = {}
-      
+      const nextStatic: Record<string, any> = {}
       schema.data.forEach(source => {
-        if (source.type === 'computed' && source.compute) {
-          try {
-            const computeFn = new Function('context', `return ${source.compute}`)
-            computed[source.id] = computeFn(dataContext)
-          } catch (error) {
-            console.error(`Failed to compute ${source.id}:`, error)
-          }
-        } else if (source.type === 'static' && source.defaultValue !== undefined) {
-          computed[source.id] = source.defaultValue
+        if (source.type === 'static' && source.defaultValue !== undefined) {
+          nextStatic[source.id] = source.defaultValue
         }
       })
-      
-      setComputedData(computed)
+      setStaticData(nextStatic)
     }
   }, [schema.data, dataContext])
   

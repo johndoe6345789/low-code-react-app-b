@@ -39,22 +39,6 @@ export function useDataSources(dataSources: DataSource[]) {
     initializeData()
   }, [])
 
-  useEffect(() => {
-    const computedSources = dataSources.filter(ds => ds.type === 'computed')
-    
-    computedSources.forEach(source => {
-      if (source.compute) {
-        const deps = source.dependencies || []
-        const hasAllDeps = deps.every(dep => dep in data)
-        
-        if (hasAllDeps) {
-          const computedValue = source.compute(data)
-          setData(prev => ({ ...prev, [source.id]: computedValue }))
-        }
-      }
-    })
-  }, [data, dataSources])
-
   const updateData = useCallback((sourceId: string, value: any) => {
     const source = dataSources.find(ds => ds.id === sourceId)
     

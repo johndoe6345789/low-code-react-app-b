@@ -40,19 +40,23 @@ export function resolveDataBinding(
     : sourceContext[source]
   const resolvedValue = path ? getNestedValue(sourceValue, path) : sourceValue
 
-  return applyTransform(resolvedValue, transform)
+  return applyTransform(resolvedValue, transform, mergedContext)
 }
 
-function applyTransform(value: unknown, transform?: BindingTransform) {
+function applyTransform(
+  value: unknown,
+  transform?: BindingTransform,
+  context: Record<string, any> = {},
+) {
   if (!transform) {
     return value
   }
 
   if (typeof transform === 'function') {
-    return transform(value)
+    return transform(value, context)
   }
 
-  return transformData(value, transform)
+  return transformData(value, transform, context)
 }
 
 export function getNestedValue(obj: any, path: string): any {
@@ -86,10 +90,15 @@ export function evaluateCondition(condition: string, context: Record<string, any
   }
 }
 
-export function transformData(data: any, transformFn: string): any {
+export function transformData(
+  data: any,
+  transformFn: string,
+  context: Record<string, any> = {},
+): any {
   try {
-    const fn = new Function('data', `return ${transformFn}`)
-    return fn(data)
+    const fn = new Function('data', 'context', `return ${transformFn}`)
+    const result = fn(data, context)
+    return typeof result === 'function' ? result(data, context) : result
   } catch (err) {
     console.warn('Failed to transform data:', err)
     return data

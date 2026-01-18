@@ -29,18 +29,6 @@
       "id": "createDialogOpen",
       "type": "static",
       "defaultValue": false
-    },
-    {
-      "id": "selectedWorkflow",
-      "type": "computed",
-      "compute": "(data) => data.workflows?.find(w => w.id === data.selectedWorkflowId) || null",
-      "dependencies": ["workflows", "selectedWorkflowId"]
-    },
-    {
-      "id": "workflowCount",
-      "type": "computed",
-      "compute": "(data) => (data.workflows || []).length",
-      "dependencies": ["workflows"]
     }
   ],
   "components": [
@@ -131,7 +119,7 @@
                 {
                   "type": "div",
                   "conditional": {
-                    "if": "workflowCount === 0"
+                    "if": "(workflows || []).length === 0"
                   },
                   "props": {
                     "className": "text-center py-8 text-muted-foreground"
@@ -156,7 +144,7 @@
                 "className": "flex-1 flex items-center justify-center"
               },
               "conditional": {
-                "if": "!selectedWorkflow"
+                "if": "!(workflows || []).find((workflow) => workflow.id === selectedWorkflowId)"
               },
               "children": [
                 {
@@ -201,7 +189,7 @@
                 "className": "flex-1 p-6 overflow-auto"
               },
               "conditional": {
-                "if": "selectedWorkflow"
+                "if": "(workflows || []).find((workflow) => workflow.id === selectedWorkflowId)"
               },
               "children": [
                 {
@@ -219,8 +207,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedWorkflow",
-                          "path": "name"
+                          "source": "workflows",
+                          "transform": "(workflows, context) => (workflows || []).find((workflow) => workflow.id === context.selectedWorkflowId)?.name"
                         }
                       }
                     },
@@ -232,8 +220,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedWorkflow",
-                          "path": "description"
+                          "source": "workflows",
+                          "transform": "(workflows, context) => (workflows || []).find((workflow) => workflow.id === context.selectedWorkflowId)?.description"
                         }
                       }
                     }

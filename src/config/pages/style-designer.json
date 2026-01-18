@@ -51,24 +51,6 @@
       "id": "newColorValue",
       "type": "static",
       "defaultValue": "#000000"
-    },
-    {
-      "id": "activeVariant",
-      "type": "computed",
-      "compute": "(data) => { const theme = data.theme || {}; const variants = theme.variants || []; return variants.find(v => v.id === theme.activeVariantId) || variants[0] || null; }",
-      "dependencies": ["theme"]
-    },
-    {
-      "id": "variantCount",
-      "type": "computed",
-      "compute": "(data) => ((data.theme || {}).variants || []).length",
-      "dependencies": ["theme"]
-    },
-    {
-      "id": "customColorCount",
-      "type": "computed",
-      "compute": "(data) => { const variant = data.activeVariant; if (!variant || !variant.colors) return 0; return Object.keys(variant.colors.customColors || {}).length; }",
-      "dependencies": ["activeVariant"]
     }
   ],
   "components": [
@@ -114,7 +96,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "variantCount"
+                          "source": "theme",
+                          "transform": "(data?.variants || []).length"
                         }
                       }
                     }
@@ -176,9 +159,8 @@
                               },
                               "bindings": {
                                 "children": {
-                                  "source": "activeVariant",
-                                  "path": "name",
-                                  "default": "Default"
+                                  "source": "theme",
+                                  "transform": "((data?.variants || []).find((variant) => variant.id === data?.activeVariantId) || (data?.variants || [])[0] || {}).name || 'Default'"
                                 }
                               }
                             }
@@ -252,7 +234,8 @@
                           },
                           "bindings": {
                             "children": {
-                              "source": "customColorCount"
+                              "source": "theme",
+                              "transform": "Object.keys((((data?.variants || []).find((variant) => variant.id === data?.activeVariantId) || (data?.variants || [])[0] || {}).colors?.customColors || {})).length"
                             }
                           }
                         }
@@ -433,9 +416,8 @@
                                               },
                                               "bindings": {
                                                 "style": {
-                                                  "source": "activeVariant",
-                                                  "path": "colors.primary",
-                                                  "transform": "color => ({ backgroundColor: color })"
+                                                  "source": "theme",
+                                                  "transform": "data => { const variant = (data?.variants || []).find((v) => v.id === data?.activeVariantId) || (data?.variants || [])[0] || {}; return { backgroundColor: variant.colors?.primary }; }"
                                                 }
                                               }
                                             },
@@ -446,8 +428,8 @@
                                               },
                                               "bindings": {
                                                 "children": {
-                                                  "source": "activeVariant",
-                                                  "path": "colors.primary"
+                                                  "source": "theme",
+                                                  "transform": "((data?.variants || []).find((variant) => variant.id === data?.activeVariantId) || (data?.variants || [])[0] || {}).colors?.primary"
                                                 }
                                               }
                                             }
@@ -470,9 +452,8 @@
                                               },
                                               "bindings": {
                                                 "style": {
-                                                  "source": "activeVariant",
-                                                  "path": "colors.secondary",
-                                                  "transform": "color => ({ backgroundColor: color })"
+                                                  "source": "theme",
+                                                  "transform": "data => { const variant = (data?.variants || []).find((v) => v.id === data?.activeVariantId) || (data?.variants || [])[0] || {}; return { backgroundColor: variant.colors?.secondary }; }"
                                                 }
                                               }
                                             },
@@ -483,8 +464,8 @@
                                               },
                                               "bindings": {
                                                 "children": {
-                                                  "source": "activeVariant",
-                                                  "path": "colors.secondary"
+                                                  "source": "theme",
+                                                  "transform": "((data?.variants || []).find((variant) => variant.id === data?.activeVariantId) || (data?.variants || [])[0] || {}).colors?.secondary"
                                                 }
                                               }
                                             }
@@ -507,9 +488,8 @@
                                               },
                                               "bindings": {
                                                 "style": {
-                                                  "source": "activeVariant",
-                                                  "path": "colors.accent",
-                                                  "transform": "color => ({ backgroundColor: color })"
+                                                  "source": "theme",
+                                                  "transform": "data => { const variant = (data?.variants || []).find((v) => v.id === data?.activeVariantId) || (data?.variants || [])[0] || {}; return { backgroundColor: variant.colors?.accent }; }"
                                                 }
                                               }
                                             },
@@ -520,8 +500,8 @@
                                               },
                                               "bindings": {
                                                 "children": {
-                                                  "source": "activeVariant",
-                                                  "path": "colors.accent"
+                                                  "source": "theme",
+                                                  "transform": "((data?.variants || []).find((variant) => variant.id === data?.activeVariantId) || (data?.variants || [])[0] || {}).colors?.accent"
                                                 }
                                               }
                                             }
@@ -602,7 +582,7 @@
                                         "className": "text-center py-8"
                                       },
                                       "conditional": {
-                                        "if": "customColorCount === 0"
+                                        "if": "Object.keys((((theme?.variants || []).find((variant) => variant.id === theme?.activeVariantId) || (theme?.variants || [])[0] || {}).colors?.customColors || {})).length === 0"
                                       },
                                       "children": [
                                         {
@@ -628,7 +608,7 @@
                                         "className": "text-sm text-muted-foreground"
                                       },
                                       "conditional": {
-                                        "if": "customColorCount > 0"
+                                        "if": "Object.keys((((theme?.variants || []).find((variant) => variant.id === theme?.activeVariantId) || (theme?.variants || [])[0] || {}).colors?.customColors || {})).length > 0"
                                       },
                                       "children": "Custom colors will be displayed here"
                                     }

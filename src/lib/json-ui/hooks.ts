@@ -8,7 +8,6 @@ export function useJSONDataSource<T = unknown>(
 ) {
   const kvConfig = config.type === 'kv' ? config.config : undefined
   const apiConfig = config.type === 'api' ? config.config : undefined
-  const computedConfig = config.type === 'computed' ? config.config : undefined
   const defaultValue =
     config.type === 'static' ? config.config : config.config?.defaultValue
 
@@ -57,8 +56,6 @@ export function useJSONDataSource<T = unknown>(
         return apiValue
       case 'static':
         return config.config
-      case 'computed':
-        return computedConfig?.defaultValue
       default:
         return null
     }

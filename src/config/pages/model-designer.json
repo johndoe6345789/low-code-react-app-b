@@ -25,18 +25,6 @@
       "id": "newModelName",
       "type": "static",
       "defaultValue": ""
-    },
-    {
-      "id": "selectedModel",
-      "type": "computed",
-      "compute": "(data) => data.models?.find(m => m.id === data.selectedModelId) || null",
-      "dependencies": ["models", "selectedModelId"]
-    },
-    {
-      "id": "modelCount",
-      "type": "computed",
-      "compute": "(data) => (data.models || []).length",
-      "dependencies": ["models"]
     }
   ],
   "components": [
@@ -84,7 +72,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "modelCount"
+                          "source": "models",
+                          "transform": "(data || []).length"
                         }
                       }
                     }
@@ -137,8 +126,8 @@
                 "className": "flex-1 flex items-center justify-center"
               },
               "condition": {
-                "source": "selectedModel",
-                "transform": "(val) => !val"
+                "source": "models",
+                "transform": "(models, context) => !(models || []).find((model) => model.id === context.selectedModelId)"
               },
               "children": [
                 {
@@ -196,8 +185,8 @@
                 "className": "flex-1 p-6 overflow-auto"
               },
               "condition": {
-                "source": "selectedModel",
-                "transform": "(val) => !!val"
+                "source": "models",
+                "transform": "(models, context) => !!(models || []).find((model) => model.id === context.selectedModelId)"
               },
               "children": [
                 {
@@ -215,8 +204,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedModel",
-                          "path": "name"
+                          "source": "models",
+                          "transform": "(models, context) => (models || []).find((model) => model.id === context.selectedModelId)?.name"
                         }
                       }
                     },
@@ -228,8 +217,8 @@
                       },
                       "bindings": {
                         "children": {
-                          "source": "selectedModel",
-                          "path": "description"
+                          "source": "models",
+                          "transform": "(models, context) => (models || []).find((model) => model.id === context.selectedModelId)?.description"
                         }
                       }
                     }

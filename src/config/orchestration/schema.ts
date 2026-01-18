@@ -10,12 +10,11 @@ export const ActionSchema = z.object({
 
 export const DataSourceSchema = z.object({
   id: z.string(),
-  type: z.enum(['kv', 'api', 'computed', 'static'], { message: 'Invalid data source type' }),
+  type: z.enum(['kv', 'api', 'static'], { message: 'Invalid data source type' }),
   key: z.string().optional(),
   endpoint: z.string().optional(),
   transform: z.string().optional(),
   defaultValue: z.any().optional(),
-  dependencies: z.array(z.string()).optional(),
 })
 
 export const HookConfigSchema = z.object({

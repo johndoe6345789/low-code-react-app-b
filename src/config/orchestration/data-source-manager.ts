@@ -37,13 +37,6 @@ export function useDataSource(source: DataSource) {
         loading: false,
         error: null,
       }
-    case 'computed':
-      return {
-        data: source.defaultValue,
-        setData: () => {},
-        loading: false,
-        error: null,
-      }
     default:
       return {
         data: null,
@@ -67,7 +60,7 @@ export function useDataSources(sources: DataSource[]) {
 
   useEffect(() => {
     sources.forEach((source) => {
-      if (source.type === 'static' || source.type === 'computed') {
+      if (source.type === 'static') {
         updateData(source.id, source.defaultValue)
       }
     })

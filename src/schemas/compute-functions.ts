@@ -31,9 +31,26 @@ export const updateNewTodo = (data: any, event: any) => event?.target?.value || 
 
 export const checkCanAddTodo = (data: any) => data.newTodo?.trim().length > 0
 
-export const transformFilteredUsers = (users: any[]) => `${users?.length || 0} users`
+export const transformFilteredUsers = (users: any[], context?: { filterQuery?: string }) => {
+  const query = (context?.filterQuery || '').toLowerCase()
+  const filteredUsers = query
+    ? (users || []).filter((user: any) =>
+      user.name.toLowerCase().includes(query)
+      || user.email.toLowerCase().includes(query)
+    )
+    : (users || [])
+  return `${filteredUsers.length} users`
+}
 
-export const transformUserList = (users: any[]) => (users || []).map((user: any) => ({
+export const transformUserList = (users: any[], context?: { filterQuery?: string }) => {
+  const query = (context?.filterQuery || '').toLowerCase()
+  const filteredUsers = query
+    ? (users || []).filter((user: any) =>
+      user.name.toLowerCase().includes(query)
+      || user.email.toLowerCase().includes(query)
+    )
+    : (users || [])
+  return filteredUsers.map((user: any) => ({
   type: 'Card',
   id: `user-${user.id}`,
   props: {
@@ -85,4 +102,5 @@ export const transformUserList = (users: any[]) => (users || []).map((user: any)
       ],
     },
   ],
-}))
+  }))
+}
