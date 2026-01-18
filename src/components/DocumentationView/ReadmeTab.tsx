@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Code, Database, Tree, PaintBrush, Flask, Play, Cube, Wrench, Gear, Rocket, Lightbulb, CheckCircle } from '@phosphor-icons/react'
-import { FeatureItem, AIFeatureCard } from './DocComponents'
+import { FeatureItem, AIFeatureCard } from './FeatureItems'
 import readmeData from '@/data/documentation/readme-data.json'
 
 const Sparkle = ({ size }: { size: number }) => <span style={{ fontSize: size }}>✨</span>
