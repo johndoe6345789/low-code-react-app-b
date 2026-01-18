@@ -1,33 +1,38 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useKV } from '@/hooks/use-kv'
+import type { DataSourceConfig } from './schema'
 
-export interface DataSourceConfig {
-  type: 'kv' | 'api' | 'computed' | 'static'
-  key?: string
-  url?: string
-  defaultValue?: any
-  transform?: (data: any) => any
-}
+export function useJSONDataSource<T = unknown>(
+  id: string,
+  config: DataSourceConfig<T>
+) {
+  const kvConfig = config.type === 'kv' ? config.config : undefined
+  const apiConfig = config.type === 'api' ? config.config : undefined
+  const computedConfig = config.type === 'computed' ? config.config : undefined
+  const defaultValue =
+    config.type === 'static' ? config.config : config.config?.defaultValue
 
-export function useJSONDataSource(id: string, config: DataSourceConfig) {
-  const [kvValue, setKVValue] = useKV(config.key || id, config.defaultValue)
-  const [apiValue, setApiValue] = useState(config.defaultValue)
+  const [kvValue, setKVValue] = useKV<T>(
+    kvConfig?.key || id,
+    (kvConfig?.defaultValue ?? defaultValue) as T
+  )
+  const [apiValue, setApiValue] = useState<T | undefined>(defaultValue)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
   const fetchAPI = useCallback(async () => {
-    if (config.type !== 'api' || !config.url) return
+    if (config.type !== 'api' || !apiConfig?.url) return
     
     setLoading(true)
     setError(null)
     
     try {
-      const response = await fetch(config.url)
+      const response = await fetch(apiConfig.url)
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       let data = await response.json()
       
-      if (config.transform) {
-        data = config.transform(data)
+      if (apiConfig.transform) {
+        data = apiConfig.transform(data)
       }
       
       setApiValue(data)
@@ -36,7 +41,7 @@ export function useJSONDataSource(id: string, config: DataSourceConfig) {
     } finally {
       setLoading(false)
     }
-  }, [config.type, config.url, config.transform])
+  }, [apiConfig, config.type])
 
   useEffect(() => {
     if (config.type === 'api') {
@@ -51,9 +56,9 @@ export function useJSONDataSource(id: string, config: DataSourceConfig) {
       case 'api':
         return apiValue
       case 'static':
-        return config.defaultValue
+        return config.config
       case 'computed':
-        return config.defaultValue
+        return computedConfig?.defaultValue
       default:
         return null
     }
@@ -81,7 +86,9 @@ export function useJSONDataSource(id: string, config: DataSourceConfig) {
   }
 }
 
-export function useJSONDataSources(sources: Record<string, DataSourceConfig>) {
+export function useJSONDataSources<T = unknown>(
+  sources: Record<string, DataSourceConfig<T>>
+) {
   const [dataMap, setDataMap] = useState<Record<string, any>>({})
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({})
   const [errorMap, setErrorMap] = useState<Record<string, Error | null>>({})
@@ -101,7 +108,7 @@ export function useJSONDataSources(sources: Record<string, DataSourceConfig>) {
       const config = sources[id]
       
       if (config.type === 'static') {
-        updateData(id, config.defaultValue)
+        updateData(id, config.config)
       }
     })
   }, [sourceIds])

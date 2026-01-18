@@ -185,6 +185,34 @@ export const PageUISchema = z.object({
   })).optional(),
 })
 
+export type DataSourceConfig<T = unknown> =
+  | {
+      type: 'kv'
+      config: {
+        key?: string
+        defaultValue?: T
+      }
+    }
+  | {
+      type: 'api'
+      config: {
+        url?: string
+        defaultValue?: T
+        transform?: (data: unknown) => T
+      }
+    }
+  | {
+      type: 'computed'
+      config: {
+        defaultValue?: T
+        transform?: (data: unknown) => T
+      }
+    }
+  | {
+      type: 'static'
+      config: T
+    }
+
 export type UIValue = z.infer<typeof UIValueSchema>
 export type DataBinding = z.infer<typeof DataBindingSchema>
 export type EventHandler = z.infer<typeof EventHandlerSchema>
