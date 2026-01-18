@@ -68,15 +68,38 @@ export const syncFromFlaskBulk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const data = await fetchAllFromFlask()
-      
+
+      const validStoreNames = ['files', 'models', 'components', 'workflows'] as const
+      const remoteIdsByStore = new Map<(typeof validStoreNames)[number], Set<string>>()
+
       for (const [key, value] of Object.entries(data)) {
-        const [storeName, id] = key.split(':')
-        
-        if (storeName === 'files' || 
-            storeName === 'models' || 
-            storeName === 'components' || 
-            storeName === 'workflows') {
-          await db.put(storeName as any, value)
+        const keyParts = key.split(':')
+        if (keyParts.length !== 2) continue
+
+        const [storeName, id] = keyParts
+
+        if (!validStoreNames.includes(storeName as (typeof validStoreNames)[number])) {
+          continue
+        }
+
+        if (!id) continue
+
+        await db.put(storeName as any, value)
+
+        const ids = remoteIdsByStore.get(storeName as any) ?? new Set<string>()
+        ids.add(id)
+        remoteIdsByStore.set(storeName as any, ids)
+      }
+
+      for (const storeName of validStoreNames) {
+        const localItems = await db.getAll(storeName)
+        const remoteIds = remoteIdsByStore.get(storeName) ?? new Set<string>()
+
+        for (const item of localItems) {
+          if (!item?.id) continue
+          if (!remoteIds.has(item.id)) {
+            await db.delete(storeName, item.id)
+          }
         }
       }
       
