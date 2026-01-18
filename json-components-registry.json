@@ -2,7 +2,7 @@
   "$schema": "./schemas/json-components-registry-schema.json",
   "version": "2.0.0",
   "description": "Registry of all components in the application",
-  "lastUpdated": "2026-01-18T12:20:47.049Z",
+  "lastUpdated": "2026-01-18T13:03:47Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -1129,6 +1129,51 @@
       "source": "atoms"
     },
     {
+      "type": "TableHeader",
+      "name": "TableHeader",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "Table header wrapper",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "TableBody",
+      "name": "TableBody",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "Table body wrapper",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "TableRow",
+      "name": "TableRow",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "Table row container",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "TableCell",
+      "name": "TableCell",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "Table body cell",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
+      "type": "TableHead",
+      "name": "TableHead",
+      "category": "data",
+      "canHaveChildren": true,
+      "description": "Table header cell",
+      "status": "supported",
+      "source": "ui"
+    },
+    {
       "type": "Timeline",
       "name": "Timeline",
       "category": "data",
@@ -1750,8 +1795,8 @@
     }
   ],
   "statistics": {
-    "total": 217,
-    "supported": 204,
+    "total": 222,
+    "supported": 209,
     "planned": 0,
     "jsonCompatible": 13,
     "maybeJsonCompatible": 0,
@@ -1761,14 +1806,14 @@
       "display": 31,
       "navigation": 15,
       "feedback": 23,
-      "data": 20,
+      "data": 25,
       "custom": 69
     },
     "bySource": {
       "atoms": 117,
       "molecules": 40,
       "organisms": 15,
-      "ui": 45
+      "ui": 50
     }
   }
 }

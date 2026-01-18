@@ -3,8 +3,9 @@ import showcaseCopy from '@/config/ui-examples/showcase.json'
 import dashboardExample from '@/config/ui-examples/dashboard.json'
 import formExample from '@/config/ui-examples/form.json'
 import tableExample from '@/config/ui-examples/table.json'
+import listTableTimelineExample from '@/config/ui-examples/list-table-timeline.json'
 import settingsExample from '@/config/ui-examples/settings.json'
-import { FileCode, ChartBar, ListBullets, Table, Gear } from '@phosphor-icons/react'
+import { FileCode, ChartBar, ListBullets, Table, Gear, Clock } from '@phosphor-icons/react'
 import { ShowcaseHeader } from '@/components/json-ui-showcase/ShowcaseHeader'
 import { ShowcaseTabs } from '@/components/json-ui-showcase/ShowcaseTabs'
 import { ShowcaseFooter } from '@/components/json-ui-showcase/ShowcaseFooter'
@@ -14,6 +15,7 @@ const exampleConfigs = {
   dashboard: dashboardExample,
   form: formExample,
   table: tableExample,
+  'list-table-timeline': listTableTimelineExample,
   settings: settingsExample,
 }
 
@@ -21,6 +23,7 @@ const exampleIcons = {
   ChartBar,
   ListBullets,
   Table,
+  Clock,
   Gear,
 }
 

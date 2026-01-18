@@ -177,6 +177,7 @@ export const atomComponents: UIComponentRegistry = {
   ),
   DataList: (AtomComponents as Record<string, ComponentType<any>>).DataList,
   DataTable: (AtomComponents as Record<string, ComponentType<any>>).DataTable,
+  ListItem: (AtomComponents as Record<string, ComponentType<any>>).ListItem,
   MetricCard: (AtomComponents as Record<string, ComponentType<any>>).MetricCard,
   Timeline: (AtomComponents as Record<string, ComponentType<any>>).Timeline,
 }
