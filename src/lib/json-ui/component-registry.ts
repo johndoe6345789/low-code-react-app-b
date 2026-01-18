@@ -19,19 +19,7 @@ import { Progress } from '@/components/ui/progress'
 import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
-import {
-  BreadcrumbWrapper,
-  ComponentBindingDialogWrapper,
-  ComponentTreeWrapper,
-  DataSourceEditorDialogWrapper,
-  GitHubBuildStatusWrapper,
-  LazyBarChartWrapper,
-  LazyD3BarChartWrapper,
-  LazyLineChartWrapper,
-  SaveIndicatorWrapper,
-  SeedDataManagerWrapper,
-  StorageSettingsWrapper,
-} from '@/lib/json-ui/wrappers'
+import * as WrapperComponents from '@/lib/json-ui/wrappers'
 import jsonComponentsRegistry from '../../../json-components-registry.json'
 import { 
   ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
@@ -51,6 +39,8 @@ interface JsonRegistryEntry {
   type?: string
   export?: string
   source?: string
+  wrapperRequired?: boolean
+  wrapperComponent?: string
 }
 
 interface JsonComponentRegistry {
@@ -81,6 +71,19 @@ const moleculeRegistryNames = jsonRegistryEntries
   .filter((entry) => entry.source === 'molecules')
   .map((entry) => entry.export ?? entry.name ?? entry.type)
   .filter((name): name is string => Boolean(name))
+const wrapperRegistryNames = jsonRegistryEntries
+  .filter((entry) => entry.source === 'wrappers')
+  .map((entry) => entry.export ?? entry.name ?? entry.type)
+  .filter((name): name is string => Boolean(name))
+
+const registryEntryByType = new Map<string, JsonRegistryEntry>(
+  jsonRegistryEntries
+    .map((entry) => {
+      const key = entry.type ?? entry.name ?? entry.export
+      return key ? [key, entry] : null
+    })
+    .filter((entry): entry is [string, JsonRegistryEntry] => Boolean(entry))
+)
 
 export const primitiveComponents: UIComponentRegistry = {
   div: 'div' as any,
@@ -170,30 +173,10 @@ export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
   MoleculeComponents as Record<string, ComponentType<any>>
 )
 
-export const jsonWrapperComponents: UIComponentRegistry = {
-  Breadcrumb: BreadcrumbWrapper,
-  BreadcrumbWrapper: BreadcrumbWrapper,
-  SaveIndicator: SaveIndicatorWrapper,
-  SaveIndicatorWrapper: SaveIndicatorWrapper,
-  LazyBarChart: LazyBarChartWrapper,
-  LazyBarChartWrapper: LazyBarChartWrapper,
-  LazyLineChart: LazyLineChartWrapper,
-  LazyLineChartWrapper: LazyLineChartWrapper,
-  LazyD3BarChart: LazyD3BarChartWrapper,
-  LazyD3BarChartWrapper: LazyD3BarChartWrapper,
-  SeedDataManager: SeedDataManagerWrapper,
-  SeedDataManagerWrapper: SeedDataManagerWrapper,
-  StorageSettings: StorageSettingsWrapper,
-  StorageSettingsWrapper: StorageSettingsWrapper,
-  GitHubBuildStatus: GitHubBuildStatusWrapper,
-  GitHubBuildStatusWrapper: GitHubBuildStatusWrapper,
-  ComponentBindingDialog: ComponentBindingDialogWrapper,
-  ComponentBindingDialogWrapper: ComponentBindingDialogWrapper,
-  DataSourceEditorDialog: DataSourceEditorDialogWrapper,
-  DataSourceEditorDialogWrapper: DataSourceEditorDialogWrapper,
-  ComponentTree: ComponentTreeWrapper,
-  ComponentTreeWrapper: ComponentTreeWrapper,
-}
+export const jsonWrapperComponents: UIComponentRegistry = buildRegistryFromNames(
+  wrapperRegistryNames,
+  WrapperComponents as Record<string, ComponentType<any>>
+)
 
 export const iconComponents: UIComponentRegistry = {
   ArrowLeft,
@@ -249,10 +232,18 @@ export function registerComponent(name: string, component: ComponentType<any>) {
   uiComponentRegistry[name] = component
 }
 
+const resolveWrapperComponent = (type: string): ComponentType<any> | null => {
+  const entry = registryEntryByType.get(type)
+  if (entry?.wrapperRequired && entry.wrapperComponent) {
+    return uiComponentRegistry[entry.wrapperComponent] || null
+  }
+  return null
+}
+
 export function getUIComponent(type: string): ComponentType<any> | string | null {
-  return uiComponentRegistry[type] || null
+  return resolveWrapperComponent(type) ?? uiComponentRegistry[type] ?? null
 }
 
 export function hasComponent(type: string): boolean {
-  return type in uiComponentRegistry
+  return Boolean(resolveWrapperComponent(type) ?? uiComponentRegistry[type])
 }
