@@ -1,12 +1,11 @@
 import * as Icons from '@phosphor-icons/react'
+import { evaluateBindingExpression } from '@/lib/json-ui/expression-helpers'
 
 export function resolveBinding(binding: string, data: Record<string, any>): any {
-  try {
-    const func = new Function(...Object.keys(data), `return ${binding}`)
-    return func(...Object.values(data))
-  } catch {
-    return binding
-  }
+  return evaluateBindingExpression(binding, data, {
+    fallback: binding,
+    label: 'json-page-renderer binding',
+  })
 }
 
 export function getIcon(iconName: string, props?: any) {

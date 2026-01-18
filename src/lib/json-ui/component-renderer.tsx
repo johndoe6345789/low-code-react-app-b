@@ -1,7 +1,8 @@
 import { createElement, useMemo, Fragment } from 'react'
 import { UIComponent, Binding, ComponentRendererProps, EventHandler, JSONEventDefinition, JSONEventMap } from '@/types/json-ui'
 import { getUIComponent } from './component-registry'
-import { resolveDataBinding, evaluateCondition } from './utils'
+import { resolveDataBinding } from './utils'
+import { evaluateConditionExpression } from './expression-helpers'
 
 function resolveBinding(
   binding: Binding,
@@ -100,7 +101,7 @@ export function ComponentRenderer({ component, data, context = {}, state, onEven
           const conditionMet = !handler.condition
             || (typeof handler.condition === 'function'
               ? handler.condition(mergedData as Record<string, any>)
-              : evaluateCondition(handler.condition, mergedData as Record<string, any>))
+              : evaluateConditionExpression(handler.condition, mergedData as Record<string, any>, { label: 'event handler condition' }))
           if (conditionMet) {
             const eventPayload = typeof e === 'object' && e !== null
               ? Object.assign(e as Record<string, unknown>, context)
@@ -195,7 +196,7 @@ export function ComponentRenderer({ component, data, context = {}, state, onEven
 
   const renderConditionalContent = (renderContext: Record<string, unknown>) => {
     if (!component.conditional) return undefined
-    const conditionMet = evaluateCondition(component.conditional.if, { ...data, ...renderContext } as Record<string, any>)
+    const conditionMet = evaluateConditionExpression(component.conditional.if, { ...data, ...renderContext } as Record<string, any>, { label: `component conditional (${component.id})` })
     if (conditionMet) {
       if (component.conditional.then !== undefined) {
         return renderBranch(component.conditional.then as UIComponent | (UIComponent | string)[] | string, renderContext)

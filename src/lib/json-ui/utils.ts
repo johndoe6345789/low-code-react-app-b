@@ -1,3 +1,5 @@
+import { evaluateTransformExpression } from './expression-helpers'
+
 type BindingTransform = string | ((data: unknown) => unknown)
 
 interface BindingSourceOptions {
@@ -52,7 +54,7 @@ function applyTransform(value: unknown, transform?: BindingTransform) {
     return transform(value)
   }
 
-  return transformData(value, transform)
+  return evaluateTransformExpression(transform, value, {}, { label: 'data binding transform' })
 }
 
 export function getNestedValue(obj: any, path: string): any {
@@ -74,26 +76,6 @@ export function setNestedValue(obj: any, path: string, value: any): any {
   
   target[lastKey] = value
   return obj
-}
-
-export function evaluateCondition(condition: string, context: Record<string, any>): boolean {
-  try {
-    const conditionFn = new Function(...Object.keys(context), `return ${condition}`)
-    return Boolean(conditionFn(...Object.values(context)))
-  } catch (err) {
-    console.warn('Failed to evaluate condition:', condition, err)
-    return false
-  }
-}
-
-export function transformData(data: any, transformFn: string): any {
-  try {
-    const fn = new Function('data', `return ${transformFn}`)
-    return fn(data)
-  } catch (err) {
-    console.warn('Failed to transform data:', err)
-    return data
-  }
 }
 
 export function mergeClassNames(...classes: (string | undefined | null | false)[]): string {
