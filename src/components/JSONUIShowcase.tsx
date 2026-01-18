@@ -1,23 +1,10 @@
 import { useMemo, useState } from 'react'
 import showcaseCopy from '@/config/ui-examples/showcase.json'
-import dashboardExample from '@/config/ui-examples/dashboard.json'
-import formExample from '@/config/ui-examples/form.json'
-import tableExample from '@/config/ui-examples/table.json'
-import listTableTimelineExample from '@/config/ui-examples/list-table-timeline.json'
-import settingsExample from '@/config/ui-examples/settings.json'
 import { FileCode, ChartBar, ListBullets, Table, Gear, Clock } from '@phosphor-icons/react'
 import { ShowcaseHeader } from '@/components/json-ui-showcase/ShowcaseHeader'
 import { ShowcaseTabs } from '@/components/json-ui-showcase/ShowcaseTabs'
 import { ShowcaseFooter } from '@/components/json-ui-showcase/ShowcaseFooter'
 import { ShowcaseExample } from '@/components/json-ui-showcase/types'
-
-const exampleConfigs = {
-  dashboard: dashboardExample,
-  form: formExample,
-  table: tableExample,
-  'list-table-timeline': listTableTimelineExample,
-  settings: settingsExample,
-}
 
 const exampleIcons = {
   ChartBar,
@@ -27,14 +14,22 @@ const exampleIcons = {
   Gear,
 }
 
+const configModules = import.meta.glob('/src/config/ui-examples/*.json', { eager: true })
+
+const resolveExampleConfig = (configPath: string) => {
+  const moduleEntry = configModules[configPath] as { default: ShowcaseExample['config'] } | undefined
+
+  return moduleEntry?.default ?? {}
+}
+
 export function JSONUIShowcase() {
   const [selectedExample, setSelectedExample] = useState(showcaseCopy.defaultExampleKey)
   const [showJSON, setShowJSON] = useState(false)
 
   const examples = useMemo<ShowcaseExample[]>(() => {
     return showcaseCopy.examples.map((example) => {
-      const icon = exampleIcons[example.icon as keyof typeof exampleIcons] || FileCode
-      const config = exampleConfigs[example.configKey as keyof typeof exampleConfigs]
+      const icon = exampleIcons[example.iconId as keyof typeof exampleIcons] || FileCode
+      const config = resolveExampleConfig(example.configPath)
 
       return {
         key: example.key,
