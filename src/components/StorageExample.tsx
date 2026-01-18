@@ -1,11 +1,11 @@
 import { useStorage } from '@/hooks/use-storage'
-import { useIndexedDB, useIndexedDBCollection } from '@/hooks/use-indexed-db'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { useState } from 'react'
 import { Database } from '@phosphor-icons/react'
+import copy from '@/data/storage-example.json'
 
 interface Todo {
   id: string
@@ -14,9 +14,137 @@ interface Todo {
   createdAt: number
 }
 
+type HeaderProps = {
+  title: string
+  description: string
+}
+
+const StorageExampleHeader = ({ title, description }: HeaderProps) => (
+  <div>
+    <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+      <Database size={32} />
+      {title}
+    </h1>
+    <p className="text-muted-foreground">{description}</p>
+  </div>
+)
+
+type CounterCardProps = {
+  counter: number
+  onIncrement: () => void
+}
+
+const CounterCard = ({ counter, onIncrement }: CounterCardProps) => (
+  <Card>
+    <CardHeader>
+      <CardTitle>{copy.counter.title}</CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      <div className="flex items-center justify-center gap-4">
+        <Badge variant="outline" className="text-4xl py-4 px-8">
+          {counter}
+        </Badge>
+      </div>
+      <Button onClick={onIncrement} className="w-full" size="lg">
+        {copy.counter.incrementButton}
+      </Button>
+      <p className="text-xs text-muted-foreground text-center">{copy.counter.helper}</p>
+    </CardContent>
+  </Card>
+)
+
+type TodoListCardProps = {
+  todos: Todo[]
+  newTodoText: string
+  onTodoTextChange: (value: string) => void
+  onAddTodo: () => void
+  onToggleTodo: (id: string) => void
+  onDeleteTodo: (id: string) => void
+}
+
+const TodoListCard = ({
+  todos,
+  newTodoText,
+  onTodoTextChange,
+  onAddTodo,
+  onToggleTodo,
+  onDeleteTodo,
+}: TodoListCardProps) => (
+  <Card>
+    <CardHeader>
+      <CardTitle>{copy.todo.title}</CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      <div className="flex gap-2">
+        <Input
+          value={newTodoText}
+          onChange={(e) => onTodoTextChange(e.target.value)}
+          placeholder={copy.todo.placeholder}
+          onKeyDown={(e) => e.key === 'Enter' && onAddTodo()}
+        />
+        <Button onClick={onAddTodo}>{copy.todo.addButton}</Button>
+      </div>
+
+      <div className="space-y-2 max-h-64 overflow-y-auto">
+        {todos.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-4">
+            {copy.todo.emptyState}
+          </p>
+        ) : (
+          todos.map((todo) => (
+            <div key={todo.id} className="flex items-center gap-2 p-2 rounded border">
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => onToggleTodo(todo.id)}
+                className="w-4 h-4"
+              />
+              <span
+                className={`flex-1 ${
+                  todo.completed ? 'line-through text-muted-foreground' : ''
+                }`}
+              >
+                {todo.text}
+              </span>
+              <Button variant="ghost" size="sm" onClick={() => onDeleteTodo(todo.id)}>
+                {copy.todo.deleteButton}
+              </Button>
+            </div>
+          ))
+        )}
+      </div>
+
+      <p className="text-xs text-muted-foreground">{copy.todo.footer}</p>
+    </CardContent>
+  </Card>
+)
+
+const HowItWorksCard = () => (
+  <Card>
+    <CardHeader>
+      <CardTitle>{copy.howItWorks.title}</CardTitle>
+    </CardHeader>
+    <CardContent className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {copy.howItWorks.steps.map((step) => (
+          <div className="space-y-2" key={step.title}>
+            <h3 className="font-semibold">{step.title}</h3>
+            <p className="text-sm text-muted-foreground">{step.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-muted p-4 rounded-lg">
+        <h4 className="font-semibold mb-2">{copy.howItWorks.codeExampleTitle}</h4>
+        <pre className="text-xs overflow-x-auto">{copy.howItWorks.codeSample}</pre>
+      </div>
+    </CardContent>
+  </Card>
+)
+
 export function StorageExample() {
   const [newTodoText, setNewTodoText] = useState('')
-  
+
   const [todos, setTodos] = useStorage<Todo[]>('example-todos', [])
   const [counter, setCounter] = useStorage<number>('example-counter', 0)
 
@@ -37,9 +165,7 @@ export function StorageExample() {
 
   const toggleTodo = (id: string) => {
     setTodos((current) =>
-      current.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+      current.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo))
     )
   }
 
@@ -53,134 +179,21 @@ export function StorageExample() {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Database size={32} />
-          Storage Example
-        </h1>
-        <p className="text-muted-foreground">
-          Demonstrates IndexedDB + Spark KV hybrid storage
-        </p>
-      </div>
+      <StorageExampleHeader title={copy.title} description={copy.description} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Simple Counter (useStorage)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-center gap-4">
-              <Badge variant="outline" className="text-4xl py-4 px-8">
-                {counter}
-              </Badge>
-            </div>
-            <Button onClick={incrementCounter} className="w-full" size="lg">
-              Increment
-            </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              This counter persists across page refreshes using hybrid storage
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Todo List (useStorage)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Input
-                value={newTodoText}
-                onChange={(e) => setNewTodoText(e.target.value)}
-                placeholder="Enter todo..."
-                onKeyDown={(e) => e.key === 'Enter' && addTodo()}
-              />
-              <Button onClick={addTodo}>Add</Button>
-            </div>
-
-            <div className="space-y-2 max-h-64 overflow-y-auto">
-              {todos.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">
-                  No todos yet. Add one above!
-                </p>
-              ) : (
-                todos.map((todo) => (
-                  <div
-                    key={todo.id}
-                    className="flex items-center gap-2 p-2 rounded border"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={() => toggleTodo(todo.id)}
-                      className="w-4 h-4"
-                    />
-                    <span
-                      className={`flex-1 ${
-                        todo.completed ? 'line-through text-muted-foreground' : ''
-                      }`}
-                    >
-                      {todo.text}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => deleteTodo(todo.id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                ))
-              )}
-            </div>
-
-            <p className="text-xs text-muted-foreground">
-              Todos are stored in IndexedDB with Spark KV fallback
-            </p>
-          </CardContent>
-        </Card>
+        <CounterCard counter={counter} onIncrement={incrementCounter} />
+        <TodoListCard
+          todos={todos}
+          newTodoText={newTodoText}
+          onTodoTextChange={setNewTodoText}
+          onAddTodo={addTodo}
+          onToggleTodo={toggleTodo}
+          onDeleteTodo={deleteTodo}
+        />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>How It Works</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <h3 className="font-semibold">1. Primary: IndexedDB</h3>
-              <p className="text-sm text-muted-foreground">
-                Data is first saved to IndexedDB for fast, structured storage with indexes
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-semibold">2. Fallback: Spark KV</h3>
-              <p className="text-sm text-muted-foreground">
-                If IndexedDB fails or is unavailable, Spark KV is used automatically
-              </p>
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-semibold">3. Sync Both</h3>
-              <p className="text-sm text-muted-foreground">
-                Data is kept in sync between both storage systems for redundancy
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-muted p-4 rounded-lg">
-            <h4 className="font-semibold mb-2">Code Example:</h4>
-            <pre className="text-xs overflow-x-auto">
-              {`import { useStorage } from '@/hooks/use-storage'
-
-// Replaces useKV from Spark
-const [todos, setTodos] = useStorage('todos', [])
-
-// Use functional updates for safety
-setTodos((current) => [...current, newTodo])`}
-            </pre>
-          </div>
-        </CardContent>
-      </Card>
+      <HowItWorksCard />
     </div>
   )
 }
