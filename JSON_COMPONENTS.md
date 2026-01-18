@@ -169,8 +169,16 @@ Domain-specific components:
 ## Current Status
 
 - **Total Components**: 60
-- **Supported**: 46 (77%)
-- **Planned**: 14 (23%)
+- **Supported**: 51 (85%)
+- **Planned**: 9 (15%)
+
+## Status Summary
+
+| Status | Count |
+| --- | ---: |
+| Supported | 51 |
+| Maybe | 0 |
+| Planned | 9 |
 
 ## Files
 
