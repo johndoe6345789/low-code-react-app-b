@@ -31,9 +31,9 @@
           "event": "onChange",
           "actions": [
             {
-              "type": "setState",
+              "type": "set-value",
               "target": "searchValue",
-              "valueFrom": "event.target.value"
+              "expression": "event.target.value"
             }
           ]
         }
@@ -48,16 +48,14 @@
         "className": "absolute right-1 h-7 w-7 p-0"
       },
       "conditional": {
-        "source": "searchValue",
-        "operator": "neq",
-        "value": ""
+        "if": "searchValue !== \"\""
       },
       "events": [
         {
           "event": "onClick",
           "actions": [
             {
-              "type": "setState",
+              "type": "set-value",
               "target": "searchValue",
               "value": ""
             }

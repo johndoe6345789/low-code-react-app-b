@@ -157,7 +157,10 @@ export function JSONUIRenderer({
               : evaluateCondition(handler.condition, { ...dataMap, ...renderContext })
             if (!conditionMet) return
           }
-          onAction?.(handler.actions, event)
+          const eventPayload = typeof event === 'object' && event !== null
+            ? Object.assign(event, renderContext)
+            : event
+          onAction?.(handler.actions, eventPayload)
         }
       })
     }

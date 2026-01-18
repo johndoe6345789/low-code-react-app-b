@@ -20,9 +20,7 @@
         "className": "text-xs"
       },
       "conditional": {
-        "source": "badge",
-        "operator": "neq",
-        "value": null
+        "if": "badge !== null"
       }
     }
   ]

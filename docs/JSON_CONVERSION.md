@@ -106,12 +106,29 @@ Converted three complex pages (Models, Component Trees, and Workflows) from trad
           "type": "Component",
           "bindings": { "prop": { "source": "...", "path": "..." } },
           "events": [
-            { "event": "click", "actions": [...] }
+            {
+              "event": "click",
+              "actions": [
+                { "type": "set-value", "target": "selectedId", "expression": "event" }
+              ]
+            }
           ]
         }
       ]
     }
   ]
+}
+```
+
+### Action & Conditional Syntax
+- Use supported JSON UI action types (for example, `set-value`, `toggle-value`, `show-toast`) with `target`, `path`, `value`, or `expression` fields instead of legacy `setState` actions.
+- Replace legacy conditional objects (`{ "source": "...", "operator": "eq|gt|truthy|falsy", "value": ... }`) with `conditional.if` expressions:
+
+```json
+{
+  "conditional": {
+    "if": "modelCount === 0"
+  }
 }
 ```
 

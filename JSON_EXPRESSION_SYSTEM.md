@@ -27,6 +27,7 @@ Use the `expression` field to evaluate dynamic values:
   - Supports nested objects using dot notation
 
 - **Event Access**: `"event.target.value"`, `"event.key"`, `"event.type"`
+  - You can also reference the full event payload with `"event"`
   - Access event properties
   - Commonly used for form inputs
 
@@ -109,6 +110,20 @@ To update nested values inside a data source, use a dotted `target` where the pr
 ```
 
 This dotted `target` format works with `set-value`, `update`, `toggle-value`, `increment`, and `decrement`.
+
+## Conditional Expressions
+
+Conditional rendering uses `conditional.if` strings that are evaluated against the current data context:
+
+```json
+{
+  "conditional": {
+    "if": "statusFilter === 'running'"
+  }
+}
+```
+
+Legacy conditional objects (with `source`/`operator`/`value`) should be migrated to these inline expressions so schemas stay compatible with the JSON UI renderer.
 
 ### create
 Add a new item to an array data source.
