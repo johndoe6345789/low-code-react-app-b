@@ -9,7 +9,8 @@ import type {
   UIComponent,
 } from './types'
 import { getUIComponent } from './component-registry'
-import { resolveDataBinding, evaluateCondition } from './utils'
+import { resolveDataBinding } from './utils'
+import { evaluateConditionExpression } from './expression-helpers'
 import { cn } from '@/lib/utils'
 
 export function JSONUIRenderer({ 
@@ -154,7 +155,7 @@ export function JSONUIRenderer({
           if (handler.condition) {
             const conditionMet = typeof handler.condition === 'function'
               ? handler.condition({ ...dataMap, ...renderContext })
-              : evaluateCondition(handler.condition, { ...dataMap, ...renderContext })
+              : evaluateConditionExpression(handler.condition, { ...dataMap, ...renderContext }, { label: 'event handler condition' })
             if (!conditionMet) return
           }
           const eventPayload = typeof event === 'object' && event !== null
@@ -196,7 +197,7 @@ export function JSONUIRenderer({
 
   const renderWithContext = (renderContext: Record<string, unknown>) => {
     if (component.conditional) {
-      const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...renderContext })
+      const conditionMet = evaluateConditionExpression(component.conditional.if, { ...dataMap, ...renderContext }, { label: `component conditional (${component.id})` })
       if (conditionMet) {
         if (component.conditional.then !== undefined) {
           return renderConditionalBranch(
@@ -258,7 +259,7 @@ export function JSONUIRenderer({
       let content = renderChildren(component.children, loopContext)
 
       if (component.conditional) {
-        const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...loopContext })
+        const conditionMet = evaluateConditionExpression(component.conditional.if, { ...dataMap, ...loopContext }, { label: `loop conditional (${component.id})` })
         if (conditionMet) {
           if (component.conditional.then !== undefined) {
             content = renderConditionalBranch(

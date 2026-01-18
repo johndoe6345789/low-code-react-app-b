@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { ComponentSchema as ComponentSchemaType } from '@/types/page-schema'
 import { getUIComponent } from '@/lib/json-ui/component-registry'
+import { evaluateConditionExpression, evaluateTransformExpression } from '@/lib/json-ui/expression-helpers'
 
 interface ComponentRendererProps {
   schema: ComponentSchemaType
@@ -17,13 +18,10 @@ export function ComponentRenderer({ schema, context, onEvent }: ComponentRendere
   }
   
   if (schema.condition) {
-    try {
-      const conditionFn = new Function('context', `return ${schema.condition}`)
-      if (!conditionFn(context)) {
-        return null
-      }
-    } catch (error) {
-      console.error(`Condition evaluation failed for ${schema.id}:`, error)
+    const conditionMet = evaluateConditionExpression(schema.condition, context, {
+      label: `component condition (${schema.id})`,
+    })
+    if (!conditionMet) {
       return null
     }
   }
@@ -34,13 +32,10 @@ export function ComponentRenderer({ schema, context, onEvent }: ComponentRendere
     schema.bindings.forEach(binding => {
       const value = getNestedValue(context, binding.source)
       if (binding.transform) {
-        try {
-          const transformFn = new Function('value', 'context', `return ${binding.transform}`)
-          props[binding.target] = transformFn(value, context)
-        } catch (error) {
-          console.error(`Transform failed for ${binding.target}:`, error)
-          props[binding.target] = value
-        }
+        props[binding.target] = evaluateTransformExpression(binding.transform, value, context, {
+          fallback: value,
+          label: `binding transform (${binding.target})`,
+        })
       } else {
         props[binding.target] = value
       }

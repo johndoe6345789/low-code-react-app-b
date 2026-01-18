@@ -1,17 +1,15 @@
 import { useMemo } from 'react'
-import { ComponentSchema } from '@/types/json-ui'
+import { evaluateBindingExpression } from '@/lib/json-ui/expression-helpers'
 
 export function useJSONRenderer() {
   const resolveBinding = useMemo(() => {
     return (binding: string, data: Record<string, any>): any => {
       if (!binding) return undefined
       
-      try {
-        const func = new Function(...Object.keys(data), `return ${binding}`)
-        return func(...Object.values(data))
-      } catch {
-        return binding
-      }
+      return evaluateBindingExpression(binding, data, {
+        fallback: binding,
+        label: 'json renderer binding',
+      })
     }
   }, [])
 
