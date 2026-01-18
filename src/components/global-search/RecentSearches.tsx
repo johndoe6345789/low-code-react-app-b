@@ -2,25 +2,7 @@ import { ClockCounterClockwise, X } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CommandGroup, CommandItem, CommandSeparator } from '@/components/ui/command'
-
-interface SearchHistoryItem {
-  id: string
-  query: string
-  timestamp: number
-  resultId?: string
-  resultTitle?: string
-  resultCategory?: string
-}
-
-interface SearchResult {
-  id: string
-  title: string
-  subtitle?: string
-  category: string
-  icon: React.ReactNode
-  action: () => void
-  tags?: string[]
-}
+import type { SearchHistoryItem, SearchResult } from './types'
 
 interface RecentSearchesProps {
   recentSearches: Array<{ historyItem: SearchHistoryItem; result?: SearchResult }>
