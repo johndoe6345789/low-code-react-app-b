@@ -25,6 +25,16 @@ export type ComponentType =
   | 'PageHeaderContent' | 'PropertyEditor' | 'SchemaEditorCanvas' | 'SchemaEditorLayout'
   | 'SchemaEditorPropertiesPanel' | 'SchemaEditorSidebar' | 'SchemaEditorToolbar' | 'SearchBar' | 'ToolbarActions'
 
+export interface BreadcrumbItem {
+  label: string
+  href?: string
+}
+
+export interface BreadcrumbProps {
+  items?: BreadcrumbItem[]
+  className?: string
+}
+
 export type ActionType =
   | 'create' | 'update' | 'delete' | 'navigate'
   | 'show-toast' | 'open-dialog' | 'close-dialog'

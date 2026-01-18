@@ -21,7 +21,6 @@ import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
 import * as OrganismComponents from '@/components/organisms'
 import {
-  BreadcrumbWrapper,
   LazyBarChartWrapper,
   LazyD3BarChartWrapper,
   LazyLineChartWrapper,
@@ -197,7 +196,6 @@ export const organismComponents: UIComponentRegistry = buildRegistryFromNames(
 )
 
 export const jsonWrapperComponents: UIComponentRegistry = {
-  Breadcrumb: BreadcrumbWrapper,
   SaveIndicator: SaveIndicatorWrapper,
   LazyBarChart: LazyBarChartWrapper,
   LazyLineChart: LazyLineChartWrapper,

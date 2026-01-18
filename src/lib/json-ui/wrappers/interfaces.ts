@@ -1,15 +1,5 @@
 import type { StorageBackendKey } from '@/components/storage/storageSettingsConfig'
 
-export interface BreadcrumbItem {
-  label: string
-  href?: string
-}
-
-export interface BreadcrumbWrapperProps {
-  items?: BreadcrumbItem[]
-  className?: string
-}
-
 export type SaveIndicatorStatus = 'saved' | 'synced'
 
 export interface SaveIndicatorWrapperProps {
