@@ -1,0 +1,300 @@
+{
+  "id": "feature-toggle-settings",
+  "name": "Feature Toggle Settings",
+  "description": "Enable or disable features to customize your workspace",
+  "dataSources": [
+    {
+      "id": "featuresList",
+      "type": "static",
+      "defaultValue": [
+        {
+          "key": "codeEditor",
+          "label": "Code Editor",
+          "description": "Monaco-based code editor with syntax highlighting",
+          "icon": "Code"
+        },
+        {
+          "key": "models",
+          "label": "Database Models",
+          "description": "Prisma schema designer for database models",
+          "icon": "Database"
+        },
+        {
+          "key": "components",
+          "label": "Component Builder",
+          "description": "Visual component tree builder for React components",
+          "icon": "Tree"
+        },
+        {
+          "key": "componentTrees",
+          "label": "Component Trees Manager",
+          "description": "Manage multiple component tree configurations",
+          "icon": "Tree"
+        },
+        {
+          "key": "workflows",
+          "label": "Workflow Designer",
+          "description": "n8n-style visual workflow automation builder",
+          "icon": "FlowArrow"
+        },
+        {
+          "key": "lambdas",
+          "label": "Lambda Functions",
+          "description": "Serverless function editor with multiple runtimes",
+          "icon": "Code"
+        },
+        {
+          "key": "styling",
+          "label": "Theme Designer",
+          "description": "Material UI theme customization and styling",
+          "icon": "PaintBrush"
+        },
+        {
+          "key": "flaskApi",
+          "label": "Flask API Designer",
+          "description": "Python Flask backend API endpoint designer",
+          "icon": "Flask"
+        },
+        {
+          "key": "playwright",
+          "label": "Playwright Tests",
+          "description": "E2E testing with Playwright configuration",
+          "icon": "Play"
+        },
+        {
+          "key": "storybook",
+          "label": "Storybook Stories",
+          "description": "Component documentation and development",
+          "icon": "BookOpen"
+        },
+        {
+          "key": "unitTests",
+          "label": "Unit Tests",
+          "description": "Component and function unit test designer",
+          "icon": "Cube"
+        },
+        {
+          "key": "errorRepair",
+          "label": "Error Repair",
+          "description": "Auto-detect and fix code errors",
+          "icon": "Wrench"
+        },
+        {
+          "key": "documentation",
+          "label": "Documentation",
+          "description": "Project documentation, roadmap, and guides",
+          "icon": "FileText"
+        },
+        {
+          "key": "sassStyles",
+          "label": "Sass Styles",
+          "description": "Custom Sass/SCSS styling showcase",
+          "icon": "PaintBrush"
+        },
+        {
+          "key": "faviconDesigner",
+          "label": "Favicon Designer",
+          "description": "Design and generate app favicons and icons",
+          "icon": "Image"
+        },
+        {
+          "key": "ideaCloud",
+          "label": "Feature Idea Cloud",
+          "description": "Brainstorm and organize feature ideas",
+          "icon": "Lightbulb"
+        }
+      ]
+    },
+    {
+      "id": "enabledCount",
+      "type": "static",
+      "expression": "Object.values(data.features || {}).filter(Boolean).length"
+    },
+    {
+      "id": "totalCount",
+      "type": "static",
+      "expression": "Object.keys(data.features || {}).length"
+    }
+  ],
+  "components": [
+    {
+      "id": "root",
+      "type": "div",
+      "props": {
+        "className": "h-full p-6 bg-background"
+      },
+      "children": [
+        {
+          "id": "header",
+          "type": "div",
+          "props": {
+            "className": "mb-6"
+          },
+          "children": [
+            {
+              "id": "title",
+              "type": "Heading",
+              "props": {
+                "level": 2,
+                "className": "text-2xl font-bold mb-2",
+                "children": "Feature Toggles"
+              }
+            },
+            {
+              "id": "description",
+              "type": "Text",
+              "props": {
+                "className": "text-muted-foreground"
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "value": "Enable or disable features to customize your workspace. "
+                },
+                {
+                  "type": "text",
+                  "dataBinding": "enabledCount"
+                },
+                {
+                  "type": "text",
+                  "value": " of "
+                },
+                {
+                  "type": "text",
+                  "dataBinding": "totalCount"
+                },
+                {
+                  "type": "text",
+                  "value": " features enabled."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "scroll-area",
+          "type": "ScrollArea",
+          "props": {
+            "className": "h-[calc(100vh-200px)]"
+          },
+          "children": [
+            {
+              "id": "grid",
+              "type": "div",
+              "props": {
+                "className": "grid grid-cols-1 lg:grid-cols-2 gap-4 pr-4"
+              },
+              "loop": {
+                "source": "featuresList",
+                "itemVar": "item",
+                "indexVar": "index"
+              },
+              "children": [
+                {
+                  "id": "feature-card",
+                  "type": "Card",
+                  "children": [
+                    {
+                      "id": "card-header",
+                      "type": "div",
+                      "props": {
+                        "className": "p-6 pb-3"
+                      },
+                      "children": [
+                        {
+                          "id": "card-content",
+                          "type": "div",
+                          "props": {
+                            "className": "flex items-start justify-between"
+                          },
+                          "children": [
+                            {
+                              "id": "left-content",
+                              "type": "div",
+                              "props": {
+                                "className": "flex items-center gap-3"
+                              },
+                              "children": [
+                                {
+                                  "id": "icon-container",
+                                  "type": "div",
+                                  "props": {
+                                    "className": {
+                                      "expression": "data.features?.[item.key] ? 'p-2 rounded-lg bg-primary text-primary-foreground' : 'p-2 rounded-lg bg-muted text-muted-foreground'"
+                                    }
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "icon",
+                                      "type": {
+                                        "dataBinding": "item.icon"
+                                      },
+                                      "props": {
+                                        "size": 20,
+                                        "weight": "duotone"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "text-content",
+                                  "type": "div",
+                                  "children": [
+                                    {
+                                      "id": "title",
+                                      "type": "div",
+                                      "props": {
+                                        "className": "text-base font-semibold"
+                                      },
+                                      "dataBinding": "item.label"
+                                    },
+                                    {
+                                      "id": "description",
+                                      "type": "div",
+                                      "props": {
+                                        "className": "text-xs mt-1 text-muted-foreground"
+                                      },
+                                      "dataBinding": "item.description"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "id": "switch",
+                              "type": "Switch",
+                              "bindings": {
+                                "checked": {
+                                  "expression": "data.features?.[item.key] || false"
+                                }
+                              },
+                              "events": [
+                                {
+                                  "event": "checkedChange",
+                                  "actions": [
+                                    {
+                                      "id": "updateFeature",
+                                      "type": "custom",
+                                      "params": {
+                                        "key": "item.key",
+                                        "checked": "event"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
