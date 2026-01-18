@@ -8,24 +8,25 @@ import {
   TextT,
   Image as ImageIcon,
 } from '@phosphor-icons/react'
+import copy from '@/data/favicon-designer.json'
 import { FaviconDesign } from './types'
 
 export const PRESET_SIZES = [16, 32, 48, 64, 128, 256, 512]
 
 export const ELEMENT_TYPES = [
-  { value: 'circle', label: 'Circle', icon: CircleNotch },
-  { value: 'square', label: 'Square', icon: Square },
-  { value: 'triangle', label: 'Triangle', icon: Triangle },
-  { value: 'star', label: 'Star', icon: Star },
-  { value: 'heart', label: 'Heart', icon: Heart },
-  { value: 'polygon', label: 'Polygon', icon: Polygon },
-  { value: 'text', label: 'Text', icon: TextT },
-  { value: 'emoji', label: 'Emoji', icon: ImageIcon },
+  { value: 'circle', icon: CircleNotch },
+  { value: 'square', icon: Square },
+  { value: 'triangle', icon: Triangle },
+  { value: 'star', icon: Star },
+  { value: 'heart', icon: Heart },
+  { value: 'polygon', icon: Polygon },
+  { value: 'text', icon: TextT },
+  { value: 'emoji', icon: ImageIcon },
 ]
 
 export const DEFAULT_DESIGN: FaviconDesign = {
   id: 'default',
-  name: 'My Favicon',
+  name: copy.defaults.designName,
   size: 128,
   backgroundColor: '#7c3aed',
   elements: [
@@ -38,7 +39,7 @@ export const DEFAULT_DESIGN: FaviconDesign = {
       height: 100,
       color: '#ffffff',
       rotation: 0,
-      text: 'CF',
+      text: copy.defaults.designText,
       fontSize: 48,
       fontWeight: 'bold',
     },
