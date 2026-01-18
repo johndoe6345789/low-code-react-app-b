@@ -23,7 +23,7 @@ class UnifiedStorage {
         try {
           console.log('[Storage] Flask backend explicitly configured, attempting to initialize...')
           const flaskAdapter = new FlaskBackendAdapter(flaskEnvUrl)
-          const testResponse = await Promise.race([
+          await Promise.race([
             flaskAdapter.get('_health_check'),
             new Promise((_, reject) => setTimeout(() => reject(new Error('Flask connection timeout')), 2000))
           ])

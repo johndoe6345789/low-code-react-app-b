@@ -718,6 +718,348 @@
       "source": "atoms"
     },
     {
+      "type": "ArrowLeft",
+      "name": "ArrowLeft",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "ArrowLeft icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "ArrowRight",
+      "name": "ArrowRight",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "ArrowRight icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Check",
+      "name": "Check",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Check icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "X",
+      "name": "X",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "X icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Plus",
+      "name": "Plus",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Plus icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Minus",
+      "name": "Minus",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Minus icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Search",
+      "name": "Search",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Search icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Filter",
+      "name": "Filter",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Filter icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Download",
+      "name": "Download",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Download icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Upload",
+      "name": "Upload",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Upload icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Edit",
+      "name": "Edit",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Edit icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Trash",
+      "name": "Trash",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Trash icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Eye",
+      "name": "Eye",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Eye icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "EyeOff",
+      "name": "EyeOff",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "EyeOff icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "ChevronUp",
+      "name": "ChevronUp",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "ChevronUp icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "ChevronDown",
+      "name": "ChevronDown",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "ChevronDown icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "ChevronLeft",
+      "name": "ChevronLeft",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "ChevronLeft icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "ChevronRight",
+      "name": "ChevronRight",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "ChevronRight icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Settings",
+      "name": "Settings",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Settings icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "User",
+      "name": "User",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "User icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Bell",
+      "name": "Bell",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Bell icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Mail",
+      "name": "Mail",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Mail icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Calendar",
+      "name": "Calendar",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Calendar icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Clock",
+      "name": "Clock",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Clock icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Star",
+      "name": "Star",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Star icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Heart",
+      "name": "Heart",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Heart icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Share",
+      "name": "Share",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Share icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Link",
+      "name": "Link",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Link icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Copy",
+      "name": "Copy",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Copy icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Save",
+      "name": "Save",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Save icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "RefreshCw",
+      "name": "RefreshCw",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "RefreshCw icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "AlertCircle",
+      "name": "AlertCircle",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "AlertCircle icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Info",
+      "name": "Info",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Info icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "HelpCircle",
+      "name": "HelpCircle",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "HelpCircle icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Home",
+      "name": "Home",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Home icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "Menu",
+      "name": "Menu",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Menu icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "MoreVertical",
+      "name": "MoreVertical",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "MoreVertical icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
+      "type": "MoreHorizontal",
+      "name": "MoreHorizontal",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "MoreHorizontal icon",
+      "status": "supported",
+      "source": "icons"
+    },
+    {
       "type": "Breadcrumb",
       "name": "Breadcrumb",
       "category": "navigation",
@@ -1926,25 +2268,27 @@
     }
   ],
   "statistics": {
-    "total": 222,
-    "supported": 209,
+    "total": 239,
+    "supported": 226,
     "planned": 0,
-    "jsonCompatible": 13,
+    "jsonCompatible": 50,
     "maybeJsonCompatible": 0,
     "byCategory": {
-      "layout": 25,
-      "input": 34,
-      "display": 31,
-      "navigation": 15,
-      "feedback": 23,
-      "data": 25,
-      "custom": 69
+      "layout": 24,
+      "input": 26,
+      "display": 64,
+      "navigation": 12,
+      "feedback": 21,
+      "data": 27,
+      "custom": 65
     },
     "bySource": {
       "atoms": 117,
-      "molecules": 40,
-      "organisms": 15,
-      "ui": 50
+      "molecules": 36,
+      "organisms": 13,
+      "ui": 25,
+      "wrappers": 10,
+      "icons": 38
     }
   }
 }
