@@ -27,7 +27,7 @@ interface RegistryEntry {
   canHaveChildren: boolean
   description: string
   status: 'supported' | 'deprecated'
-  source: 'atoms' | 'molecules' | 'organisms' | 'ui' | 'wrappers'
+  source: 'atoms' | 'molecules' | 'organisms' | 'ui' | 'wrappers' | 'custom'
   jsonCompatible: boolean
   wrapperRequired?: boolean
   load?: {
@@ -134,7 +134,7 @@ function generateDescription(componentName: string, category: string): string {
  */
 async function processDirectory(
   dir: string,
-  source: 'atoms' | 'molecules' | 'organisms' | 'ui'
+  source: 'atoms' | 'molecules' | 'organisms' | 'ui' | 'custom'
 ): Promise<RegistryEntry[]> {
   const entries: RegistryEntry[] = []
 
@@ -204,6 +204,7 @@ async function updateRegistry() {
     { dir: path.join(rootDir, 'src/config/pages/molecules'), source: 'molecules' as const },
     { dir: path.join(rootDir, 'src/config/pages/organisms'), source: 'organisms' as const },
     { dir: path.join(rootDir, 'src/config/pages/ui'), source: 'ui' as const },
+    { dir: path.join(rootDir, 'src/config/pages/components'), source: 'custom' as const },
   ]
 
   for (const { dir, source } of directories) {
