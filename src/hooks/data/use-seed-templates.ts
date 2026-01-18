@@ -6,7 +6,7 @@ import defaultTemplate from '@/config/seed-data.json'
 
 export type TemplateType = 'default' | 'e-commerce' | 'blog' | 'dashboard'
 
-interface Template {
+export interface Template {
   id: TemplateType
   name: string
   description: string
