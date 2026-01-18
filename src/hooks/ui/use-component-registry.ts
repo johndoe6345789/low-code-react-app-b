@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { createElement, useMemo } from 'react'
 import { uiComponentRegistry, iconComponents } from '@/lib/json-ui/component-registry'
 import * as Icons from '@phosphor-icons/react'
 
@@ -20,9 +20,13 @@ export function useComponentRegistry({ customComponents = {} }: ComponentRegistr
   }
 
   const getIcon = (iconName: string, props?: any): React.ReactElement | null => {
-    const IconComponent = iconComponents[iconName as keyof typeof iconComponents] || (Icons as any)[iconName]
-    if (!IconComponent) return null
-    return IconComponent({ size: 24, weight: "duotone", ...props })
+    const registryIcon = registry[iconName as keyof typeof registry]
+    const IconComponent =
+      (registryIcon && typeof registryIcon !== 'string' ? registryIcon : null) ||
+      iconComponents[iconName as keyof typeof iconComponents] ||
+      (Icons as any)[iconName]
+    if (!IconComponent || typeof IconComponent === 'string') return null
+    return createElement(IconComponent, { size: 24, weight: "duotone", ...props })
   }
 
   return {

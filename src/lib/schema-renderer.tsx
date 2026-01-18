@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react'
+import { createElement, type ComponentType, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Component as ComponentSchema, Layout } from '@/schemas/ui-schema'
 import { useDataBinding, useEventHandlers, useComponentRegistry } from '@/hooks/ui'
@@ -91,7 +91,11 @@ export function SchemaRenderer({ schema, data, functions = {}, componentRegistry
 
   if (schema.binding) {
     const iconName = resolveBinding(schema.binding)
-    if (iconName && schema.type === 'Icon') {
+    if (typeof iconName === 'string' && schema.type === 'Icon') {
+      const IconComponent = getComponent(iconName)
+      if (IconComponent) {
+        return createElement(IconComponent, combinedProps)
+      }
       return getIcon(iconName, combinedProps)
     }
   }
