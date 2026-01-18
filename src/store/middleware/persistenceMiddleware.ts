@@ -38,7 +38,7 @@ type PendingOperation = {
   timestamp: number
 }
 
-class PersistenceQueue {
+export class PersistenceQueue {
   private queue: Map<string, PendingOperation> = new Map()
   private processing = false
   private debounceTimers: Map<string, ReturnType<typeof setTimeout>> = new Map()
@@ -97,6 +97,9 @@ class PersistenceQueue {
       }
     } finally {
       this.processing = false
+      if (this.queue.size > 0) {
+        await this.processQueue()
+      }
     }
   }
 
