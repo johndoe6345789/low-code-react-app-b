@@ -13,7 +13,18 @@ export function JSONUIRenderer({
   
   if (component.conditional) {
     const conditionMet = evaluateCondition(component.conditional.if, { ...dataMap, ...context })
-    if (!conditionMet) {
+    if (conditionMet) {
+      if (component.conditional.then) {
+        return (
+          <JSONUIRenderer 
+            component={component.conditional.then as UIComponent} 
+            dataMap={dataMap} 
+            onAction={onAction}
+            context={context}
+          />
+        )
+      }
+    } else {
       return component.conditional.else ? (
         <JSONUIRenderer 
           component={component.conditional.else as UIComponent} 
