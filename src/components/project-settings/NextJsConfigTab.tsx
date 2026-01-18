@@ -1,16 +1,11 @@
-import { NextJsConfig } from '@/types/project'
 import { NextJsApplicationCard } from '@/components/project-settings/NextJsApplicationCard'
 import { NextJsFeaturesCard } from '@/components/project-settings/NextJsFeaturesCard'
-
-interface NextJsConfigTabProps {
-  nextjsConfig: NextJsConfig
-  onNextjsConfigChange: (config: NextJsConfig | ((current: NextJsConfig) => NextJsConfig)) => void
-}
+import { NextJsConfigSectionProps } from '@/components/project-settings/types'
 
 export function NextJsConfigTab({
   nextjsConfig,
   onNextjsConfigChange,
-}: NextJsConfigTabProps) {
+}: NextJsConfigSectionProps) {
   return (
     <div className="max-w-2xl space-y-6">
       <NextJsApplicationCard
