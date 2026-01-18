@@ -29,6 +29,8 @@ import componentBindingDialogDef from '@/components/json-definitions/component-b
 import dataSourceEditorDialogDef from '@/components/json-definitions/data-source-editor-dialog.json'
 import githubBuildStatusDef from '@/components/json-definitions/github-build-status.json'
 import saveIndicatorDef from '@/components/json-definitions/save-indicator.json'
+import componentTreeDef from '@/components/json-definitions/component-tree.json'
+import seedDataManagerDef from '@/components/json-definitions/seed-data-manager.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -37,6 +39,7 @@ export const PageHeaderContent = createJsonComponent<PageHeaderContentProps>(pag
 export const ComponentBindingDialog = createJsonComponent<ComponentBindingDialogProps>(componentBindingDialogDef)
 export const DataSourceEditorDialog = createJsonComponent<DataSourceEditorDialogProps>(dataSourceEditorDialogDef)
 export const GitHubBuildStatus = createJsonComponent<GitHubBuildStatusProps>(githubBuildStatusDef)
+export const SeedDataManager = createJsonComponent<SeedDataManagerProps>(seedDataManagerDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
@@ -48,10 +51,17 @@ export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(sa
   }
 })
 
+export const ComponentTree = createJsonComponentWithHooks<ComponentTreeProps>(componentTreeDef, {
+  hooks: {
+    treeData: {
+      hookName: 'useComponentTree',
+      args: (props) => [props.components || [], props.selectedId || null]
+    }
+  }
+})
+
 // Note: The following still need JSON definitions created:
-// - LazyBarChart (needs Recharts integration)
-// - LazyLineChart (needs Recharts integration)
-// - LazyD3BarChart (needs D3 integration)
-// - SeedDataManager (complex multi-button component)
-// - StorageSettings (complex form component)
-// - ComponentTree (needs recursive rendering support)
+// - StorageSettings (complex form with backend switching)
+// - LazyBarChart (Recharts integration)
+// - LazyLineChart (Recharts integration)
+// - LazyD3BarChart (D3 calculations - hook created, needs JSON definition)
