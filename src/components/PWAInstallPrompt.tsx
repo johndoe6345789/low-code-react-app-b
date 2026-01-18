@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Download, X, DeviceMobile, Desktop } from '@phosphor-icons/react'
@@ -6,41 +5,26 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { usePWA } from '@/hooks/use-pwa'
 
 export function PWAInstallPrompt() {
-  const { isInstallable, installApp } = usePWA()
-  const [dismissed, setDismissed] = useState(false)
-  const [showPrompt, setShowPrompt] = useState(false)
-
-  useEffect(() => {
-    const hasBeenDismissed = localStorage.getItem('pwa-install-dismissed')
-    if (hasBeenDismissed) {
-      setDismissed(true)
-    }
-
-    const timer = setTimeout(() => {
-      if (isInstallable && !hasBeenDismissed) {
-        setShowPrompt(true)
-      }
-    }, 3000)
-
-    return () => clearTimeout(timer)
-  }, [isInstallable])
+  const {
+    isInstallable,
+    isInstallPromptDismissed,
+    isInstallPromptVisible,
+    installApp,
+    dismissInstallPrompt,
+  } = usePWA()
 
   const handleInstall = async () => {
     const success = await installApp()
-    if (success) {
-      setShowPrompt(false)
-    }
+    if (success) return
   }
 
   const handleDismiss = () => {
-    setShowPrompt(false)
-    setDismissed(true)
-    localStorage.setItem('pwa-install-dismissed', 'true')
+    dismissInstallPrompt()
   }
 
   return (
     <AnimatePresence>
-      {isInstallable && !dismissed && showPrompt && (
+      {isInstallable && !isInstallPromptDismissed && isInstallPromptVisible && (
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
