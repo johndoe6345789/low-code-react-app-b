@@ -24,19 +24,80 @@ export function PWASettings() {
     registration
   } = usePWA()
 
-  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default')
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission | 'unsupported'>(
+    'default'
+  )
   const [cacheSize, setCacheSize] = useState<string>(pwaSettingsCopy.defaults.cacheCalculating)
 
   useEffect(() => {
-    if ('Notification' in window) {
-      setNotificationPermission(Notification.permission)
+    let isMounted = true
+    let permissionStatus: PermissionStatus | null = null
+    let handlePermissionChange: (() => void) | null = null
+
+    const setPermissionState = (state: PermissionState | NotificationPermission | 'unsupported') => {
+      if (!isMounted) return
+      if (state === 'prompt') {
+        setNotificationPermission('default')
+        return
+      }
+      if (state === 'granted' || state === 'denied' || state === 'default' || state === 'unsupported') {
+        setNotificationPermission(state)
+      }
     }
 
-    if ('storage' in navigator && 'estimate' in navigator.storage) {
-      navigator.storage.estimate().then((estimate) => {
-        const usageInMB = ((estimate.usage || 0) / (1024 * 1024)).toFixed(2)
+    const updatePermission = async () => {
+      if (!('Notification' in window)) {
+        setPermissionState('unsupported')
+        return
+      }
+
+      setPermissionState(Notification.permission)
+
+      if ('permissions' in navigator && 'query' in navigator.permissions) {
+        try {
+          permissionStatus = await navigator.permissions.query({ name: 'notifications' })
+          handlePermissionChange = () => setPermissionState(permissionStatus?.state ?? 'default')
+          permissionStatus.addEventListener('change', handlePermissionChange)
+          handlePermissionChange()
+        } catch (error) {
+          console.error('[PWA] Notification permission query failed:', error)
+        }
+      }
+    }
+
+    const updateCacheSize = async () => {
+      if (!('storage' in navigator && 'estimate' in navigator.storage)) {
+        if (isMounted) {
+          setCacheSize(pwaSettingsCopy.defaults.cacheUnavailable)
+        }
+        return
+      }
+
+      try {
+        const estimate = await navigator.storage.estimate()
+        const usage = estimate.usage
+        if (typeof usage !== 'number') {
+          setCacheSize(pwaSettingsCopy.defaults.cacheUnavailable)
+          return
+        }
+        const usageInMB = (usage / (1024 * 1024)).toFixed(2)
         setCacheSize(`${usageInMB} ${pwaSettingsCopy.cache.storageUnit}`)
-      })
+      } catch (error) {
+        console.error('[PWA] Storage estimate failed:', error)
+        if (isMounted) {
+          setCacheSize(pwaSettingsCopy.defaults.cacheUnavailable)
+        }
+      }
+    }
+
+    updatePermission()
+    updateCacheSize()
+
+    return () => {
+      isMounted = false
+      if (permissionStatus && handlePermissionChange) {
+        permissionStatus.removeEventListener('change', handlePermissionChange)
+      }
     }
   }, [])
 
@@ -60,15 +121,17 @@ export function PWASettings() {
   }
 
   const handleNotificationToggle = async (enabled: boolean) => {
-    if (enabled) {
-      const permission = await requestNotificationPermission()
-      setNotificationPermission(permission as NotificationPermission)
+    if (!enabled || notificationPermission === 'unsupported') {
+      return
+    }
 
-      if (permission === 'granted') {
-        toast.success(pwaSettingsCopy.toasts.notificationsEnabled)
-      } else {
-        toast.error(pwaSettingsCopy.toasts.notificationsDenied)
-      }
+    const permission = await requestNotificationPermission()
+    setNotificationPermission(permission)
+
+    if (permission === 'granted') {
+      toast.success(pwaSettingsCopy.toasts.notificationsEnabled)
+    } else {
+      toast.error(pwaSettingsCopy.toasts.notificationsDenied)
     }
   }
 

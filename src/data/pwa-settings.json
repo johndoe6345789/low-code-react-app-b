@@ -45,7 +45,8 @@
     "description": "Receive updates about your projects and builds",
     "label": "Push Notifications",
     "permissionLabel": "Permission:",
-    "blocked": "Notifications are blocked. Please enable them in your browser settings."
+    "blocked": "Notifications are blocked. Please enable them in your browser settings.",
+    "unsupported": "Notifications aren't supported in this browser."
   },
   "cache": {
     "title": "Cache Management",
@@ -84,6 +85,7 @@
     "notificationsDenied": "Notification permission denied"
   },
   "defaults": {
-    "cacheCalculating": "Calculating..."
+    "cacheCalculating": "Calculating...",
+    "cacheUnavailable": "Unavailable"
   }
 }

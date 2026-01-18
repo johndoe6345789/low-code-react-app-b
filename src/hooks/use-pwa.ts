@@ -136,7 +136,7 @@ export function usePWA() {
     }
   }
 
-  const requestNotificationPermission = async () => {
+  const requestNotificationPermission = async (): Promise<NotificationPermission | 'unsupported'> => {
     if (!('Notification' in window)) {
       return 'unsupported'
     }
