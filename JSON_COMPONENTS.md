@@ -10,6 +10,25 @@ The JSON UI system allows you to define user interfaces using JSON schemas inste
 - Configuration-driven UIs
 - Rapid prototyping
 
+## JSON Eligibility Checklist
+
+Use this checklist during every conversion to determine whether a component can be safely represented in JSON.
+
+### Core requirements (must all be true)
+- **No side-effects**: The component should be render-only; it must not perform data fetching, subscriptions, timers, or imperative DOM work. Side-effects belong in wrappers or higher-level orchestration. 
+- **Supported bindings only**: Props must map to supported JSON bindings (static values, expression bindings, or schema-recognized props). Avoid custom callbacks, ref usage, or passing functions through JSON.
+- **Stable props**: Props should be serializable and deterministic (strings, numbers, booleans, arrays, objects). Avoid non-serializable values like class instances, functions, or dates unless explicitly supported by the JSON schema.
+
+### Derived state guidance
+- **Prefer pure derivation**: If state can be derived from props or data bindings, compute it at render time in the renderer or via expression bindings rather than introducing component state.
+- **Avoid local state in JSON components**: If a component needs internal state to function, wrap it in a React component and expose only the minimal, declarative props to JSON.
+- **Keep calculations explicit**: Use named props (e.g., `selectedCount`, `isComplete`) rather than embedding complex logic that would need component state.
+
+### Event handler guidance
+- **Use schema-recognized actions**: Wire events to supported JSON actions or expression handlers (e.g., `onClick` -> `actions.navigate`, `actions.submit`), not raw functions.
+- **Pass data, not closures**: Event handlers should reference IDs, routes, or action payloads so the runtime can resolve them.
+- **Escalate complex logic**: If an event handler needs branching logic or side-effects, move that logic into an app-level action or wrapper component and keep JSON props declarative.
+
 ## Quick Start
 
 ### List All JSON-Compatible Components
