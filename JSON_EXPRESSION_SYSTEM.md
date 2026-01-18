@@ -96,6 +96,20 @@ Update a data source with a new value.
 }
 ```
 
+**Target-path convention:**
+To update nested values inside a data source, use a dotted `target` where the prefix is the data source ID and the remainder is the nested path:
+
+```json
+{
+  "id": "set-city",
+  "type": "set-value",
+  "target": "profile.address.city",
+  "expression": "event.target.value"
+}
+```
+
+This dotted `target` format works with `set-value`, `update`, `toggle-value`, `increment`, and `decrement`.
+
 ### create
 Add a new item to an array data source.
 
