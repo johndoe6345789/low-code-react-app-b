@@ -31,6 +31,7 @@ import prioritiesData from './FeatureIdeaCloud/data/priorities.json'
 import statusesData from './FeatureIdeaCloud/data/statuses.json'
 import groupColorsData from './FeatureIdeaCloud/data/group-colors.json'
 import { nodeTypes } from './FeatureIdeaCloud/nodes'
+import { dispatchConnectionCountUpdate } from './FeatureIdeaCloud/dispatchConnectionCountUpdate'
 
 type SeedIdeaJson = Omit<FeatureIdea, 'createdAt'> & { createdAtOffsetMs: number }
 
@@ -133,10 +134,7 @@ export function FeatureIdeaCloud() {
         bottom: connections.bottom.size,
       }
       
-      const event = new CustomEvent('updateConnectionCounts', {
-        detail: { nodeId, counts }
-      })
-      window.dispatchEvent(event)
+      dispatchConnectionCountUpdate(nodeId, counts)
     })
   }, [])
 
