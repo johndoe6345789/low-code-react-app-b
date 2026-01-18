@@ -1,0 +1,17 @@
+{
+  "id": "action-bar",
+  "$ref": "../atoms/div-flex.json",
+  "props": {
+    "className": "flex items-center gap-2 p-4 border-b bg-muted/30"
+  },
+  "children": [
+    {
+      "id": "action-primary",
+      "$ref": "../atoms/button-primary.json"
+    },
+    {
+      "id": "action-secondary",
+      "$ref": "../atoms/button-secondary.json"
+    }
+  ]
+}

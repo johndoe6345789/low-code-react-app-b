@@ -1,0 +1,23 @@
+{
+  "id": "breadcrumb",
+  "$ref": "../atoms/div-flex.json",
+  "props": {
+    "className": "flex items-center gap-2 text-sm"
+  },
+  "children": [
+    {
+      "id": "breadcrumb-home",
+      "$ref": "../atoms/text-muted.json",
+      "props": {
+        "children": "Home"
+      }
+    },
+    {
+      "id": "breadcrumb-separator",
+      "$ref": "../atoms/text-muted.json",
+      "props": {
+        "children": "/"
+      }
+    }
+  ]
+}

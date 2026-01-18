@@ -1,0 +1,23 @@
+{
+  "id": "editor-toolbar",
+  "$ref": "../atoms/div-flex.json",
+  "props": {
+    "className": "flex items-center justify-between border-b p-2 bg-muted/30"
+  },
+  "children": [
+    {
+      "id": "toolbar-left",
+      "$ref": "../atoms/div-flex.json",
+      "props": {
+        "className": "flex items-center gap-2"
+      }
+    },
+    {
+      "id": "toolbar-right",
+      "$ref": "../atoms/div-flex.json",
+      "props": {
+        "className": "flex items-center gap-2"
+      }
+    }
+  ]
+}

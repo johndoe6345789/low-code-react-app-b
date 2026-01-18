@@ -1,0 +1,6 @@
+{
+  "type": "Separator",
+  "props": {
+    "className": "my-4"
+  }
+}

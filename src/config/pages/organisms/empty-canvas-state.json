@@ -1,0 +1,59 @@
+{
+  "id": "empty-canvas-state",
+  "type": "div",
+  "props": {
+    "className": "h-full flex flex-col items-center justify-center p-8 bg-muted/20"
+  },
+  "children": [
+    {
+      "$ref": "../molecules/empty-state.json",
+      "children": [
+        {
+          "id": "empty-canvas-icon",
+          "$ref": "../atoms/icon-folder.json",
+          "props": {
+            "size": 64,
+            "weight": "duotone"
+          }
+        },
+        {
+          "id": "empty-canvas-title",
+          "$ref": "../atoms/heading-2.json",
+          "props": {
+            "children": "Empty Canvas"
+          }
+        },
+        {
+          "id": "empty-canvas-description",
+          "$ref": "../atoms/text-muted.json",
+          "props": {
+            "children": "Start building your UI by dragging components from the left panel, or import an existing schema."
+          }
+        },
+        {
+          "id": "empty-canvas-actions",
+          "$ref": "../atoms/div-flex.json",
+          "props": {
+            "className": "flex gap-2 mt-4"
+          },
+          "children": [
+            {
+              "id": "import-schema-button",
+              "$ref": "../atoms/button-secondary.json",
+              "props": {
+                "children": "Import Schema"
+              }
+            },
+            {
+              "id": "add-component-button",
+              "$ref": "../atoms/button-primary.json",
+              "props": {
+                "children": "Add Component"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "type": "Badge",
+  "props": {
+    "variant": "default"
+  }
+}

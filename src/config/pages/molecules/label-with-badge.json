@@ -1,0 +1,29 @@
+{
+  "id": "label-with-badge",
+  "type": "div",
+  "props": {
+    "className": "flex items-center gap-2"
+  },
+  "children": [
+    {
+      "id": "label-text",
+      "$ref": "../atoms/text-small.json",
+      "props": {
+        "className": "font-medium"
+      }
+    },
+    {
+      "id": "badge",
+      "type": "Badge",
+      "props": {
+        "variant": "secondary",
+        "className": "text-xs"
+      },
+      "conditional": {
+        "source": "badge",
+        "operator": "neq",
+        "value": null
+      }
+    }
+  ]
+}

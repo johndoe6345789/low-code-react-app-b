@@ -1,0 +1,24 @@
+{
+  "id": "schema-editor-canvas",
+  "$ref": "../atoms/div-flex-col.json",
+  "props": {
+    "className": "bg-background"
+  },
+  "children": [
+    {
+      "id": "editor-toolbar",
+      "$ref": "../molecules/editor-toolbar.json"
+    },
+    {
+      "id": "canvas-content",
+      "$ref": "../atoms/div-flex.json",
+      "props": {
+        "className": "flex-1 p-8 overflow-auto"
+      }
+    },
+    {
+      "id": "status-bar",
+      "$ref": "../molecules/schema-editor-status-bar.json"
+    }
+  ]
+}

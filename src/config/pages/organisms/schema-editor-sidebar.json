@@ -1,0 +1,20 @@
+{
+  "id": "schema-editor-sidebar",
+  "$ref": "../atoms/div-flex-col.json",
+  "props": {
+    "className": "border-r bg-muted/30 overflow-y-auto"
+  },
+  "children": [
+    {
+      "id": "sidebar-header",
+      "$ref": "../atoms/div-flex.json",
+      "props": {
+        "className": "p-4 border-b font-semibold"
+      }
+    },
+    {
+      "id": "component-palette",
+      "$ref": "../molecules/component-palette.json"
+    }
+  ]
+}

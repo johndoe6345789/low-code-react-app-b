@@ -1,0 +1,21 @@
+{
+  "id": "loading-state",
+  "type": "div",
+  "props": {
+    "className": "flex flex-col items-center justify-center gap-3 py-12"
+  },
+  "children": [
+    {
+      "id": "loading-spinner",
+      "$ref": "../atoms/loading-spinner.json"
+    },
+    {
+      "id": "loading-message",
+      "$ref": "../atoms/text-muted.json",
+      "props": {
+        "className": "text-sm text-muted-foreground",
+        "children": "Loading..."
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "search-input",
+  "type": "div",
+  "props": {
+    "className": "relative flex items-center"
+  },
+  "children": [
+    {
+      "id": "search-icon",
+      "type": "icon",
+      "props": {
+        "name": "MagnifyingGlass",
+        "className": "absolute left-3 text-muted-foreground",
+        "size": 16
+      }
+    },
+    {
+      "id": "search-field",
+      "type": "Input",
+      "props": {
+        "placeholder": "Search...",
+        "className": "pl-9 pr-9"
+      },
+      "dataBinding": {
+        "value": {
+          "source": "searchValue"
+        }
+      },
+      "events": [
+        {
+          "event": "onChange",
+          "actions": [
+            {
+              "type": "setState",
+              "target": "searchValue",
+              "valueFrom": "event.target.value"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clear-button",
+      "type": "Button",
+      "props": {
+        "variant": "ghost",
+        "size": "sm",
+        "className": "absolute right-1 h-7 w-7 p-0"
+      },
+      "conditional": {
+        "source": "searchValue",
+        "operator": "neq",
+        "value": ""
+      },
+      "events": [
+        {
+          "event": "onClick",
+          "actions": [
+            {
+              "type": "setState",
+              "target": "searchValue",
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "children": [
+        {
+          "type": "icon",
+          "props": {
+            "name": "X",
+            "size": 14
+          }
+        }
+      ]
+    }
+  ]
+}

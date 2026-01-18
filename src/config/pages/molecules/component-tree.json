@@ -1,0 +1,7 @@
+{
+  "id": "component-tree",
+  "$ref": "../atoms/div-flex-col.json",
+  "props": {
+    "className": "space-y-1"
+  }
+}

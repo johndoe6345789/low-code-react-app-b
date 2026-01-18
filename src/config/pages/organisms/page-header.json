@@ -1,0 +1,13 @@
+{
+  "id": "page-header",
+  "type": "div",
+  "props": {
+    "className": "border-b border-border bg-card px-4 sm:px-6 py-3 sm:py-4"
+  },
+  "children": [
+    {
+      "id": "page-header-content",
+      "$ref": "../molecules/page-header-content.json"
+    }
+  ]
+}

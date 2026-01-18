@@ -1,0 +1,21 @@
+{
+  "id": "schema-editor-layout",
+  "$ref": "../atoms/div-grid.json",
+  "props": {
+    "className": "grid grid-cols-[250px_1fr_300px] h-screen"
+  },
+  "children": [
+    {
+      "id": "sidebar",
+      "$ref": "./schema-editor-sidebar.json"
+    },
+    {
+      "id": "canvas",
+      "$ref": "./schema-editor-canvas.json"
+    },
+    {
+      "id": "properties",
+      "$ref": "./schema-editor-properties-panel.json"
+    }
+  ]
+}

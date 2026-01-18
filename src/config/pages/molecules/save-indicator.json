@@ -1,0 +1,69 @@
+{
+  "id": "save-indicator",
+  "dataSources": [
+    {
+      "id": "lastSaved",
+      "type": "static",
+      "defaultValue": null
+    },
+    {
+      "id": "currentTime",
+      "type": "static",
+      "defaultValue": 0,
+      "polling": {
+        "interval": 10000,
+        "update": "() => Date.now()"
+      }
+    },
+    {
+      "id": "isRecent",
+      "type": "computed",
+      "compute": "(data) => { if (!data.lastSaved) return false; return Date.now() - data.lastSaved < 3000; }",
+      "dependencies": ["lastSaved", "currentTime"]
+    },
+    {
+      "id": "timeAgo",
+      "type": "computed",
+      "compute": "(data) => { if (!data.lastSaved) return ''; const seconds = Math.floor((Date.now() - data.lastSaved) / 1000); if (seconds < 60) return 'just now'; if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`; if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`; return `${Math.floor(seconds / 86400)}d ago`; }",
+      "dependencies": ["lastSaved", "currentTime"]
+    }
+  ],
+  "type": "div",
+  "props": {
+    "className": "flex items-center gap-1.5 text-xs text-muted-foreground"
+  },
+  "conditional": {
+    "source": "lastSaved",
+    "operator": "neq",
+    "value": null
+  },
+  "children": [
+    {
+      "id": "status-icon",
+      "type": "StatusIcon",
+      "dataBinding": {
+        "type": {
+          "source": "isRecent",
+          "transform": "isRecent => isRecent ? 'saved' : 'synced'"
+        },
+        "animate": {
+          "source": "isRecent"
+        }
+      }
+    },
+    {
+      "id": "time-text",
+      "type": "span",
+      "props": {
+        "className": "hidden sm:inline"
+      },
+      "dataBinding": {
+        "children": {
+          "source": "isRecent",
+          "path": null,
+          "transform": "(isRecent, data) => isRecent ? 'Saved' : data.timeAgo"
+        }
+      }
+    }
+  ]
+}

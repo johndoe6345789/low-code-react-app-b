@@ -1,0 +1,31 @@
+{
+  "id": "schema-editor-properties-panel",
+  "$ref": "../atoms/div-flex-col.json",
+  "props": {
+    "className": "border-l bg-muted/30 overflow-y-auto"
+  },
+  "children": [
+    {
+      "id": "properties-header",
+      "$ref": "../atoms/div-flex.json",
+      "props": {
+        "className": "p-4 border-b font-semibold"
+      },
+      "children": [
+        {
+          "$ref": "../atoms/text.json",
+          "props": {
+            "children": "Properties"
+          }
+        }
+      ]
+    },
+    {
+      "id": "properties-content",
+      "$ref": "../atoms/div-flex-col.json",
+      "props": {
+        "className": "p-4 space-y-4"
+      }
+    }
+  ]
+}

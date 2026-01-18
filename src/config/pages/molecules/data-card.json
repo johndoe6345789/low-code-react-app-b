@@ -1,0 +1,18 @@
+{
+  "id": "data-card",
+  "$ref": "../atoms/card.json",
+  "children": [
+    {
+      "$ref": "../atoms/card-header.json",
+      "children": [
+        {
+          "id": "card-title",
+          "$ref": "../atoms/heading-2.json"
+        }
+      ]
+    },
+    {
+      "$ref": "../atoms/card-content.json"
+    }
+  ]
+}
