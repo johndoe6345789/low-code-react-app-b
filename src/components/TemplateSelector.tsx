@@ -172,8 +172,10 @@ const formatToastDescription = (actionType: 'replace' | 'merge', template: Templ
   return description.replace('{template}', template)
 }
 
-export function TemplateSelector() {
-  const { templates, isLoading, clearAndLoadTemplate, mergeTemplate } = useSeedTemplates()
+const useConfirmDialog = ({
+  clearAndLoadTemplate,
+  mergeTemplate
+}: Pick<ReturnType<typeof useSeedTemplates>, 'clearAndLoadTemplate' | 'mergeTemplate'>) => {
   const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogState>({
     open: false,
     actionType: 'replace',
@@ -210,6 +212,23 @@ export function TemplateSelector() {
       setConfirmDialog(prevState => ({ ...prevState, open }))
     }
   }
+
+  return {
+    confirmDialog,
+    handleSelectTemplate,
+    handleConfirmLoad,
+    handleDialogToggle
+  }
+}
+
+export function TemplateSelector() {
+  const { templates, isLoading, clearAndLoadTemplate, mergeTemplate } = useSeedTemplates()
+  const {
+    confirmDialog,
+    handleSelectTemplate,
+    handleConfirmLoad,
+    handleDialogToggle
+  } = useConfirmDialog({ clearAndLoadTemplate, mergeTemplate })
 
   return (
     <>
