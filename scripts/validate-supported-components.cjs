@@ -4,7 +4,7 @@ const path = require('path')
 const rootDir = path.resolve(__dirname, '..')
 const registryPath = path.join(rootDir, 'json-components-registry.json')
 const definitionsPath = path.join(rootDir, 'src/lib/component-definitions.json')
-const componentTypesPath = path.join(rootDir, 'src/types/json-ui.ts')
+const componentTypesPath = path.join(rootDir, 'src/types/json-ui-component-types.ts')
 const uiRegistryPath = path.join(rootDir, 'src/lib/json-ui/component-registry.ts')
 const atomIndexPath = path.join(rootDir, 'src/components/atoms/index.ts')
 const moleculeIndexPath = path.join(rootDir, 'src/components/molecules/index.ts')
@@ -21,16 +21,10 @@ const componentDefinitions = readJson(definitionsPath)
 const definitionTypes = new Set(componentDefinitions.map((def) => def.type))
 
 const componentTypesContent = readText(componentTypesPath)
-const componentTypesStart = componentTypesContent.indexOf('export type ComponentType')
-const componentTypesEnd = componentTypesContent.indexOf('export type ActionType')
-if (componentTypesStart === -1 || componentTypesEnd === -1) {
-  throw new Error('Unable to locate ComponentType union in src/types/json-ui.ts')
-}
-const componentTypesBlock = componentTypesContent.slice(componentTypesStart, componentTypesEnd)
 const componentTypeSet = new Set()
-const componentTypeRegex = /'([^']+)'/g
+const componentTypeRegex = /"([^"]+)"/g
 let match
-while ((match = componentTypeRegex.exec(componentTypesBlock)) !== null) {
+while ((match = componentTypeRegex.exec(componentTypesContent)) !== null) {
   componentTypeSet.add(match[1])
 }
 

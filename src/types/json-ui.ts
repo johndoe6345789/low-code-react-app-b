@@ -1,29 +1,6 @@
-export type ComponentType = 
-  | 'div' | 'section' | 'article' | 'header' | 'footer' | 'main'
-  | 'Button' | 'Card' | 'CardHeader' | 'CardTitle' | 'CardDescription' | 'CardContent' | 'CardFooter'
-  | 'Input' | 'TextArea' | 'Textarea' | 'Select' | 'Checkbox' | 'Radio' | 'Switch' | 'Slider' | 'NumberInput' | 'DatePicker' | 'FileUpload'
-  | 'Badge' | 'Progress' | 'Separator' | 'Tabs' | 'TabsContent' | 'TabsList' | 'TabsTrigger' | 'Dialog'
-  | 'Text' | 'Heading' | 'Label' | 'List' | 'ListItem' | 'Grid' | 'Stack' | 'Flex' | 'Container'
-  | 'Link' | 'Breadcrumb' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
-  | 'CircularProgress' | 'Divider' | 'ProgressBar'
-  | 'Alert' | 'InfoBox' | 'EmptyState' | 'StatusBadge' 
-  | 'ErrorBadge' | 'Notification' | 'StatusIcon'
-  | 'Table' | 'TableHeader' | 'TableBody' | 'TableRow' | 'TableCell' | 'TableHead'
-  | 'KeyValue' | 'StatCard' | 'DataCard' | 'SearchInput' | 'ActionBar'
-  | 'DataList' | 'DataTable' | 'MetricCard' | 'Timeline'
-  | 'LazyBarChart' | 'LazyLineChart' | 'LazyD3BarChart' | 'SeedDataManager'
-  | 'SaveIndicator' | 'StorageSettings'
-  | 'AppBranding' | 'LabelWithBadge' | 'NavigationGroupHeader' | 'EmptyEditorState' | 'LoadingFallback' | 'LoadingState'
-  | 'CodeExplanationDialog' | 'ComponentBindingDialog' | 'DataSourceCard' | 'DataSourceEditorDialog' | 'TreeCard' | 'TreeFormDialog'
-  | 'ToolbarButton'
-  | 'SchemaCodeViewer'
-  | 'FileTabs' | 'NavigationItem' | 'NavigationMenu'
-  | 'EmptyCanvasState' | 'SchemaEditorStatusBar'
-  | 'DataSourceManager' | 'TreeListHeader' | 'TreeListPanel'
-  | 'AppHeader' | 'BindingEditor' | 'CanvasRenderer' | 'ComponentPalette' | 'ComponentTree' | 'EditorActions'
-  | 'EditorToolbar' | 'JSONUIShowcase' | 'LazyInlineMonacoEditor' | 'LazyMonacoEditor' | 'MonacoEditorPanel'
-  | 'PageHeaderContent' | 'PropertyEditor' | 'SchemaEditorCanvas' | 'SchemaEditorLayout'
-  | 'SchemaEditorPropertiesPanel' | 'SchemaEditorSidebar' | 'SchemaEditorToolbar' | 'SearchBar' | 'ToolbarActions'
+import type { JSONUIComponentType } from './json-ui-component-types'
+
+export type ComponentType = JSONUIComponentType
 
 export interface BreadcrumbItem {
   label: string
