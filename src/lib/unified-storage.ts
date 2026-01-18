@@ -19,6 +19,23 @@ class UnifiedStorage {
       const flaskEnvUrl = import.meta.env.VITE_FLASK_BACKEND_URL
       const preferSQLite = localStorage.getItem('codeforge-prefer-sqlite') === 'true'
 
+      if (preferFlask || flaskEnvUrl) {
+        try {
+          console.log('[Storage] Flask backend explicitly configured, attempting to initialize...')
+          const flaskAdapter = new FlaskBackendAdapter(flaskEnvUrl)
+          await Promise.race([
+            flaskAdapter.get('_health_check'),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Flask connection timeout')), 2000))
+          ])
+          this.adapter = flaskAdapter
+          this.backend = 'flask'
+          console.log('[Storage] ✓ Using Flask backend')
+          return
+        } catch (error) {
+          console.warn('[Storage] Flask backend not available, falling back to IndexedDB:', error)
+        }
+      }
+
       if (typeof indexedDB !== 'undefined') {
         try {
           console.log('[Storage] Initializing default IndexedDB backend...')
@@ -30,26 +47,6 @@ class UnifiedStorage {
           return
         } catch (error) {
           console.warn('[Storage] IndexedDB not available:', error)
-        }
-      }
-
-      if (preferFlask || flaskEnvUrl) {
-        try {
-          console.log('[Storage] Flask backend explicitly configured, attempting to initialize...')
-          const flaskAdapter = new FlaskBackendAdapter(flaskEnvUrl)
-          const testResponse = await Promise.race([
-            flaskAdapter.get('_health_check'),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('Flask connection timeout')), 2000))
-          ])
-          this.adapter = flaskAdapter
-          this.backend = 'flask'
-          console.log('[Storage] ✓ Using Flask backend')
-          return
-        } catch (error) {
-          console.warn('[Storage] Flask backend not available, already using IndexedDB:', error)
-          if (this.adapter && this.backend === 'indexeddb') {
-            return
-          }
         }
       }
 

@@ -1,5 +1,6 @@
 import { FlaskConfig } from '@/types/project'
 import { generateFlaskBlueprint } from './generateFlaskBlueprint'
+import { sanitizeIdentifier } from './sanitizeIdentifier'
 
 export function generateFlaskApp(config: FlaskConfig): Record<string, string> {
   const files: Record<string, string> = {}
@@ -11,7 +12,7 @@ export function generateFlaskApp(config: FlaskConfig): Record<string, string> {
   appCode += `\n`
 
   config.blueprints.forEach(blueprint => {
-    const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+    const blueprintVarName = sanitizeIdentifier(blueprint.name, { fallback: 'blueprint' })
     appCode += `from blueprints.${blueprintVarName} import ${blueprintVarName}_bp\n`
   })
 
@@ -34,7 +35,7 @@ export function generateFlaskApp(config: FlaskConfig): Record<string, string> {
   }
 
   config.blueprints.forEach(blueprint => {
-    const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+    const blueprintVarName = sanitizeIdentifier(blueprint.name, { fallback: 'blueprint' })
     appCode += `    app.register_blueprint(${blueprintVarName}_bp)\n`
   })
 
@@ -50,7 +51,7 @@ export function generateFlaskApp(config: FlaskConfig): Record<string, string> {
   files['app.py'] = appCode
 
   config.blueprints.forEach(blueprint => {
-    const blueprintVarName = blueprint.name.toLowerCase().replace(/\s+/g, '_')
+    const blueprintVarName = sanitizeIdentifier(blueprint.name, { fallback: 'blueprint' })
     files[`blueprints/${blueprintVarName}.py`] = generateFlaskBlueprint(blueprint)
   })
 
