@@ -1,14 +1,22 @@
-export function resolveDataBinding(binding: string | { source: string; path?: string }, dataMap: Record<string, any>): any {
+export function resolveDataBinding(
+  binding: string | { source: string; path?: string; transform?: string },
+  dataMap: Record<string, any>,
+  context: Record<string, any> = {},
+): any {
+  const mergedContext = { ...dataMap, ...context }
+
   if (typeof binding === 'string') {
-    return dataMap[binding]
+    if (binding.includes('.')) {
+      return getNestedValue(mergedContext, binding)
+    }
+    return mergedContext[binding]
   }
   
-  const { source, path } = binding
-  const data = dataMap[source]
-  
-  if (!path) return data
-  
-  return getNestedValue(data, path)
+  const { source, path, transform } = binding
+  const data = mergedContext[source]
+  const resolvedValue = path ? getNestedValue(data, path) : data
+
+  return transform ? transformData(resolvedValue, transform) : resolvedValue
 }
 
 export function getNestedValue(obj: any, path: string): any {

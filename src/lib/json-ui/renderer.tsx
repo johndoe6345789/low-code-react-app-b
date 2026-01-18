@@ -26,7 +26,7 @@ export function JSONUIRenderer({
   }
 
   if (component.loop) {
-    const items = resolveDataBinding(component.loop.source, dataMap) || []
+    const items = resolveDataBinding(component.loop.source, dataMap, context) || []
     return (
       <>
         {items.map((item: any, index: number) => {
@@ -59,7 +59,7 @@ export function JSONUIRenderer({
   const props: Record<string, any> = { ...component.props }
 
   if (component.dataBinding) {
-    const boundData = resolveDataBinding(component.dataBinding, dataMap)
+    const boundData = resolveDataBinding(component.dataBinding, dataMap, context)
     if (boundData !== undefined) {
       props.value = boundData
       props.data = boundData
