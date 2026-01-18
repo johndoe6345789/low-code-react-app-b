@@ -37,6 +37,7 @@ export async function syncToFlask(
     }
   } catch (error) {
     console.error('[FlaskSync] Error syncing to Flask:', error)
+    throw error
   }
 }
 

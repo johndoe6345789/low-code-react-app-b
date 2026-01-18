@@ -38,10 +38,23 @@ type PendingOperation = {
   timestamp: number
 }
 
+type FailedSyncOperation = PendingOperation & {
+  attempt: number
+  lastError: string
+  nextRetryAt: number
+}
+
+const MAX_SYNC_RETRIES = 5
+const BASE_SYNC_RETRY_DELAY_MS = 1000
+const MAX_SYNC_RETRY_DELAY_MS = 30000
+
 class PersistenceQueue {
   private queue: Map<string, PendingOperation> = new Map()
   private processing = false
+  private pendingFlush = false
   private debounceTimers: Map<string, ReturnType<typeof setTimeout>> = new Map()
+  private failedSyncs: Map<string, FailedSyncOperation> = new Map()
+  private retryTimers: Map<string, ReturnType<typeof setTimeout>> = new Map()
 
   enqueue(operation: PendingOperation, debounceMs: number) {
     const opKey = `${operation.storeName}:${operation.key}`
@@ -62,7 +75,12 @@ class PersistenceQueue {
   }
 
   async processQueue() {
-    if (this.processing || this.queue.size === 0) return
+    if (this.processing) {
+      this.pendingFlush = true
+      return
+    }
+
+    if (this.queue.size === 0) return
 
     this.processing = true
 
@@ -75,14 +93,10 @@ class PersistenceQueue {
           try {
             if (op.type === 'put') {
               await db.put(op.storeName as any, op.value)
-              if (sliceToPersistenceMap[op.storeName]?.syncToFlask) {
-                await syncToFlask(op.storeName, op.key, op.value, 'put')
-              }
+              await this.syncToFlaskWithRetry(op, op.value)
             } else if (op.type === 'delete') {
               await db.delete(op.storeName as any, op.key)
-              if (sliceToPersistenceMap[op.storeName]?.syncToFlask) {
-                await syncToFlask(op.storeName, op.key, null, 'delete')
-              }
+              await this.syncToFlaskWithRetry(op, null)
             }
           } catch (error) {
             console.error(`[PersistenceMiddleware] Failed to persist ${op.type} for ${op.storeName}:${op.key}`, error)
@@ -97,6 +111,23 @@ class PersistenceQueue {
       }
     } finally {
       this.processing = false
+      const needsFlush = this.pendingFlush || this.queue.size > 0
+      this.pendingFlush = false
+      if (needsFlush) {
+        await this.processQueue()
+      }
+    }
+  }
+
+  getFailedSyncs() {
+    return Array.from(this.failedSyncs.values()).sort((a, b) => a.nextRetryAt - b.nextRetryAt)
+  }
+
+  async retryFailedSyncs() {
+    for (const [opKey, failure] of this.failedSyncs.entries()) {
+      if (failure.nextRetryAt <= Date.now()) {
+        await this.retryFailedSync(opKey)
+      }
     }
   }
 
@@ -106,6 +137,89 @@ class PersistenceQueue {
     }
     this.debounceTimers.clear()
     await this.processQueue()
+  }
+
+  private async syncToFlaskWithRetry(op: PendingOperation, value: any) {
+    if (!sliceToPersistenceMap[op.storeName]?.syncToFlask) return
+
+    try {
+      await syncToFlask(op.storeName, op.key, value, op.type)
+      this.clearSyncFailure(op)
+    } catch (error) {
+      this.recordSyncFailure(op, error)
+      console.warn(
+        `[PersistenceMiddleware] Flask sync failed for ${op.storeName}:${op.key} (${op.type}); queued for retry.`,
+        error
+      )
+    }
+  }
+
+  private recordSyncFailure(op: PendingOperation, error: unknown) {
+    const opKey = this.getFailureKey(op)
+    const previous = this.failedSyncs.get(opKey)
+    const attempt = previous ? previous.attempt + 1 : 1
+    const delayMs = this.getRetryDelayMs(attempt)
+    const nextRetryAt = Date.now() + delayMs
+    const lastError = error instanceof Error ? error.message : String(error)
+
+    this.failedSyncs.set(opKey, {
+      ...op,
+      attempt,
+      lastError,
+      nextRetryAt,
+    })
+
+    const existingTimer = this.retryTimers.get(opKey)
+    if (existingTimer) {
+      clearTimeout(existingTimer)
+    }
+
+    if (attempt <= MAX_SYNC_RETRIES) {
+      const timer = setTimeout(() => {
+        this.retryTimers.delete(opKey)
+        void this.retryFailedSync(opKey)
+      }, delayMs)
+      this.retryTimers.set(opKey, timer)
+    }
+  }
+
+  private clearSyncFailure(op: PendingOperation) {
+    const opKey = this.getFailureKey(op)
+    const timer = this.retryTimers.get(opKey)
+    if (timer) {
+      clearTimeout(timer)
+      this.retryTimers.delete(opKey)
+    }
+    this.failedSyncs.delete(opKey)
+  }
+
+  private async retryFailedSync(opKey: string) {
+    const failure = this.failedSyncs.get(opKey)
+    if (!failure) return
+
+    if (failure.attempt > MAX_SYNC_RETRIES) {
+      return
+    }
+
+    this.enqueue(
+      {
+        type: failure.type,
+        storeName: failure.storeName,
+        key: failure.key,
+        value: failure.value,
+        timestamp: Date.now(),
+      },
+      0
+    )
+  }
+
+  private getRetryDelayMs(attempt: number) {
+    const delay = BASE_SYNC_RETRY_DELAY_MS * Math.pow(2, attempt - 1)
+    return Math.min(delay, MAX_SYNC_RETRY_DELAY_MS)
+  }
+
+  private getFailureKey(op: PendingOperation) {
+    return `${op.storeName}:${op.key}:${op.type}`
   }
 }
 
@@ -208,6 +322,8 @@ export const createPersistenceMiddleware = (): Middleware => {
 }
 
 export const flushPersistence = () => persistenceQueue.flush()
+export const getFailedSyncOperations = () => persistenceQueue.getFailedSyncs()
+export const retryFailedSyncOperations = () => persistenceQueue.retryFailedSyncs()
 
 export const configurePersistence = (sliceName: string, config: Partial<PersistenceConfig>) => {
   if (sliceToPersistenceMap[sliceName]) {

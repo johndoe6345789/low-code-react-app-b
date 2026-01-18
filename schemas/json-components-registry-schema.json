@@ -73,6 +73,16 @@
           "wrapperFor": {
             "type": "string"
           },
+          "load": {
+            "type": "object",
+            "properties": {
+              "export": {
+                "type": "string"
+              }
+            },
+            "required": ["export"],
+            "additionalProperties": false
+          },
           "deprecated": {
             "type": "object",
             "properties": {
