@@ -39,9 +39,13 @@
     },
     {
       "id": "trends",
-      "type": "computed",
-      "compute": "(data) => ({ filesGrowth: 12, modelsGrowth: -3, componentsGrowth: 8, testsGrowth: 15 })",
-      "dependencies": ["metrics"]
+      "type": "static",
+      "defaultValue": {
+        "filesGrowth": 12,
+        "modelsGrowth": -3,
+        "componentsGrowth": 8,
+        "testsGrowth": 15
+      }
     }
   ],
   "components": [

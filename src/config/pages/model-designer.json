@@ -28,15 +28,20 @@
     },
     {
       "id": "selectedModel",
-      "type": "computed",
-      "compute": "(data) => data.models?.find(m => m.id === data.selectedModelId) || null",
-      "dependencies": ["models", "selectedModelId"]
+      "type": "static",
+      "expression": "data.models.find(id === data.selectedModelId)",
+      "dependencies": [
+        "models",
+        "selectedModelId"
+      ]
     },
     {
       "id": "modelCount",
-      "type": "computed",
-      "compute": "(data) => (data.models || []).length",
-      "dependencies": ["models"]
+      "type": "static",
+      "expression": "data.models.length",
+      "dependencies": [
+        "models"
+      ]
     }
   ],
   "components": [
@@ -131,55 +136,142 @@
           },
           "children": [
             {
-              "id": "empty-state",
+              "id": "model-selection-state",
               "type": "div",
-              "props": {
-                "className": "flex-1 flex items-center justify-center"
-              },
-              "condition": {
-                "source": "selectedModel",
-                "transform": "(val) => !val"
-              },
-              "children": [
-                {
-                  "id": "empty-state-content",
+              "conditional": {
+                "if": "selectedModel != null",
+                "then": {
+                  "id": "model-editor",
                   "type": "div",
                   "props": {
-                    "className": "text-center space-y-4"
+                    "className": "flex-1 p-6 overflow-auto"
                   },
                   "children": [
                     {
-                      "id": "empty-state-title",
-                      "type": "Heading",
+                      "id": "model-header",
+                      "type": "div",
                       "props": {
-                        "className": "text-2xl font-bold text-muted-foreground",
-                        "children": "No Model Selected"
-                      }
-                    },
-                    {
-                      "id": "empty-state-description",
-                      "type": "Text",
-                      "props": {
-                        "className": "text-muted-foreground",
-                        "children": "Select a model from the sidebar or create a new one"
-                      }
-                    },
-                    {
-                      "id": "empty-state-button",
-                      "type": "Button",
-                      "props": {
-                        "variant": "default",
-                        "children": "Create Your First Model"
+                        "className": "mb-6"
                       },
-                      "events": [
+                      "children": [
                         {
-                          "event": "click",
-                          "actions": [
+                          "id": "model-name",
+                          "type": "Heading",
+                          "props": {
+                            "className": "text-3xl font-bold mb-2"
+                          },
+                          "bindings": {
+                            "children": {
+                              "source": "selectedModel",
+                              "path": "name"
+                            }
+                          }
+                        },
+                        {
+                          "id": "model-description",
+                          "type": "Text",
+                          "props": {
+                            "className": "text-muted-foreground"
+                          },
+                          "bindings": {
+                            "children": {
+                              "source": "selectedModel",
+                              "path": "description"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "fields-card",
+                      "type": "Card",
+                      "children": [
+                        {
+                          "id": "fields-header",
+                          "type": "CardHeader",
+                          "children": [
                             {
-                              "id": "open-create-from-empty",
-                              "type": "set-value",
-                              "target": "createDialogOpen",
-                              "value": true
+                              "id": "fields-title",
+                              "type": "CardTitle",
+                              "props": {
+                                "children": "Model Fields"
+                              }
+                            },
+                            {
+                              "id": "fields-description",
+                              "type": "CardDescription",
+                              "props": {
+                                "children": "Define the fields and their types for this model"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": "fields-content",
+                          "type": "CardContent",
+                          "children": [
+                            {
+                              "id": "fields-placeholder",
+                              "type": "div",
+                              "props": {
+                                "className": "text-center text-muted-foreground py-8 border-2 border-dashed border-border rounded-lg",
+                                "children": "Add fields to define your data model"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "else": {
+                  "id": "empty-state",
+                  "type": "div",
+                  "props": {
+                    "className": "flex-1 flex items-center justify-center"
+                  },
+                  "children": [
+                    {
+                      "id": "empty-state-content",
+                      "type": "div",
+                      "props": {
+                        "className": "text-center space-y-4"
+                      },
+                      "children": [
+                        {
+                          "id": "empty-state-title",
+                          "type": "Heading",
+                          "props": {
+                            "className": "text-2xl font-bold text-muted-foreground",
+                            "children": "No Model Selected"
+                          }
+                        },
+                        {
+                          "id": "empty-state-description",
+                          "type": "Text",
+                          "props": {
+                            "className": "text-muted-foreground",
+                            "children": "Select a model from the sidebar or create a new one"
+                          }
+                        },
+                        {
+                          "id": "empty-state-button",
+                          "type": "Button",
+                          "props": {
+                            "variant": "default",
+                            "children": "Create Your First Model"
+                          },
+                          "events": [
+                            {
+                              "event": "click",
+                              "actions": [
+                                {
+                                  "id": "open-create-from-empty",
+                                  "type": "set-value",
+                                  "target": "createDialogOpen",
+                                  "value": true
+                                }
+                              ]
                             }
                           ]
                         }
@@ -187,95 +279,7 @@
                     }
                   ]
                 }
-              ]
-            },
-            {
-              "id": "model-editor",
-              "type": "div",
-              "props": {
-                "className": "flex-1 p-6 overflow-auto"
-              },
-              "condition": {
-                "source": "selectedModel",
-                "transform": "(val) => !!val"
-              },
-              "children": [
-                {
-                  "id": "model-header",
-                  "type": "div",
-                  "props": {
-                    "className": "mb-6"
-                  },
-                  "children": [
-                    {
-                      "id": "model-name",
-                      "type": "Heading",
-                      "props": {
-                        "className": "text-3xl font-bold mb-2"
-                      },
-                      "bindings": {
-                        "children": {
-                          "source": "selectedModel",
-                          "path": "name"
-                        }
-                      }
-                    },
-                    {
-                      "id": "model-description",
-                      "type": "Text",
-                      "props": {
-                        "className": "text-muted-foreground"
-                      },
-                      "bindings": {
-                        "children": {
-                          "source": "selectedModel",
-                          "path": "description"
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "id": "fields-card",
-                  "type": "Card",
-                  "children": [
-                    {
-                      "id": "fields-header",
-                      "type": "CardHeader",
-                      "children": [
-                        {
-                          "id": "fields-title",
-                          "type": "CardTitle",
-                          "props": {
-                            "children": "Model Fields"
-                          }
-                        },
-                        {
-                          "id": "fields-description",
-                          "type": "CardDescription",
-                          "props": {
-                            "children": "Define the fields and their types for this model"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "id": "fields-content",
-                      "type": "CardContent",
-                      "children": [
-                        {
-                          "id": "fields-placeholder",
-                          "type": "div",
-                          "props": {
-                            "className": "text-center text-muted-foreground py-8 border-2 border-dashed border-border rounded-lg",
-                            "children": "Add fields to define your data model"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              }
             }
           ]
         }

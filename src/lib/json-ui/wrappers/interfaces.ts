@@ -4,6 +4,7 @@ import type { UIComponent } from '@/types/json-ui'
 export type SaveIndicatorStatus = 'saved' | 'synced'
 
 export interface SaveIndicatorWrapperProps {
+  lastSaved?: number | null
   status?: SaveIndicatorStatus
   label?: string
   showLabel?: boolean

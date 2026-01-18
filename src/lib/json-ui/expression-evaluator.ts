@@ -54,6 +54,35 @@ export function evaluateExpression(
       return lengthSuffix ? filtered.length : filtered
     }
 
+    const findMatch = expression.match(
+      /^data\.([a-zA-Z0-9_.]+)\.find\(\s*([a-zA-Z0-9_.]+)\s*(===|==|!==|!=)\s*(.+?)\s*\)$/
+    )
+    if (findMatch) {
+      const [, collectionPath, fieldPath, operator, rawValue] = findMatch
+      const collection = getNestedValue(data, collectionPath)
+      if (!Array.isArray(collection)) {
+        return undefined
+      }
+
+      const expectedValue = evaluateExpression(rawValue.trim(), { data, event })
+      const isNegated = operator === '!=' || operator === '!=='
+      return collection.find((item) => {
+        const fieldValue = getNestedValue(item, fieldPath)
+        return isNegated ? fieldValue !== expectedValue : fieldValue === expectedValue
+      })
+    }
+
+    const objectKeysLengthMatch = expression.match(
+      /^Object\.keys\(\s*data\.([a-zA-Z0-9_.]+)\s*\)\.length$/
+    )
+    if (objectKeysLengthMatch) {
+      const value = getNestedValue(data, objectKeysLengthMatch[1])
+      if (!value || typeof value !== 'object') {
+        return 0
+      }
+      return Object.keys(value).length
+    }
+
     // Handle direct data access: "data.fieldName"
     if (expression.startsWith('data.')) {
       return getNestedValue(data, expression.substring(5))

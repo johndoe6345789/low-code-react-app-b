@@ -1,6 +1,6 @@
 {
   "title": "Edit Data Source",
-  "description": "Configure the data source settings and dependencies",
+  "description": "Configure the data source settings",
   "fields": {
     "id": {
       "label": "ID",
@@ -17,17 +17,6 @@
   "static": {
     "valueLabel": "Value (JSON)",
     "valuePlaceholder": "{\"key\": \"value\"}"
-  },
-  "computed": {
-    "expressionLabel": "Expression",
-    "expressionPlaceholder": "data.source1",
-    "expressionHelp": "Expression that computes the value from other data sources",
-    "valueTemplateLabel": "Value Template (JSON)",
-    "valueTemplatePlaceholder": "{\n  \"total\": \"data.items.length\"\n}",
-    "valueTemplateHelp": "Template object with expressions for computed fields",
-    "dependenciesLabel": "Dependencies",
-    "availableSourcesLabel": "Available Sources",
-    "emptyDependencies": "No data sources available. Create KV or static sources first."
   },
   "actions": {
     "cancel": "Cancel",

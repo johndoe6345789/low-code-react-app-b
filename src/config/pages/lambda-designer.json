@@ -27,15 +27,20 @@
     },
     {
       "id": "selectedLambda",
-      "type": "computed",
-      "compute": "(data) => data.lambdas?.find(l => l.id === data.selectedLambdaId) || null",
-      "dependencies": ["lambdas", "selectedLambdaId"]
+      "type": "static",
+      "expression": "data.lambdas.find(id === data.selectedLambdaId)",
+      "dependencies": [
+        "lambdas",
+        "selectedLambdaId"
+      ]
     },
     {
       "id": "lambdaCount",
-      "type": "computed",
-      "compute": "(data) => (data.lambdas || []).length",
-      "dependencies": ["lambdas"]
+      "type": "static",
+      "expression": "data.lambdas.length",
+      "dependencies": [
+        "lambdas"
+      ]
     }
   ],
   "components": [
@@ -71,7 +76,9 @@
                       "props": {
                         "className": "text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
                       },
-                      "children": ["Lambdas"]
+                      "children": [
+                        "Lambdas"
+                      ]
                     },
                     {
                       "type": "Badge",
@@ -133,7 +140,9 @@
                   "children": [
                     {
                       "type": "text",
-                      "children": ["Lambda list will be rendered here"]
+                      "children": [
+                        "Lambda list will be rendered here"
+                      ]
                     }
                   ]
                 },
@@ -159,14 +168,18 @@
                       "props": {
                         "className": "text-lg font-semibold mb-2"
                       },
-                      "children": ["No Lambdas Yet"]
+                      "children": [
+                        "No Lambdas Yet"
+                      ]
                     },
                     {
                       "type": "p",
                       "props": {
                         "className": "text-sm text-muted-foreground mb-4"
                       },
-                      "children": ["Create your first serverless function"]
+                      "children": [
+                        "Create your first serverless function"
+                      ]
                     }
                   ]
                 }
@@ -182,101 +195,106 @@
           },
           "children": [
             {
+              "id": "lambda-selection-state",
               "type": "div",
-              "props": {
-                "className": "flex-1 flex items-center justify-center p-8"
-              },
               "conditional": {
-                "if": "selectedLambda"
-              },
-              "children": [
-                {
+                "if": "selectedLambda != null",
+                "then": {
                   "type": "div",
                   "props": {
-                    "className": "max-w-6xl mx-auto w-full space-y-6"
+                    "className": "flex-1 flex items-center justify-center p-8"
                   },
                   "children": [
                     {
                       "type": "div",
                       "props": {
-                        "className": "flex items-center justify-between"
+                        "className": "max-w-6xl mx-auto w-full space-y-6"
                       },
                       "children": [
                         {
                           "type": "div",
+                          "props": {
+                            "className": "flex items-center justify-between"
+                          },
                           "children": [
                             {
-                              "type": "h1",
-                              "props": {
-                                "className": "text-3xl font-bold"
-                              },
-                              "bindings": {
-                                "children": {
-                                  "source": "selectedLambda",
-                                  "path": "name"
+                              "type": "div",
+                              "children": [
+                                {
+                                  "type": "h1",
+                                  "props": {
+                                    "className": "text-3xl font-bold"
+                                  },
+                                  "bindings": {
+                                    "children": {
+                                      "source": "selectedLambda",
+                                      "path": "name"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "p",
+                                  "props": {
+                                    "className": "text-muted-foreground"
+                                  },
+                                  "bindings": {
+                                    "children": {
+                                      "source": "selectedLambda",
+                                      "path": "description"
+                                    }
+                                  }
                                 }
-                              }
-                            },
-                            {
-                              "type": "p",
-                              "props": {
-                                "className": "text-muted-foreground"
-                              },
-                              "bindings": {
-                                "children": {
-                                  "source": "selectedLambda",
-                                  "path": "description"
-                                }
-                              }
+                              ]
                             }
                           ]
                         }
                       ]
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "div",
-              "props": {
-                "className": "flex-1 flex items-center justify-center p-8"
-              },
-              "conditional": {
-                "if": "!selectedLambda"
-              },
-              "children": [
-                {
+                },
+                "else": {
                   "type": "div",
                   "props": {
-                    "className": "text-center"
+                    "className": "flex-1 flex items-center justify-center p-8"
                   },
                   "children": [
                     {
-                      "type": "icon",
+                      "type": "div",
                       "props": {
-                        "name": "Code",
-                        "className": "h-20 w-20 text-muted-foreground/50 mx-auto mb-4",
-                        "weight": "duotone"
-                      }
-                    },
-                    {
-                      "type": "h3",
-                      "props": {
-                        "className": "text-xl font-semibold mb-2"
+                        "className": "text-center"
                       },
-                      "children": ["No Lambda Selected"]
-                    },
-                    {
-                      "type": "p",
-                      "props": {
-                        "className": "text-muted-foreground"
-                      },
-                      "children": ["Select a lambda from the sidebar or create a new one"]
+                      "children": [
+                        {
+                          "type": "icon",
+                          "props": {
+                            "name": "Code",
+                            "className": "h-20 w-20 text-muted-foreground/50 mx-auto mb-4",
+                            "weight": "duotone"
+                          }
+                        },
+                        {
+                          "type": "h3",
+                          "props": {
+                            "className": "text-xl font-semibold mb-2"
+                          },
+                          "children": [
+                            "No Lambda Selected"
+                          ]
+                        },
+                        {
+                          "type": "p",
+                          "props": {
+                            "className": "text-muted-foreground"
+                          },
+                          "children": [
+                            "Select a lambda from the sidebar or create a new one"
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
-              ]
+              }
             }
           ]
         }

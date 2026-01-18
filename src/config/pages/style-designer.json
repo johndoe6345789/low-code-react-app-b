@@ -54,21 +54,27 @@
     },
     {
       "id": "activeVariant",
-      "type": "computed",
-      "compute": "(data) => { const theme = data.theme || {}; const variants = theme.variants || []; return variants.find(v => v.id === theme.activeVariantId) || variants[0] || null; }",
-      "dependencies": ["theme"]
+      "type": "static",
+      "expression": "data.theme.variants.find(id === data.theme.activeVariantId)",
+      "dependencies": [
+        "theme"
+      ]
     },
     {
       "id": "variantCount",
-      "type": "computed",
-      "compute": "(data) => ((data.theme || {}).variants || []).length",
-      "dependencies": ["theme"]
+      "type": "static",
+      "expression": "data.theme.variants.length",
+      "dependencies": [
+        "theme"
+      ]
     },
     {
       "id": "customColorCount",
-      "type": "computed",
-      "compute": "(data) => { const variant = data.activeVariant; if (!variant || !variant.colors) return 0; return Object.keys(variant.colors.customColors || {}).length; }",
-      "dependencies": ["activeVariant"]
+      "type": "static",
+      "expression": "Object.keys(data.activeVariant.colors.customColors).length",
+      "dependencies": [
+        "activeVariant"
+      ]
     }
   ],
   "components": [

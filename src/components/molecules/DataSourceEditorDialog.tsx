@@ -5,14 +5,12 @@ import { DataSourceBadge } from '@/components/atoms/DataSourceBadge'
 import { DataSourceIdField } from '@/components/molecules/data-source-editor/DataSourceIdField'
 import { KvSourceFields } from '@/components/molecules/data-source-editor/KvSourceFields'
 import { StaticSourceFields } from '@/components/molecules/data-source-editor/StaticSourceFields'
-import { ComputedSourceFields } from '@/components/molecules/data-source-editor/ComputedSourceFields'
 import dataSourceEditorCopy from '@/data/data-source-editor-dialog.json'
 import { useDataSourceEditor } from '@/hooks/data/use-data-source-editor'
 
 interface DataSourceEditorDialogProps {
   open: boolean
   dataSource: DataSource | null
-  allDataSources: DataSource[]
   onOpenChange: (open: boolean) => void
   onSave: (dataSource: DataSource) => void
 }
@@ -20,19 +18,13 @@ interface DataSourceEditorDialogProps {
 export function DataSourceEditorDialog({
   open,
   dataSource,
-  allDataSources,
   onOpenChange,
   onSave,
 }: DataSourceEditorDialogProps) {
   const {
     editingSource,
     updateField,
-    addDependency,
-    removeDependency,
-    availableDeps,
-    selectedDeps,
-    unselectedDeps,
-  } = useDataSourceEditor(dataSource, allDataSources)
+  } = useDataSourceEditor(dataSource)
 
   const handleSave = () => {
     if (!editingSource) return
@@ -80,18 +72,6 @@ export function DataSourceEditorDialog({
             />
           )}
 
-          {editingSource.type === 'computed' && (
-            <ComputedSourceFields
-              editingSource={editingSource}
-              availableDeps={availableDeps}
-              selectedDeps={selectedDeps}
-              unselectedDeps={unselectedDeps}
-              copy={dataSourceEditorCopy.computed}
-              onUpdateField={updateField}
-              onAddDependency={addDependency}
-              onRemoveDependency={removeDependency}
-            />
-          )}
         </div>
 
         <DialogFooter>

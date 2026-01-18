@@ -108,7 +108,7 @@ function PageCard({ card, data, functions }: PageCardProps) {
 
   if (card.type === 'gradient-card') {
     const computeFn = functions[card.dataSource?.compute]
-    const computedData = computeFn ? computeFn(data) : {}
+    const computedData = computeFn ? computeFn(data) : data
 
     return (
       <Card className={cn('bg-gradient-to-br border-primary/20', card.gradient)}>

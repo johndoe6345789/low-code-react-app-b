@@ -45,22 +45,26 @@ export function usePage(schema: PageSchema) {
   useEffect(() => {
     if (schema.data) {
       const computed: Record<string, any> = {}
-      
+
       schema.data.forEach(source => {
-        if (source.type === 'computed') {
-          if (source.expression) {
-            computed[source.id] = evaluateBindingExpression(source.expression, dataContext, {
-              fallback: undefined,
-              label: `computed data (${source.id})`,
-            })
-          } else if (source.valueTemplate) {
-            computed[source.id] = evaluateTemplate(source.valueTemplate, { data: dataContext })
-          }
-        } else if (source.type === 'static' && source.defaultValue !== undefined) {
+        if (source.expression) {
+          computed[source.id] = evaluateBindingExpression(source.expression, { ...dataContext, ...computed }, {
+            fallback: undefined,
+            label: `derived data (${source.id})`,
+          })
+          return
+        }
+
+        if (source.valueTemplate) {
+          computed[source.id] = evaluateTemplate(source.valueTemplate, { data: { ...dataContext, ...computed } })
+          return
+        }
+
+        if (source.type === 'static' && source.defaultValue !== undefined) {
           computed[source.id] = source.defaultValue
         }
       })
-      
+
       setComputedData(computed)
     }
   }, [schema.data, dataContext])

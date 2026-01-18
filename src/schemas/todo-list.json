@@ -22,7 +22,7 @@
     },
     {
       "id": "stats",
-      "type": "computed",
+      "type": "static",
       "valueTemplate": {
         "total": "data.todos.length",
         "completed": "data.todos.filter(completed === true).length",

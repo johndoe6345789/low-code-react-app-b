@@ -41,20 +41,20 @@ export function useDataSources(dataSources: DataSource[]) {
   }, [])
 
   useEffect(() => {
-    const computedSources = dataSources.filter(ds => ds.type === 'computed')
-    
-    computedSources.forEach(source => {
+    const derivedSources = dataSources.filter(ds => ds.expression || ds.valueTemplate)
+
+    derivedSources.forEach(source => {
       const deps = source.dependencies || []
       const hasAllDeps = deps.every(dep => dep in data)
 
       if (hasAllDeps) {
         const evaluationContext = { data }
-        const computedValue = source.expression
+        const derivedValue = source.expression
           ? evaluateExpression(source.expression, evaluationContext)
           : source.valueTemplate
             ? evaluateTemplate(source.valueTemplate, evaluationContext)
             : source.defaultValue
-        setData(prev => ({ ...prev, [source.id]: computedValue }))
+        setData(prev => ({ ...prev, [source.id]: derivedValue }))
       }
     })
   }, [data, dataSources])

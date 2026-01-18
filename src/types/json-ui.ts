@@ -42,7 +42,7 @@ export type ActionType =
   | 'custom'
 
 export type DataSourceType =
-  | 'kv' | 'computed' | 'static'
+  | 'kv' | 'static'
 
 export type BindingSourceType =
   | 'data' | 'bindings' | 'state'
