@@ -7,7 +7,7 @@
         "dev": "vite",
         "kill": "fuser -k 5000/tcp",
         "prebuild": "mkdir -p /tmp/dist || true",
-        "build": "tsc -b --noCheck && vite build",
+        "build": "npm run schemas:validate && tsc -b --noCheck && vite build",
         "lint": "eslint . --fix",
         "lint:check": "eslint .",
         "optimize": "vite optimize",
@@ -21,6 +21,7 @@
         "pages:list": "node scripts/list-pages.js",
         "pages:validate": "tsx src/config/validate-config.ts",
         "pages:generate": "node scripts/generate-page.js",
+        "schemas:validate": "tsx scripts/validate-json-schemas.ts",
         "components:list": "node scripts/list-json-components.cjs",
         "components:scan": "node scripts/scan-and-update-registry.cjs",
         "components:validate": "node scripts/validate-supported-components.cjs"
@@ -107,6 +108,7 @@
         "eslint-plugin-react-refresh": "^0.4.19",
         "globals": "^17.0.0",
         "tailwindcss": "^4.1.11",
+        "tsx": "^4.21.0",
         "typescript": "~5.7.2",
         "typescript-eslint": "^8.38.0",
         "vite": "^7.3.1"
