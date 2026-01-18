@@ -1,4 +1,4 @@
-import { ComponentDefinition, getCategoryComponents } from '@/lib/component-definitions'
+import { ComponentDefinition, getCategoryComponents } from '@/lib/component-definitions-utils'
 import { ComponentPaletteItem } from '@/components/atoms/ComponentPaletteItem'
 import { PanelHeader, Stack } from '@/components/atoms'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'

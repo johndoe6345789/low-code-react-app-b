@@ -1,5 +1,5 @@
 import { UIComponent, PageSchema } from '@/types/json-ui'
-import { ComponentDefinition } from '@/lib/component-definitions'
+import { ComponentDefinition } from '@/lib/component-definitions-utils'
 import { SchemaEditorToolbar } from './SchemaEditorToolbar'
 import { SchemaEditorSidebar } from './SchemaEditorSidebar'
 import { SchemaEditorCanvas } from './SchemaEditorCanvas'

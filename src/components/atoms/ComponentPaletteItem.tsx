@@ -1,4 +1,4 @@
-import { ComponentDefinition } from '@/lib/component-definitions'
+import { ComponentDefinition } from '@/lib/component-definitions-utils'
 import { Card } from '@/components/ui/card'
 import * as Icons from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
