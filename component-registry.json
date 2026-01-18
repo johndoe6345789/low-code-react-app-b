@@ -237,6 +237,15 @@
       "description": "JSON UI system demonstration"
     },
     {
+      "name": "JSONConversionShowcase",
+      "path": "@/components/JSONConversionShowcase",
+      "export": "JSONConversionShowcase",
+      "type": "feature",
+      "preload": false,
+      "category": "showcase",
+      "description": "JSON conversion showcase overview"
+    },
+    {
       "name": "SchemaEditor",
       "path": "@/components/SchemaEditorPage",
       "export": "SchemaEditorPage",
