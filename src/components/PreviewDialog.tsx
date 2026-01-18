@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react'
 interface PreviewDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onPreviewUrlChange?: (url: string) => void
 }
 
-export function PreviewDialog({ open, onOpenChange }: PreviewDialogProps) {
+export function PreviewDialog({ open, onOpenChange, onPreviewUrlChange }: PreviewDialogProps) {
   const [previewUrl, setPreviewUrl] = useState<string>('')
 
   useEffect(() => {
@@ -16,9 +17,14 @@ export function PreviewDialog({ open, onOpenChange }: PreviewDialogProps) {
       const currentUrl = window.location.href
       const url = new URL(currentUrl)
       url.searchParams.set('preview', 'true')
-      setPreviewUrl(url.toString())
+      const nextUrl = url.toString()
+      setPreviewUrl(nextUrl)
+      onPreviewUrlChange?.(nextUrl)
+      return
     }
-  }, [open])
+    setPreviewUrl('')
+    onPreviewUrlChange?.('')
+  }, [open, onPreviewUrlChange])
 
   const handleOpenInNewTab = () => {
     if (previewUrl) {
