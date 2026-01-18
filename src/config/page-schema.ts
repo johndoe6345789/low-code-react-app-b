@@ -18,11 +18,10 @@ export const ResizableConfigSchema = z.object({
   rightPanel: ResizablePanelConfigSchema,
 })
 
-export const SimplePageConfigSchema = z.object({
+const SimplePageConfigBaseSchema = z.object({
   id: z.string(),
   title: z.string(),
   icon: z.string(),
-  component: z.string(),
   enabled: z.boolean(),
   toggleKey: z.string().optional(),
   shortcut: z.string().optional(),
@@ -31,6 +30,21 @@ export const SimplePageConfigSchema = z.object({
   props: PropConfigSchema.optional(),
   resizableConfig: ResizableConfigSchema.optional(),
 })
+
+const SimpleComponentPageConfigSchema = SimplePageConfigBaseSchema.extend({
+  type: z.literal('component').optional(),
+  component: z.string(),
+})
+
+const SimpleJsonPageConfigSchema = SimplePageConfigBaseSchema.extend({
+  type: z.literal('json'),
+  schemaPath: z.string(),
+})
+
+export const SimplePageConfigSchema = z.union([
+  SimpleComponentPageConfigSchema,
+  SimpleJsonPageConfigSchema,
+])
 
 export const SimplePagesConfigSchema = z.object({
   pages: z.array(SimplePageConfigSchema),
@@ -65,17 +79,31 @@ export const FeatureConfigSchema = z.object({
   config: z.record(z.string(), z.any()).optional(),
 })
 
-export const PageConfigSchema = z.object({
+const PageConfigBaseSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
   icon: z.string(),
-  component: z.string(),
   layout: LayoutConfigSchema,
   features: z.array(FeatureConfigSchema).optional(),
   permissions: z.array(z.string()).optional(),
   shortcuts: z.array(KeyboardShortcutSchema).optional(),
 })
+
+const ComponentPageConfigSchema = PageConfigBaseSchema.extend({
+  type: z.literal('component').optional(),
+  component: z.string(),
+})
+
+const JsonPageConfigSchema = PageConfigBaseSchema.extend({
+  type: z.literal('json'),
+  schemaPath: z.string(),
+})
+
+export const PageConfigSchema = z.union([
+  ComponentPageConfigSchema,
+  JsonPageConfigSchema,
+])
 
 export const PageRegistrySchema = z.object({
   pages: z.array(PageConfigSchema),
