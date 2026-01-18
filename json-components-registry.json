@@ -2,7 +2,7 @@
   "$schema": "./schemas/json-components-registry-schema.json",
   "version": "2.0.0",
   "description": "Registry of all components in the application",
-  "lastUpdated": "2026-01-18T12:05:00.000Z",
+  "lastUpdated": "2026-01-18T12:20:47.049Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -39,15 +39,6 @@
       "description": "Container card with optional header, content, and footer",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Card",
-      "name": "Card",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Container card with optional header, content, and footer",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "CodeExplanationDialog",
@@ -126,15 +117,6 @@
       "source": "atoms"
     },
     {
-      "type": "Drawer",
-      "name": "Drawer",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Sliding panel overlay",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Flex",
       "name": "Flex",
       "category": "layout",
@@ -169,15 +151,6 @@
       "description": "Card shown on hover",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "HoverCard",
-      "name": "HoverCard",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Card shown on hover",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "Modal",
@@ -263,15 +236,6 @@
       "source": "atoms"
     },
     {
-      "type": "Button",
-      "name": "Button",
-      "category": "input",
-      "canHaveChildren": true,
-      "description": "Interactive button element",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "ButtonGroup",
       "name": "ButtonGroup",
       "category": "input",
@@ -288,15 +252,6 @@
       "description": "Checkbox toggle control",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Checkbox",
-      "name": "Checkbox",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Checkbox toggle control",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "ConfirmButton",
@@ -353,15 +308,6 @@
       "source": "atoms"
     },
     {
-      "type": "Form",
-      "name": "Form",
-      "category": "input",
-      "canHaveChildren": true,
-      "description": "Form container component",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "IconButton",
       "name": "IconButton",
       "category": "input",
@@ -378,15 +324,6 @@
       "description": "Text input field",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Input",
-      "name": "Input",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Text input field",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "InputOtp",
@@ -461,38 +398,11 @@
       "source": "atoms"
     },
     {
-      "type": "Select",
-      "name": "Select",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Dropdown select control",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Slider",
       "name": "Slider",
       "category": "input",
       "canHaveChildren": false,
       "description": "Numeric range slider",
-      "status": "supported",
-      "source": "atoms"
-    },
-    {
-      "type": "Slider",
-      "name": "Slider",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Numeric range slider",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
-      "type": "Switch",
-      "name": "Switch",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Toggle switch control",
       "status": "supported",
       "source": "atoms"
     },
@@ -503,7 +413,7 @@
       "canHaveChildren": false,
       "description": "Toggle switch control",
       "status": "supported",
-      "source": "ui"
+      "source": "atoms"
     },
     {
       "type": "TextArea",
@@ -522,15 +432,6 @@
       "description": "Toggle button control",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Toggle",
-      "name": "Toggle",
-      "category": "input",
-      "canHaveChildren": true,
-      "description": "Toggle button control",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "ToggleGroup",
@@ -570,15 +471,6 @@
       "source": "atoms"
     },
     {
-      "type": "Avatar",
-      "name": "Avatar",
-      "category": "display",
-      "canHaveChildren": false,
-      "description": "User avatar image",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "AvatarGroup",
       "name": "AvatarGroup",
       "category": "display",
@@ -595,15 +487,6 @@
       "description": "Small status or count indicator",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Badge",
-      "name": "Badge",
-      "category": "display",
-      "canHaveChildren": true,
-      "description": "Small status or count indicator",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "CircularProgress",
@@ -696,15 +579,6 @@
       "source": "atoms"
     },
     {
-      "type": "Label",
-      "name": "Label",
-      "category": "display",
-      "canHaveChildren": true,
-      "description": "Form label element",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Progress",
       "name": "Progress",
       "category": "display",
@@ -742,15 +616,6 @@
       "source": "atoms"
     },
     {
-      "type": "Separator",
-      "name": "Separator",
-      "category": "display",
-      "canHaveChildren": false,
-      "description": "Visual divider line",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Skeleton",
       "name": "Skeleton",
       "category": "display",
@@ -758,15 +623,6 @@
       "description": "Loading skeleton placeholder",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Skeleton",
-      "name": "Skeleton",
-      "category": "display",
-      "canHaveChildren": false,
-      "description": "Loading skeleton placeholder",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "Spinner",
@@ -850,15 +706,6 @@
       "source": "atoms"
     },
     {
-      "type": "ContextMenu",
-      "name": "ContextMenu",
-      "category": "navigation",
-      "canHaveChildren": true,
-      "description": "Right-click context menu",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "DropdownMenu",
       "name": "DropdownMenu",
       "category": "navigation",
@@ -931,16 +778,6 @@
       "canHaveChildren": true,
       "description": "NavigationMenu component",
       "status": "supported",
-      "source": "organisms",
-      "jsonCompatible": true
-    },
-    {
-      "type": "NavigationMenu",
-      "name": "NavigationMenu",
-      "category": "navigation",
-      "canHaveChildren": true,
-      "description": "NavigationMenu component",
-      "status": "supported",
       "source": "ui"
     },
     {
@@ -962,15 +799,6 @@
       "source": "atoms"
     },
     {
-      "type": "Tabs",
-      "name": "Tabs",
-      "category": "navigation",
-      "canHaveChildren": true,
-      "description": "Tabbed interface container",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Alert",
       "name": "Alert",
       "category": "feedback",
@@ -978,15 +806,6 @@
       "description": "Alert notification message",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Alert",
-      "name": "Alert",
-      "category": "feedback",
-      "canHaveChildren": true,
-      "description": "Alert notification message",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "CountBadge",
@@ -1043,16 +862,6 @@
       "description": "Empty state placeholder",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "EmptyState",
-      "name": "EmptyState",
-      "category": "feedback",
-      "canHaveChildren": true,
-      "description": "Empty state placeholder",
-      "status": "supported",
-      "source": "molecules",
-      "jsonCompatible": true
     },
     {
       "type": "EmptyStateIcon",
@@ -1128,16 +937,6 @@
       "description": "LoadingState component",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "LoadingState",
-      "name": "LoadingState",
-      "category": "feedback",
-      "canHaveChildren": true,
-      "description": "LoadingState component",
-      "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
     },
     {
       "type": "Notification",
@@ -1317,16 +1116,6 @@
       "source": "atoms"
     },
     {
-      "type": "StatCard",
-      "name": "StatCard",
-      "category": "data",
-      "canHaveChildren": false,
-      "description": "Statistic card display",
-      "status": "supported",
-      "source": "molecules",
-      "jsonCompatible": true
-    },
-    {
       "type": "Table",
       "name": "Table",
       "category": "data",
@@ -1334,15 +1123,6 @@
       "description": "Data table",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Table",
-      "name": "Table",
-      "category": "data",
-      "canHaveChildren": false,
-      "description": "Data table",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "Timeline",
@@ -1383,15 +1163,6 @@
       "source": "atoms"
     },
     {
-      "type": "Accordion",
-      "name": "Accordion",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Collapsible content sections",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "ActionBar",
       "name": "ActionBar",
       "category": "custom",
@@ -1399,7 +1170,11 @@
       "description": "Action button toolbar",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: stateless layout molecule; bindings/events supported in json-ui component types."
+      }
     },
     {
       "type": "AppBranding",
@@ -1466,15 +1241,6 @@
       "description": "Calendar date selector",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Calendar",
-      "name": "Calendar",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Calendar date selector",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "CanvasRenderer",
@@ -1586,7 +1352,11 @@
       "description": "Custom data display card",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: presentational molecule with conditional rendering only; bindings supported in json-ui component types."
+      }
     },
     {
       "type": "DetailRow",
@@ -1703,16 +1473,6 @@
       "source": "atoms"
     },
     {
-      "type": "PageHeader",
-      "name": "PageHeader",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "PageHeader component",
-      "status": "json-compatible",
-      "source": "organisms",
-      "jsonCompatible": true
-    },
-    {
       "type": "PageHeaderContent",
       "name": "PageHeaderContent",
       "category": "custom",
@@ -1748,15 +1508,6 @@
       "description": "Popover overlay content",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Popover",
-      "name": "Popover",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Popover overlay content",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "PropertyEditor",
@@ -1874,15 +1625,6 @@
       "source": "atoms"
     },
     {
-      "type": "ScrollArea",
-      "name": "ScrollArea",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Scrollable container area",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "SearchBar",
       "name": "SearchBar",
       "category": "custom",
@@ -1900,16 +1642,6 @@
       "description": "Search input with icon",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "SearchInput",
-      "name": "SearchInput",
-      "category": "custom",
-      "canHaveChildren": false,
-      "description": "Search input with icon",
-      "status": "supported",
-      "source": "molecules",
-      "jsonCompatible": true
     },
     {
       "type": "Sheet",
@@ -2011,15 +1743,6 @@
       "description": "Tooltip overlay text",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Tooltip",
-      "name": "Tooltip",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Tooltip overlay text",
-      "status": "supported",
-      "source": "ui"
     }
   ],
   "statistics": {

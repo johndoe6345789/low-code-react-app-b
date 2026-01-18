@@ -211,6 +211,103 @@ Remove an item from an array.
 }
 ```
 
+## Complex Expression Use Cases
+
+### 1. Building Nested Records from Existing Data
+
+Use a single `create` action to stitch together multiple sources. Complex objects can be sourced from data fields (the expression returns the object), while top-level fields can mix event and data values.
+
+```json
+{
+  "id": "create-audit-entry",
+  "type": "create",
+  "target": "auditLog",
+  "valueTemplate": {
+    "id": "Date.now()",
+    "actorId": "data.currentUser.id",
+    "action": "event.type",
+    "metadata": "data.auditMetadata",
+    "createdAt": "Date.now()"
+  }
+}
+```
+
+### 2. Selecting Deep Values for Conditional Deletions
+
+Pick a deeply nested value for the delete path without needing a compute function.
+
+```json
+{
+  "id": "remove-primary-address",
+  "type": "delete",
+  "target": "addresses",
+  "path": "id",
+  "expression": "data.user.profile.primaryAddressId"
+}
+```
+
+### 3. Multi-Step Updates with Event + Data Context
+
+Use sequential actions to update multiple fields from a single event.
+
+```json
+{
+  "event": "change",
+  "actions": [
+    {
+      "type": "set-value",
+      "target": "filters.query",
+      "expression": "event.target.value"
+    },
+    {
+      "type": "set-value",
+      "target": "filters.lastUpdatedBy",
+      "expression": "data.currentUser.name"
+    }
+  ]
+}
+```
+
+## Escaping Literal Strings
+
+Because any string that starts with `data.` or `event.` is treated as an expression, use a quoted literal to force a static string. This works in both `expression` and `valueTemplate` fields.
+
+```json
+{
+  "type": "set-value",
+  "target": "rawText",
+  "expression": "\"data.user.name\""
+}
+```
+
+```json
+{
+  "type": "create",
+  "target": "labels",
+  "valueTemplate": {
+    "label": "\"event.target.value\""
+  }
+}
+```
+
+If you simply need a static value, prefer the `value` field instead of `expression`.
+
+## Fallback Behavior
+
+- If an expression does not match a supported pattern, the system returns the original string and logs a warning.
+- If an expression throws during evaluation, the result is `undefined` and the error is logged.
+- Conditional checks default to `true` when they cannot be evaluated (fail-open behavior).
+- Data bindings that use a binding object can provide a `fallback` value (see the binding resolver in UI schemas).
+
+When fallback behavior matters, guard the data source with defaults or use the legacy `compute` functions for stricter control.
+
+## Performance Considerations
+
+- Expression evaluation happens synchronously on every event. Keep expressions short and avoid repeated deep reads in high-frequency events (e.g., `input` or `mousemove`).
+- Prefer precomputing derived values in your data model and referencing them directly in expressions.
+- Batch related updates into a single event handler to reduce re-renders.
+- For heavy or repeated logic, use legacy `compute` functions where memoization or caching can be applied.
+
 ## Backward Compatibility
 
 The system maintains backward compatibility with the legacy `compute` function approach:

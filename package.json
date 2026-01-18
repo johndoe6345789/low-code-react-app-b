@@ -22,7 +22,8 @@
         "pages:validate": "tsx src/config/validate-config.ts",
         "pages:generate": "node scripts/generate-page.js",
         "components:list": "node scripts/list-json-components.cjs",
-        "components:scan": "node scripts/scan-and-update-registry.cjs"
+        "components:scan": "node scripts/scan-and-update-registry.cjs",
+        "components:validate": "node scripts/validate-supported-components.cjs"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
