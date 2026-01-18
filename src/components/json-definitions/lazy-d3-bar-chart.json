@@ -6,7 +6,7 @@
     "height": "height",
     "className": {
       "source": "className",
-      "transform": "data ? `overflow-visible ${data}` : 'overflow-visible'"
+      "transform": "className ? `overflow-visible ${className}` : 'overflow-visible'"
     }
   },
   "children": [

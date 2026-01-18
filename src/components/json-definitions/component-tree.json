@@ -4,7 +4,7 @@
   "bindings": {
     "className": {
       "source": "className",
-      "transform": "data ? `space-y-2 ${data}` : 'space-y-2'"
+      "transform": "className ? `space-y-2 ${className}` : 'space-y-2'"
     }
   },
   "children": [
