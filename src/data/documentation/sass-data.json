@@ -27,7 +27,13 @@
   "components": [
     {
       "name": "Buttons",
-      "classes": ["mui-custom-button--primary", "mui-custom-button--secondary", "mui-custom-button--accent", "mui-custom-button--outline", "mui-custom-button--ghost"],
+      "classes": [
+        "mui-custom-button--primary",
+        "mui-custom-button--secondary",
+        "mui-custom-button--accent",
+        "mui-custom-button--outline",
+        "mui-custom-button--ghost"
+      ],
       "description": "Custom styled buttons with hover effects and variants"
     },
     {
@@ -78,56 +84,62 @@
   ],
   "layoutComponents": [
     {
-      "name": "custom-mui-container",
+      "title": "custom-mui-container",
       "description": "Max-width container with responsive padding"
     },
     {
-      "name": "custom-mui-grid",
+      "title": "custom-mui-grid",
       "description": "CSS Grid layouts with responsive columns (--cols-1 to --cols-12, --responsive)"
     },
     {
-      "name": "custom-mui-flex",
+      "title": "custom-mui-flex",
       "description": "Flexbox utilities (--row, --col, --wrap, --center, --between, --around)"
     },
     {
-      "name": "custom-mui-stack",
+      "title": "custom-mui-stack",
       "description": "Vertical/horizontal stacks with configurable gaps"
     },
     {
-      "name": "custom-mui-surface",
+      "title": "custom-mui-surface",
       "description": "Interactive surfaces with elevation and hover effects"
     }
   ],
   "utilities": [
     {
-      "name": "@include respond-to($breakpoint)",
+      "title": "Responsive Design",
+      "mixin": "@include respond-to($breakpoint)",
       "description": "Generate media queries for xs, sm, md, lg, xl, 2xl breakpoints",
-      "example": "@include respond-to('lg') {\n  padding: 2rem;\n}"
+      "snippet": "@include respond-to('lg') {\n  padding: 2rem;\n}"
     },
     {
-      "name": "@include elevation($level)",
+      "title": "Elevation & Shadows",
+      "mixin": "@include elevation($level)",
       "description": "Apply box shadows with levels 1-4",
-      "example": "@include elevation(2);"
+      "snippet": "@include elevation(2);"
     },
     {
-      "name": "@include glassmorphism($blur, $opacity)",
+      "title": "Glassmorphism",
+      "mixin": "@include glassmorphism($blur, $opacity)",
       "description": "Create frosted glass effects with backdrop blur",
-      "example": "@include glassmorphism(16px, 0.1);"
+      "snippet": "@include glassmorphism(16px, 0.1);"
     },
     {
-      "name": "get-color($palette, $shade)",
+      "title": "Color Functions",
+      "mixin": "get-color($palette, $shade)",
       "description": "Access colors from predefined palettes (primary, secondary, accent, success, error, warning)",
-      "example": "color: get-color('primary', 500);"
+      "snippet": "color: get-color('primary', 500);"
     },
     {
-      "name": "@include truncate($lines)",
+      "title": "Text Truncation",
+      "mixin": "@include truncate($lines)",
       "description": "Truncate text with ellipsis after specified lines",
-      "example": "@include truncate(2);"
+      "snippet": "@include truncate(2);"
     },
     {
-      "name": "@include show-scrollbar($track, $thumb)",
+      "title": "Custom Scrollbars",
+      "mixin": "@include show-scrollbar($track, $thumb)",
       "description": "Style webkit scrollbars with custom colors",
-      "example": "@include show-scrollbar(rgba(0,0,0,0.1), rgba(0,0,0,0.3));"
+      "snippet": "@include show-scrollbar(rgba(0,0,0,0.1), rgba(0,0,0,0.3));"
     }
   ],
   "animations": [
@@ -142,6 +154,16 @@
     { "name": "animate-float", "description": "Floating up and down" },
     { "name": "animate-glow", "description": "Glowing shadow effect" }
   ],
+  "quickStart": {
+    "components": {
+      "title": "Using Custom Components",
+      "code": "import './styles/main.scss'\n\nfunction MyComponent() {\n  return (\n    <div className=\"custom-mui-container\">\n      <div className=\"custom-mui-grid custom-mui-grid--cols-3\">\n        <div className=\"mui-custom-card\">\n          <h3>Card Title</h3>\n          <p>Card content</p>\n          <button className=\"mui-custom-button mui-custom-button--primary\">\n            Click Me\n          </button>\n        </div>\n      </div>\n    </div>\n  )\n}"
+    },
+    "mixins": {
+      "title": "Creating Custom Styles with Mixins",
+      "code": "@use './styles/utilities' as *;\n@use './styles/variables' as *;\n\n.my-custom-component {\n  @include elevation(2);\n  @include responsive-padding(spacing('6'));\n  background: get-color('primary', 500);\n  \n  @include respond-to('md') {\n    @include elevation(3);\n  }\n  \n  &:hover {\n    @include glassmorphism(12px, 0.15);\n  }\n}"
+    }
+  },
   "bestPractices": [
     "Import main.scss in your index.css to access all Sass components and utilities",
     "Use @use instead of @import for better module encapsulation",
