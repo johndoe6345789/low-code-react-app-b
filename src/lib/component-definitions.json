@@ -574,5 +574,480 @@
       "isExporting": false,
       "isImporting": false
     }
+  },
+  {
+    "type": "CodeExplanationDialog",
+    "label": "Code Explanation Dialog",
+    "category": "layout",
+    "icon": "Info",
+    "defaultProps": {
+      "open": false,
+      "fileName": "example.ts",
+      "explanation": "Explain this code...",
+      "isLoading": false
+    }
+  },
+  {
+    "type": "ComponentBindingDialog",
+    "label": "Component Binding Dialog",
+    "category": "layout",
+    "icon": "Link",
+    "defaultProps": {
+      "open": false,
+      "component": null,
+      "dataSources": []
+    }
+  },
+  {
+    "type": "DataSourceCard",
+    "label": "Data Source Card",
+    "category": "layout",
+    "icon": "Database",
+    "defaultProps": {
+      "dataSource": {
+        "id": "source",
+        "type": "static",
+        "defaultValue": ""
+      },
+      "dependents": []
+    }
+  },
+  {
+    "type": "DataSourceEditorDialog",
+    "label": "Data Source Editor Dialog",
+    "category": "layout",
+    "icon": "Database",
+    "defaultProps": {
+      "open": false,
+      "dataSource": null,
+      "allDataSources": []
+    }
+  },
+  {
+    "type": "TreeCard",
+    "label": "Tree Card",
+    "category": "layout",
+    "icon": "Tree",
+    "defaultProps": {
+      "tree": {
+        "id": "tree-1",
+        "name": "Main Tree",
+        "description": "Primary UI tree",
+        "rootNodes": [],
+        "createdAt": 0,
+        "updatedAt": 0
+      },
+      "isSelected": false,
+      "disableDelete": false
+    }
+  },
+  {
+    "type": "TreeFormDialog",
+    "label": "Tree Form Dialog",
+    "category": "layout",
+    "icon": "Tree",
+    "defaultProps": {
+      "open": false,
+      "title": "Create Tree",
+      "description": "Add a new component tree.",
+      "name": "",
+      "treeDescription": "",
+      "submitLabel": "Save"
+    }
+  },
+  {
+    "type": "ToolbarButton",
+    "label": "Toolbar Button",
+    "category": "input",
+    "icon": "Button",
+    "defaultProps": {
+      "label": "Action",
+      "variant": "outline",
+      "disabled": false
+    }
+  },
+  {
+    "type": "SchemaCodeViewer",
+    "label": "Schema Code Viewer",
+    "category": "display",
+    "icon": "Code",
+    "defaultProps": {
+      "components": [],
+      "schema": {}
+    }
+  },
+  {
+    "type": "FileTabs",
+    "label": "File Tabs",
+    "category": "navigation",
+    "icon": "Tabs",
+    "defaultProps": {
+      "files": [],
+      "activeFileId": null
+    }
+  },
+  {
+    "type": "NavigationItem",
+    "label": "Navigation Item",
+    "category": "navigation",
+    "icon": "List",
+    "defaultProps": {
+      "label": "Overview",
+      "isActive": false,
+      "badge": 0
+    }
+  },
+  {
+    "type": "NavigationMenu",
+    "label": "Navigation Menu",
+    "category": "navigation",
+    "icon": "Sidebar",
+    "defaultProps": {
+      "activeTab": "overview",
+      "featureToggles": {
+        "codeEditor": false,
+        "models": false,
+        "components": false,
+        "componentTrees": false,
+        "workflows": false,
+        "lambdas": false,
+        "styling": false,
+        "flaskApi": false,
+        "playwright": false,
+        "storybook": false,
+        "unitTests": false,
+        "errorRepair": false,
+        "documentation": false,
+        "sassStyles": false,
+        "faviconDesigner": false,
+        "ideaCloud": false,
+        "schemaEditor": false,
+        "dataBinding": false
+      },
+      "errorCount": 0
+    }
+  },
+  {
+    "type": "EmptyCanvasState",
+    "label": "Empty Canvas State",
+    "category": "feedback",
+    "icon": "FolderOpen",
+    "defaultProps": {}
+  },
+  {
+    "type": "SchemaEditorStatusBar",
+    "label": "Schema Editor Status Bar",
+    "category": "feedback",
+    "icon": "Info",
+    "defaultProps": {
+      "componentCount": 0,
+      "selectedComponentType": "",
+      "hasUnsavedChanges": false
+    }
+  },
+  {
+    "type": "DataSourceManager",
+    "label": "Data Source Manager",
+    "category": "data",
+    "icon": "Database",
+    "defaultProps": {
+      "dataSources": []
+    }
+  },
+  {
+    "type": "TreeListHeader",
+    "label": "Tree List Header",
+    "category": "data",
+    "icon": "Tree",
+    "defaultProps": {
+      "hasSelectedTree": false
+    }
+  },
+  {
+    "type": "TreeListPanel",
+    "label": "Tree List Panel",
+    "category": "data",
+    "icon": "Tree",
+    "defaultProps": {
+      "trees": [],
+      "selectedTreeId": null
+    }
+  },
+  {
+    "type": "AppHeader",
+    "label": "App Header",
+    "category": "custom",
+    "icon": "Layout",
+    "defaultProps": {
+      "activeTab": "overview",
+      "featureToggles": {
+        "codeEditor": false,
+        "models": false,
+        "components": false,
+        "componentTrees": false,
+        "workflows": false,
+        "lambdas": false,
+        "styling": false,
+        "flaskApi": false,
+        "playwright": false,
+        "storybook": false,
+        "unitTests": false,
+        "errorRepair": false,
+        "documentation": false,
+        "sassStyles": false,
+        "faviconDesigner": false,
+        "ideaCloud": false,
+        "schemaEditor": false,
+        "dataBinding": false
+      },
+      "errorCount": 0,
+      "lastSaved": null,
+      "currentProject": {
+        "name": "Demo Project",
+        "files": [],
+        "models": [],
+        "components": [],
+        "componentTrees": [],
+        "workflows": [],
+        "lambdas": [],
+        "theme": {
+          "variants": [
+            {
+              "id": "default",
+              "name": "Default",
+              "colors": {
+                "primary": "#4f46e5",
+                "secondary": "#64748b",
+                "accent": "#0ea5e9",
+                "muted": "#f1f5f9",
+                "background": "#ffffff",
+                "surface": "#ffffff",
+                "text": "#0f172a",
+                "textSecondary": "#475569",
+                "border": "#e2e8f0",
+                "customColors": {}
+              }
+            }
+          ],
+          "activeVariantId": "default",
+          "fontFamily": "Inter",
+          "fontSize": {
+            "small": 12,
+            "medium": 14,
+            "large": 18
+          },
+          "spacing": 4,
+          "borderRadius": 8
+        }
+      }
+    }
+  },
+  {
+    "type": "BindingEditor",
+    "label": "Binding Editor",
+    "category": "custom",
+    "icon": "Link",
+    "defaultProps": {
+      "bindings": {},
+      "dataSources": [],
+      "availableProps": ["children", "value"]
+    }
+  },
+  {
+    "type": "CanvasRenderer",
+    "label": "Canvas Renderer",
+    "category": "custom",
+    "icon": "Layout",
+    "defaultProps": {
+      "components": [],
+      "selectedId": null,
+      "hoveredId": null,
+      "draggedOverId": null,
+      "dropPosition": null
+    }
+  },
+  {
+    "type": "ComponentPalette",
+    "label": "Component Palette",
+    "category": "custom",
+    "icon": "GridFour",
+    "defaultProps": {}
+  },
+  {
+    "type": "ComponentTree",
+    "label": "Component Tree",
+    "category": "custom",
+    "icon": "Tree",
+    "defaultProps": {
+      "components": [],
+      "selectedId": null,
+      "hoveredId": null,
+      "draggedOverId": null,
+      "dropPosition": null
+    }
+  },
+  {
+    "type": "EditorActions",
+    "label": "Editor Actions",
+    "category": "custom",
+    "icon": "Sparkle",
+    "defaultProps": {}
+  },
+  {
+    "type": "EditorToolbar",
+    "label": "Editor Toolbar",
+    "category": "custom",
+    "icon": "Toolbox",
+    "defaultProps": {
+      "openFiles": [],
+      "activeFileId": null,
+      "activeFile": null
+    }
+  },
+  {
+    "type": "JSONUIShowcase",
+    "label": "JSON UI Showcase",
+    "category": "custom",
+    "icon": "Code",
+    "defaultProps": {
+      "files": [],
+      "models": [],
+      "components": []
+    }
+  },
+  {
+    "type": "LazyInlineMonacoEditor",
+    "label": "Inline Monaco Editor",
+    "category": "custom",
+    "icon": "Code",
+    "defaultProps": {
+      "height": "300px",
+      "language": "typescript",
+      "value": "// Start typing..."
+    }
+  },
+  {
+    "type": "LazyMonacoEditor",
+    "label": "Monaco Editor",
+    "category": "custom",
+    "icon": "Code",
+    "defaultProps": {
+      "file": {
+        "id": "file-1",
+        "name": "App.tsx",
+        "path": "/App.tsx",
+        "content": "// Start typing...",
+        "language": "typescript"
+      }
+    }
+  },
+  {
+    "type": "MonacoEditorPanel",
+    "label": "Monaco Editor Panel",
+    "category": "custom",
+    "icon": "Code",
+    "defaultProps": {
+      "file": {
+        "id": "file-1",
+        "name": "App.tsx",
+        "path": "/App.tsx",
+        "content": "// Start typing...",
+        "language": "typescript"
+      }
+    }
+  },
+  {
+    "type": "PageHeaderContent",
+    "label": "Page Header Content",
+    "category": "custom",
+    "icon": "Heading",
+    "defaultProps": {
+      "title": "Page Title",
+      "description": "Page description"
+    }
+  },
+  {
+    "type": "PropertyEditor",
+    "label": "Property Editor",
+    "category": "custom",
+    "icon": "SlidersHorizontal",
+    "defaultProps": {
+      "component": null
+    }
+  },
+  {
+    "type": "SchemaEditorCanvas",
+    "label": "Schema Editor Canvas",
+    "category": "custom",
+    "icon": "Layout",
+    "defaultProps": {
+      "components": [],
+      "selectedId": null,
+      "hoveredId": null,
+      "draggedOverId": null,
+      "dropPosition": null
+    }
+  },
+  {
+    "type": "SchemaEditorLayout",
+    "label": "Schema Editor Layout",
+    "category": "custom",
+    "icon": "Layout",
+    "defaultProps": {
+      "components": [],
+      "selectedId": null,
+      "hoveredId": null,
+      "draggedOverId": null,
+      "dropPosition": null,
+      "selectedComponent": null
+    }
+  },
+  {
+    "type": "SchemaEditorPropertiesPanel",
+    "label": "Schema Editor Properties Panel",
+    "category": "custom",
+    "icon": "SlidersHorizontal",
+    "defaultProps": {
+      "components": [],
+      "selectedId": null,
+      "hoveredId": null,
+      "draggedOverId": null,
+      "dropPosition": null,
+      "selectedComponent": null
+    }
+  },
+  {
+    "type": "SchemaEditorSidebar",
+    "label": "Schema Editor Sidebar",
+    "category": "custom",
+    "icon": "Sidebar",
+    "defaultProps": {}
+  },
+  {
+    "type": "SchemaEditorToolbar",
+    "label": "Schema Editor Toolbar",
+    "category": "custom",
+    "icon": "Toolbox",
+    "defaultProps": {}
+  },
+  {
+    "type": "SearchBar",
+    "label": "Search Bar",
+    "category": "custom",
+    "icon": "MagnifyingGlass",
+    "defaultProps": {
+      "value": "",
+      "placeholder": "Search..."
+    }
+  },
+  {
+    "type": "ToolbarActions",
+    "label": "Toolbar Actions",
+    "category": "custom",
+    "icon": "Toolbox",
+    "defaultProps": {
+      "errorCount": 0,
+      "showErrorButton": false
+    }
   }
 ]
