@@ -421,8 +421,12 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Multi-line text input",
-      "status": "supported",
-      "source": "atoms"
+      "status": "deprecated",
+      "source": "atoms",
+      "deprecated": {
+        "replacedBy": "Textarea",
+        "message": "Prefer the shadcn/ui Textarea component for JSON schemas."
+      }
     },
     {
       "type": "Toggle",
