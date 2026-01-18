@@ -6,7 +6,14 @@ export interface ComponentDefinition {
   category: 'layout' | 'input' | 'display' | 'navigation' | 'feedback' | 'data' | 'custom'
   icon: string
   defaultProps?: Record<string, any>
+  propSchema?: Record<string, ComponentPropSchema>
   canHaveChildren?: boolean
+}
+
+export interface ComponentPropSchema {
+  type: 'string' | 'number' | 'boolean' | 'enum'
+  description?: string
+  options?: string[]
 }
 
 export const componentDefinitions: ComponentDefinition[] = [
@@ -195,6 +202,40 @@ export const componentDefinitions: ComponentDefinition[] = [
     defaultProps: { value: 50 }
   },
   {
+    type: 'ProgressBar',
+    label: 'Progress Bar',
+    category: 'display',
+    icon: 'ChartBar',
+    defaultProps: { value: 60, max: 100, size: 'md', variant: 'default', showLabel: false },
+    propSchema: {
+      value: { type: 'number', description: 'Current progress value.' },
+      max: { type: 'number', description: 'Maximum progress value.' },
+      size: { type: 'enum', options: ['sm', 'md', 'lg'], description: 'Height size of the bar.' },
+      variant: {
+        type: 'enum',
+        options: ['default', 'accent', 'destructive'],
+        description: 'Color variant for the progress fill.',
+      },
+      showLabel: { type: 'boolean', description: 'Show percentage text below the bar.' },
+      className: { type: 'string', description: 'Additional class names for the container.' },
+    },
+  },
+  {
+    type: 'CircularProgress',
+    label: 'Circular Progress',
+    category: 'display',
+    icon: 'CircleNotch',
+    defaultProps: { value: 72, max: 100, size: 'md', showLabel: true },
+    propSchema: {
+      value: { type: 'number', description: 'Current progress value.' },
+      max: { type: 'number', description: 'Maximum progress value.' },
+      size: { type: 'enum', options: ['sm', 'md', 'lg', 'xl'], description: 'Rendered size.' },
+      showLabel: { type: 'boolean', description: 'Show percentage label in the center.' },
+      strokeWidth: { type: 'number', description: 'Override the default stroke width.' },
+      className: { type: 'string', description: 'Additional class names for the wrapper.' },
+    },
+  },
+  {
     type: 'Spinner',
     label: 'Spinner',
     category: 'display',
@@ -214,6 +255,22 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'display',
     icon: 'Minus',
     defaultProps: {}
+  },
+  {
+    type: 'Divider',
+    label: 'Divider',
+    category: 'display',
+    icon: 'Minus',
+    defaultProps: { orientation: 'horizontal', decorative: true },
+    propSchema: {
+      orientation: {
+        type: 'enum',
+        options: ['horizontal', 'vertical'],
+        description: 'Divider orientation.',
+      },
+      decorative: { type: 'boolean', description: 'Whether the divider is decorative.' },
+      className: { type: 'string', description: 'Additional class names for the divider.' },
+    },
   },
   // Navigation Components
   {
