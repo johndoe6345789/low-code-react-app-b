@@ -2,6 +2,11 @@ import { Middleware } from '@reduxjs/toolkit'
 import { db } from '@/lib/db'
 import { syncToFlask } from './flaskSync'
 import { RootState } from '../index'
+import {
+  persistenceBulkActionNames,
+  persistenceDeleteActionNames,
+  persistenceSingleItemActionNames,
+} from '../actionNames'
 
 interface PersistenceConfig {
   storeName: string
@@ -128,10 +133,7 @@ export const createPersistenceMiddleware = (): Middleware => {
     if (!sliceState) return result
 
     try {
-      if (actionName === 'addItem' || actionName === 'updateItem' || actionName === 'saveFile' || 
-          actionName === 'saveModel' || actionName === 'saveComponent' || actionName === 'saveComponentTree' ||
-          actionName === 'saveWorkflow' || actionName === 'saveLambda') {
-        
+      if (persistenceSingleItemActionNames.has(actionName)) {
         const item = action.payload
         if (item && item.id) {
           persistenceQueue.enqueue({
@@ -144,10 +146,7 @@ export const createPersistenceMiddleware = (): Middleware => {
         }
       }
 
-      if (actionName === 'addItems' || actionName === 'setItems' || actionName === 'setFiles' || 
-          actionName === 'setModels' || actionName === 'setComponents' || actionName === 'setComponentTrees' ||
-          actionName === 'setWorkflows' || actionName === 'setLambdas') {
-        
+      if (persistenceBulkActionNames.has(actionName)) {
         const items = action.payload
         if (Array.isArray(items)) {
           items.forEach((item: any) => {
@@ -164,10 +163,7 @@ export const createPersistenceMiddleware = (): Middleware => {
         }
       }
 
-      if (actionName === 'removeItem' || actionName === 'deleteFile' || actionName === 'deleteModel' ||
-          actionName === 'deleteComponent' || actionName === 'deleteComponentTree' || 
-          actionName === 'deleteWorkflow' || actionName === 'deleteLambda') {
-        
+      if (persistenceDeleteActionNames.has(actionName)) {
         const itemId = typeof action.payload === 'string' ? action.payload : action.payload?.id
         if (itemId) {
           persistenceQueue.enqueue({

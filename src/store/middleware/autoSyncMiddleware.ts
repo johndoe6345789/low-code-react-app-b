@@ -1,6 +1,7 @@
 import { Middleware } from '@reduxjs/toolkit'
 import { syncToFlaskBulk, checkFlaskConnection } from '../slices/syncSlice'
 import { RootState } from '../index'
+import { itemChangeActionTypes } from '../actionNames'
 
 interface AutoSyncConfig {
   enabled: boolean
@@ -127,28 +128,7 @@ export const createAutoSyncMiddleware = (): Middleware => {
         })
       }
 
-      const changeActions = [
-        'files/addItem',
-        'files/updateItem',
-        'files/removeItem',
-        'models/addItem',
-        'models/updateItem',
-        'models/removeItem',
-        'components/addItem',
-        'components/updateItem',
-        'components/removeItem',
-        'componentTrees/addItem',
-        'componentTrees/updateItem',
-        'componentTrees/removeItem',
-        'workflows/addItem',
-        'workflows/updateItem',
-        'workflows/removeItem',
-        'lambdas/addItem',
-        'lambdas/updateItem',
-        'lambdas/removeItem',
-      ]
-
-      if (changeActions.includes(action.type)) {
+      if (itemChangeActionTypes.has(action.type)) {
         autoSyncManager.trackChange()
       }
 
