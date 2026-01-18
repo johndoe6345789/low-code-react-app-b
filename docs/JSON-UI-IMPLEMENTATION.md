@@ -27,7 +27,7 @@ Successfully implemented a comprehensive JSON-driven UI system that allows build
   - Array looping for lists
   - Form rendering with validation
 
-- **hooks.ts**: React hooks for data management
+- **hooks.ts**: React hooks for data management (import from `@/lib/json-ui`)
   - `useJSONDataSource`: Single data source management (KV, API, static, computed)
   - `useJSONDataSources`: Multiple data sources orchestration
   - `useJSONActions`: Action registration and execution

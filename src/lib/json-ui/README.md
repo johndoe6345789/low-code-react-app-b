@@ -226,6 +226,14 @@ const component: UIComponent = {
 }
 ```
 
+### Hooks
+
+Consume JSON UI data hooks from the public entrypoint:
+
+```typescript
+import { useJSONDataSource, useJSONDataSources, useJSONActions } from '@/lib/json-ui'
+```
+
 ## 📦 Exports
 
 ```typescript

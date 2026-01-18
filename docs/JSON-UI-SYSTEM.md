@@ -275,6 +275,12 @@ registerComponent('MyCustom', MyCustomComponent)
 
 ### Add Custom Data Source Types
 
+Use the public entrypoint when consuming JSON UI hooks:
+
+```typescript
+import { useJSONDataSource, useJSONDataSources, useJSONActions } from '@/lib/json-ui'
+```
+
 Edit `/src/lib/json-ui/hooks.ts` to add new data source handlers.
 
 ### Add Custom Actions
@@ -296,7 +302,7 @@ const handleAction = (handler: EventHandler, event?: any) => {
 - **Schema Definitions**: `/src/lib/json-ui/schema.ts`
 - **Component Registry**: `/src/lib/json-ui/component-registry.ts`
 - **Renderer**: `/src/lib/json-ui/renderer.tsx`
-- **Hooks**: `/src/lib/json-ui/hooks.ts`
+- **Hooks**: Import from `@/lib/json-ui` (source: `/src/lib/json-ui/hooks.ts`)
 - **Utils**: `/src/lib/json-ui/utils.ts`
 - **Examples**: `/src/config/ui-examples/`
 - **Demo Page**: `/src/components/JSONUIShowcase.tsx`
