@@ -53,62 +53,66 @@
       ]
     }
   ],
-  "pipelineStages": [
-    {
-      "stage": "Lint",
-      "description": "ESLint and TypeScript type checking to ensure code quality",
-      "duration": "~1-2 min"
-    },
-    {
-      "stage": "Test",
-      "description": "Unit tests with coverage reporting and result artifacts",
-      "duration": "~2-3 min"
-    },
-    {
-      "stage": "Build",
-      "description": "Production build with artifact generation for deployment",
-      "duration": "~2-4 min"
-    },
-    {
-      "stage": "E2E Tests",
-      "description": "Playwright end-to-end tests with HTML reports",
-      "duration": "~3-5 min"
-    },
-    {
-      "stage": "Security",
-      "description": "npm audit and Trivy vulnerability scanning",
-      "duration": "~1-2 min"
-    },
-    {
-      "stage": "Docker Build",
-      "description": "Multi-stage Docker image build and push to registry",
-      "duration": "~3-5 min"
-    },
-    {
-      "stage": "Deploy",
-      "description": "Automated deployment to staging and production environments",
-      "duration": "~1-3 min"
-    }
-  ],
-  "dockerConfig": {
+  "pipeline": {
+    "intro": "All CI/CD configurations follow a similar multi-stage pipeline structure:",
+    "stages": [
+      {
+        "stage": "Lint",
+        "description": "ESLint and TypeScript type checking to ensure code quality",
+        "duration": "~1-2 min"
+      },
+      {
+        "stage": "Test",
+        "description": "Unit tests with coverage reporting and result artifacts",
+        "duration": "~2-3 min"
+      },
+      {
+        "stage": "Build",
+        "description": "Production build with artifact generation for deployment",
+        "duration": "~2-4 min"
+      },
+      {
+        "stage": "E2E Tests",
+        "description": "Playwright end-to-end tests with HTML reports",
+        "duration": "~3-5 min"
+      },
+      {
+        "stage": "Security",
+        "description": "npm audit and Trivy vulnerability scanning",
+        "duration": "~1-2 min"
+      },
+      {
+        "stage": "Docker Build",
+        "description": "Multi-stage Docker image build and push to registry",
+        "duration": "~3-5 min"
+      },
+      {
+        "stage": "Deploy",
+        "description": "Automated deployment to staging and production environments",
+        "duration": "~1-3 min"
+      }
+    ]
+  },
+  "docker": {
     "files": [
       {
-        "file": "Dockerfile",
+        "name": "Dockerfile",
         "description": "Multi-stage build with Node.js builder and Nginx runtime"
       },
       {
-        "file": "nginx.conf",
+        "name": "nginx.conf",
         "description": "Production Nginx configuration with health checks and caching"
       },
       {
-        "file": "docker-compose.yml",
+        "name": "docker-compose.yml",
         "description": "Local development and deployment orchestration"
       },
       {
-        "file": ".dockerignore",
+        "name": ".dockerignore",
         "description": "Optimized build context by excluding unnecessary files"
       }
     ],
+    "commands": "# Build image locally\ndocker build -t codeforge:local .\n\n# Run container\ndocker run -p 3000:80 codeforge:local\n\n# Use docker-compose\ndocker-compose up -d\n\n# Pull from registry\ndocker pull ghcr.io/<username>/<repo>:latest",
     "features": [
       "Multi-stage build reduces final image size to ~50MB",
       "Nginx serves static files with gzip compression",
@@ -121,54 +125,54 @@
     {
       "variable": "NODE_VERSION",
       "description": "Node.js version (default: 20)",
-      "required": false
+      "required": "No"
     },
     {
       "variable": "REGISTRY",
       "description": "Docker registry URL (default: ghcr.io)",
-      "required": false
+      "required": "No"
     },
     {
       "variable": "STAGING_WEBHOOK_URL",
       "description": "Webhook for staging deployments",
-      "required": false
+      "required": "Optional"
     },
     {
       "variable": "PRODUCTION_WEBHOOK_URL",
       "description": "Webhook for production deployments",
-      "required": false
+      "required": "Optional"
     },
     {
       "variable": "CODECOV_TOKEN",
       "description": "Codecov integration token",
-      "required": false
+      "required": "Optional"
     },
     {
       "variable": "SLACK_WEBHOOK",
       "description": "Slack webhook for notifications",
-      "required": false
+      "required": "Optional"
     }
   ],
-  "branchStrategy": [
+  "branches": [
     {
-      "branch": "main",
+      "name": "main",
       "description": "Production branch - deploys to production environment (manual approval required)",
-      "color": "green"
+      "tone": "green"
     },
     {
-      "branch": "develop",
+      "name": "develop",
       "description": "Development branch - automatically deploys to staging environment",
-      "color": "blue"
+      "tone": "blue"
     },
     {
-      "branch": "feature/*",
+      "name": "feature/*",
       "description": "Feature branches - runs tests only, no deployment",
-      "color": "purple"
+      "tone": "purple"
     },
     {
-      "branch": "v* tags",
+      "name": "v* tags",
       "description": "Version tags - triggers release workflow with artifacts and changelog",
-      "color": "orange"
+      "tone": "orange"
     }
   ],
   "quickStart": [
@@ -203,25 +207,25 @@
     "Use semantic versioning for releases (v1.0.0, v1.1.0, etc.)",
     "Configure Slack or email notifications for deployment status"
   ],
-  "additionalResources": [
+  "resources": [
     {
-      "file": "CI_CD_GUIDE.md",
+      "label": "CI_CD_GUIDE.md",
       "description": "Detailed setup guide for all platforms"
     },
     {
-      "file": ".github/workflows/",
+      "label": ".github/workflows/",
       "description": "GitHub Actions workflows"
     },
     {
-      "file": ".gitlab-ci.yml",
+      "label": ".gitlab-ci.yml",
       "description": "GitLab CI configuration"
     },
     {
-      "file": "Jenkinsfile",
+      "label": "Jenkinsfile",
       "description": "Jenkins pipeline definition"
     },
     {
-      "file": ".circleci/config.yml",
+      "label": ".circleci/config.yml",
       "description": "CircleCI configuration"
     }
   ]

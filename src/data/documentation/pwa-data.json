@@ -31,7 +31,7 @@
   "installation": {
     "desktop": [
       {
-        "platform": "Chrome/Edge/Brave",
+        "title": "Chrome/Edge/Brave:",
         "steps": [
           "Look for install icon (⊕) in address bar",
           "Click \"Install\" or use prompt in app",
@@ -39,7 +39,7 @@
         ]
       },
       {
-        "platform": "Safari (macOS)",
+        "title": "Safari (macOS):",
         "steps": [
           "Click File → Add to Dock",
           "App appears in Dock"
@@ -48,15 +48,15 @@
     ],
     "mobile": [
       {
-        "platform": "iOS (Safari)",
+        "title": "iOS (Safari):",
         "steps": [
           "Tap Share button",
           "Select \"Add to Home Screen\"",
-          "Confirm installation"
+          "Tap \"Add\""
         ]
       },
       {
-        "platform": "Android (Chrome)",
+        "title": "Android (Chrome):",
         "steps": [
           "Tap menu (three dots)",
           "Select \"Install app\"",
@@ -87,7 +87,7 @@
       "description": "Install pending updates when new versions are available"
     }
   ],
-  "offlineCapabilities": {
+  "offline": {
     "worksOffline": [
       "View and edit existing projects",
       "Browse files and code",
