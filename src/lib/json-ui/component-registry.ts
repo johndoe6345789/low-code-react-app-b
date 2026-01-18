@@ -16,6 +16,9 @@ interface JsonRegistryEntry {
   wrapperRequired?: boolean
   wrapperComponent?: string
   wrapperFor?: string
+  load?: {
+    export?: string
+  }
   deprecated?: DeprecatedComponentInfo
 }
 
@@ -30,26 +33,29 @@ export interface DeprecatedComponentInfo {
 
 const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
 
-const getRegistryEntryName = (entry: JsonRegistryEntry): string | undefined =>
-  entry.export ?? entry.name ?? entry.type
+const getRegistryEntryKey = (entry: JsonRegistryEntry): string | undefined =>
+  entry.name ?? entry.type
+
+const getRegistryEntryExportName = (entry: JsonRegistryEntry): string | undefined =>
+  entry.load?.export ?? entry.export ?? getRegistryEntryKey(entry)
 
 const jsonRegistryEntries = jsonRegistry.components ?? []
 const registryEntryByType = new Map(
   jsonRegistryEntries
     .map((entry) => {
-      const entryName = getRegistryEntryName(entry)
-      return entryName ? [entryName, entry] : null
+      const entryKey = getRegistryEntryKey(entry)
+      return entryKey ? [entryKey, entry] : null
     })
     .filter((entry): entry is [string, JsonRegistryEntry] => Boolean(entry))
 )
 const deprecatedComponentInfo = jsonRegistryEntries.reduce<Record<string, DeprecatedComponentInfo>>(
   (acc, entry) => {
-    const entryName = getRegistryEntryName(entry)
-    if (!entryName) {
+    const entryKey = getRegistryEntryKey(entry)
+    if (!entryKey) {
       return acc
     }
     if (entry.status === 'deprecated' || entry.deprecated) {
-      acc[entryName] = entry.deprecated ?? {}
+      acc[entryKey] = entry.deprecated ?? {}
     }
     return acc
   },
@@ -110,29 +116,6 @@ const sourceAliases: Record<string, Record<string, string>> = {
   wrappers: {},
 }
 
-const iconAliases: Record<string, string> = {
-  Search: 'MagnifyingGlass',
-  Filter: 'Funnel',
-  Edit: 'PencilSimple',
-  EyeOff: 'EyeClosed',
-  ChevronUp: 'CaretUp',
-  ChevronDown: 'CaretDown',
-  ChevronLeft: 'CaretLeft',
-  ChevronRight: 'CaretRight',
-  Settings: 'Gear',
-  Mail: 'Envelope',
-  Share: 'ShareNetwork',
-  Link: 'LinkSimple',
-  Save: 'FloppyDisk',
-  RefreshCw: 'ArrowClockwise',
-  AlertCircle: 'WarningCircle',
-  HelpCircle: 'Question',
-  Home: 'House',
-  Menu: 'List',
-  MoreVertical: 'DotsThreeVertical',
-  MoreHorizontal: 'DotsThree',
-}
-
 const explicitComponentAllowlist: Record<string, ComponentType<any>> = {
   JSONUIShowcase,
 }
@@ -145,36 +128,18 @@ const buildRegistryFromEntries = (
   return jsonRegistryEntries
     .filter((entry) => entry.source === source)
     .reduce<UIComponentRegistry>((registry, entry) => {
-      const entryName = getRegistryEntryName(entry)
-      if (!entryName) {
+      const entryKey = getRegistryEntryKey(entry)
+      const entryExportName = getRegistryEntryExportName(entry)
+      if (!entryKey || !entryExportName) {
         return registry
       }
-      const aliasName = aliases[entryName]
+      const aliasName = aliases[entryKey]
       const component =
-        componentMap[entryName] ??
+        componentMap[entryExportName] ??
         (aliasName ? componentMap[aliasName] : undefined) ??
-        explicitComponentAllowlist[entryName]
+        explicitComponentAllowlist[entryKey]
       if (component) {
-        registry[entryName] = component
-      }
-      return registry
-    }, {})
-}
-
-const buildIconRegistry = (): UIComponentRegistry => {
-  return jsonRegistryEntries
-    .filter((entry) => entry.source === 'icons')
-    .reduce<UIComponentRegistry>((registry, entry) => {
-      const entryName = getRegistryEntryName(entry)
-      if (!entryName) {
-        return registry
-      }
-      const aliasName = iconAliases[entryName]
-      const component =
-        iconComponentMap[entryName] ??
-        (aliasName ? iconComponentMap[aliasName] : undefined)
-      if (component) {
-        registry[entryName] = component
+        registry[entryKey] = component
       }
       return registry
     }, {})
@@ -229,7 +194,10 @@ export const jsonWrapperComponents: UIComponentRegistry = buildRegistryFromEntri
   sourceAliases.wrappers
 )
 
-export const iconComponents: UIComponentRegistry = buildIconRegistry()
+export const iconComponents: UIComponentRegistry = buildRegistryFromEntries(
+  'icons',
+  iconComponentMap
+)
 
 export const uiComponentRegistry: UIComponentRegistry = {
   ...primitiveComponents,
