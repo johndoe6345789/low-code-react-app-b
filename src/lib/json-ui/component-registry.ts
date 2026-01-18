@@ -19,6 +19,7 @@ import { Progress } from '@/components/ui/progress'
 import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
+import * as OrganismComponents from '@/components/organisms'
 import {
   BreadcrumbWrapper,
   LazyBarChartWrapper,
@@ -75,6 +76,10 @@ const atomRegistryNames = jsonRegistryEntries
   .filter((name): name is string => Boolean(name))
 const moleculeRegistryNames = jsonRegistryEntries
   .filter((entry) => entry.source === 'molecules')
+  .map((entry) => entry.export ?? entry.name ?? entry.type)
+  .filter((name): name is string => Boolean(name))
+const organismRegistryNames = jsonRegistryEntries
+  .filter((entry) => entry.source === 'organisms')
   .map((entry) => entry.export ?? entry.name ?? entry.type)
   .filter((name): name is string => Boolean(name))
 
@@ -166,6 +171,11 @@ export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
   MoleculeComponents as Record<string, ComponentType<any>>
 )
 
+export const organismComponents: UIComponentRegistry = buildRegistryFromNames(
+  organismRegistryNames,
+  OrganismComponents as Record<string, ComponentType<any>>
+)
+
 export const jsonWrapperComponents: UIComponentRegistry = {
   Breadcrumb: BreadcrumbWrapper,
   SaveIndicator: SaveIndicatorWrapper,
@@ -222,6 +232,7 @@ export const uiComponentRegistry: UIComponentRegistry = {
   ...shadcnComponents,
   ...atomComponents,
   ...moleculeComponents,
+  ...organismComponents,
   ...jsonWrapperComponents,
   ...iconComponents,
 }
