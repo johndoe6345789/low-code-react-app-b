@@ -27,7 +27,7 @@
         "components:list": "node scripts/list-json-components.cjs",
         "components:generate-types": "tsx scripts/generate-json-ui-component-types.ts",
         "components:scan": "node scripts/scan-and-update-registry.cjs",
-        "components:validate": "node scripts/validate-supported-components.cjs"
+        "components:validate": "node scripts/validate-supported-components.cjs && tsx scripts/validate-json-registry.ts"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
