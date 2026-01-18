@@ -24,7 +24,7 @@ const toneStyles = {
 export function CicdBranchStrategySection() {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Branch Strategy</h2>
+      <h2 className="text-2xl font-semibold">{cicdData.branchStrategyTitle}</h2>
       <div className="grid gap-4">
         {cicdData.branches.map((branch) => {
           const styles = toneStyles[branch.tone]

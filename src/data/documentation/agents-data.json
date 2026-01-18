@@ -1,6 +1,15 @@
 {
   "title": "Agents Files",
   "subtitle": "AI agent configuration and service architecture",
+  "overviewTitle": "AI Service Architecture",
+  "coreServicesTitle": "Core AI Services",
+  "coreServicesDescription": "Primary modules handling AI operations",
+  "coreServicesFeaturesLabel": "Key Features:",
+  "integrationPointsTitle": "AI Integration Points",
+  "integrationPointsDescription": "Features enhanced by AI capabilities",
+  "promptEngineeringTitle": "Prompt Engineering",
+  "promptEngineeringDescription": "How we optimize AI interactions",
+  "futureEnhancementsTitle": "Future AI Enhancements",
   "overview": "CodeForge uses a modular AI service architecture that integrates OpenAI's GPT models across all features. Each designer has specialized prompts and validation logic to ensure high-quality generated code.",
   "coreServices": [
     {

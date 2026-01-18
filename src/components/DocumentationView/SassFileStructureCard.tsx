@@ -5,7 +5,7 @@ export function SassFileStructureCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>File Structure</CardTitle>
+        <CardTitle>{sassData.fileStructureTitle}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {sassData.fileStructure.map((item) => (

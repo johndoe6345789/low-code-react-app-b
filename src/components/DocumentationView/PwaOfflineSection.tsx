@@ -18,14 +18,14 @@ function OfflineList({ items, accent }: { items: string[]; accent: boolean }) {
 export function PwaOfflineSection() {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Offline Capabilities</h2>
+      <h2 className="text-2xl font-semibold">{pwaData.offlineTitle}</h2>
 
       <div className="grid md:grid-cols-2 gap-4">
         <Card className="border-accent/50">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <CheckCircle size={20} weight="fill" className="text-accent" />
-              Works Offline
+              {pwaData.offlineWorksTitle}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -37,7 +37,7 @@ export function PwaOfflineSection() {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Wrench size={20} weight="duotone" className="text-muted-foreground" />
-              Requires Internet
+              {pwaData.offlineRequiresTitle}
             </CardTitle>
           </CardHeader>
           <CardContent>

@@ -9,7 +9,7 @@ export function SassQuickStartCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Rocket size={20} weight="duotone" />
-          Quick Start Example
+          {sassData.quickStartTitle}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

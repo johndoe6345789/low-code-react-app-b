@@ -28,7 +28,7 @@ export function ReadmeTab() {
         <Separator />
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Overview</h2>
+          <h2 className="text-2xl font-semibold">{readmeData.sections.overviewTitle}</h2>
           <p className="text-foreground/90 leading-relaxed">{readmeData.overview}</p>
         </div>
 
@@ -36,7 +36,7 @@ export function ReadmeTab() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Rocket size={20} weight="duotone" />
-              Key Features
+              {readmeData.sections.featuresTitle}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -55,7 +55,7 @@ export function ReadmeTab() {
         </Card>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Getting Started</h2>
+          <h2 className="text-2xl font-semibold">{readmeData.sections.gettingStartedTitle}</h2>
           <Card>
             <CardContent className="pt-6 space-y-4">
               {readmeData.gettingStarted.map((step) => (
@@ -74,9 +74,9 @@ export function ReadmeTab() {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">AI-Powered Features</h2>
+          <h2 className="text-2xl font-semibold">{readmeData.sections.aiFeaturesTitle}</h2>
           <p className="text-foreground/90 leading-relaxed">
-            CodeForge integrates OpenAI across every designer to accelerate development:
+            {readmeData.sections.aiFeaturesDescription}
           </p>
           <div className="grid gap-3">
             {readmeData.aiFeatures.map((feature, idx) => (
@@ -86,11 +86,11 @@ export function ReadmeTab() {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Technology Stack</h2>
+          <h2 className="text-2xl font-semibold">{readmeData.sections.techStackTitle}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Frontend</CardTitle>
+                <CardTitle className="text-base">{readmeData.sections.techStackFrontendTitle}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm text-foreground/80">
@@ -105,7 +105,7 @@ export function ReadmeTab() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Backend & Tools</CardTitle>
+                <CardTitle className="text-base">{readmeData.sections.techStackBackendTitle}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm text-foreground/80">
@@ -125,7 +125,7 @@ export function ReadmeTab() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lightbulb size={20} weight="duotone" className="text-accent" />
-              Pro Tips
+              {readmeData.sections.proTipsTitle}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">

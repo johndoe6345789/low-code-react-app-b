@@ -6,8 +6,8 @@ export function PwaFeaturesCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>PWA Features</CardTitle>
-        <CardDescription>Native app capabilities in your browser</CardDescription>
+        <CardTitle>{pwaData.featuresTitle}</CardTitle>
+        <CardDescription>{pwaData.featuresDescription}</CardDescription>
       </CardHeader>
       <CardContent className="grid md:grid-cols-2 gap-4">
         {pwaData.features.map((feature) => (

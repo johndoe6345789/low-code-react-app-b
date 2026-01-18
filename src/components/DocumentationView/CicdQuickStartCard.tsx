@@ -8,7 +8,7 @@ export function CicdQuickStartCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Lightbulb size={20} weight="duotone" className="text-accent" />
-          Quick Start
+          {cicdData.quickStartTitle}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

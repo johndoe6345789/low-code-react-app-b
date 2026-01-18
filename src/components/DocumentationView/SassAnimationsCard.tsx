@@ -6,8 +6,8 @@ export function SassAnimationsCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Animation Classes</CardTitle>
-        <CardDescription>Pre-built animation utilities</CardDescription>
+        <CardTitle>{sassData.animationsTitle}</CardTitle>
+        <CardDescription>{sassData.animationsDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">

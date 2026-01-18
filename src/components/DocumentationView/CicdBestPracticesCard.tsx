@@ -8,7 +8,7 @@ export function CicdBestPracticesCard() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Rocket size={20} weight="duotone" />
-          Best Practices
+          {cicdData.bestPracticesTitle}
         </CardTitle>
       </CardHeader>
       <CardContent>

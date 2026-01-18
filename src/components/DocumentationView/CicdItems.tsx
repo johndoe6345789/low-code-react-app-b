@@ -2,11 +2,12 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { CheckCircle, GitBranch } from '@phosphor-icons/react'
 
-export function CICDPlatformItem({ name, file, description, features }: {
+export function CICDPlatformItem({ name, file, description, features, featureLabel }: {
   name: string
   file: string
   description: string
   features: string[]
+  featureLabel: string
 }) {
   return (
     <div className="space-y-3 border-l-2 border-accent pl-4">
@@ -19,7 +20,7 @@ export function CICDPlatformItem({ name, file, description, features }: {
         <p className="text-sm text-foreground/90">{description}</p>
       </div>
       <div className="space-y-1">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Key Features:</p>
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{featureLabel}</p>
         <ul className="space-y-1">
           {features.map((feature) => (
             <li key={feature} className="text-sm text-foreground/80 flex items-start gap-2">

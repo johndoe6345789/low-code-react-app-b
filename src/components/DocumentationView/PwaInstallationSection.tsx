@@ -26,10 +26,10 @@ function InstallationCard({ title, items }: { title: string; items: { title: str
 export function PwaInstallationSection() {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Installation</h2>
+      <h2 className="text-2xl font-semibold">{pwaData.installationTitle}</h2>
       <div className="grid md:grid-cols-2 gap-4">
-        <InstallationCard title="Desktop Installation" items={pwaData.installation.desktop} />
-        <InstallationCard title="Mobile Installation" items={pwaData.installation.mobile} />
+        <InstallationCard title={pwaData.installationDesktopTitle} items={pwaData.installation.desktop} />
+        <InstallationCard title={pwaData.installationMobileTitle} items={pwaData.installation.mobile} />
       </div>
     </div>
   )

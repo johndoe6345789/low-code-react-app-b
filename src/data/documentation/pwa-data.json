@@ -1,6 +1,19 @@
 {
   "title": "Progressive Web App",
   "subtitle": "Offline-first experience with native-like capabilities",
+  "overviewTitle": "Overview",
+  "featuresTitle": "PWA Features",
+  "featuresDescription": "Native app capabilities in your browser",
+  "installationTitle": "Installation",
+  "installationDesktopTitle": "Desktop Installation",
+  "installationMobileTitle": "Mobile Installation",
+  "settingsTitle": "PWA Settings",
+  "settingsDescription": "Navigate to the PWA tab to manage all Progressive Web App features:",
+  "settingsCardTitle": "Available Controls",
+  "offlineTitle": "Offline Capabilities",
+  "offlineWorksTitle": "Works Offline",
+  "offlineRequiresTitle": "Requires Internet",
+  "proTipsTitle": "Pro Tips",
   "overview": "CodeForge is a fully-featured Progressive Web App that can be installed on any device and works offline. With intelligent caching, automatic updates, and native app-like features, you can build applications anywhere, anytime.",
   "features": [
     {

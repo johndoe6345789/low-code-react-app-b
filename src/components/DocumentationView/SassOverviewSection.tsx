@@ -18,7 +18,7 @@ export function SassOverviewSection() {
       <Separator />
 
       <div className="space-y-4">
-        <h2 className="text-2xl font-semibold">Overview</h2>
+        <h2 className="text-2xl font-semibold">{sassData.overviewTitle}</h2>
         <p className="text-foreground/90 leading-relaxed">{sassData.overview}</p>
       </div>
     </div>

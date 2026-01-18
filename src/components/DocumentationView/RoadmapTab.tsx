@@ -6,13 +6,13 @@ import { RoadmapItem } from './RoadmapItem'
 const sections = [
   {
     key: 'completed',
-    title: 'Completed Features',
+    title: roadmapData.sections.completedTitle,
     icon: <CheckCircle size={24} weight="fill" className="text-green-500" />,
     items: roadmapData.completed
   },
   {
     key: 'planned',
-    title: 'Planned Features',
+    title: roadmapData.sections.plannedTitle,
     icon: <Clock size={24} weight="duotone" className="text-accent" />,
     items: roadmapData.planned
   }
