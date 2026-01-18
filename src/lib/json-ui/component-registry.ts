@@ -24,6 +24,7 @@ interface JsonRegistryEntry {
 
 interface JsonComponentRegistry {
   components?: JsonRegistryEntry[]
+  sourceRoots?: Record<string, string[]>
 }
 
 export interface DeprecatedComponentInfo {
@@ -32,6 +33,15 @@ export interface DeprecatedComponentInfo {
 }
 
 const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
+const sourceRoots = jsonRegistry.sourceRoots ?? {}
+const moduleMapsBySource = Object.fromEntries(
+  Object.entries(sourceRoots).map(([source, patterns]) => {
+    if (!patterns || patterns.length === 0) {
+      return [source, {}]
+    }
+    return [source, import.meta.glob(patterns, { eager: true })]
+  })
+) as Record<string, Record<string, unknown>>
 
 const getRegistryEntryKey = (entry: JsonRegistryEntry): string | undefined =>
   entry.name ?? entry.type

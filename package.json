@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "vite",
         "kill": "fuser -k 5000/tcp",
-        "prebuild": "mkdir -p /tmp/dist || true",
+        "predev": "npm run components:generate-types",
+        "prebuild": "npm run components:generate-types && mkdir -p /tmp/dist || true",
         "build": "tsc -b --noCheck && vite build",
         "lint": "eslint . --fix && npm run lint:schemas",
         "lint:check": "eslint . && npm run lint:schemas",
@@ -24,6 +25,7 @@
         "pages:generate": "node scripts/generate-page.js",
         "schemas:validate": "tsx scripts/validate-json-schemas.ts",
         "components:list": "node scripts/list-json-components.cjs",
+        "components:generate-types": "tsx scripts/generate-json-ui-component-types.ts",
         "components:scan": "node scripts/scan-and-update-registry.cjs",
         "components:validate": "node scripts/validate-supported-components.cjs"
     },

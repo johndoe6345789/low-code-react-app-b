@@ -12,7 +12,69 @@
     "data": "Data display and visualization components",
     "custom": "Custom domain-specific components"
   },
+  "sourceRoots": {
+    "atoms": ["@/components/atoms/*.tsx"],
+    "molecules": ["@/components/molecules/*.tsx"],
+    "organisms": ["@/components/organisms/*.tsx"],
+    "ui": ["@/components/ui/**/*.{ts,tsx}"],
+    "wrappers": ["@/lib/json-ui/wrappers/*.tsx"],
+    "icons": []
+  },
   "components": [
+    {
+      "type": "div",
+      "name": "div",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Generic block container",
+      "status": "supported",
+      "source": "primitive"
+    },
+    {
+      "type": "section",
+      "name": "section",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Semantic section container",
+      "status": "supported",
+      "source": "primitive"
+    },
+    {
+      "type": "article",
+      "name": "article",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Semantic article container",
+      "status": "supported",
+      "source": "primitive"
+    },
+    {
+      "type": "header",
+      "name": "header",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Semantic header container",
+      "status": "supported",
+      "source": "primitive"
+    },
+    {
+      "type": "footer",
+      "name": "footer",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Semantic footer container",
+      "status": "supported",
+      "source": "primitive"
+    },
+    {
+      "type": "main",
+      "name": "main",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "Semantic main container",
+      "status": "supported",
+      "source": "primitive"
+    },
     {
       "type": "ActionCard",
       "name": "ActionCard",
