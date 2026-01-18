@@ -1,4 +1,5 @@
 export { Breadcrumb } from './Breadcrumb'
+export { AppBranding } from './AppBranding'
 export { CanvasRenderer } from './CanvasRenderer'
 export { CodeExplanationDialog } from './CodeExplanationDialog'
 export { ComponentPalette } from './ComponentPalette'
