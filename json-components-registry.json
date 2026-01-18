@@ -2,7 +2,7 @@
   "$schema": "./schemas/json-components-registry-schema.json",
   "version": "2.0.0",
   "description": "Registry of all components in the application",
-  "lastUpdated": "2026-01-18T11:54:11.109Z",
+  "lastUpdated": "2026-01-18T12:05:00.000Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -611,7 +611,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Circular progress indicator",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -629,7 +629,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Visual section divider",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -719,7 +719,7 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Linear progress bar",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -2024,8 +2024,8 @@
   ],
   "statistics": {
     "total": 219,
-    "supported": 156,
-    "planned": 8,
+    "supported": 157,
+    "planned": 7,
     "jsonCompatible": 14,
     "maybeJsonCompatible": 41,
     "byCategory": {
