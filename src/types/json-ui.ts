@@ -98,6 +98,7 @@ export interface JSONUIContext {
 export interface ComponentRendererProps {
   component: UIComponent
   data: Record<string, unknown>
+  context?: Record<string, unknown>
   onEvent?: (componentId: string, event: string, eventData: unknown) => void
 }
 
