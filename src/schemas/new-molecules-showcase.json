@@ -181,29 +181,28 @@
               ]
             },
             {
-              "id": "loading-states-card",
+              "id": "loading-fallback-card",
               "type": "Card",
               "children": [
                 {
-                  "id": "loading-states-header",
+                  "id": "loading-fallback-header",
                   "type": "CardHeader",
                   "children": [
                     {
-                      "id": "loading-states-title",
+                      "id": "loading-fallback-title",
                       "type": "CardTitle",
-                      "props": { "children": "Loading States" }
+                      "props": { "children": "LoadingFallback" }
                     },
                     {
-                      "id": "loading-states-description",
+                      "id": "loading-fallback-description",
                       "type": "CardDescription",
-                      "props": { "children": "LoadingFallback and LoadingState components" }
+                      "props": { "children": "Inline loading message with spinner" }
                     }
                   ]
                 },
                 {
-                  "id": "loading-states-content",
+                  "id": "loading-fallback-content",
                   "type": "CardContent",
-                  "props": { "className": "space-y-4" },
                   "children": [
                     {
                       "id": "loading-fallback-wrapper",
@@ -218,13 +217,50 @@
                           }
                         }
                       ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "loading-state-card",
+              "type": "Card",
+              "children": [
+                {
+                  "id": "loading-state-header",
+                  "type": "CardHeader",
+                  "children": [
+                    {
+                      "id": "loading-state-title",
+                      "type": "CardTitle",
+                      "props": { "children": "LoadingState" }
                     },
+                    {
+                      "id": "loading-state-description",
+                      "type": "CardDescription",
+                      "props": { "children": "Standalone loading state with size variants" }
+                    }
+                  ]
+                },
+                {
+                  "id": "loading-state-content",
+                  "type": "CardContent",
+                  "props": { "className": "space-y-3" },
+                  "children": [
                     {
                       "id": "loading-state-demo",
                       "type": "LoadingState",
                       "props": {
                         "message": "Processing request...",
                         "size": "sm"
+                      }
+                    },
+                    {
+                      "id": "loading-state-demo-lg",
+                      "type": "LoadingState",
+                      "props": {
+                        "message": "Syncing workspace...",
+                        "size": "lg"
                       }
                     }
                   ]
