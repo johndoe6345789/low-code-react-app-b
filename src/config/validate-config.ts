@@ -57,11 +57,22 @@ export function validatePageConfig(): ValidationError[] {
       })
     }
 
-    if (!page.component) {
+    const isJsonPage = page.type === 'json' || Boolean(page.schemaPath)
+
+    if (!page.component && !isJsonPage) {
       errors.push({
         page: page.id || 'Unknown',
         field: 'component',
         message: 'Component name is required',
+        severity: 'error',
+      })
+    }
+
+    if (isJsonPage && !page.schemaPath && !page.schema) {
+      errors.push({
+        page: page.id || 'Unknown',
+        field: 'schemaPath',
+        message: 'schemaPath is required for JSON pages',
         severity: 'error',
       })
     }
