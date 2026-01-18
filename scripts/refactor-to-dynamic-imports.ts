@@ -38,12 +38,11 @@ const targetComponents = {
   atoms: ['Input']
 }
 
-async function refactorFile(filePath: string): Promise<boolean> {
+export async function refactorFile(filePath: string): Promise<boolean> {
   let content = await fs.readFile(filePath, 'utf-8')
   let modified = false
 
   // Find all imports to replace
-  const importLines: string[] = []
   const componentsToLoad = new Set<string>()
 
   for (const [category, components] of Object.entries(targetComponents)) {

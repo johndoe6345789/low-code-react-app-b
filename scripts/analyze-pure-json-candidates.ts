@@ -18,7 +18,6 @@ async function analyzeComponent(category: string, component: string): Promise<vo
   // Check if it's pure composition (only uses UI primitives)
   const hasBusinessLogic = /useState|useEffect|useCallback|useMemo|useReducer|useRef/.test(content)
   const hasComplexLogic = /if\s*\(.*\{|switch\s*\(|for\s*\(|while\s*\(/.test(content)
-  const hasCustomFunctions = /function\s+\w+\(|const\s+\w+\s*=\s*\([^)]*\)\s*=>/.test(content)
 
   // Extract what it imports
   const imports = content.match(/import\s+\{[^}]+\}\s+from\s+['"][^'"]+['"]/g) || []

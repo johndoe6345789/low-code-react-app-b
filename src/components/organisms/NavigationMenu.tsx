@@ -4,7 +4,7 @@ import { Sidebar, SidebarContent, SidebarHeader } from '@/components/ui/sidebar'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Collapsible, CollapsibleContent } from '@/components/ui/collapsible'
 import { CaretDoubleDown, CaretDoubleUp } from '@phosphor-icons/react'
-import { NavigationItem, NavigationGroupHeader } from '@/components/molecules'
+import { NavigationGroupHeader, Badge, Flex, Text, IconWrapper } from '@/components/atoms'
 import { navigationGroups, NavigationItemData } from '@/lib/navigation-config'
 import { FeatureToggles } from '@/types/project'
 import { useRoutePreload } from '@/hooks/use-route-preload'
@@ -126,19 +126,41 @@ function NavigationMenuGroupList({
                 {group.items.map((item) => {
                   if (!isItemVisible(item)) return null
 
+                  const isActive = activeTab === item.value
+                  const badge = getItemBadge(item)
+
                   return (
                     <div
                       key={item.id}
                       onMouseEnter={() => onItemHover(item.value)}
                       onMouseLeave={() => onItemLeave(item.value)}
                     >
-                      <NavigationItem
-                        icon={item.icon}
-                        label={item.label}
-                        isActive={activeTab === item.value}
-                        badge={getItemBadge(item)}
+                      {/* NavigationItem - inlined */}
+                      <button
                         onClick={() => onItemClick(item.value)}
-                      />
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                          isActive
+                            ? 'bg-primary text-primary-foreground'
+                            : 'hover:bg-muted text-foreground'
+                        }`}
+                      >
+                        <IconWrapper
+                          icon={item.icon}
+                          size="md"
+                          variant={isActive ? 'default' : 'muted'}
+                        />
+                        <Text className="flex-1 text-left font-medium" variant="small">
+                          {item.label}
+                        </Text>
+                        {badge !== undefined && badge > 0 && (
+                          <Badge
+                            variant={isActive ? 'secondary' : 'destructive'}
+                            className="ml-auto"
+                          >
+                            {badge}
+                          </Badge>
+                        )}
+                      </button>
                     </div>
                   )
                 })}
