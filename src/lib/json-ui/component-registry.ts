@@ -6,25 +6,51 @@ import { Label } from '@/components/ui/label'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Alert as ShadcnAlert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Switch } from '@/components/ui/switch'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Table as ShadcnTable, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton as ShadcnSkeleton } from '@/components/ui/skeleton'
 import { Progress } from '@/components/ui/progress'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Heading } from '@/components/atoms/Heading'
 import { Text } from '@/components/atoms/Text'
+import { TextArea } from '@/components/atoms/TextArea'
 import { List as ListComponent } from '@/components/atoms/List'
 import { Grid } from '@/components/atoms/Grid'
+import { Stack } from '@/components/atoms/Stack'
+import { Flex } from '@/components/atoms/Flex'
+import { Container } from '@/components/atoms/Container'
+import { Link } from '@/components/atoms/Link'
+import { Image } from '@/components/atoms/Image'
+import { Avatar as AtomAvatar } from '@/components/atoms/Avatar'
+import { Code } from '@/components/atoms/Code'
+import { Tag } from '@/components/atoms/Tag'
+import { Spinner } from '@/components/atoms/Spinner'
+import { Skeleton as AtomSkeleton } from '@/components/atoms/Skeleton'
+import { Slider } from '@/components/atoms/Slider'
+import { NumberInput } from '@/components/atoms/NumberInput'
+import { Radio } from '@/components/atoms/Radio'
+import { Alert as AtomAlert } from '@/components/atoms/Alert'
+import { InfoBox } from '@/components/atoms/InfoBox'
+import { EmptyState } from '@/components/atoms/EmptyState'
+import { Table as AtomTable } from '@/components/atoms/Table'
+import { KeyValue } from '@/components/atoms/KeyValue'
+import { StatCard } from '@/components/atoms/StatCard'
 import { StatusBadge } from '@/components/atoms/StatusBadge'
 import { DataCard } from '@/components/molecules/DataCard'
 import { SearchInput } from '@/components/molecules/SearchInput'
 import { ActionBar } from '@/components/molecules/ActionBar'
+import { AppBranding } from '@/components/molecules/AppBranding'
+import { LabelWithBadge } from '@/components/molecules/LabelWithBadge'
+import { EmptyEditorState } from '@/components/molecules/EmptyEditorState'
+import { LoadingFallback } from '@/components/molecules/LoadingFallback'
+import { LoadingState } from '@/components/molecules/LoadingState'
+import { NavigationGroupHeader } from '@/components/molecules/NavigationGroupHeader'
 import { 
   ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
   Funnel, Download, Upload, PencilSimple, Trash, Eye, EyeClosed, 
@@ -70,7 +96,7 @@ export const shadcnComponents: UIComponentRegistry = {
   CardFooter,
   Badge,
   Separator,
-  Alert,
+  Alert: ShadcnAlert,
   AlertDescription,
   AlertTitle,
   Switch,
@@ -82,7 +108,7 @@ export const shadcnComponents: UIComponentRegistry = {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
+  Table: ShadcnTable,
   TableBody,
   TableCell,
   TableHead,
@@ -98,22 +124,51 @@ export const shadcnComponents: UIComponentRegistry = {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  Skeleton,
+  Skeleton: ShadcnSkeleton,
   Progress,
-  Avatar,
+  Avatar: ShadcnAvatar,
   AvatarFallback,
   AvatarImage,
 }
 
-export const customComponents: UIComponentRegistry = {
+export const atomComponents: UIComponentRegistry = {
   Heading,
   Text,
+  TextArea,
   List: ListComponent,
   Grid,
+  Stack,
+  Flex,
+  Container,
+  Link,
+  Image,
+  Avatar: AtomAvatar,
+  Code,
+  Tag,
+  Spinner,
+  Skeleton: AtomSkeleton,
+  Slider,
+  NumberInput,
+  Radio,
+  Alert: AtomAlert,
+  InfoBox,
+  EmptyState,
+  Table: AtomTable,
+  KeyValue,
+  StatCard,
   StatusBadge,
+}
+
+export const moleculeComponents: UIComponentRegistry = {
   DataCard,
   SearchInput,
   ActionBar,
+  AppBranding,
+  LabelWithBadge,
+  EmptyEditorState,
+  LoadingFallback,
+  LoadingState,
+  NavigationGroupHeader,
 }
 
 export const iconComponents: UIComponentRegistry = {
@@ -160,7 +215,8 @@ export const iconComponents: UIComponentRegistry = {
 export const uiComponentRegistry: UIComponentRegistry = {
   ...primitiveComponents,
   ...shadcnComponents,
-  ...customComponents,
+  ...atomComponents,
+  ...moleculeComponents,
   ...iconComponents,
 }
 
