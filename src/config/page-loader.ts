@@ -1,4 +1,5 @@
 import pagesConfig from './pages.json'
+import { PageSchema } from '@/types/json-ui'
 import { FeatureToggles } from '@/types/project'
 
 export interface PropConfig {
@@ -31,7 +32,10 @@ export interface PageConfig {
   id: string
   title: string
   icon: string
-  component: string
+  component?: string
+  type?: 'json' | 'component'
+  schemaPath?: string
+  schema?: PageSchema
   enabled: boolean
   isRoot?: boolean
   toggleKey?: string

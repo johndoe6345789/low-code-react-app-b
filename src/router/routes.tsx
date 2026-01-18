@@ -2,9 +2,11 @@ import { lazy, Suspense } from 'react'
 import { RouteObject, Navigate } from 'react-router-dom'
 import { JSONSchemaPageLoader } from '@/components/JSONSchemaPageLoader'
 import { LoadingFallback } from '@/components/molecules'
+import { JSONSchemaPageLoader } from '@/components/JSONSchemaPageLoader'
 import { NotFoundPage } from '@/components/NotFoundPage'
 import { getEnabledPages, resolveProps } from '@/config/page-loader'
 import { ComponentRegistry } from '@/lib/component-registry'
+import { PageRenderer } from '@/lib/json-ui/page-renderer'
 import { FeatureToggles } from '@/types/project'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 
@@ -93,6 +95,21 @@ export function createRoutes(
   const rootPage = enabledPages.find(p => p.isRoot)
   console.log('[ROUTES] 🏠 Root page search result:', rootPage ? `Found: ${rootPage.id} (${rootPage.component})` : 'NOT FOUND - will redirect to /dashboard')
 
+  const renderJsonPage = (page: typeof enabledPages[number]) => {
+    if (page.schema) {
+      console.log('[ROUTES] 🧾 Rendering preloaded JSON schema for page:', page.id)
+      return <PageRenderer schema={page.schema} />
+    }
+
+    if (page.schemaPath) {
+      console.log('[ROUTES] 🧾 Rendering JSON schema loader for page:', page.id)
+      return <JSONSchemaPageLoader schemaPath={page.schemaPath} />
+    }
+
+    console.error('[ROUTES] ❌ JSON page missing schemaPath:', page.id)
+    return <LoadingFallback message={`Schema path missing for JSON page: ${page.id}`} />
+  }
+
   const routes: RouteObject[] = enabledPages
     .filter(p => !p.isRoot)
     .map(page => {
@@ -102,18 +119,10 @@ export function createRoutes(
         ? resolveProps(page.props, stateContext, actionContext)
         : {}
 
-      if (page.jsonSchemaPath) {
-        const { data, functions } = resolveJsonBindings(page.jsonProps)
-
+      if (page.type === 'json' || page.schemaPath) {
         return {
           path: `/${page.id}`,
-          element: (
-            <JSONSchemaPageLoader
-              schemaPath={page.jsonSchemaPath}
-              data={data}
-              functions={functions}
-            />
-          )
+          element: renderJsonPage(page)
         }
       }
 
@@ -121,6 +130,14 @@ export function createRoutes(
         console.log('[ROUTES] 🔀 Page requires resizable layout:', page.id)
         const config = page.resizableConfig
         const leftProps = resolveProps(config.leftProps, stateContext, actionContext)
+
+        if (!page.component) {
+          console.error('[ROUTES] ❌ Resizable page missing component:', page.id)
+          return {
+            path: `/${page.id}`,
+            element: <LoadingFallback message={`Component missing for page: ${page.id}`} />
+          }
+        }
 
         return {
           path: `/${page.id}`,
@@ -136,6 +153,14 @@ export function createRoutes(
         }
       }
 
+      if (!page.component) {
+        console.error('[ROUTES] ❌ Page missing component:', page.id)
+        return {
+          path: `/${page.id}`,
+          element: <LoadingFallback message={`Component missing for page: ${page.id}`} />
+        }
+      }
+
       return {
         path: `/${page.id}`,
         element: <LazyComponent componentName={page.component} props={props} />
@@ -147,19 +172,17 @@ export function createRoutes(
     const props = rootPage.props 
       ? resolveProps(rootPage.props, stateContext, actionContext)
       : {}
-
-    if (rootPage.jsonSchemaPath) {
-      const { data, functions } = resolveJsonBindings(rootPage.jsonProps)
-
+    
+    if (rootPage.type === 'json' || rootPage.schemaPath) {
       routes.push({
         path: '/',
-        element: (
-          <JSONSchemaPageLoader
-            schemaPath={rootPage.jsonSchemaPath}
-            data={data}
-            functions={functions}
-          />
-        )
+        element: renderJsonPage(rootPage)
+      })
+    } else if (!rootPage.component) {
+      console.error('[ROUTES] ❌ Root page missing component:', rootPage.id)
+      routes.push({
+        path: '/',
+        element: <LoadingFallback message="Root page component missing" />
       })
     } else {
       routes.push({

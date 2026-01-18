@@ -1,3 +1,4 @@
+import { PageSchema } from './json-ui'
 import { PropConfig } from './prop-config'
 import { ResizableConfig } from './resizable-config'
 
@@ -6,7 +7,9 @@ export interface PageConfig {
   title: string
   icon: string
   component?: string
-  schema?: string
+  type?: 'json' | 'component'
+  schemaPath?: string
+  schema?: PageSchema
   enabled: boolean
   isRoot?: boolean
   toggleKey?: string
