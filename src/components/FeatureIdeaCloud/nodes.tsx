@@ -5,7 +5,10 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { DotsThree } from '@phosphor-icons/react'
 import { FeatureIdea, IdeaGroup } from './types'
-import { PRIORITY_COLORS, STATUS_COLORS, GROUP_COLORS } from './constants'
+import { PRIORITY_COLORS, STATUS_COLORS } from './constants'
+import groupColorsData from './data/group-colors.json'
+
+const GROUP_COLORS = groupColorsData as Array<{ name: string; value: string; bg: string; border: string }>
 
 export function GroupNode({ data, selected }: NodeProps<IdeaGroup>) {
   const colorScheme = GROUP_COLORS.find(c => c.value === data.color) || GROUP_COLORS[0]
