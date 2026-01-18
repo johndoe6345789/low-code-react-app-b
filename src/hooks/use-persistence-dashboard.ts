@@ -9,12 +9,7 @@ import {
 } from '@/store/slices/syncSlice'
 import copy from '@/data/persistence-dashboard.json'
 
-export function usePersistenceDashboard() {
-  const dispatch = useAppDispatch()
-  const { status, metrics, autoSyncStatus, syncNow, configureAutoSync } = usePersistence()
-  const [autoSyncEnabled, setAutoSyncEnabled] = useState(false)
-  const [syncing, setSyncing] = useState(false)
-
+const useFlaskConnectionPolling = (dispatch: ReturnType<typeof useAppDispatch>) => {
   useEffect(() => {
     dispatch(checkFlaskConnection())
     const interval = setInterval(() => {
@@ -23,6 +18,15 @@ export function usePersistenceDashboard() {
 
     return () => clearInterval(interval)
   }, [dispatch])
+}
+
+export function usePersistenceDashboard() {
+  const dispatch = useAppDispatch()
+  const { status, metrics, autoSyncStatus, syncNow, configureAutoSync } = usePersistence()
+  const [autoSyncEnabled, setAutoSyncEnabled] = useState(false)
+  const [syncing, setSyncing] = useState(false)
+
+  useFlaskConnectionPolling(dispatch)
 
   const handleSyncToFlask = async () => {
     setSyncing(true)
@@ -67,16 +71,29 @@ export function usePersistenceDashboard() {
     dispatch(checkFlaskConnection())
   }
 
-  return {
-    status,
-    metrics,
-    autoSyncStatus,
-    autoSyncEnabled,
-    syncing,
+  const flags = {
+    isConnected: status.flaskConnected,
+    isSyncing: syncing,
+    hasError: Boolean(status.error),
+    canSyncToFlask: status.flaskConnected && !syncing,
+    canSyncFromFlask: status.flaskConnected && !syncing,
+    canTriggerManualSync: autoSyncStatus.enabled && !syncing,
+  }
+
+  const handlers = {
     handleSyncToFlask,
     handleSyncFromFlask,
     handleManualSync,
     handleAutoSyncToggle,
     handleCheckConnection,
+  }
+
+  return {
+    status,
+    metrics,
+    autoSyncStatus,
+    autoSyncEnabled,
+    flags,
+    handlers,
   }
 }
