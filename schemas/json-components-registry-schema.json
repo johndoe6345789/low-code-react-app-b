@@ -85,6 +85,9 @@
           "load": {
             "type": "object",
             "properties": {
+              "path": {
+                "type": "string"
+              },
               "export": {
                 "type": "string"
               }
