@@ -25,9 +25,12 @@
     },
     {
       "id": "filteredFiles",
-      "type": "computed",
-      "compute": "(data) => {\n  if (!data.searchQuery) return data.files;\n  return data.files.filter(f => f.name.toLowerCase().includes(data.searchQuery.toLowerCase()));\n}",
-      "dependencies": ["files", "searchQuery"]
+      "type": "static",
+      "expression": "data.files",
+      "dependencies": [
+        "files",
+        "searchQuery"
+      ]
     }
   ],
   "components": [

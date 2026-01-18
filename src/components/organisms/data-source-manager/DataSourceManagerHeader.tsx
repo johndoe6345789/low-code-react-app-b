@@ -5,7 +5,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ActionButton, Heading, Stack, Text } from '@/components/atoms'
-import { Plus, Database, Function, FileText } from '@phosphor-icons/react'
+import { Plus, Database, FileText } from '@phosphor-icons/react'
 import { DataSourceType } from '@/types/json-ui'
 
 interface DataSourceManagerHeaderCopy {
@@ -14,7 +14,6 @@ interface DataSourceManagerHeaderCopy {
   addLabel: string
   menu: {
     kv: string
-    computed: string
     static: string
   }
 }
@@ -48,10 +47,6 @@ export function DataSourceManagerHeader({ copy, onAdd }: DataSourceManagerHeader
           <DropdownMenuItem onClick={() => onAdd('kv')}>
             <Database className="w-4 h-4 mr-2" />
             {copy.menu.kv}
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onAdd('computed')}>
-            <Function className="w-4 h-4 mr-2" />
-            {copy.menu.computed}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onAdd('static')}>
             <FileText className="w-4 h-4 mr-2" />

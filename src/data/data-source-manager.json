@@ -1,14 +1,13 @@
 {
   "header": {
     "title": "Data Sources",
-    "description": "Manage KV storage, computed values, and static data"
+    "description": "Manage KV storage and static data"
   },
   "actions": {
     "add": "Add Data Source"
   },
   "menu": {
     "kv": "KV Store",
-    "computed": "Computed Value",
     "static": "Static Data"
   },
   "emptyState": {
@@ -17,12 +16,11 @@
   },
   "groups": {
     "kv": "KV Store",
-    "static": "Static Data",
-    "computed": "Computed Values"
+    "static": "Static Data"
   },
   "toasts": {
     "deleteBlockedTitle": "Cannot delete",
-    "deleteBlockedDescription": "This source is used by {count} computed {noun}",
+    "deleteBlockedDescription": "This source is used by {count} dependent {noun}",
     "deleted": "Data source deleted",
     "updated": "Data source updated"
   }

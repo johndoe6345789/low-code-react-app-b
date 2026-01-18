@@ -13,8 +13,8 @@ export function useDataSources(dataSources: DataSource[]) {
     [dataSources]
   )
 
-  const computedSources = useMemo(
-    () => dataSources.filter((ds) => ds.type === 'computed'),
+  const derivedSources = useMemo(
+    () => dataSources.filter((ds) => ds.expression || ds.valueTemplate),
     [dataSources]
   )
 
@@ -54,8 +54,8 @@ export function useDataSources(dataSources: DataSource[]) {
   const computedData = useMemo(() => {
     const result: Record<string, any> = {}
     
-    computedSources.forEach((ds) => {
-      const evaluationContext = { data }
+    derivedSources.forEach((ds) => {
+      const evaluationContext = { data: { ...data, ...result } }
       if (ds.expression) {
         result[ds.id] = evaluateExpression(ds.expression, evaluationContext)
         return
@@ -70,7 +70,7 @@ export function useDataSources(dataSources: DataSource[]) {
     })
     
     return result
-  }, [computedSources, data])
+  }, [derivedSources, data])
 
   const allData = useMemo(
     () => ({ ...data, ...computedData }),

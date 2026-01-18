@@ -32,15 +32,20 @@
     },
     {
       "id": "selectedWorkflow",
-      "type": "computed",
-      "compute": "(data) => data.workflows?.find(w => w.id === data.selectedWorkflowId) || null",
-      "dependencies": ["workflows", "selectedWorkflowId"]
+      "type": "static",
+      "expression": "data.workflows.find(id === data.selectedWorkflowId)",
+      "dependencies": [
+        "workflows",
+        "selectedWorkflowId"
+      ]
     },
     {
       "id": "workflowCount",
-      "type": "computed",
-      "compute": "(data) => (data.workflows || []).length",
-      "dependencies": ["workflows"]
+      "type": "static",
+      "expression": "data.workflows.length",
+      "dependencies": [
+        "workflows"
+      ]
     }
   ],
   "components": [
@@ -71,7 +76,9 @@
                   "props": {
                     "className": "text-xl font-bold mb-2 flex items-center gap-2"
                   },
-                  "children": ["Workflows"]
+                  "children": [
+                    "Workflows"
+                  ]
                 },
                 {
                   "id": "create-button",
@@ -117,7 +124,9 @@
                   "props": {
                     "className": "text-sm text-muted-foreground"
                   },
-                  "children": ["Status Filter"]
+                  "children": [
+                    "Status Filter"
+                  ]
                 }
               ]
             },
@@ -136,7 +145,9 @@
                   "props": {
                     "className": "text-center py-8 text-muted-foreground"
                   },
-                  "children": ["No workflows yet"]
+                  "children": [
+                    "No workflows yet"
+                  ]
                 }
               ]
             }
@@ -150,122 +161,129 @@
           },
           "children": [
             {
-              "id": "empty-state",
+              "id": "workflow-selection-state",
               "type": "div",
-              "props": {
-                "className": "flex-1 flex items-center justify-center"
-              },
               "conditional": {
-                "if": "!selectedWorkflow"
-              },
-              "children": [
-                {
-                  "id": "empty-state-content",
+                "if": "selectedWorkflow != null",
+                "then": {
+                  "id": "workflow-editor",
                   "type": "div",
                   "props": {
-                    "className": "text-center space-y-4"
+                    "className": "flex-1 p-6 overflow-auto"
                   },
                   "children": [
                     {
-                      "type": "icon",
+                      "id": "workflow-header",
+                      "type": "div",
                       "props": {
-                        "name": "GitBranch",
-                        "className": "h-20 w-20 text-muted-foreground/50 mx-auto",
-                        "weight": "duotone"
-                      }
-                    },
-                    {
-                      "id": "empty-state-title",
-                      "type": "h3",
-                      "props": {
-                        "className": "text-2xl font-bold text-muted-foreground"
-                      },
-                      "children": ["No Workflow Selected"]
-                    },
-                    {
-                      "id": "empty-state-description",
-                      "type": "p",
-                      "props": {
-                        "className": "text-muted-foreground"
-                      },
-                      "children": ["Select a workflow from the sidebar or create a new one"]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "workflow-editor",
-              "type": "div",
-              "props": {
-                "className": "flex-1 p-6 overflow-auto"
-              },
-              "conditional": {
-                "if": "selectedWorkflow"
-              },
-              "children": [
-                {
-                  "id": "workflow-header",
-                  "type": "div",
-                  "props": {
-                    "className": "mb-6"
-                  },
-                  "children": [
-                    {
-                      "id": "workflow-name",
-                      "type": "h1",
-                      "props": {
-                        "className": "text-3xl font-bold mb-2"
-                      },
-                      "bindings": {
-                        "children": {
-                          "source": "selectedWorkflow",
-                          "path": "name"
-                        }
-                      }
-                    },
-                    {
-                      "id": "workflow-description",
-                      "type": "p",
-                      "props": {
-                        "className": "text-muted-foreground"
-                      },
-                      "bindings": {
-                        "children": {
-                          "source": "selectedWorkflow",
-                          "path": "description"
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "id": "workflow-canvas",
-                  "type": "Card",
-                  "props": {
-                    "className": "min-h-[400px] bg-muted/20"
-                  },
-                  "children": [
-                    {
-                      "id": "canvas-content",
-                      "type": "CardContent",
-                      "props": {
-                        "className": "p-6"
+                        "className": "mb-6"
                       },
                       "children": [
                         {
-                          "id": "canvas-placeholder",
-                          "type": "div",
+                          "id": "workflow-name",
+                          "type": "h1",
                           "props": {
-                            "className": "text-center text-muted-foreground py-12"
+                            "className": "text-3xl font-bold mb-2"
                           },
-                          "children": ["Workflow canvas - Add nodes to build your workflow"]
+                          "bindings": {
+                            "children": {
+                              "source": "selectedWorkflow",
+                              "path": "name"
+                            }
+                          }
+                        },
+                        {
+                          "id": "workflow-description",
+                          "type": "p",
+                          "props": {
+                            "className": "text-muted-foreground"
+                          },
+                          "bindings": {
+                            "children": {
+                              "source": "selectedWorkflow",
+                              "path": "description"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": "workflow-canvas",
+                      "type": "Card",
+                      "props": {
+                        "className": "min-h-[400px] bg-muted/20"
+                      },
+                      "children": [
+                        {
+                          "id": "canvas-content",
+                          "type": "CardContent",
+                          "props": {
+                            "className": "p-6"
+                          },
+                          "children": [
+                            {
+                              "id": "canvas-placeholder",
+                              "type": "div",
+                              "props": {
+                                "className": "text-center text-muted-foreground py-12"
+                              },
+                              "children": [
+                                "Workflow canvas - Add nodes to build your workflow"
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "else": {
+                  "id": "empty-state",
+                  "type": "div",
+                  "props": {
+                    "className": "flex-1 flex items-center justify-center"
+                  },
+                  "children": [
+                    {
+                      "id": "empty-state-content",
+                      "type": "div",
+                      "props": {
+                        "className": "text-center space-y-4"
+                      },
+                      "children": [
+                        {
+                          "type": "icon",
+                          "props": {
+                            "name": "GitBranch",
+                            "className": "h-20 w-20 text-muted-foreground/50 mx-auto",
+                            "weight": "duotone"
+                          }
+                        },
+                        {
+                          "id": "empty-state-title",
+                          "type": "h3",
+                          "props": {
+                            "className": "text-2xl font-bold text-muted-foreground"
+                          },
+                          "children": [
+                            "No Workflow Selected"
+                          ]
+                        },
+                        {
+                          "id": "empty-state-description",
+                          "type": "p",
+                          "props": {
+                            "className": "text-muted-foreground"
+                          },
+                          "children": [
+                            "Select a workflow from the sidebar or create a new one"
+                          ]
                         }
                       ]
                     }
                   ]
                 }
-              ]
+              }
             }
           ]
         }

@@ -22,13 +22,13 @@
     },
     {
       "id": "filteredUsers",
-      "type": "computed",
+      "type": "static",
       "expression": "data.users",
       "dependencies": ["users", "filterQuery"]
     },
     {
       "id": "stats",
-      "type": "computed",
+      "type": "static",
       "valueTemplate": {
         "total": "data.users.length",
         "active": "data.users.filter(status === 'active').length",

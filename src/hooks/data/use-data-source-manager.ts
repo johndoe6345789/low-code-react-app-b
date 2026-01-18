@@ -9,7 +9,6 @@ export function useDataSourceManager(initialSources: DataSource[] = []) {
       id: `ds-${Date.now()}`,
       type,
       ...(type === 'kv' && { key: '', defaultValue: null }),
-      ...(type === 'computed' && { expression: '', dependencies: [] }),
       ...(type === 'static' && { defaultValue: null }),
     }
     
@@ -33,7 +32,6 @@ export function useDataSourceManager(initialSources: DataSource[] = []) {
 
   const getDependents = useCallback((sourceId: string) => {
     return dataSources.filter(ds => 
-      ds.type === 'computed' && 
       ds.dependencies?.includes(sourceId)
     )
   }, [dataSources])

@@ -220,7 +220,7 @@ export const PageUISchema = z.object({
   tables: z.array(TableSchema).optional(),
   menus: z.array(MenuSchema).optional(),
   dataSources: z.record(z.string(), z.object({
-    type: z.enum(['kv', 'api', 'computed', 'static']),
+    type: z.enum(['kv', 'api', 'static']),
     config: z.any(),
   })).optional(),
 })
@@ -237,13 +237,6 @@ export type DataSourceConfig<T = unknown> =
       type: 'api'
       config: {
         url?: string
-        defaultValue?: T
-        transform?: (data: unknown) => T
-      }
-    }
-  | {
-      type: 'computed'
-      config: {
         defaultValue?: T
         transform?: (data: unknown) => T
       }
