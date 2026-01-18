@@ -1,10 +1,8 @@
-import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useStorageBackend } from '@/hooks/use-unified-storage'
 import {
   Database,
   HardDrive,
@@ -15,8 +13,7 @@ import {
   CloudArrowUp,
 } from '@phosphor-icons/react'
 import { storageSettingsCopy, getBackendCopy, type StorageBackendKey } from '@/components/storage/storageSettingsConfig'
-import { useStorageSwitchHandlers } from '@/components/storage/useStorageSwitchHandlers'
-import { useStorageDataHandlers } from '@/components/storage/useStorageDataHandlers'
+import { useStorageSettingsHandlers } from '@/components/storage/useStorageSettingsHandlers'
 
 const getBackendIcon = (backend: StorageBackendKey | null) => {
   switch (backend) {
@@ -186,29 +183,18 @@ export function StorageSettingsPanel() {
   const {
     backend,
     isLoading,
-    switchToFlask,
-    switchToSQLite,
-    switchToIndexedDB,
-    exportData,
-    importData,
-  } = useStorageBackend()
-
-  const [flaskUrl, setFlaskUrl] = useState(
-    localStorage.getItem('codeforge-flask-url') || storageSettingsCopy.panel.flaskUrlPlaceholder
-  )
-
-  const { isSwitching, handleSwitchToFlask, handleSwitchToSQLite, handleSwitchToIndexedDB } =
-    useStorageSwitchHandlers({
-      backend,
-      flaskUrl,
-      switchToFlask,
-      switchToSQLite,
-      switchToIndexedDB,
-    })
-
-  const { isExporting, isImporting, handleExport, handleImport } = useStorageDataHandlers({
-    exportData,
-    importData,
+    flaskUrl,
+    setFlaskUrl,
+    isSwitching,
+    handleSwitchToFlask,
+    handleSwitchToSQLite,
+    handleSwitchToIndexedDB,
+    isExporting,
+    isImporting,
+    handleExport,
+    handleImport,
+  } = useStorageSettingsHandlers({
+    defaultFlaskUrl: storageSettingsCopy.panel.flaskUrlPlaceholder,
     exportFilename: () => {
       const dateStamp = new Date().toISOString().split('T')[0]
       return `${storageSettingsCopy.panel.exportFilenamePrefix}-${dateStamp}.json`
