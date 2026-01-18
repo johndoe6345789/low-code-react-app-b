@@ -1069,7 +1069,7 @@
       "category": "feedback",
       "canHaveChildren": false,
       "description": "Error state badge",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1145,7 +1145,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "Toast notification",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1182,7 +1182,7 @@
       "category": "feedback",
       "canHaveChildren": false,
       "description": "Status indicator icon",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1200,7 +1200,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Styled data list",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1219,7 +1219,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Advanced data table with sorting and filtering",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1285,7 +1285,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Metric display card",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -1350,7 +1350,7 @@
       "category": "data",
       "canHaveChildren": false,
       "description": "Timeline visualization",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -2023,10 +2023,10 @@
     }
   ],
   "statistics": {
-    "total": 217,
-    "supported": 151,
-    "planned": 12,
-    "jsonCompatible": 13,
+    "total": 219,
+    "supported": 154,
+    "planned": 10,
+    "jsonCompatible": 14,
     "maybeJsonCompatible": 41,
     "byCategory": {
       "layout": 25,

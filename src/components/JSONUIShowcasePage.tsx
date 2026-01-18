@@ -3,11 +3,13 @@ import { AtomicComponentDemo } from '@/components/AtomicComponentDemo'
 import { DashboardDemoPage } from '@/components/DashboardDemoPage'
 import { PageRenderer } from '@/lib/json-ui/page-renderer'
 import { hydrateSchema } from '@/schemas/schema-loader'
+import pageSchemasJson from '@/schemas/page-schemas.json'
 import todoListJson from '@/schemas/todo-list.json'
 import newMoleculesShowcaseJson from '@/schemas/new-molecules-showcase.json'
 
 const todoListSchema = hydrateSchema(todoListJson)
 const newMoleculesShowcaseSchema = hydrateSchema(newMoleculesShowcaseJson)
+const dataComponentsDemoSchema = hydrateSchema(pageSchemasJson.dataComponentsDemoSchema)
 
 export function JSONUIShowcasePage() {
   return (
@@ -24,7 +26,9 @@ export function JSONUIShowcasePage() {
           </div>
           <TabsList className="w-full justify-start">
             <TabsTrigger value="atomic">Atomic Components</TabsTrigger>
+            <TabsTrigger value="feedback">Feedback Atoms</TabsTrigger>
             <TabsTrigger value="molecules">New Molecules</TabsTrigger>
+            <TabsTrigger value="data-components">Data Components</TabsTrigger>
             <TabsTrigger value="dashboard">JSON Dashboard</TabsTrigger>
             <TabsTrigger value="todos">JSON Todo List</TabsTrigger>
           </TabsList>
@@ -34,9 +38,17 @@ export function JSONUIShowcasePage() {
           <TabsContent value="atomic" className="h-full m-0 data-[state=active]:block">
             <AtomicComponentDemo />
           </TabsContent>
+
+          <TabsContent value="feedback" className="h-full m-0 data-[state=active]:block">
+            <PageRenderer schema={feedbackAtomsDemoSchema} />
+          </TabsContent>
           
           <TabsContent value="molecules" className="h-full m-0 data-[state=active]:block">
             <PageRenderer schema={newMoleculesShowcaseSchema} />
+          </TabsContent>
+
+          <TabsContent value="data-components" className="h-full m-0 data-[state=active]:block">
+            <PageRenderer schema={dataComponentsDemoSchema} />
           </TabsContent>
           
           <TabsContent value="dashboard" className="h-full m-0 data-[state=active]:block">

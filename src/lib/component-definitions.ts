@@ -7,6 +7,23 @@ export interface ComponentDefinition {
   icon: string
   defaultProps?: Record<string, any>
   canHaveChildren?: boolean
+  props?: ComponentPropDefinition[]
+  events?: ComponentEventDefinition[]
+}
+
+export interface ComponentPropDefinition {
+  name: string
+  type: string
+  description: string
+  required?: boolean
+  defaultValue?: string
+  options?: string[]
+  supportsBinding?: boolean
+}
+
+export interface ComponentEventDefinition {
+  name: string
+  description: string
 }
 
 export const componentDefinitions: ComponentDefinition[] = [
@@ -269,6 +286,107 @@ export const componentDefinitions: ComponentDefinition[] = [
     icon: 'Circle',
     defaultProps: { status: 'active', children: 'Active' }
   },
+  {
+    type: 'ErrorBadge',
+    label: 'Error Badge',
+    category: 'feedback',
+    icon: 'WarningCircle',
+    defaultProps: { count: 3, variant: 'destructive', size: 'md' },
+    props: [
+      {
+        name: 'count',
+        type: 'number',
+        description: 'Number of errors to display. Hidden when set to 0.',
+        required: true,
+        supportsBinding: true,
+      },
+      {
+        name: 'variant',
+        type: 'string',
+        description: 'Visual variant for the badge.',
+        defaultValue: 'destructive',
+        options: ['default', 'destructive'],
+      },
+      {
+        name: 'size',
+        type: 'string',
+        description: 'Badge size.',
+        defaultValue: 'md',
+        options: ['sm', 'md'],
+      },
+    ],
+  },
+  {
+    type: 'Notification',
+    label: 'Notification',
+    category: 'feedback',
+    icon: 'Info',
+    defaultProps: { type: 'info', title: 'Notification', message: 'Details go here.' },
+    props: [
+      {
+        name: 'type',
+        type: 'string',
+        description: 'Notification style variant.',
+        required: true,
+        options: ['info', 'success', 'warning', 'error'],
+      },
+      {
+        name: 'title',
+        type: 'string',
+        description: 'Primary notification title.',
+        required: true,
+        supportsBinding: true,
+      },
+      {
+        name: 'message',
+        type: 'string',
+        description: 'Optional supporting message text.',
+        supportsBinding: true,
+      },
+      {
+        name: 'className',
+        type: 'string',
+        description: 'Optional custom classes for spacing or layout tweaks.',
+      },
+    ],
+    events: [
+      {
+        name: 'onClose',
+        description: 'Fires when the close button is clicked. Bind to dismiss or trigger an action.',
+      },
+    ],
+  },
+  {
+    type: 'StatusIcon',
+    label: 'Status Icon',
+    category: 'feedback',
+    icon: 'CheckCircle',
+    defaultProps: { type: 'saved', size: 14, animate: false },
+    props: [
+      {
+        name: 'type',
+        type: 'string',
+        description: 'Status icon style.',
+        required: true,
+        supportsBinding: true,
+        options: ['saved', 'synced'],
+      },
+      {
+        name: 'size',
+        type: 'number',
+        description: 'Icon size in pixels.',
+        defaultValue: '14',
+        supportsBinding: true,
+      },
+      {
+        name: 'animate',
+        type: 'boolean',
+        description: 'Applies entry animation when true.',
+        defaultValue: 'false',
+        supportsBinding: true,
+      },
+    ],
+  },
   // Data Components
   {
     type: 'List',
@@ -278,11 +396,41 @@ export const componentDefinitions: ComponentDefinition[] = [
     defaultProps: { items: [], emptyMessage: 'No items' }
   },
   {
+    type: 'DataList',
+    label: 'Data List',
+    category: 'data',
+    icon: 'List',
+    defaultProps: {
+      items: ['Daily summary', 'New signups', 'Pending approvals'],
+      emptyMessage: 'No updates',
+      itemClassName: 'rounded-md border border-border bg-card/50 px-4 py-2'
+    }
+  },
+  {
     type: 'Table',
     label: 'Table',
     category: 'data',
     icon: 'Table',
     defaultProps: { data: [], columns: [] }
+  },
+  {
+    type: 'DataTable',
+    label: 'Data Table',
+    category: 'data',
+    icon: 'Table',
+    defaultProps: {
+      columns: [
+        { key: 'name', header: 'Name' },
+        { key: 'status', header: 'Status' },
+        { key: 'owner', header: 'Owner' },
+      ],
+      data: [
+        { name: 'Launch Plan', status: 'In Progress', owner: 'Avery' },
+        { name: 'Design Review', status: 'Scheduled', owner: 'Jordan' },
+        { name: 'QA Checklist', status: 'Done', owner: 'Riley' },
+      ],
+      emptyMessage: 'No records available',
+    }
   },
   {
     type: 'KeyValue',
@@ -297,6 +445,45 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'data',
     icon: 'ChartBar',
     defaultProps: { title: 'Metric', value: '0' }
+  },
+  {
+    type: 'MetricCard',
+    label: 'Metric Card',
+    category: 'data',
+    icon: 'ChartBar',
+    defaultProps: {
+      label: 'Active Users',
+      value: '1,248',
+      trend: { value: 12.4, direction: 'up' },
+    }
+  },
+  {
+    type: 'Timeline',
+    label: 'Timeline',
+    category: 'data',
+    icon: 'Clock',
+    defaultProps: {
+      items: [
+        {
+          title: 'Planning',
+          description: 'Finalize milestones',
+          timestamp: 'Mon 9:00 AM',
+          status: 'completed',
+        },
+        {
+          title: 'Execution',
+          description: 'Kick off delivery',
+          timestamp: 'Tue 11:00 AM',
+          status: 'current',
+        },
+        {
+          title: 'Review',
+          description: 'Collect feedback',
+          timestamp: 'Wed 3:00 PM',
+          status: 'pending',
+        },
+      ],
+    }
   },
   // Custom Components
   {
