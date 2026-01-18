@@ -8,42 +8,41 @@ import {
   TextT,
   Image as ImageIcon,
 } from '@phosphor-icons/react'
-import copy from '@/data/favicon-designer.json'
-import { FaviconDesign } from './types'
+import presets from '../../data/favicon-designer-presets.json'
+import { FaviconDesign, FaviconElement } from './types'
 
-export const PRESET_SIZES = [16, 32, 48, 64, 128, 256, 512]
+type ElementTypePreset = {
+  value: FaviconElement['type']
+  label: string
+}
 
-export const ELEMENT_TYPES = [
-  { value: 'circle', icon: CircleNotch },
-  { value: 'square', icon: Square },
-  { value: 'triangle', icon: Triangle },
-  { value: 'star', icon: Star },
-  { value: 'heart', icon: Heart },
-  { value: 'polygon', icon: Polygon },
-  { value: 'text', icon: TextT },
-  { value: 'emoji', icon: ImageIcon },
-]
+type IconComponent = typeof CircleNotch
+
+type ElementTypeValue = ElementTypePreset['value']
+
+const ELEMENT_TYPE_ICONS: Record<ElementTypeValue, IconComponent> = {
+  circle: CircleNotch,
+  square: Square,
+  triangle: Triangle,
+  star: Star,
+  heart: Heart,
+  polygon: Polygon,
+  text: TextT,
+  emoji: ImageIcon,
+}
+
+const elementTypePresets = presets.elementTypes as ElementTypePreset[]
+const defaultDesignPreset = presets.defaultDesign as FaviconDesign
+
+export const PRESET_SIZES = presets.presetSizes
+
+export const ELEMENT_TYPES = elementTypePresets.map((preset) => ({
+  ...preset,
+  icon: ELEMENT_TYPE_ICONS[preset.value],
+}))
 
 export const DEFAULT_DESIGN: FaviconDesign = {
-  id: 'default',
-  name: copy.defaults.designName,
-  size: 128,
-  backgroundColor: '#7c3aed',
-  elements: [
-    {
-      id: '1',
-      type: 'text',
-      x: 64,
-      y: 64,
-      width: 100,
-      height: 100,
-      color: '#ffffff',
-      rotation: 0,
-      text: copy.defaults.designText,
-      fontSize: 48,
-      fontWeight: 'bold',
-    },
-  ],
+  ...defaultDesignPreset,
   createdAt: Date.now(),
   updatedAt: Date.now(),
 }

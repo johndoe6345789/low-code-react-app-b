@@ -1,4 +1,6 @@
 {
+  "title": "Product Roadmap",
+  "subtitle": "Features delivered and planned for CodeForge development",
   "completed": [
     {
       "title": "Monaco Code Editor Integration",

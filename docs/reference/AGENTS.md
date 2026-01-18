@@ -212,31 +212,31 @@ Repairs multiple errors efficiently.
 - Validates fixes don't introduce new errors
 - Returns repaired files and success status
 
-### Generators (`/src/lib/generators.ts`)
+### Generators (`/src/lib/generators/*`)
 
 Code generation utilities for project export.
 
 #### Functions
 
-##### `generateNextJSProject(appName: string, models: PrismaModel[], components: ComponentNode[], theme: ThemeConfig)`
+##### `generateNextJSProject(appName: string, models: PrismaModel[], components: ComponentNode[], theme: ThemeConfig)` (`/src/lib/generators/generateNextJSProject.ts`)
 Creates complete Next.js file structure.
 
-##### `generatePrismaSchema(models: PrismaModel[])`
+##### `generatePrismaSchema(models: PrismaModel[])` (`/src/lib/generators/generatePrismaSchema.ts`)
 Converts visual models to Prisma schema syntax.
 
-##### `generateMUITheme(theme: ThemeConfig)`
+##### `generateMUITheme(theme: ThemeConfig)` (`/src/lib/generators/generateMUITheme.ts`)
 Exports Material UI theme configuration.
 
-##### `generatePlaywrightTests(tests: PlaywrightTest[])`
+##### `generatePlaywrightTests(tests: PlaywrightTest[])` (`/src/lib/generators/generatePlaywrightTests.ts`)
 Converts visual test definitions to Playwright code.
 
-##### `generateStorybookStories(stories: StorybookStory[])`
+##### `generateStorybookStories(stories: StorybookStory[])` (`/src/lib/generators/generateStorybookStories.ts`)
 Creates Storybook CSF3 story files.
 
-##### `generateUnitTests(tests: UnitTest[])`
+##### `generateUnitTests(tests: UnitTest[])` (`/src/lib/generators/generateUnitTests.ts`)
 Generates Vitest test files with React Testing Library.
 
-##### `generateFlaskApp(config: FlaskConfig)`
+##### `generateFlaskApp(config: FlaskConfig)` (`/src/lib/generators/generateFlaskApp.ts`)
 Creates Flask application with blueprints and routes.
 
 ## Integration Points
