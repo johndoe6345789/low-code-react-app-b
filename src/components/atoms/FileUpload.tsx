@@ -6,7 +6,7 @@ interface FileUploadProps {
   accept?: string
   multiple?: boolean
   maxSize?: number
-  onFilesSelected: (files: File[]) => void
+  onFilesSelected?: (files: File[]) => void
   disabled?: boolean
   className?: string
 }
@@ -34,7 +34,7 @@ export function FileUpload({
     })
 
     setSelectedFiles(validFiles)
-    onFilesSelected(validFiles)
+    onFilesSelected?.(validFiles)
   }
 
   const handleDrop = (e: React.DragEvent) => {
@@ -59,7 +59,7 @@ export function FileUpload({
   const removeFile = (index: number) => {
     const newFiles = selectedFiles.filter((_, i) => i !== index)
     setSelectedFiles(newFiles)
-    onFilesSelected(newFiles)
+    onFilesSelected?.(newFiles)
   }
 
   return (

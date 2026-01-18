@@ -2,7 +2,7 @@
   "$schema": "./schemas/json-components-registry-schema.json",
   "version": "2.0.0",
   "description": "Registry of all components in the application",
-  "lastUpdated": "2026-01-17T22:10:22.582Z",
+  "lastUpdated": "2026-01-18T11:30:41.908Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -322,7 +322,7 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Date selection input",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -331,7 +331,7 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "File upload control",
-      "status": "planned",
+      "status": "supported",
       "source": "atoms"
     },
     {
@@ -2043,8 +2043,8 @@
   ],
   "statistics": {
     "total": 219,
-    "supported": 150,
-    "planned": 14,
+    "supported": 152,
+    "planned": 12,
     "jsonCompatible": 14,
     "maybeJsonCompatible": 41,
     "byCategory": {

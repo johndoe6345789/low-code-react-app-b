@@ -6,6 +6,7 @@ export interface ComponentDefinition {
   category: 'layout' | 'input' | 'display' | 'navigation' | 'feedback' | 'data' | 'custom'
   icon: string
   defaultProps?: Record<string, any>
+  propSchema?: Record<string, { type: string; description?: string; required?: boolean }>
   canHaveChildren?: boolean
 }
 
@@ -96,6 +97,33 @@ export const componentDefinitions: ComponentDefinition[] = [
     category: 'input',
     icon: 'CaretDown',
     defaultProps: { placeholder: 'Choose option...' }
+  },
+  {
+    type: 'DatePicker',
+    label: 'Date Picker',
+    category: 'input',
+    icon: 'Calendar',
+    defaultProps: { placeholder: 'Pick a date' },
+    propSchema: {
+      value: { type: 'date', description: 'Selected date value' },
+      placeholder: { type: 'string', description: 'Placeholder when no date is selected' },
+      disabled: { type: 'boolean', description: 'Disable the date picker' },
+      onChange: { type: 'event', description: 'Fires when the date selection changes' }
+    }
+  },
+  {
+    type: 'FileUpload',
+    label: 'File Upload',
+    category: 'input',
+    icon: 'Upload',
+    defaultProps: { accept: '', multiple: false },
+    propSchema: {
+      accept: { type: 'string', description: 'Accepted file types (comma-separated)' },
+      multiple: { type: 'boolean', description: 'Allow multiple file selections' },
+      maxSize: { type: 'number', description: 'Maximum file size in bytes' },
+      disabled: { type: 'boolean', description: 'Disable file uploads' },
+      onFilesSelected: { type: 'event', description: 'Fires when files are selected' }
+    }
   },
   {
     type: 'Checkbox',

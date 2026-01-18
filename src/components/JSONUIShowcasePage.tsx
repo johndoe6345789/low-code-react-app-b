@@ -5,6 +5,7 @@ import { PageRenderer } from '@/lib/json-ui/page-renderer'
 import { hydrateSchema } from '@/schemas/schema-loader'
 import todoListJson from '@/schemas/todo-list.json'
 import newMoleculesShowcaseJson from '@/schemas/new-molecules-showcase.json'
+import { inputComponentsShowcaseSchema } from '@/schemas/page-schemas'
 
 const todoListSchema = hydrateSchema(todoListJson)
 const newMoleculesShowcaseSchema = hydrateSchema(newMoleculesShowcaseJson)
@@ -24,6 +25,7 @@ export function JSONUIShowcasePage() {
           </div>
           <TabsList className="w-full justify-start">
             <TabsTrigger value="atomic">Atomic Components</TabsTrigger>
+            <TabsTrigger value="inputs">JSON Inputs</TabsTrigger>
             <TabsTrigger value="molecules">New Molecules</TabsTrigger>
             <TabsTrigger value="dashboard">JSON Dashboard</TabsTrigger>
             <TabsTrigger value="todos">JSON Todo List</TabsTrigger>
@@ -33,6 +35,10 @@ export function JSONUIShowcasePage() {
         <div className="flex-1 overflow-hidden">
           <TabsContent value="atomic" className="h-full m-0 data-[state=active]:block">
             <AtomicComponentDemo />
+          </TabsContent>
+
+          <TabsContent value="inputs" className="h-full m-0 data-[state=active]:block">
+            <PageRenderer schema={inputComponentsShowcaseSchema} />
           </TabsContent>
           
           <TabsContent value="molecules" className="h-full m-0 data-[state=active]:block">

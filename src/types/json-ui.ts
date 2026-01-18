@@ -2,6 +2,7 @@ export type ComponentType =
   | 'div' | 'section' | 'article' | 'header' | 'footer' | 'main'
   | 'Button' | 'Card' | 'CardHeader' | 'CardTitle' | 'CardDescription' | 'CardContent' | 'CardFooter'
   | 'Input' | 'TextArea' | 'Textarea' | 'Select' | 'Checkbox' | 'Radio' | 'Switch' | 'Slider' | 'NumberInput'
+  | 'DatePicker' | 'FileUpload'
   | 'Badge' | 'Progress' | 'Separator' | 'Tabs' | 'TabsContent' | 'TabsList' | 'TabsTrigger' | 'Dialog'
   | 'Text' | 'Heading' | 'Label' | 'List' | 'Grid' | 'Stack' | 'Flex' | 'Container'
   | 'Link' | 'Image' | 'Avatar' | 'Code' | 'Tag' | 'Spinner' | 'Skeleton'
