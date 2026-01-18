@@ -89,15 +89,22 @@ export function createRoutes(
   const rootPage = enabledPages.find(p => p.isRoot)
   console.log('[ROUTES] 🏠 Root page search result:', rootPage ? `Found: ${rootPage.id} (${rootPage.component})` : 'NOT FOUND - will redirect to /dashboard')
 
-  const renderJsonPage = (page: typeof enabledPages[number]) => {
+  // JSON page prop contract: page.props.data maps to stateContext -> data bindings,
+  // page.props.functions maps to actionContext -> custom action handlers.
+  // The mapping syntax matches props.state/props.actions (propName[:contextKey]).
+  const renderJsonPage = (
+    page: typeof enabledPages[number],
+    data?: Record<string, any>,
+    functions?: Record<string, any>
+  ) => {
     if (page.schema) {
       console.log('[ROUTES] 🧾 Rendering preloaded JSON schema for page:', page.id)
-      return <PageRenderer schema={page.schema} />
+      return <PageRenderer schema={page.schema} data={data} functions={functions} />
     }
 
     if (page.schemaPath) {
       console.log('[ROUTES] 🧾 Rendering JSON schema loader for page:', page.id)
-      return <JSONSchemaPageLoader schemaPath={page.schemaPath} />
+      return <JSONSchemaPageLoader schemaPath={page.schemaPath} data={data} functions={functions} />
     }
 
     console.error('[ROUTES] ❌ JSON page missing schemaPath:', page.id)
@@ -114,9 +121,18 @@ export function createRoutes(
         : {}
 
       if (page.type === 'json' || page.schemaPath) {
+        const jsonDataConfig = page.props?.data ?? page.props?.state
+        const jsonFunctionsConfig = page.props?.functions ?? page.props?.actions
+        const jsonData = jsonDataConfig
+          ? resolveProps({ state: jsonDataConfig }, stateContext, actionContext)
+          : {}
+        const jsonFunctions = jsonFunctionsConfig
+          ? resolveProps({ actions: jsonFunctionsConfig }, stateContext, actionContext)
+          : {}
+
         return {
           path: `/${page.id}`,
-          element: renderJsonPage(page)
+          element: renderJsonPage(page, jsonData, jsonFunctions)
         }
       }
 
@@ -168,9 +184,18 @@ export function createRoutes(
       : {}
     
     if (rootPage.type === 'json' || rootPage.schemaPath) {
+      const jsonDataConfig = rootPage.props?.data ?? rootPage.props?.state
+      const jsonFunctionsConfig = rootPage.props?.functions ?? rootPage.props?.actions
+      const jsonData = jsonDataConfig
+        ? resolveProps({ state: jsonDataConfig }, stateContext, actionContext)
+        : {}
+      const jsonFunctions = jsonFunctionsConfig
+        ? resolveProps({ actions: jsonFunctionsConfig }, stateContext, actionContext)
+        : {}
+
       routes.push({
         path: '/',
-        element: renderJsonPage(rootPage)
+        element: renderJsonPage(rootPage, jsonData, jsonFunctions)
       })
     } else if (!rootPage.component) {
       console.error('[ROUTES] ❌ Root page missing component:', rootPage.id)

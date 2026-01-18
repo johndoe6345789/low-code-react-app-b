@@ -3,8 +3,22 @@ import { PageSchema } from '@/types/json-ui'
 import { FeatureToggles } from '@/types/project'
 
 export interface PropConfig {
+  /**
+   * Component page prop bindings (map to stateContext).
+   */
   state?: string[]
+  /**
+   * Component page action bindings (map to actionContext).
+   */
   actions?: string[]
+  /**
+   * JSON page data bindings (map to stateContext).
+   */
+  data?: string[]
+  /**
+   * JSON page function bindings (map to actionContext).
+   */
+  functions?: string[]
 }
 
 export interface ResizableConfig {
@@ -119,44 +133,39 @@ export function resolveProps(propConfig: PropConfig | undefined, stateContext: R
   
   const resolvedProps: Record<string, any> = {}
   
+  const resolveEntries = (
+    entries: string[] | undefined,
+    context: Record<string, any>,
+    label: string
+  ) => {
+    if (!entries?.length) {
+      return
+    }
+
+    console.log('[CONFIG] 📦 Resolving', entries.length, label)
+    for (const entry of entries) {
+      try {
+        const [propName, contextKey] = entry.includes(':')
+          ? entry.split(':')
+          : [entry, entry]
+
+        if (context[contextKey] !== undefined) {
+          resolvedProps[propName] = context[contextKey]
+          console.log('[CONFIG] ✅ Resolved', label, 'prop:', propName)
+        } else {
+          console.log('[CONFIG] ⚠️', label, 'prop not found:', contextKey)
+        }
+      } catch (err) {
+        console.warn('[CONFIG] ❌ Failed to resolve', label, 'prop:', entry, err)
+      }
+    }
+  }
+
   try {
-    if (propConfig.state) {
-      console.log('[CONFIG] 📦 Resolving', propConfig.state.length, 'state props')
-      for (const stateKey of propConfig.state) {
-        try {
-          const [propName, contextKey] = stateKey.includes(':') 
-            ? stateKey.split(':') 
-            : [stateKey, stateKey]
-          
-          if (stateContext[contextKey] !== undefined) {
-            resolvedProps[propName] = stateContext[contextKey]
-            console.log('[CONFIG] ✅ Resolved state prop:', propName)
-          } else {
-            console.log('[CONFIG] ⚠️ State prop not found:', contextKey)
-          }
-        } catch (err) {
-          console.warn('[CONFIG] ❌ Failed to resolve state prop:', stateKey, err)
-        }
-      }
-    }
-    
-    if (propConfig.actions) {
-      console.log('[CONFIG] 🎬 Resolving', propConfig.actions.length, 'action props')
-      for (const actionKey of propConfig.actions) {
-        try {
-          const [propName, contextKey] = actionKey.split(':')
-          
-          if (actionContext[contextKey]) {
-            resolvedProps[propName] = actionContext[contextKey]
-            console.log('[CONFIG] ✅ Resolved action prop:', propName)
-          } else {
-            console.log('[CONFIG] ⚠️ Action prop not found:', contextKey)
-          }
-        } catch (err) {
-          console.warn('[CONFIG] ❌ Failed to resolve action prop:', actionKey, err)
-        }
-      }
-    }
+    resolveEntries(propConfig.state, stateContext, 'state')
+    resolveEntries(propConfig.data, stateContext, 'data')
+    resolveEntries(propConfig.actions, actionContext, 'action')
+    resolveEntries(propConfig.functions, actionContext, 'function')
   } catch (err) {
     console.error('[CONFIG] ❌ Failed to resolve props:', err)
   }
