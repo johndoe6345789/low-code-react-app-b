@@ -1,24 +1,6 @@
 {
-  "id": "component-palette",
-  "$ref": "../atoms/div-flex-col.json",
+  "type": "Tabs, TabsContent, TabsList, TabsTrigger",
   "props": {
-    "className": "p-2 space-y-2"
-  },
-  "children": [
-    {
-      "id": "palette-search",
-      "$ref": "../atoms/input-text.json",
-      "props": {
-        "placeholder": "Search components...",
-        "className": "mb-2"
-      }
-    },
-    {
-      "id": "palette-list",
-      "$ref": "../atoms/div-flex-col.json",
-      "props": {
-        "className": "space-y-1"
-      }
-    }
-  ]
+    "onDragStart": "> void"
+  }
 }

@@ -1,3 +1,4 @@
 {
-  "type": "Label"
+  "type": "Label",
+  "props": {}
 }

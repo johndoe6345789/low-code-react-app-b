@@ -1,25 +1,4 @@
 {
-  "id": "app-branding",
-  "$ref": "../atoms/div-flex.json",
-  "props": {
-    "className": "flex items-center gap-3"
-  },
-  "children": [
-    {
-      "id": "logo",
-      "$ref": "../atoms/text.json",
-      "props": {
-        "className": "text-xl font-bold",
-        "children": "CodeForge"
-      }
-    },
-    {
-      "id": "version",
-      "$ref": "../atoms/badge.json",
-      "props": {
-        "children": "v1.0",
-        "variant": "secondary"
-      }
-    }
-  ]
+  "type": "AppBranding",
+  "props": {}
 }

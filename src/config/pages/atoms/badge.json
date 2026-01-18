@@ -1,6 +1,4 @@
 {
-  "type": "Badge",
-  "props": {
-    "variant": "default"
-  }
+  "type": "Badge as ShadcnBadge",
+  "props": {}
 }

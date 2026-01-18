@@ -1,19 +1,13 @@
 {
-  "id": "save-indicator",
-  "dataSources": [
-    {
-      "id": "lastSaved",
-      "type": "static",
-      "defaultValue": null
-    }
-  ],
   "type": "SaveIndicator",
-  "conditional": {
-    "if": "lastSaved != null"
+  "jsonCompatible": false,
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/molecules/SaveIndicator",
+    "export": "SaveIndicator"
   },
-  "bindings": {
-    "lastSaved": {
-      "source": "lastSaved"
-    }
+  "props": {},
+  "metadata": {
+    "notes": "Contains hooks - needs wrapper"
   }
 }

@@ -1,23 +1,15 @@
 {
-  "id": "navigation-menu",
-  "type": "nav",
+  "type": "Button",
   "props": {
-    "className": "border-r bg-muted/30 w-64"
-  },
-  "children": [
-    {
-      "id": "nav-header",
-      "$ref": "../atoms/div-flex.json",
-      "props": {
-        "className": "p-4 border-b"
-      }
-    },
-    {
-      "id": "nav-items",
-      "$ref": "../atoms/div-flex-col.json",
-      "props": {
-        "className": "p-2 space-y-1"
-      }
-    }
-  ]
+    "onTabChange": "> void",
+    "onExpandAll": "> void",
+    "onCollapseAll": "> void",
+    "onToggleGroup": "> void",
+    "onItemClick": "> void",
+    "onItemHover": "> void",
+    "onItemLeave": "> void",
+    "item": "> {",
+    "groupId": "> {",
+    "value": "> {"
+  }
 }

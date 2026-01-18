@@ -1,21 +1,29 @@
 {
-  "id": "schema-editor-layout",
-  "$ref": "../atoms/div-grid.json",
-  "props": {
-    "className": "grid grid-cols-[250px_1fr_300px] h-screen"
+  "type": "SchemaEditorLayout",
+  "jsonCompatible": false,
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/organisms/SchemaEditorLayout",
+    "export": "SchemaEditorLayout"
   },
-  "children": [
-    {
-      "id": "sidebar",
-      "$ref": "./schema-editor-sidebar.json"
-    },
-    {
-      "id": "canvas",
-      "$ref": "./schema-editor-canvas.json"
-    },
-    {
-      "id": "properties",
-      "$ref": "./schema-editor-properties-panel.json"
-    }
-  ]
+  "props": {
+    "onSelect": "> void",
+    "onHover": "> void",
+    "onHoverEnd": "> void",
+    "onComponentDragStart": "> void",
+    "onTreeDragStart": "> void",
+    "onDragOver": "> void",
+    "onDragLeave": "> void",
+    "onDrop": "> void",
+    "onUpdate": "> void",
+    "onDelete": "> void",
+    "onImport": "> void",
+    "onExport": "> void",
+    "onCopy": "> void",
+    "onPreview": "> void",
+    "onClear": "> void"
+  },
+  "metadata": {
+    "notes": "Complex logic - needs wrapper"
+  }
 }

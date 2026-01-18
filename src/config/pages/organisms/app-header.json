@@ -1,26 +1,13 @@
 {
-  "id": "app-header",
-  "type": "header",
+  "type": "SidebarTrigger",
   "props": {
-    "className": "border-b bg-background"
-  },
-  "children": [
-    {
-      "id": "header-content",
-      "$ref": "../atoms/div-flex.json",
-      "props": {
-        "className": "flex items-center justify-between px-6 py-4"
-      },
-      "children": [
-        {
-          "id": "branding",
-          "$ref": "../molecules/app-branding.json"
-        },
-        {
-          "id": "toolbar",
-          "$ref": "../molecules/toolbar-with-actions.json"
-        }
-      ]
-    }
-  ]
+    "onTabChange": "> void",
+    "onProjectLoad": "> void",
+    "onSearch": "> void",
+    "onShowShortcuts": "> void",
+    "onGenerateAI": "> void",
+    "onExport": "> void",
+    "onPreview": "> void",
+    "onShowErrors": "> void"
+  }
 }

@@ -1,7 +1,12 @@
 {
-  "id": "component-tree",
-  "$ref": "../atoms/div-flex-col.json",
+  "type": "ScrollArea",
   "props": {
-    "className": "space-y-1"
+    "onSelect": "> void",
+    "onHover": "> void",
+    "onHoverEnd": "> void",
+    "onDragStart": "> void",
+    "onDragOver": "> void",
+    "onDragLeave": "> void",
+    "onDrop": "> void"
   }
 }

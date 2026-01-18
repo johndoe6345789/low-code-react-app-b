@@ -1,6 +1,4 @@
 {
-  "type": "Separator",
-  "props": {
-    "className": "my-4"
-  }
+  "type": "Separator as ShadcnSeparator",
+  "props": {}
 }

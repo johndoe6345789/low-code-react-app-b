@@ -1,33 +1,4 @@
 {
-  "type": "div",
-  "props": {
-    "className": "flex flex-col items-center justify-center p-12 text-center"
-  },
-  "children": [
-    {
-      "id": "empty-icon",
-      "type": "div",
-      "props": {
-        "className": "text-muted-foreground mb-4"
-      }
-    },
-    {
-      "id": "empty-title",
-      "$ref": "../atoms/heading-2.json",
-      "props": {
-        "className": "text-xl font-semibold mb-2"
-      }
-    },
-    {
-      "id": "empty-description",
-      "$ref": "../atoms/text-muted.json"
-    },
-    {
-      "id": "empty-action",
-      "$ref": "../atoms/button-primary.json",
-      "props": {
-        "className": "mt-4"
-      }
-    }
-  ]
+  "type": "EmptyState",
+  "props": {}
 }

@@ -1,7 +1,4 @@
 {
-  "id": "loading-spinner",
   "type": "LoadingSpinner",
-  "props": {
-    "size": "md"
-  }
+  "props": {}
 }

@@ -1,7 +1,7 @@
 {
-  "id": "file-tabs",
-  "$ref": "../atoms/div-flex.json",
+  "type": "FileTabs",
   "props": {
-    "className": "flex items-center gap-1 border-b bg-muted/30 overflow-x-auto"
+    "onFileSelect": "> void",
+    "onFileClose": "> void"
   }
 }

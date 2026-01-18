@@ -1,27 +1,4 @@
 {
-  "id": "empty-editor-state",
-  "$ref": "./empty-state.json",
-  "children": [
-    {
-      "id": "empty-title",
-      "$ref": "../atoms/heading-2.json",
-      "props": {
-        "children": "No items yet"
-      }
-    },
-    {
-      "id": "empty-description",
-      "$ref": "../atoms/text-muted.json",
-      "props": {
-        "children": "Get started by creating your first item"
-      }
-    },
-    {
-      "id": "empty-action",
-      "$ref": "../atoms/button-primary.json",
-      "props": {
-        "children": "Create Item"
-      }
-    }
-  ]
+  "type": "EmptyEditorState",
+  "props": {}
 }

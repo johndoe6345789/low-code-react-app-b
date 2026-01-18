@@ -1,6 +1,4 @@
 {
   "type": "Alert",
-  "props": {
-    "variant": "default"
-  }
+  "props": {}
 }
