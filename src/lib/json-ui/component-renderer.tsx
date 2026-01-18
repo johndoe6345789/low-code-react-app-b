@@ -1,21 +1,15 @@
 import { createElement, useMemo } from 'react'
-import { UIComponent, Binding } from '@/types/json-ui'
+import { UIComponent, Binding, ComponentRendererProps } from '@/types/json-ui'
 import { getUIComponent } from './component-registry'
 
-interface ComponentRendererProps {
-  component: UIComponent
-  data: Record<string, any>
-  onEvent?: (componentId: string, event: string, eventData: any) => void
-}
-
-function resolveBinding(binding: Binding, data: Record<string, any>): any {
-  let value = data[binding.source]
+function resolveBinding(binding: Binding, data: Record<string, unknown>): unknown {
+  let value: unknown = data[binding.source]
   
   if (binding.path) {
     const keys = binding.path.split('.')
     for (const key of keys) {
       if (value && typeof value === 'object') {
-        value = value[key]
+        value = (value as Record<string, unknown>)[key]
       } else {
         value = undefined
         break
@@ -32,7 +26,7 @@ function resolveBinding(binding: Binding, data: Record<string, any>): any {
 
 export function ComponentRenderer({ component, data, onEvent }: ComponentRendererProps) {
   const resolvedProps = useMemo(() => {
-    const resolved: Record<string, any> = { ...component.props }
+    const resolved: Record<string, unknown> = { ...component.props }
     
     if (component.bindings) {
       Object.entries(component.bindings).forEach(([propName, binding]) => {
@@ -42,7 +36,7 @@ export function ComponentRenderer({ component, data, onEvent }: ComponentRendere
     
     if (component.events && onEvent) {
       component.events.forEach(handler => {
-        resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: any) => {
+        resolved[`on${handler.event.charAt(0).toUpperCase()}${handler.event.slice(1)}`] = (e: unknown) => {
           if (!handler.condition || handler.condition(data)) {
             onEvent(component.id, handler.event, e)
           }
