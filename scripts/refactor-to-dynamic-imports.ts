@@ -38,7 +38,7 @@ const targetComponents = {
   atoms: ['Input']
 }
 
-async function refactorFile(filePath: string): Promise<boolean> {
+export async function refactorFile(filePath: string): Promise<boolean> {
   let content = await fs.readFile(filePath, 'utf-8')
   let modified = false
 
