@@ -241,12 +241,9 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
     loading,
     error,
     copiedBadge,
-    fetchData,
-    copyBadgeMarkdown,
-    getBadgeUrl,
-    getBadgeMarkdown,
-    formatTime,
+    actions,
   } = useGithubBuildStatus({ owner, repo, defaultBranch })
+  const { refresh, copyBadgeMarkdown, getBadgeUrl, getBadgeMarkdown, formatTime } = actions
 
   if (loading) {
     return (
@@ -291,7 +288,7 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
             <XCircle size={20} weight="fill" className="text-red-500 mt-0.5" />
             <div className="flex-1 space-y-2">
               <p className="text-sm text-red-500">{error}</p>
-              <Button size="sm" variant="outline" onClick={fetchData} className="text-xs">
+              <Button size="sm" variant="outline" onClick={refresh} className="text-xs">
                 {copy.error.retry}
               </Button>
             </div>
@@ -331,7 +328,7 @@ export function GitHubBuildStatus({ owner, repo, defaultBranch = 'main' }: GitHu
             </CardTitle>
             <CardDescription>{copy.header.description}</CardDescription>
           </div>
-          <Button size="sm" variant="ghost" onClick={fetchData} className="text-xs">
+          <Button size="sm" variant="ghost" onClick={refresh} className="text-xs">
             {copy.header.refresh}
           </Button>
         </div>
