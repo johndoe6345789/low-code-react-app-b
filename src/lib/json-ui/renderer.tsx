@@ -1,15 +1,8 @@
 import React, { useCallback } from 'react'
-import { UIComponent, EventHandler } from './schema'
+import type { EventHandler, JSONFormRendererProps, JSONUIRendererProps, UIComponent } from './types'
 import { getUIComponent } from './component-registry'
 import { resolveDataBinding, evaluateCondition, mergeClassNames } from './utils'
 import { cn } from '@/lib/utils'
-
-export interface JSONUIRendererProps {
-  component: UIComponent
-  dataMap?: Record<string, any>
-  onAction?: (handler: EventHandler, event?: any) => void
-  context?: Record<string, any>
-}
 
 export function JSONUIRenderer({ 
   component, 
@@ -50,7 +43,7 @@ export function JSONUIRenderer({
               onAction={onAction}
               context={loopContext}
             />
-          )
+          )}
         })}
       </>
     )
@@ -123,15 +116,8 @@ export function JSONUIRenderer({
   )
 }
 
-export interface JSONFormRendererProps {
-  formData: any
-  fields: any[]
-  onSubmit: (data: any) => void
-  onChange?: (data: any) => void
-}
-
 export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONFormRendererProps) {
-  const handleFieldChange = useCallback((fieldName: string, value: any) => {
+  const handleFieldChange = useCallback((fieldName: string, value: unknown) => {
     const newData = { ...formData, [fieldName]: value }
     onChange?.(newData)
   }, [formData, onChange])
@@ -175,12 +161,13 @@ export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONF
               dataMap={{}}
               onAction={(handler, event) => {
                 if (handler.action === 'field-change') {
-                  handleFieldChange(field.name, event.target.value)
+                  const targetValue = (event as { target?: { value?: unknown } } | undefined)?.target?.value
+                  handleFieldChange(field.name, targetValue)
                 }
               }}
             />
           </div>
-        )
+        )}
       })}
     </form>
   )
