@@ -91,15 +91,48 @@ Connect UI to data sources:
 
 ### Event Handling
 
-Respond to user interactions:
+Respond to user interactions using a JSON event map. Each entry maps an event name to an action definition:
 
 ```json
 {
   "events": {
-    "onClick": "save-data"
+    "onClick": {
+      "action": "save-data",
+      "payload": {
+        "source": "profile"
+      }
+    }
   }
 }
 ```
+
+You can also pass full action arrays when needed:
+
+```json
+{
+  "events": {
+    "change": {
+      "actions": [
+        { "id": "set-name", "type": "set-value", "target": "userName" }
+      ]
+    }
+  }
+}
+```
+
+#### Supported events
+
+Events map directly to React handler props, so common values include:
+
+- `click` / `onClick`
+- `change` / `onChange`
+- `submit` / `onSubmit`
+- `focus` / `onFocus`
+- `blur` / `onBlur`
+- `keyDown` / `onKeyDown`
+- `keyUp` / `onKeyUp`
+- `mouseEnter` / `onMouseEnter`
+- `mouseLeave` / `onMouseLeave`
 
 ### Looping
 

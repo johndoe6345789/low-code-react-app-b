@@ -56,6 +56,15 @@ export interface EventHandler {
   condition?: string | ((data: Record<string, any>) => boolean)
 }
 
+export interface JSONEventDefinition {
+  action?: string
+  actions?: Action[]
+  payload?: Record<string, any>
+  condition?: string | ((data: Record<string, any>) => boolean)
+}
+
+export type JSONEventMap = Record<string, JSONEventDefinition | JSONEventDefinition[] | string>
+
 export interface Conditional {
   if: string
   then?: UIComponent | (UIComponent | string)[] | string
@@ -76,7 +85,7 @@ export interface UIComponent {
   style?: Record<string, any>
   bindings?: Record<string, Binding>
   dataBinding?: string | Binding
-  events?: EventHandler[]
+  events?: EventHandler[] | JSONEventMap
   children?: UIComponent[] | string
   condition?: Binding
   conditional?: Conditional
