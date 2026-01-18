@@ -31,6 +31,8 @@ import githubBuildStatusDef from '@/components/json-definitions/github-build-sta
 import saveIndicatorDef from '@/components/json-definitions/save-indicator.json'
 import componentTreeDef from '@/components/json-definitions/component-tree.json'
 import seedDataManagerDef from '@/components/json-definitions/seed-data-manager.json'
+import lazyD3BarChartDef from '@/components/json-definitions/lazy-d3-bar-chart.json'
+import storageSettingsDef from '@/components/json-definitions/storage-settings.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -60,8 +62,22 @@ export const ComponentTree = createJsonComponentWithHooks<ComponentTreeProps>(co
   }
 })
 
-// Note: The following still need JSON definitions created:
-// - StorageSettings (complex form with backend switching)
-// - LazyBarChart (Recharts integration)
-// - LazyLineChart (Recharts integration)
-// - LazyD3BarChart (D3 calculations - hook created, needs JSON definition)
+export const LazyD3BarChart = createJsonComponentWithHooks<LazyD3BarChartProps>(lazyD3BarChartDef, {
+  hooks: {
+    chartData: {
+      hookName: 'useD3BarChart',
+      args: (props) => [props.data, props.width, props.height]
+    }
+  }
+})
+
+export const StorageSettings = createJsonComponentWithHooks<StorageSettingsProps>(storageSettingsDef, {
+  hooks: {
+    backendInfo: {
+      hookName: 'useStorageBackendInfo',
+      args: (props) => [props.backend || null]
+    }
+  }
+})
+
+// All components converted to pure JSON! 🎉

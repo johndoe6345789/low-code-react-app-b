@@ -5,8 +5,6 @@ export { ComponentPalette } from './ComponentPalette'
 export { GitHubBuildStatus } from './GitHubBuildStatus'
 export { LazyLineChart } from './LazyLineChart'
 export { LazyBarChart } from './LazyBarChart'
-export { LazyD3BarChart } from './LazyD3BarChart'
-export { StorageSettings } from './StorageSettings'
 export { NavigationGroupHeader } from './NavigationGroupHeader'
 export { PropertyEditor } from './PropertyEditor'
 export { ToolbarButton } from './ToolbarButton'
@@ -24,6 +22,8 @@ export {
   GitHubBuildStatus as GitHubBuildStatusJSON,
   SaveIndicator,
   ComponentTree,
-  SeedDataManager
+  SeedDataManager,
+  LazyD3BarChart,
+  StorageSettings
 } from '@/lib/json-ui/json-components'
 export { preloadMonacoEditor } from './LazyMonacoEditor'
