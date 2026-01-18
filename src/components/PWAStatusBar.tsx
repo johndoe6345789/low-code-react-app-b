@@ -1,20 +1,35 @@
 import { usePWA } from '@/hooks/use-pwa'
 import { WifiSlash, WifiHigh } from '@phosphor-icons/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export function PWAStatusBar() {
   const { isOnline } = usePWA()
   const [showOffline, setShowOffline] = useState(false)
+  const hideTimerRef = useRef<number | null>(null)
 
   useEffect(() => {
     if (!isOnline) {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current)
+        hideTimerRef.current = null
+      }
       setShowOffline(true)
-    } else if (showOffline) {
-      const timer = setTimeout(() => {
+      return
+    }
+
+    if (showOffline) {
+      hideTimerRef.current = window.setTimeout(() => {
         setShowOffline(false)
+        hideTimerRef.current = null
       }, 3000)
-      return () => clearTimeout(timer)
+    }
+
+    return () => {
+      if (hideTimerRef.current) {
+        clearTimeout(hideTimerRef.current)
+        hideTimerRef.current = null
+      }
     }
   }, [isOnline, showOffline])
 
