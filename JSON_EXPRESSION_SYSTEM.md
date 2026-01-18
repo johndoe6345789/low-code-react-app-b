@@ -140,6 +140,18 @@ Remove an item from an array.
 }
 ```
 
+Example with the selector derived from event data:
+
+```json
+{
+  "id": "remove-clicked",
+  "type": "delete",
+  "target": "todos",
+  "path": "meta.id",
+  "expression": "event.todoId ?? data.selectedId"
+}
+```
+
 ## Common Patterns
 
 ### 1. Input Field Updates
