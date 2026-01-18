@@ -10,7 +10,7 @@ interface AutoSyncConfig {
   maxQueueSize: number
 }
 
-class AutoSyncManager {
+export class AutoSyncManager {
   private config: AutoSyncConfig = {
     enabled: false,
     intervalMs: 30000,
