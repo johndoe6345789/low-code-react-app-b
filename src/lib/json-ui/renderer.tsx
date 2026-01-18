@@ -359,7 +359,7 @@ export function JSONFormRenderer({ formData, fields, onSubmit, onChange }: JSONF
               }}
             />
           </div>
-        )}
+        )
       })}
     </form>
   )
