@@ -366,6 +366,15 @@
       "props": {}
     },
     {
+      "id": "json-conversion-showcase",
+      "title": "JSON Conversion Showcase",
+      "icon": "BookOpen",
+      "component": "JSONConversionShowcase",
+      "enabled": true,
+      "order": 22.1,
+      "props": {}
+    },
+    {
       "id": "schema-editor",
       "title": "Schema Editor",
       "icon": "PencilRuler",

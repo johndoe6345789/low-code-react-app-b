@@ -236,6 +236,16 @@
       }
     },
     {
+      "id": "json-conversion-showcase",
+      "title": "JSON Conversion Showcase",
+      "description": "JSON conversion showcase overview",
+      "icon": "BookOpen",
+      "component": "JSONConversionShowcase",
+      "layout": {
+        "type": "single"
+      }
+    },
+    {
       "id": "sass",
       "title": "Sass Styles",
       "description": "Explore custom Sass components",
