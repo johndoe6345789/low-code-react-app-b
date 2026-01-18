@@ -1,112 +1,134 @@
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { FeatureToggles } from '@/types/project'
-import { Code, Database, Tree, PaintBrush, Flask, Play, BookOpen, Cube, Wrench, FileText, FlowArrow, Image, Lightbulb } from '@phosphor-icons/react'
+import {
+  BookOpen,
+  Code,
+  Cube,
+  Database,
+  FileText,
+  Flask,
+  FlowArrow,
+  Image,
+  Lightbulb,
+  PaintBrush,
+  Play,
+  Tree,
+  Wrench,
+} from '@phosphor-icons/react'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import featureToggleSettings from '@/config/feature-toggle-settings.json'
+import type { ComponentType } from 'react'
 
 interface FeatureToggleSettingsProps {
   features: FeatureToggles
   onFeaturesChange: (features: FeatureToggles) => void
 }
 
-const featuresList = [
-  { 
-    key: 'codeEditor' as keyof FeatureToggles, 
-    label: 'Code Editor', 
-    description: 'Monaco-based code editor with syntax highlighting',
-    icon: Code
-  },
-  { 
-    key: 'models' as keyof FeatureToggles, 
-    label: 'Database Models', 
-    description: 'Prisma schema designer for database models',
-    icon: Database
-  },
-  { 
-    key: 'components' as keyof FeatureToggles, 
-    label: 'Component Builder', 
-    description: 'Visual component tree builder for React components',
-    icon: Tree
-  },
-  { 
-    key: 'componentTrees' as keyof FeatureToggles, 
-    label: 'Component Trees Manager', 
-    description: 'Manage multiple component tree configurations',
-    icon: Tree
-  },
-  { 
-    key: 'workflows' as keyof FeatureToggles, 
-    label: 'Workflow Designer', 
-    description: 'n8n-style visual workflow automation builder',
-    icon: FlowArrow
-  },
-  { 
-    key: 'lambdas' as keyof FeatureToggles, 
-    label: 'Lambda Functions', 
-    description: 'Serverless function editor with multiple runtimes',
-    icon: Code
-  },
-  { 
-    key: 'styling' as keyof FeatureToggles, 
-    label: 'Theme Designer', 
-    description: 'Material UI theme customization and styling',
-    icon: PaintBrush
-  },
-  { 
-    key: 'flaskApi' as keyof FeatureToggles, 
-    label: 'Flask API Designer', 
-    description: 'Python Flask backend API endpoint designer',
-    icon: Flask
-  },
-  { 
-    key: 'playwright' as keyof FeatureToggles, 
-    label: 'Playwright Tests', 
-    description: 'E2E testing with Playwright configuration',
-    icon: Play
-  },
-  { 
-    key: 'storybook' as keyof FeatureToggles, 
-    label: 'Storybook Stories', 
-    description: 'Component documentation and development',
-    icon: BookOpen
-  },
-  { 
-    key: 'unitTests' as keyof FeatureToggles, 
-    label: 'Unit Tests', 
-    description: 'Component and function unit test designer',
-    icon: Cube
-  },
-  { 
-    key: 'errorRepair' as keyof FeatureToggles, 
-    label: 'Error Repair', 
-    description: 'Auto-detect and fix code errors',
-    icon: Wrench
-  },
-  { 
-    key: 'documentation' as keyof FeatureToggles, 
-    label: 'Documentation', 
-    description: 'Project documentation, roadmap, and guides',
-    icon: FileText
-  },
-  { 
-    key: 'sassStyles' as keyof FeatureToggles, 
-    label: 'Sass Styles', 
-    description: 'Custom Sass/SCSS styling showcase',
-    icon: PaintBrush
-  },
-  { 
-    key: 'faviconDesigner' as keyof FeatureToggles, 
-    label: 'Favicon Designer', 
-    description: 'Design and generate app favicons and icons',
-    icon: Image
-  },
-  { 
-    key: 'ideaCloud' as keyof FeatureToggles, 
-    label: 'Feature Idea Cloud', 
-    description: 'Brainstorm and organize feature ideas',
-    icon: Lightbulb
-  },
-]
+type FeatureToggleIconKey =
+  | 'BookOpen'
+  | 'Code'
+  | 'Cube'
+  | 'Database'
+  | 'FileText'
+  | 'Flask'
+  | 'FlowArrow'
+  | 'Image'
+  | 'Lightbulb'
+  | 'PaintBrush'
+  | 'Play'
+  | 'Tree'
+  | 'Wrench'
+
+const iconMap: Record<FeatureToggleIconKey, ComponentType<{ size?: number; weight?: 'duotone' }>> = {
+  BookOpen,
+  Code,
+  Cube,
+  Database,
+  FileText,
+  Flask,
+  FlowArrow,
+  Image,
+  Lightbulb,
+  PaintBrush,
+  Play,
+  Tree,
+  Wrench,
+}
+
+type FeatureToggleItem = {
+  key: keyof FeatureToggles
+  label: string
+  description: string
+  icon: FeatureToggleIconKey
+}
+
+const featuresList = featureToggleSettings as FeatureToggleItem[]
+
+function FeatureToggleHeader({ enabledCount, totalCount }: { enabledCount: number; totalCount: number }) {
+  return (
+    <div className="mb-6">
+      <h2 className="text-2xl font-bold mb-2">Feature Toggles</h2>
+      <p className="text-muted-foreground">
+        Enable or disable features to customize your workspace. {enabledCount} of {totalCount} features enabled.
+      </p>
+    </div>
+  )
+}
+
+function FeatureToggleCard({
+  item,
+  enabled,
+  onToggle,
+}: {
+  item: FeatureToggleItem
+  enabled: boolean
+  onToggle: (value: boolean) => void
+}) {
+  const Icon = iconMap[item.icon]
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`p-2 rounded-lg ${enabled ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+              <Icon size={20} weight="duotone" />
+            </div>
+            <div>
+              <CardTitle className="text-base">{item.label}</CardTitle>
+              <CardDescription className="text-xs mt-1">{item.description}</CardDescription>
+            </div>
+          </div>
+          <Switch id={item.key} checked={enabled} onCheckedChange={onToggle} />
+        </div>
+      </CardHeader>
+    </Card>
+  )
+}
+
+function FeatureToggleGrid({
+  items,
+  features,
+  onToggle,
+}: {
+  items: FeatureToggleItem[]
+  features: FeatureToggles
+  onToggle: (key: keyof FeatureToggles, value: boolean) => void
+}) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pr-4">
+      {items.map((item) => (
+        <FeatureToggleCard
+          key={item.key}
+          item={item}
+          enabled={features[item.key]}
+          onToggle={(checked) => onToggle(item.key, checked)}
+        />
+      ))}
+    </div>
+  )
+}
 
 export function FeatureToggleSettings({ features, onFeaturesChange }: FeatureToggleSettingsProps) {
   const handleToggle = (key: keyof FeatureToggles, value: boolean) => {
@@ -121,38 +143,10 @@ export function FeatureToggleSettings({ features, onFeaturesChange }: FeatureTog
 
   return (
     <div className="h-full p-6 bg-background">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2">Feature Toggles</h2>
-        <p className="text-muted-foreground">
-          Enable or disable features to customize your workspace. {enabledCount} of {totalCount} features enabled.
-        </p>
-      </div>
+      <FeatureToggleHeader enabledCount={enabledCount} totalCount={totalCount} />
 
       <ScrollArea className="h-[calc(100vh-200px)]">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pr-4">
-          {featuresList.map(({ key, label, description, icon: Icon }) => (
-            <Card key={key}>
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${features[key] ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
-                      <Icon size={20} weight="duotone" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-base">{label}</CardTitle>
-                      <CardDescription className="text-xs mt-1">{description}</CardDescription>
-                    </div>
-                  </div>
-                  <Switch
-                    id={key}
-                    checked={features[key]}
-                    onCheckedChange={(checked) => handleToggle(key, checked)}
-                  />
-                </div>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
+        <FeatureToggleGrid items={featuresList} features={features} onToggle={handleToggle} />
       </ScrollArea>
     </div>
   )
