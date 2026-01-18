@@ -189,9 +189,9 @@ type ManualSyncCardProps = {
   onSyncFromFlask: () => void
   onManualSync: () => void
   onCheckConnection: () => void
-  syncing: boolean
-  status: PersistenceStatus
-  autoSyncStatus: AutoSyncStatus
+  canSyncToFlask: boolean
+  canSyncFromFlask: boolean
+  canTriggerManualSync: boolean
 }
 
 const ManualSyncCard = ({
@@ -199,9 +199,9 @@ const ManualSyncCard = ({
   onSyncFromFlask,
   onManualSync,
   onCheckConnection,
-  syncing,
-  status,
-  autoSyncStatus,
+  canSyncToFlask,
+  canSyncFromFlask,
+  canTriggerManualSync,
 }: ManualSyncCardProps) => (
   <Card className="p-6 space-y-4 border-sidebar-border">
     <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -212,7 +212,7 @@ const ManualSyncCard = ({
     <div className="flex flex-wrap gap-3">
       <Button
         onClick={onSyncToFlask}
-        disabled={syncing || !status.flaskConnected}
+        disabled={!canSyncToFlask}
         className="flex items-center gap-2"
       >
         <CloudArrowUp />
@@ -220,7 +220,7 @@ const ManualSyncCard = ({
       </Button>
       <Button
         onClick={onSyncFromFlask}
-        disabled={syncing || !status.flaskConnected}
+        disabled={!canSyncFromFlask}
         variant="outline"
         className="flex items-center gap-2"
       >
@@ -229,7 +229,7 @@ const ManualSyncCard = ({
       </Button>
       <Button
         onClick={onManualSync}
-        disabled={syncing || !autoSyncStatus.enabled}
+        disabled={!canTriggerManualSync}
         variant="outline"
         className="flex items-center gap-2"
       >
@@ -284,12 +284,8 @@ export function PersistenceDashboard() {
     metrics,
     autoSyncStatus,
     autoSyncEnabled,
-    syncing,
-    handleSyncToFlask,
-    handleSyncFromFlask,
-    handleManualSync,
-    handleAutoSyncToggle,
-    handleCheckConnection,
+    flags,
+    handlers,
   } = usePersistenceDashboard()
 
   return (
@@ -302,21 +298,21 @@ export function PersistenceDashboard() {
         <AutoSyncCard
           autoSyncStatus={autoSyncStatus}
           autoSyncEnabled={autoSyncEnabled}
-          onToggle={handleAutoSyncToggle}
+          onToggle={handlers.handleAutoSyncToggle}
         />
       </div>
 
       <ManualSyncCard
-        onSyncToFlask={handleSyncToFlask}
-        onSyncFromFlask={handleSyncFromFlask}
-        onManualSync={handleManualSync}
-        onCheckConnection={handleCheckConnection}
-        syncing={syncing}
-        status={status}
-        autoSyncStatus={autoSyncStatus}
+        onSyncToFlask={handlers.handleSyncToFlask}
+        onSyncFromFlask={handlers.handleSyncFromFlask}
+        onManualSync={handlers.handleManualSync}
+        onCheckConnection={handlers.handleCheckConnection}
+        canSyncToFlask={flags.canSyncToFlask}
+        canSyncFromFlask={flags.canSyncFromFlask}
+        canTriggerManualSync={flags.canTriggerManualSync}
       />
 
-      {status.error && <SyncErrorCard error={status.error} />}
+      {flags.hasError && status.error && <SyncErrorCard error={status.error} />}
 
       <HowPersistenceWorksCard />
     </div>
