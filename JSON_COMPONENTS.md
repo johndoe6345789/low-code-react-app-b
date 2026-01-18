@@ -92,8 +92,8 @@ Form inputs and interactive controls:
 - `Switch` - Toggle switch
 - `Slider` - Numeric range slider
 - `NumberInput` - Numeric input with increment/decrement
-- `DatePicker` - Date selection (planned)
-- `FileUpload` - File upload control (planned)
+- `DatePicker` - Date selection
+- `FileUpload` - File upload control
 
 ### Display Components (16)
 Presentation and visual elements:

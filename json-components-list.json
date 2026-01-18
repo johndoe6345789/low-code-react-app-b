@@ -172,7 +172,7 @@
     "category": "input",
     "canHaveChildren": false,
     "description": "Date selection input",
-    "status": "planned"
+    "status": "supported"
   },
   {
     "type": "FileUpload",
@@ -180,7 +180,7 @@
     "category": "input",
     "canHaveChildren": false,
     "description": "File upload control",
-    "status": "planned"
+    "status": "supported"
   },
   {
     "type": "Text",
