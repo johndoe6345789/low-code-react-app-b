@@ -78,6 +78,7 @@ const buildRegistryFromNames = (
 }
 
 const jsonRegistryEntries = jsonRegistry.components ?? []
+const atomComponentMap = AtomComponents as Record<string, ComponentType<any>>
 const deprecatedComponentInfo = jsonRegistryEntries.reduce<Record<string, DeprecatedComponentInfo>>(
   (acc, entry) => {
     const entryName = entry.export ?? entry.name ?? entry.type
@@ -174,8 +175,10 @@ export const shadcnComponents: UIComponentRegistry = {
 export const atomComponents: UIComponentRegistry = {
   ...buildRegistryFromNames(
     atomRegistryNames,
-    AtomComponents as Record<string, ComponentType<any>>
+    atomComponentMap
   ),
+  DatePicker: atomComponentMap.DatePicker,
+  FileUpload: atomComponentMap.FileUpload,
   CircularProgress,
   Divider,
   ProgressBar,
