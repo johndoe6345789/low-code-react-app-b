@@ -16,9 +16,15 @@ export { ToolbarButton } from './ToolbarButton'
 export { TreeFormDialog } from './TreeFormDialog'
 export { SearchInput } from './SearchInput'
 export { BindingEditor } from './BindingEditor'
-export { DataSourceEditorDialog } from './DataSourceEditorDialog'
-export { ComponentBindingDialog } from './ComponentBindingDialog'
 export { TreeCard } from './TreeCard'
 export { TreeListHeader } from './TreeListHeader'
-export { LoadingFallback, NavigationItem, PageHeaderContent } from '@/lib/json-ui/json-components'
+export { 
+  LoadingFallback, 
+  NavigationItem, 
+  PageHeaderContent,
+  ComponentBindingDialog,
+  DataSourceEditorDialog,
+  GitHubBuildStatus as GitHubBuildStatusJSON,
+  SaveIndicator as SaveIndicatorJSON
+} from '@/lib/json-ui/json-components'
 export { preloadMonacoEditor } from './LazyMonacoEditor'
