@@ -2,6 +2,13 @@
 
 This task list captures the next steps for expanding JSON UI coverage, split between **component migrations** and **framework enablers**.
 
+## Implementation Notes
+
+- Component trees can live as JSON definitions.
+- Custom behavior should be organized into hooks where appropriate.
+- Types belong in `types` files; interfaces belong in dedicated `interfaces` files.
+- Capture relevant conversion logs during work.
+
 ## Component Migration Tasks (Planned → Supported)
 
 ### Input Components

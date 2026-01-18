@@ -10,6 +10,54 @@ The JSON UI system allows you to define user interfaces using JSON schemas inste
 - Configuration-driven UIs
 - Rapid prototyping
 
+## JSON Eligibility Checklist
+
+Use this checklist during every conversion to determine whether a component can be safely represented in JSON.
+
+### Core requirements (must all be true)
+- **No side-effects**: The component should be render-only; it must not perform data fetching, subscriptions, timers, or imperative DOM work. Side-effects belong in wrappers or higher-level orchestration. 
+- **Supported bindings only**: Props must map to supported JSON bindings (static values, expression bindings, or schema-recognized props). Avoid custom callbacks, ref usage, or passing functions through JSON.
+- **Stable props**: Props should be serializable and deterministic (strings, numbers, booleans, arrays, objects). Avoid non-serializable values like class instances, functions, or dates unless explicitly supported by the JSON schema.
+
+### Derived state guidance
+- **Prefer pure derivation**: If state can be derived from props or data bindings, compute it at render time in the renderer or via expression bindings rather than introducing component state.
+- **Avoid local state in JSON components**: If a component needs internal state to function, wrap it in a React component and expose only the minimal, declarative props to JSON.
+- **Keep calculations explicit**: Use named props (e.g., `selectedCount`, `isComplete`) rather than embedding complex logic that would need component state.
+
+### Event handler guidance
+- **Use schema-recognized actions**: Wire events to supported JSON actions or expression handlers (e.g., `onClick` -> `actions.navigate`, `actions.submit`), not raw functions.
+- **Pass data, not closures**: Event handlers should reference IDs, routes, or action payloads so the runtime can resolve them.
+- **Escalate complex logic**: If an event handler needs branching logic or side-effects, move that logic into an app-level action or wrapper component and keep JSON props declarative.
+
+## Naming & Value Conventions
+
+Use these conventions to keep JSON component schemas consistent and easy to validate.
+
+### Core naming rules
+- **`id`**: Required, unique within a page or component subtree. Use **kebab-case** (`panel-header`, `user-card`) so IDs remain stable across tools and scripts.
+- **`type`**: Must match a registered `ComponentType` or HTML element name exactly (case-sensitive). Avoid aliases or custom casing.
+- **`props` keys**: Use **camelCase** for prop names (`className`, `defaultValue`, `onClick`). Avoid nesting `children` under multiple keys.
+
+### `children` rules
+- **Accepted values**: Either a **string** (text-only) or an **array of component objects**.
+- **Do not mix**: If `children` is an array, text content should be represented by a nested `Text`/`Heading` component.
+- **Prefer `props.children` only for leaf text**: When a component has no nested child components, you can set `props.children` to a string. Do not set both `children` and `props.children` at the same time.
+
+### `variant` rules
+Use `variant` for style tokens rather than ad-hoc CSS classes.
+- **Shadcn-style variants (buttons, badges, dialog actions)**:  
+  `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`
+- **Feedback/status variants (alerts, toasts, status messaging)**:  
+  `success`, `error`, `info`, `warning`
+
+### `size` rules
+- **Dialog size**:  
+  `sm`, `md`, `lg`, `xl`, `full`
+- **Token-based sizes** (progress indicators, spinners, badges):  
+  `sm`, `md`, `lg`
+- **Numeric sizes** (icons or pixel-based controls):  
+  Use a number (e.g., `16`, `20`, `24`) when the component expects pixel sizes.
+
 ## Quick Start
 
 ### List All JSON-Compatible Components
@@ -150,8 +198,16 @@ Domain-specific components:
 ## Current Status
 
 - **Total Components**: 60
-- **Supported**: 46 (77%)
-- **Planned**: 14 (23%)
+- **Supported**: 51 (85%)
+- **Planned**: 9 (15%)
+
+## Status Summary
+
+| Status | Count |
+| --- | ---: |
+| Supported | 51 |
+| Maybe | 0 |
+| Planned | 9 |
 
 ## Files
 
@@ -201,6 +257,29 @@ Priority for migration:
 2. Components with simple props
 3. Components with good atomic design
 4. Components without complex state management
+
+## Deprecation & JSON Migration Process
+
+Use this process when retiring legacy components or renaming JSON component types.
+
+### Deprecation workflow
+1. **Assess usage**: Identify schemas and component usage (search in `src/config/schemas` or project JSON). Flag any external consumers.
+2. **Define a replacement**: Ensure a supported JSON-safe replacement exists (or create a wrapper) and document prop differences.
+3. **Mark deprecated in the registry**: Update `json-components-registry.json` with `"status": "deprecated"` and optional `"deprecated"` metadata:
+   - `replacedBy`: the new component type to use.
+   - `message`: extra guidance for migrations.
+4. **Update definitions**: If needed, adjust `src/lib/component-definitions.ts` to align defaults and prop expectations for the replacement.
+5. **Communicate the change**: Add a note to release documentation or changelog and note the replacement.
+6. **Set a removal window**: Target the next minor/major release for removal once migration is complete.
+
+### JSON migration checklist
+- [ ] Replace deprecated component types in schemas with their replacements.
+- [ ] Validate props against the replacement component definition.
+- [ ] Run JSON renderer previews to confirm layout and bindings.
+- [ ] Remove any legacy bindings or props that are no longer supported.
+
+### Runtime warning mechanism
+The schema renderer emits a `console.warn` when a deprecated component type appears in a JSON schema. This warning uses the metadata in `json-components-registry.json` to suggest replacements and highlight remediation guidance.
 
 ## Related Documentation
 

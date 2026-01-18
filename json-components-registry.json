@@ -2,7 +2,7 @@
   "$schema": "./schemas/json-components-registry-schema.json",
   "version": "2.0.0",
   "description": "Registry of all components in the application",
-  "lastUpdated": "2026-01-18T12:29:35.000Z",
+  "lastUpdated": "2026-01-18T12:20:47.049Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -41,21 +41,12 @@
       "source": "atoms"
     },
     {
-      "type": "Card",
-      "name": "Card",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Container card with optional header, content, and footer",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "CodeExplanationDialog",
       "name": "CodeExplanationDialog",
       "category": "layout",
       "canHaveChildren": true,
       "description": "CodeExplanationDialog component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -106,7 +97,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "DataSourceCard component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -152,15 +143,6 @@
       "source": "atoms"
     },
     {
-      "type": "Drawer",
-      "name": "Drawer",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Sliding panel overlay",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Flex",
       "name": "Flex",
       "category": "layout",
@@ -195,15 +177,6 @@
       "description": "Card shown on hover",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "HoverCard",
-      "name": "HoverCard",
-      "category": "layout",
-      "canHaveChildren": true,
-      "description": "Card shown on hover",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "Modal",
@@ -256,7 +229,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "TreeCard component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -266,7 +239,7 @@
       "category": "layout",
       "canHaveChildren": true,
       "description": "TreeFormDialog component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -289,15 +262,6 @@
       "source": "atoms"
     },
     {
-      "type": "Button",
-      "name": "Button",
-      "category": "input",
-      "canHaveChildren": true,
-      "description": "Interactive button element",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "ButtonGroup",
       "name": "ButtonGroup",
       "category": "input",
@@ -314,15 +278,6 @@
       "description": "Checkbox toggle control",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Checkbox",
-      "name": "Checkbox",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Checkbox toggle control",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "ConfirmButton",
@@ -379,15 +334,6 @@
       "source": "atoms"
     },
     {
-      "type": "Form",
-      "name": "Form",
-      "category": "input",
-      "canHaveChildren": true,
-      "description": "Form container component",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "IconButton",
       "name": "IconButton",
       "category": "input",
@@ -404,15 +350,6 @@
       "description": "Text input field",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Input",
-      "name": "Input",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Text input field",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "InputOtp",
@@ -487,38 +424,11 @@
       "source": "atoms"
     },
     {
-      "type": "Select",
-      "name": "Select",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Dropdown select control",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Slider",
       "name": "Slider",
       "category": "input",
       "canHaveChildren": false,
       "description": "Numeric range slider",
-      "status": "supported",
-      "source": "atoms"
-    },
-    {
-      "type": "Slider",
-      "name": "Slider",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Numeric range slider",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
-      "type": "Switch",
-      "name": "Switch",
-      "category": "input",
-      "canHaveChildren": false,
-      "description": "Toggle switch control",
       "status": "supported",
       "source": "atoms"
     },
@@ -529,7 +439,7 @@
       "canHaveChildren": false,
       "description": "Toggle switch control",
       "status": "supported",
-      "source": "ui"
+      "source": "atoms"
     },
     {
       "type": "TextArea",
@@ -537,8 +447,12 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Multi-line text input",
-      "status": "supported",
-      "source": "atoms"
+      "status": "deprecated",
+      "source": "atoms",
+      "deprecated": {
+        "replacedBy": "Textarea",
+        "message": "Prefer the shadcn/ui Textarea component for JSON schemas."
+      }
     },
     {
       "type": "Toggle",
@@ -548,15 +462,6 @@
       "description": "Toggle button control",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Toggle",
-      "name": "Toggle",
-      "category": "input",
-      "canHaveChildren": true,
-      "description": "Toggle button control",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "ToggleGroup",
@@ -573,7 +478,7 @@
       "category": "input",
       "canHaveChildren": true,
       "description": "ToolbarButton component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -596,15 +501,6 @@
       "source": "atoms"
     },
     {
-      "type": "Avatar",
-      "name": "Avatar",
-      "category": "display",
-      "canHaveChildren": false,
-      "description": "User avatar image",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "AvatarGroup",
       "name": "AvatarGroup",
       "category": "display",
@@ -621,15 +517,6 @@
       "description": "Small status or count indicator",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Badge",
-      "name": "Badge",
-      "category": "display",
-      "canHaveChildren": true,
-      "description": "Small status or count indicator",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "CircularProgress",
@@ -722,15 +609,6 @@
       "source": "atoms"
     },
     {
-      "type": "Label",
-      "name": "Label",
-      "category": "display",
-      "canHaveChildren": true,
-      "description": "Form label element",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Progress",
       "name": "Progress",
       "category": "display",
@@ -754,7 +632,7 @@
       "category": "display",
       "canHaveChildren": true,
       "description": "SchemaCodeViewer organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -768,15 +646,6 @@
       "source": "atoms"
     },
     {
-      "type": "Separator",
-      "name": "Separator",
-      "category": "display",
-      "canHaveChildren": false,
-      "description": "Visual divider line",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Skeleton",
       "name": "Skeleton",
       "category": "display",
@@ -784,15 +653,6 @@
       "description": "Loading skeleton placeholder",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Skeleton",
-      "name": "Skeleton",
-      "category": "display",
-      "canHaveChildren": false,
-      "description": "Loading skeleton placeholder",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "Spinner",
@@ -876,15 +736,6 @@
       "source": "atoms"
     },
     {
-      "type": "ContextMenu",
-      "name": "ContextMenu",
-      "category": "navigation",
-      "canHaveChildren": true,
-      "description": "Right-click context menu",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "DropdownMenu",
       "name": "DropdownMenu",
       "category": "navigation",
@@ -899,7 +750,7 @@
       "category": "navigation",
       "canHaveChildren": true,
       "description": "FileTabs component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -946,18 +797,8 @@
       "category": "navigation",
       "canHaveChildren": true,
       "description": "NavigationItem component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
-    },
-    {
-      "type": "NavigationMenu",
-      "name": "NavigationMenu",
-      "category": "navigation",
-      "canHaveChildren": true,
-      "description": "NavigationMenu component",
-      "status": "maybe-json-compatible",
-      "source": "organisms",
       "jsonCompatible": true
     },
     {
@@ -988,15 +829,6 @@
       "source": "atoms"
     },
     {
-      "type": "Tabs",
-      "name": "Tabs",
-      "category": "navigation",
-      "canHaveChildren": true,
-      "description": "Tabbed interface container",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "Alert",
       "name": "Alert",
       "category": "feedback",
@@ -1004,15 +836,6 @@
       "description": "Alert notification message",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Alert",
-      "name": "Alert",
-      "category": "feedback",
-      "canHaveChildren": true,
-      "description": "Alert notification message",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "CountBadge",
@@ -1038,7 +861,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "EmptyCanvasState organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1069,16 +892,6 @@
       "description": "Empty state placeholder",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "EmptyState",
-      "name": "EmptyState",
-      "category": "feedback",
-      "canHaveChildren": true,
-      "description": "Empty state placeholder",
-      "status": "maybe-json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
     },
     {
       "type": "EmptyStateIcon",
@@ -1169,16 +982,6 @@
       "source": "atoms"
     },
     {
-      "type": "LoadingState",
-      "name": "LoadingState",
-      "category": "feedback",
-      "canHaveChildren": true,
-      "description": "LoadingState component",
-      "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
-    },
-    {
       "type": "Notification",
       "name": "Notification",
       "category": "feedback",
@@ -1193,7 +996,7 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "SchemaEditorStatusBar organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1248,7 +1051,7 @@
       "category": "data",
       "canHaveChildren": true,
       "description": "DataSourceManager organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1408,16 +1211,6 @@
       "source": "atoms"
     },
     {
-      "type": "StatCard",
-      "name": "StatCard",
-      "category": "data",
-      "canHaveChildren": false,
-      "description": "Statistic card display",
-      "status": "maybe-json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
-    },
-    {
       "type": "Table",
       "name": "Table",
       "category": "data",
@@ -1425,15 +1218,6 @@
       "description": "Data table",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Table",
-      "name": "Table",
-      "category": "data",
-      "canHaveChildren": false,
-      "description": "Data table",
-      "status": "supported",
-      "source": "ui"
     },
     {
       "type": "Timeline",
@@ -1450,7 +1234,7 @@
       "category": "data",
       "canHaveChildren": true,
       "description": "TreeListHeader component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1460,7 +1244,7 @@
       "category": "data",
       "canHaveChildren": true,
       "description": "TreeListPanel organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1474,23 +1258,18 @@
       "source": "atoms"
     },
     {
-      "type": "Accordion",
-      "name": "Accordion",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Collapsible content sections",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "ActionBar",
       "name": "ActionBar",
       "category": "custom",
       "canHaveChildren": false,
       "description": "Action button toolbar",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: stateless layout molecule; bindings/events supported in json-ui component types."
+      }
     },
     {
       "type": "AppBranding",
@@ -1508,7 +1287,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "AppHeader organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1536,7 +1315,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "BindingEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1559,21 +1338,12 @@
       "source": "atoms"
     },
     {
-      "type": "Calendar",
-      "name": "Calendar",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Calendar date selector",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "CanvasRenderer",
       "name": "CanvasRenderer",
       "category": "custom",
       "canHaveChildren": true,
       "description": "CanvasRenderer component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1637,7 +1407,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "ComponentPalette component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1688,9 +1458,13 @@
       "category": "custom",
       "canHaveChildren": false,
       "description": "Custom data display card",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionPriority": "high",
+        "notes": "JSON-ready: presentational molecule with conditional rendering only; bindings supported in json-ui component types."
+      }
     },
     {
       "type": "DetailRow",
@@ -1716,7 +1490,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "EditorActions component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1726,7 +1500,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "EditorToolbar component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1745,7 +1519,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "JSONUIShowcase organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1764,7 +1538,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "LazyInlineMonacoEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1774,7 +1548,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "LazyMonacoEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1793,7 +1567,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "MonacoEditorPanel component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1807,22 +1581,12 @@
       "source": "atoms"
     },
     {
-      "type": "PageHeader",
-      "name": "PageHeader",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "PageHeader component",
-      "status": "json-compatible",
-      "source": "organisms",
-      "jsonCompatible": true
-    },
-    {
       "type": "PageHeaderContent",
       "name": "PageHeaderContent",
       "category": "custom",
       "canHaveChildren": true,
       "description": "PageHeaderContent component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1854,21 +1618,12 @@
       "source": "atoms"
     },
     {
-      "type": "Popover",
-      "name": "Popover",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Popover overlay content",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "PropertyEditor",
       "name": "PropertyEditor",
       "category": "custom",
       "canHaveChildren": true,
       "description": "PropertyEditor component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -1937,7 +1692,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorCanvas organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1947,7 +1702,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorLayout organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1957,7 +1712,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorPropertiesPanel organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1967,7 +1722,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorSidebar organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1977,7 +1732,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "SchemaEditorToolbar organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -1991,21 +1746,12 @@
       "source": "atoms"
     },
     {
-      "type": "ScrollArea",
-      "name": "ScrollArea",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Scrollable container area",
-      "status": "supported",
-      "source": "ui"
-    },
-    {
       "type": "SearchBar",
       "name": "SearchBar",
       "category": "custom",
       "canHaveChildren": true,
       "description": "SearchBar component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "molecules",
       "jsonCompatible": true
     },
@@ -2017,16 +1763,6 @@
       "description": "Search input with icon",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "SearchInput",
-      "name": "SearchInput",
-      "category": "custom",
-      "canHaveChildren": false,
-      "description": "Search input with icon",
-      "status": "maybe-json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
     },
     {
       "type": "Sheet",
@@ -2129,7 +1865,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "ToolbarActions organism component",
-      "status": "maybe-json-compatible",
+      "status": "supported",
       "source": "organisms",
       "jsonCompatible": true
     },
@@ -2141,23 +1877,14 @@
       "description": "Tooltip overlay text",
       "status": "supported",
       "source": "atoms"
-    },
-    {
-      "type": "Tooltip",
-      "name": "Tooltip",
-      "category": "custom",
-      "canHaveChildren": true,
-      "description": "Tooltip overlay text",
-      "status": "supported",
-      "source": "ui"
     }
   ],
   "statistics": {
-    "total": 219,
-    "supported": 157,
-    "planned": 7,
-    "jsonCompatible": 14,
-    "maybeJsonCompatible": 41,
+    "total": 217,
+    "supported": 204,
+    "planned": 0,
+    "jsonCompatible": 13,
+    "maybeJsonCompatible": 0,
     "byCategory": {
       "layout": 25,
       "input": 34,

@@ -17,9 +17,19 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Skeleton as ShadcnSkeleton } from '@/components/ui/skeleton'
 import { Progress } from '@/components/ui/progress'
 import { Avatar as ShadcnAvatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { CircularProgress, Divider, ProgressBar } from '@/components/atoms'
 import * as AtomComponents from '@/components/atoms'
 import * as MoleculeComponents from '@/components/molecules'
-import * as WrapperComponents from '@/lib/json-ui/wrappers'
+import * as OrganismComponents from '@/components/organisms'
+import {
+  BreadcrumbWrapper,
+  LazyBarChartWrapper,
+  LazyD3BarChartWrapper,
+  LazyLineChartWrapper,
+  SaveIndicatorWrapper,
+  SeedDataManagerWrapper,
+  StorageSettingsWrapper,
+} from '@/lib/json-ui/wrappers'
 import jsonComponentsRegistry from '../../../json-components-registry.json'
 import { 
   ArrowLeft, ArrowRight, Check, X, Plus, Minus, MagnifyingGlass, 
@@ -39,12 +49,17 @@ interface JsonRegistryEntry {
   type?: string
   export?: string
   source?: string
-  wrapperRequired?: boolean
-  wrapperComponent?: string
+  status?: string
+  deprecated?: DeprecatedComponentInfo
 }
 
 interface JsonComponentRegistry {
   components?: JsonRegistryEntry[]
+}
+
+export interface DeprecatedComponentInfo {
+  replacedBy?: string
+  message?: string
 }
 
 const jsonRegistry = jsonComponentsRegistry as JsonComponentRegistry
@@ -63,6 +78,19 @@ const buildRegistryFromNames = (
 }
 
 const jsonRegistryEntries = jsonRegistry.components ?? []
+const deprecatedComponentInfo = jsonRegistryEntries.reduce<Record<string, DeprecatedComponentInfo>>(
+  (acc, entry) => {
+    const entryName = entry.export ?? entry.name ?? entry.type
+    if (!entryName) {
+      return acc
+    }
+    if (entry.status === 'deprecated' || entry.deprecated) {
+      acc[entryName] = entry.deprecated ?? {}
+    }
+    return acc
+  },
+  {}
+)
 const atomRegistryNames = jsonRegistryEntries
   .filter((entry) => entry.source === 'atoms')
   .map((entry) => entry.export ?? entry.name ?? entry.type)
@@ -71,19 +99,10 @@ const moleculeRegistryNames = jsonRegistryEntries
   .filter((entry) => entry.source === 'molecules')
   .map((entry) => entry.export ?? entry.name ?? entry.type)
   .filter((name): name is string => Boolean(name))
-const wrapperRegistryNames = jsonRegistryEntries
-  .filter((entry) => entry.source === 'wrappers')
+const organismRegistryNames = jsonRegistryEntries
+  .filter((entry) => entry.source === 'organisms')
   .map((entry) => entry.export ?? entry.name ?? entry.type)
   .filter((name): name is string => Boolean(name))
-
-const registryEntryByType = new Map<string, JsonRegistryEntry>(
-  jsonRegistryEntries
-    .map((entry) => {
-      const key = entry.type ?? entry.name ?? entry.export
-      return key ? [key, entry] : null
-    })
-    .filter((entry): entry is [string, JsonRegistryEntry] => Boolean(entry))
-)
 
 export const primitiveComponents: UIComponentRegistry = {
   div: 'div' as any,
@@ -157,6 +176,9 @@ export const atomComponents: UIComponentRegistry = {
     atomRegistryNames,
     AtomComponents as Record<string, ComponentType<any>>
   ),
+  CircularProgress,
+  Divider,
+  ProgressBar,
   DataList: (AtomComponents as Record<string, ComponentType<any>>).DataList,
   DataTable: (AtomComponents as Record<string, ComponentType<any>>).DataTable,
   MetricCard: (AtomComponents as Record<string, ComponentType<any>>).MetricCard,
@@ -173,10 +195,20 @@ export const moleculeComponents: UIComponentRegistry = buildRegistryFromNames(
   MoleculeComponents as Record<string, ComponentType<any>>
 )
 
-export const jsonWrapperComponents: UIComponentRegistry = buildRegistryFromNames(
-  wrapperRegistryNames,
-  WrapperComponents as Record<string, ComponentType<any>>
+export const organismComponents: UIComponentRegistry = buildRegistryFromNames(
+  organismRegistryNames,
+  OrganismComponents as Record<string, ComponentType<any>>
 )
+
+export const jsonWrapperComponents: UIComponentRegistry = {
+  Breadcrumb: BreadcrumbWrapper,
+  SaveIndicator: SaveIndicatorWrapper,
+  LazyBarChart: LazyBarChartWrapper,
+  LazyLineChart: LazyLineChartWrapper,
+  LazyD3BarChart: LazyD3BarChartWrapper,
+  SeedDataManager: SeedDataManagerWrapper,
+  StorageSettings: StorageSettingsWrapper,
+}
 
 export const iconComponents: UIComponentRegistry = {
   ArrowLeft,
@@ -224,6 +256,7 @@ export const uiComponentRegistry: UIComponentRegistry = {
   ...shadcnComponents,
   ...atomComponents,
   ...moleculeComponents,
+  ...organismComponents,
   ...jsonWrapperComponents,
   ...iconComponents,
 }
@@ -246,4 +279,8 @@ export function getUIComponent(type: string): ComponentType<any> | string | null
 
 export function hasComponent(type: string): boolean {
   return Boolean(resolveWrapperComponent(type) ?? uiComponentRegistry[type])
+}
+
+export function getDeprecatedComponentInfo(type: string): DeprecatedComponentInfo | null {
+  return deprecatedComponentInfo[type] ?? null
 }

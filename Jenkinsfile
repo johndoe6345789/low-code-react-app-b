@@ -68,6 +68,15 @@ pipeline {
                         }
                     }
                 }
+                stage('Component Registry Check') {
+                    steps {
+                        script {
+                            nodejs(nodeJSInstallationName: "Node ${NODE_VERSION}") {
+                                sh 'npm run components:validate'
+                            }
+                        }
+                    }
+                }
             }
         }
 
