@@ -67,7 +67,20 @@
       "description": "ComponentBindingDialog component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "ComponentBindingDialogWrapper"
+    },
+    {
+      "type": "ComponentBindingDialogWrapper",
+      "name": "ComponentBindingDialogWrapper",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "JSON wrapper for component binding dialog with props-driven bindings",
+      "status": "json-compatible",
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "ComponentBindingDialog"
     },
     {
       "type": "Container",
@@ -96,7 +109,20 @@
       "description": "DataSourceEditorDialog component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "DataSourceEditorDialogWrapper"
+    },
+    {
+      "type": "DataSourceEditorDialogWrapper",
+      "name": "DataSourceEditorDialogWrapper",
+      "category": "layout",
+      "canHaveChildren": true,
+      "description": "JSON wrapper for data source editor dialog with props-driven fields",
+      "status": "json-compatible",
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "DataSourceEditorDialog"
     },
     {
       "type": "Dialog",
@@ -893,7 +919,20 @@
       "description": "GitHubBuildStatus component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "GitHubBuildStatusWrapper"
+    },
+    {
+      "type": "GitHubBuildStatusWrapper",
+      "name": "GitHubBuildStatusWrapper",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "JSON wrapper for props-driven GitHub build status summary",
+      "status": "json-compatible",
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "GitHubBuildStatus"
     },
     {
       "type": "InfoBox",
@@ -1039,30 +1078,69 @@
       "name": "LazyBarChart",
       "category": "data",
       "canHaveChildren": true,
+      "description": "Lazy-loaded Recharts bar chart with runtime library loading",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "LazyBarChartWrapper"
+    },
+    {
+      "type": "LazyBarChartWrapper",
+      "name": "LazyBarChartWrapper",
+      "category": "data",
+      "canHaveChildren": true,
       "description": "JSON wrapper for a props-driven bar chart (no lazy hooks)",
       "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "LazyBarChart"
     },
     {
       "type": "LazyD3BarChart",
       "name": "LazyD3BarChart",
       "category": "data",
       "canHaveChildren": true,
+      "description": "Lazy-loaded D3 bar chart with runtime library loading",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "LazyD3BarChartWrapper"
+    },
+    {
+      "type": "LazyD3BarChartWrapper",
+      "name": "LazyD3BarChartWrapper",
+      "category": "data",
+      "canHaveChildren": true,
       "description": "JSON wrapper for a simple SVG bar chart (no D3 hooks)",
       "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "LazyD3BarChart"
     },
     {
       "type": "LazyLineChart",
       "name": "LazyLineChart",
       "category": "data",
       "canHaveChildren": true,
+      "description": "Lazy-loaded Recharts line chart with runtime library loading",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "LazyLineChartWrapper"
+    },
+    {
+      "type": "LazyLineChartWrapper",
+      "name": "LazyLineChartWrapper",
+      "category": "data",
+      "canHaveChildren": true,
       "description": "JSON wrapper for a props-driven line chart (no lazy hooks)",
       "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "LazyLineChart"
     },
     {
       "type": "List",
@@ -1105,10 +1183,23 @@
       "name": "SeedDataManager",
       "category": "data",
       "canHaveChildren": true,
+      "description": "Seed data management with app-level hook state",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "SeedDataManagerWrapper"
+    },
+    {
+      "type": "SeedDataManagerWrapper",
+      "name": "SeedDataManagerWrapper",
+      "category": "data",
+      "canHaveChildren": true,
       "description": "JSON wrapper for seed data management with props-driven state",
       "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "SeedDataManager"
     },
     {
       "type": "StatCard",
@@ -1337,7 +1428,20 @@
       "description": "ComponentTree component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "ComponentTreeWrapper"
+    },
+    {
+      "type": "ComponentTreeWrapper",
+      "name": "ComponentTreeWrapper",
+      "category": "custom",
+      "canHaveChildren": true,
+      "description": "JSON wrapper for a props-driven component tree view",
+      "status": "json-compatible",
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "ComponentTree"
     },
     {
       "type": "ComponentTreeNode",
@@ -1564,10 +1668,23 @@
       "name": "SaveIndicator",
       "category": "custom",
       "canHaveChildren": true,
+      "description": "Save status indicator with hook-driven state",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "SaveIndicatorWrapper"
+    },
+    {
+      "type": "SaveIndicatorWrapper",
+      "name": "SaveIndicatorWrapper",
+      "category": "custom",
+      "canHaveChildren": true,
       "description": "JSON wrapper for save status indicator with pure-props API",
       "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "SaveIndicator"
     },
     {
       "type": "SchemaEditorCanvas",
@@ -1715,10 +1832,23 @@
       "name": "StorageSettings",
       "category": "custom",
       "canHaveChildren": true,
+      "description": "Storage settings controls with hook-driven state",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": false,
+      "wrapperRequired": true,
+      "wrapperComponent": "StorageSettingsWrapper"
+    },
+    {
+      "type": "StorageSettingsWrapper",
+      "name": "StorageSettingsWrapper",
+      "category": "custom",
+      "canHaveChildren": true,
       "description": "JSON wrapper for storage settings controls with props-driven state",
       "status": "json-compatible",
-      "source": "molecules",
-      "jsonCompatible": true
+      "source": "wrappers",
+      "jsonCompatible": true,
+      "wrapperFor": "StorageSettings"
     },
     {
       "type": "Timestamp",

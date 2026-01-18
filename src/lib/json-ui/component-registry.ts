@@ -265,12 +265,20 @@ export function registerComponent(name: string, component: ComponentType<any>) {
   uiComponentRegistry[name] = component
 }
 
+const resolveWrapperComponent = (type: string): ComponentType<any> | null => {
+  const entry = registryEntryByType.get(type)
+  if (entry?.wrapperRequired && entry.wrapperComponent) {
+    return uiComponentRegistry[entry.wrapperComponent] || null
+  }
+  return null
+}
+
 export function getUIComponent(type: string): ComponentType<any> | string | null {
-  return uiComponentRegistry[type] || null
+  return resolveWrapperComponent(type) ?? uiComponentRegistry[type] ?? null
 }
 
 export function hasComponent(type: string): boolean {
-  return type in uiComponentRegistry
+  return Boolean(resolveWrapperComponent(type) ?? uiComponentRegistry[type])
 }
 
 export function getDeprecatedComponentInfo(type: string): DeprecatedComponentInfo | null {
