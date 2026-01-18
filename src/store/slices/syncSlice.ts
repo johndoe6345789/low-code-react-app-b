@@ -9,6 +9,8 @@ import { db } from '@/lib/db'
 
 export type SyncStatus = 'idle' | 'syncing' | 'success' | 'error'
 
+const SYNCABLE_STORES = new Set(['files', 'models', 'components', 'workflows'])
+
 interface SyncState {
   status: SyncStatus
   lastSyncedAt: number | null
@@ -72,10 +74,7 @@ export const syncFromFlaskBulk = createAsyncThunk(
       for (const [key, value] of Object.entries(data)) {
         const [storeName, id] = key.split(':')
         
-        if (storeName === 'files' || 
-            storeName === 'models' || 
-            storeName === 'components' || 
-            storeName === 'workflows') {
+        if (SYNCABLE_STORES.has(storeName)) {
           await db.put(storeName as any, value)
         }
       }
