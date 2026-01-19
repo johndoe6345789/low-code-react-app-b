@@ -3,7 +3,7 @@ import type { UIComponent } from '@/types/json-ui'
 
 export type SaveIndicatorStatus = 'saved' | 'synced'
 
-export interface SaveIndicatorWrapperProps {
+export interface SaveIndicatorProps {
   lastSaved?: number | null
   status?: SaveIndicatorStatus
   label?: string
@@ -12,7 +12,7 @@ export interface SaveIndicatorWrapperProps {
   className?: string
 }
 
-export interface LazyBarChartWrapperProps {
+export interface LazyBarChartProps {
   data: Array<Record<string, any>>
   xKey: string
   yKey: string
@@ -25,7 +25,7 @@ export interface LazyBarChartWrapperProps {
   className?: string
 }
 
-export interface LazyLineChartWrapperProps {
+export interface LazyLineChartProps {
   data: Array<Record<string, any>>
   xKey: string
   yKey: string
@@ -38,7 +38,7 @@ export interface LazyLineChartWrapperProps {
   className?: string
 }
 
-export interface LazyD3BarChartWrapperProps {
+export interface LazyD3BarChartProps {
   data: Array<{ label: string; value: number }>
   width?: number
   height?: number
@@ -46,7 +46,7 @@ export interface LazyD3BarChartWrapperProps {
   className?: string
 }
 
-export interface SeedDataManagerWrapperProps {
+export interface SeedDataManagerProps {
   isLoaded?: boolean
   isLoading?: boolean
   title?: string
@@ -67,7 +67,7 @@ export interface SeedDataManagerWrapperProps {
   }
 }
 
-export interface StorageSettingsWrapperProps {
+export interface StorageSettingsProps {
   backend?: StorageBackendKey | null
   isLoading?: boolean
   flaskUrl?: string
@@ -93,7 +93,7 @@ export interface GitHubBuildStatusWorkflowItem {
   url?: string
 }
 
-export interface GitHubBuildStatusWrapperProps {
+export interface GitHubBuildStatusProps {
   title?: string
   description?: string
   workflows?: GitHubBuildStatusWorkflowItem[]
@@ -112,7 +112,7 @@ export interface ComponentBindingField {
   placeholder?: string
 }
 
-export interface ComponentBindingDialogWrapperProps {
+export interface ComponentBindingDialogProps {
   open?: boolean
   title?: string
   description?: string
@@ -134,7 +134,7 @@ export interface DataSourceField {
   helperText?: string
 }
 
-export interface DataSourceEditorDialogWrapperProps {
+export interface DataSourceEditorDialogProps {
   open?: boolean
   title?: string
   description?: string
@@ -146,7 +146,7 @@ export interface DataSourceEditorDialogWrapperProps {
   className?: string
 }
 
-export interface ComponentTreeWrapperProps {
+export interface ComponentTreeProps {
   components?: UIComponent[]
   selectedId?: string | null
   emptyMessage?: string

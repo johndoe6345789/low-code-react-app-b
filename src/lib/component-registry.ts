@@ -1,6 +1,5 @@
 import { lazy } from 'react'
 import { lazyWithRetry, lazyWithPreload } from '@/lib/lazy-loader'
-import { preloadMonacoEditor } from '@/components/molecules'
 import componentRegistryConfig from '../../component-registry.json'
 
 type ComponentConfig = {
@@ -30,6 +29,14 @@ type RegistryConfig = {
 }
 
 const config = componentRegistryConfig as RegistryConfig
+
+// Monaco editor preloader - inlined
+const preloadMonacoEditor = () => {
+  console.log('[MONACO] 🎯 Preloading Monaco Editor')
+  import('@monaco-editor/react')
+    .then(() => console.log('[MONACO] ✅ Monaco Editor preloaded'))
+    .catch(err => console.warn('[MONACO] ⚠️ Monaco Editor preload failed:', err))
+}
 
 const dependencyPreloaders: Record<string, () => void> = {
   preloadMonacoEditor

@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
 import { RouteObject, Navigate } from 'react-router-dom'
-import { LoadingFallback } from '@/components/molecules'
 import { JSONSchemaPageLoader } from '@/components/JSONSchemaPageLoader'
 import { NotFoundPage } from '@/components/NotFoundPage'
 import { getEnabledPages, resolveProps } from '@/config/page-loader'
@@ -23,11 +22,22 @@ const LazyComponent = ({
   
   if (!Component) {
     console.error('[ROUTES] ❌ Component not found:', componentName)
-    return <LoadingFallback message={`Component ${componentName} not found`} />
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <p className="text-sm text-muted-foreground">Component {componentName} not found</p>
+      </div>
+    )
   }
   
   return (
-    <Suspense fallback={<LoadingFallback message={`Loading ${componentName.toLowerCase()}...`} />}>
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-full w-full">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-muted-foreground">Loading {componentName.toLowerCase()}...</p>
+        </div>
+      </div>
+    }>
       <Component {...props} />
     </Suspense>
   )
@@ -46,7 +56,11 @@ const ResizableLayout = ({
 
   if (!LeftComponent || !RightComponent) {
     console.error('[ROUTES] ❌ Resizable components not found:', { leftComponent, rightComponent })
-    return <LoadingFallback message="Layout components not found" />
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <p className="text-sm text-muted-foreground">Layout components not found</p>
+      </div>
+    )
   }
 
   return (

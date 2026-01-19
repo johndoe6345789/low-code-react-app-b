@@ -3,7 +3,8 @@ import { useToggle, useDialog } from '@/hooks/ui'
 import { useKV } from '@/hooks/use-kv'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { SearchInput, DataCard, ActionBar } from '@/components/molecules'
+import { SearchInput } from '@/components/molecules'
+import { DataCard } from '@/components/atoms/json-ui'
 import { Grid, Heading, StatusBadge } from '@/components/atoms'
 import { Plus, Trash, Eye } from '@phosphor-icons/react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -64,28 +65,31 @@ export function AtomicComponentDemo() {
       </div>
 
       <Grid cols={3} gap={4}>
-        <DataCard title="Total Tasks" value={stats.total} />
-        <DataCard title="Active" value={stats.active} />
-        <DataCard title="Completed" value={stats.completed} />
+        <DataCard title="Total Tasks" icon="list" gradient="from-blue-500/10 to-blue-500/5">
+          <div className="text-3xl font-bold">{stats.total}</div>
+        </DataCard>
+        <DataCard title="Active" icon="clock" gradient="from-amber-500/10 to-amber-500/5">
+          <div className="text-3xl font-bold">{stats.active}</div>
+        </DataCard>
+        <DataCard title="Completed" icon="check" gradient="from-green-500/10 to-green-500/5">
+          <div className="text-3xl font-bold">{stats.completed}</div>
+        </DataCard>
       </Grid>
 
-      <ActionBar
-        title="Tasks"
-        actions={[
-          {
-            label: 'Add Task',
-            icon: <Plus size={16} />,
-            onClick: addDialog.open,
-            variant: 'default',
-          },
-          {
-            label: showCompleted.value ? 'Hide Completed' : 'Show Completed',
-            icon: <Eye size={16} />,
-            onClick: showCompleted.toggle,
-            variant: 'outline',
-          },
-        ]}
-      />
+      {/* ActionBar replaced with inline buttons */}
+      <div className="flex items-center justify-between">
+        <Heading level={3}>Tasks</Heading>
+        <div className="flex gap-2">
+          <Button onClick={addDialog.open} size="sm">
+            <Plus size={16} className="mr-2" />
+            Add Task
+          </Button>
+          <Button onClick={showCompleted.toggle} variant="outline" size="sm">
+            <Eye size={16} className="mr-2" />
+            {showCompleted.value ? 'Hide Completed' : 'Show Completed'}
+          </Button>
+        </div>
+      </div>
 
       <SearchInput
         value={query}
