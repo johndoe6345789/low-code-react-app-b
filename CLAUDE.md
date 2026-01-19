@@ -287,6 +287,21 @@ npm run components:generate-types
 npm run build
 ```
 
+## CodeQL Migration Helpers (Jan 2026)
+
+Custom query pack lives in `codeql/custom-queries/` with SARIF output at:
+`codeql-db-optimized/diagnostic/migration-queries.sarif`
+
+Latest optimized DB results (source-root `src/`):
+- custom/component-files-with-jsx: 400
+- custom/component-hooks-usage: 98
+- custom/component-custom-hook-usage: 191
+- custom/legacy-component-barrel-imports: 470
+- custom/components-in-migration-target-folders: 21
+- custom/legacy-imports-in-migration-targets: 0
+- custom/imports-json-definitions: 0
+- custom/imports-converted-json-components: 0
+
 ## Key Files
 
 - `json-components-registry.json` - Master registry of all components
