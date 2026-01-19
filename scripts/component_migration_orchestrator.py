@@ -485,6 +485,28 @@ def _is_rate_limited(exc: Exception) -> bool:
     return "rate limit" in message or "too many requests" in message or "429" in message
 
 
+def _is_connection_error(exc: Exception) -> bool:
+    message = str(exc).lower()
+    return any(
+        token in message
+        for token in (
+            "connection error",
+            "connection reset",
+            "connection aborted",
+            "connection refused",
+            "timeout",
+            "timed out",
+            "temporarily unavailable",
+            "network",
+            "tls",
+            "ssl",
+            "proxy",
+            "remote disconnect",
+            "broken pipe",
+        )
+    )
+
+
 def _run_sync_with_timeout(agent: Agent, prompt: str, timeout: float) -> Any:
     with ThreadPoolExecutor(max_workers=1) as executor:
         future = executor.submit(Runner.run_sync, agent, prompt)
@@ -518,7 +540,8 @@ def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
             return result
         except Exception as exc:
             is_timeout = isinstance(exc, (FuturesTimeoutError, TimeoutError))
-            if not _is_rate_limited(exc) and not is_timeout:
+            is_connection_error = _is_connection_error(exc)
+            if not _is_rate_limited(exc) and not is_timeout and not is_connection_error:
                 print(
                     f"[error] {label} attempt {attempt} failed: {exc}",
                     file=sys.stderr,
@@ -532,6 +555,14 @@ def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
                 print(
                     (
                         f"[warn] timeout {label} after {API_CALL_TIMEOUT_SECONDS:.0f}s; "
+                        f"retry {attempt}/{max_retries} in {delay:.1f}s"
+                    ),
+                    file=sys.stderr,
+                )
+            elif is_connection_error:
+                print(
+                    (
+                        f"[warn] connection error {label}; "
                         f"retry {attempt}/{max_retries} in {delay:.1f}s"
                     ),
                     file=sys.stderr,
