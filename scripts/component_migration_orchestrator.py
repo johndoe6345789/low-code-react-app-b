@@ -329,6 +329,32 @@ Rules:
 - Update or keep "lastUpdated" as a string if present in the reference header.
 """
 
+HOOK_REPAIR_TEMPLATE = """\
+Generate the custom hook file needed for this JSON component conversion.
+Return ONLY valid JSON with this shape:
+{{
+  "hook": {{
+    "name": "{hook_name}",
+    "filePath": "{hook_file_path}",
+    "source": "...typescript..."
+  }} | null
+}}
+
+Rules:
+- Use the provided hook name and file path if a hook is needed.
+- Extract stateful/side-effect logic from the TSX into the hook.
+- If the component is stateless and doesn't need a hook, return {{"hook": null}}.
+- Do NOT include Markdown or code fences.
+
+Component name: {component_name}
+Category: {category}
+Expected hook name: {hook_name}
+Expected hook path: {hook_file_path}
+
+TSX source:
+{tsx}
+"""
+
 
 def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
     targets: List[ComponentTarget] = []
@@ -435,6 +461,14 @@ def _build_schema_repair_agent() -> Agent:
     return Agent(
         name="SchemaRepair",
         instructions="Generate schema JSON only. Return ONLY valid JSON, no Markdown.",
+        model=DEFAULT_MODEL,
+    )
+
+
+def _build_hook_repair_agent() -> Agent:
+    return Agent(
+        name="HookRepair",
+        instructions="Generate hook JSON only. Return ONLY valid JSON, no Markdown.",
         model=DEFAULT_MODEL,
     )
 
@@ -811,6 +845,16 @@ def _extract_definition_var(snippet: str) -> Optional[str]:
     return match.group(1)
 
 
+def _extract_hook_names(snippet: str) -> List[str]:
+    return re.findall(r"hookName:\s*['\"]([^'\"]+)['\"]", snippet)
+
+
+def _hook_name_to_file_name(hook_name: str) -> str:
+    if hook_name.startswith("use") and len(hook_name) > 3:
+        return f"use-{_to_kebab_case(hook_name[3:])}.ts"
+    return f"{_to_kebab_case(hook_name)}.ts"
+
+
 def _build_json_components_file(
     out_dir: Path, components: List[Dict[str, Any]]
 ) -> None:
@@ -979,11 +1023,24 @@ def _post_process_outputs(
     out_dir: Path, processed: List[Tuple[ComponentTarget, Dict[str, Any]]]
 ) -> None:
     components: List[Dict[str, Any]] = []
+    missing_hooks: List[Tuple[str, str, ComponentTarget]] = []
+    hooks_dir = out_dir / "src" / "hooks"
     for target, data in processed:
         component_name = data.get("componentName") or target.name
         if not component_name:
             continue
         snippet = (data.get("jsonComponentExport") or {}).get("source", "")
+        for hook_name in _extract_hook_names(snippet):
+            hook_file_name = _hook_name_to_file_name(hook_name)
+            hook_path = hooks_dir / hook_file_name
+            if hook_path.exists():
+                continue
+            hook_data = data.get("hook") or {}
+            if hook_data.get("name") == hook_name and hook_data.get("source"):
+                hook_file_path = hook_data.get("filePath") or f"src/hooks/{hook_file_name}"
+                _write_if_content(out_dir / hook_file_path, hook_data["source"])
+                continue
+            missing_hooks.append((hook_name, hook_file_name, target))
         components.append(
             {
                 "name": component_name,
@@ -991,6 +1048,44 @@ def _post_process_outputs(
                 "snippet": snippet,
             }
         )
+    for hook_name, hook_file_name, target in missing_hooks:
+        hook_path = hooks_dir / hook_file_name
+        if hook_path.exists():
+            continue
+        component_name = target.name
+        tsx = target.path.read_text(encoding="utf-8")
+        hook_file_path = f"src/hooks/{hook_file_name}"
+        prompt = HOOK_REPAIR_TEMPLATE.format(
+            hook_name=hook_name,
+            hook_file_path=hook_file_path,
+            component_name=component_name,
+            category=target.category,
+            tsx=tsx,
+        )
+        result = _run_with_retries(
+            _build_hook_repair_agent(),
+            prompt,
+            f"hook-repair:{component_name}:{hook_name}",
+        )
+        output = getattr(result, "final_output", None)
+        if output is None:
+            output = str(result)
+        output = _extract_json_payload(str(output))
+        repaired = _parse_json_output(
+            output, f"hook-repair:{component_name}:{hook_name}", True
+        )
+        hook = repaired.get("hook")
+        if hook and hook.get("source"):
+            hook_path.parent.mkdir(parents=True, exist_ok=True)
+            hook_path.write_text(hook["source"], encoding="utf-8")
+        else:
+            print(
+                (
+                    f"[warn] hook repair did not return hook source for "
+                    f"{component_name} ({hook_name})"
+                ),
+                file=sys.stderr,
+            )
     _build_json_components_file(out_dir, components)
     _ensure_interfaces_index(out_dir)
     _ensure_hooks_index(out_dir)
