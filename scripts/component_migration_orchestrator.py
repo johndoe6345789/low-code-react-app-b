@@ -512,6 +512,20 @@ def _repair_json_output(output: str, error: str, label: str, debug: bool) -> Dic
     return json.loads(fixed_output)
 
 
+def _validate_and_repair_json_file(path: Path, label: str, debug: bool) -> None:
+    try:
+        json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        print(
+            f"[warn] invalid JSON in {path}: {exc}; attempting repair",
+            file=sys.stderr,
+        )
+        repaired = _repair_json_output(
+            path.read_text(encoding="utf-8"), str(exc), label, debug
+        )
+        path.write_text(json.dumps(repaired, indent=2) + "\n", encoding="utf-8")
+
+
 def _write_if_content(path: Path, content: str) -> None:
     if not content.strip():
         return
@@ -618,6 +632,9 @@ def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -
         json_def.get("source", {}), indent=2, sort_keys=True
     )
     _write_if_content(json_def_path, json_def_source)
+    _validate_and_repair_json_file(
+        json_def_path, f"json-definition:{component_name}", False
+    )
 
     interface = data.get("interface") or {}
     interface_path = out_dir / interface.get(
@@ -647,6 +664,10 @@ def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -
                     path_value, existing, diff_lines, debug=True
                 )
             _write_if_content(target_path, merged)
+            if target_path.suffix == ".json":
+                _validate_and_repair_json_file(
+                    target_path, f"diff-json:{path_value}", True
+                )
         return
 
     json_component_export = (data.get("jsonComponentExport") or {}).get("source", "")
