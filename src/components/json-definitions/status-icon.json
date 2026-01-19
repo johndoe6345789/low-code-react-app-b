@@ -1,0 +1,22 @@
+{
+  "id": "status-icon-root",
+  "bindings": {
+    "type": {
+      "source": "type",
+      "transform": "data === 'saved' ? 'CheckCircle' : 'CloudCheck'"
+    }
+  },
+  "props": {
+    "size": "{{size}}",
+    "weight": {
+      "source": "type",
+      "transform": "data === 'saved' ? 'fill' : 'duotone'"
+    }
+  },
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const { type, animate = false } = props; const baseClass = type === 'saved' ? 'text-accent' : ''; const animateClass = animate ? 'animate-in zoom-in duration-200' : ''; return [baseClass, animateClass].filter(Boolean).join(' ')"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "heading-root",
+  "bindings": {
+    "type": {
+      "source": "level",
+      "transform": "`h${data || 1}`"
+    },
+    "className": {
+      "source": "level",
+      "transform": "const classes = { 1: 'text-4xl font-bold tracking-tight', 2: 'text-3xl font-semibold tracking-tight', 3: 'text-2xl font-semibold tracking-tight', 4: 'text-xl font-semibold', 5: 'text-lg font-medium', 6: 'text-base font-medium' }; return `${classes[data || 1]} ${props.className || ''}`"
+    }
+  },
+  "children": "{{children}}"
+}

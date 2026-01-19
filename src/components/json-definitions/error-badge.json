@@ -1,0 +1,22 @@
+{
+  "id": "error-badge-container",
+  "type": "Badge",
+  "bindings": {
+    "_if": {
+      "source": "count",
+      "transform": "data > 0"
+    },
+    "variant": {
+      "source": "variant",
+      "transform": "data || 'destructive'"
+    },
+    "className": {
+      "source": ["size", "className"],
+      "transform": "const sizeClasses = { sm: 'h-5 w-5 text-[10px]', md: 'h-6 w-6 text-xs' }; const size = data[0] || 'md'; const className = data[1] || ''; return `${sizeClasses[size]} p-0 flex items-center justify-center absolute -top-1 -right-1 ${className}`.trim()"
+    },
+    "children": {
+      "source": "count",
+      "transform": "data"
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "id": "metric-display",
+  "type": "div",
+  "bindings": {
+    "className": {
+      "source": "className",
+      "transform": "['flex flex-col gap-1', data].filter(Boolean).join(' ')"
+    }
+  },
+  "children": [
+    {
+      "id": "metric-label-row",
+      "type": "div",
+      "bindings": {
+        "className": {
+          "source": null,
+          "transform": "'flex items-center gap-2 text-sm text-muted-foreground'"
+        }
+      },
+      "children": [
+        {
+          "id": "metric-icon",
+          "type": "span",
+          "bindings": {
+            "_if": {
+              "source": "icon",
+              "transform": "!!data"
+            },
+            "className": {
+              "source": null,
+              "transform": "'text-muted-foreground'"
+            }
+          },
+          "children": [
+            {
+              "id": "metric-icon-content",
+              "type": "slot",
+              "bindings": {
+                "name": {
+                  "source": null,
+                  "transform": "'icon'"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "metric-label",
+          "type": "text",
+          "bindings": {
+            "children": {
+              "source": "label",
+              "transform": "data"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "metric-value-row",
+      "type": "div",
+      "bindings": {
+        "className": {
+          "source": null,
+          "transform": "'flex items-baseline gap-2'"
+        }
+      },
+      "children": [
+        {
+          "id": "metric-value",
+          "type": "span",
+          "bindings": {
+            "className": {
+              "source": "variant",
+              "transform": "const variantClasses = { default: 'text-foreground', primary: 'text-primary', accent: 'text-accent' }; return ['text-2xl font-bold', variantClasses[data ?? 'default']].join(' ')"
+            }
+          },
+          "children": [
+            {
+              "id": "metric-value-text",
+              "type": "text",
+              "bindings": {
+                "children": {
+                  "source": "value",
+                  "transform": "data"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "metric-trend",
+          "type": "span",
+          "bindings": {
+            "_if": {
+              "source": "trend",
+              "transform": "!!data"
+            },
+            "className": {
+              "source": "trend",
+              "transform": "const direction = data?.direction ?? 'up'; return ['flex items-center gap-0.5 text-xs font-medium', direction === 'up' ? 'text-green-600 dark:text-green-400' : 'text-destructive'].join(' ')"
+            }
+          },
+          "children": [
+            {
+              "id": "metric-trend-icon",
+              "type": "component",
+              "bindings": {
+                "component": {
+                  "source": "trend",
+                  "transform": "data?.direction === 'up' ? 'TrendUp' : 'TrendDown'"
+                },
+                "size": {
+                  "source": null,
+                  "transform": "14"
+                }
+              }
+            },
+            {
+              "id": "metric-trend-value",
+              "type": "text",
+              "bindings": {
+                "children": {
+                  "source": "trend",
+                  "transform": "data ? `${Math.abs(data.value)}%` : ''"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

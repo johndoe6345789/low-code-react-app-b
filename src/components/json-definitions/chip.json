@@ -1,0 +1,42 @@
+{
+  "id": "chip-root",
+  "type": "span",
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const { variant = 'default', size = 'md' } = props; const variants = { default: 'bg-secondary text-secondary-foreground', primary: 'bg-primary text-primary-foreground', accent: 'bg-accent text-accent-foreground', muted: 'bg-muted text-muted-foreground' }; const sizes = { sm: 'px-2 py-0.5 text-xs', md: 'px-3 py-1 text-sm' }; const cn = (await import('@/lib/utils')).cn; return cn('inline-flex items-center gap-1 rounded-full font-medium', variants[variant], sizes[size], props.className)"
+    }
+  },
+  "children": [
+    "{{children}}",
+    {
+      "id": "chip-remove-button",
+      "type": "button",
+      "condition": {
+        "source": "onRemove",
+        "operator": "exists"
+      },
+      "props": {
+        "type": "button",
+        "aria-label": "Remove",
+        "className": "inline-flex items-center justify-center hover:bg-black/10 rounded-full transition-colors"
+      },
+      "actions": {
+        "onClick": "{{onRemove}}"
+      },
+      "children": {
+        "id": "chip-remove-icon",
+        "type": "X",
+        "bindings": {
+          "size": {
+            "source": "size",
+            "transform": "data === 'sm' ? 12 : 14"
+          }
+        },
+        "props": {
+          "weight": "bold"
+        }
+      }
+    }
+  ]
+}

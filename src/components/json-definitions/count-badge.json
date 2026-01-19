@@ -1,0 +1,22 @@
+{
+  "id": "count-badge-root",
+  "type": "Badge",
+  "condition": {
+    "source": "count",
+    "operator": "ne",
+    "value": 0
+  },
+  "props": {
+    "variant": "{{variant}}"
+  },
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const cn = (await import('@/lib/utils')).cn; return cn('ml-2 px-2 py-0.5 text-xs', props.className)"
+    }
+  },
+  "children": {
+    "source": null,
+    "transform": "const { count, max } = props; return max && count > max ? `${max}+` : count.toString()"
+  }
+}

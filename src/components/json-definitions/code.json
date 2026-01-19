@@ -1,0 +1,64 @@
+{
+  "id": "code-wrapper",
+  "type": "fragment",
+  "children": [
+    {
+      "id": "code-inline",
+      "type": "code",
+      "bindings": {
+        "_if": {
+          "source": "inline",
+          "transform": "data ?? true"
+        },
+        "className": {
+          "source": "className",
+          "transform": "['px-1.5 py-0.5 rounded bg-muted text-foreground font-mono text-sm', data].filter(Boolean).join(' ')"
+        }
+      },
+      "children": [
+        {
+          "id": "code-inline-content",
+          "type": "text",
+          "bindings": {
+            "children": {
+              "source": "children",
+              "transform": "data"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "code-block",
+      "type": "pre",
+      "bindings": {
+        "_if": {
+          "source": "inline",
+          "transform": "!(data ?? true)"
+        },
+        "className": {
+          "source": "className",
+          "transform": "['p-4 rounded-lg bg-muted text-foreground font-mono text-sm overflow-x-auto', data].filter(Boolean).join(' ')"
+        }
+      },
+      "children": [
+        {
+          "id": "code-block-inner",
+          "type": "code",
+          "children": [
+            {
+              "id": "code-block-content",
+              "type": "text",
+              "bindings": {
+                "children": {
+                  "source": "children",
+                  "transform": "data"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "spacer",
+  "type": "div",
+  "bindings": {
+    "className": {
+      "source": "className",
+      "transform": "data"
+    },
+    "style": {
+      "source": ["size", "axis"],
+      "transform": "const sizeMap = { xs: 4, sm: 8, md: 16, lg: 32, xl: 64, '2xl': 96 }; const spacing = sizeMap[data[0] || 'md']; const axis = data[1] || 'vertical'; return { width: axis === 'horizontal' || axis === 'both' ? `${spacing}px` : undefined, height: axis === 'vertical' || axis === 'both' ? `${spacing}px` : undefined }"
+    },
+    "aria-hidden": {
+      "source": null,
+      "transform": "'true'"
+    }
+  }
+}

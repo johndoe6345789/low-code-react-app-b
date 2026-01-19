@@ -1,0 +1,11 @@
+{
+  "id": "text-gradient-span",
+  "type": "span",
+  "bindings": {
+    "className": {
+      "source": ["from", "to", "via", "direction", "animate", "className"],
+      "transform": "const from = data[0] || 'from-primary'; const to = data[1] || 'to-accent'; const via = data[2]; const direction = data[3] || 'to-r'; const animate = data[4]; const className = data[5]; const directionClass = direction !== 'to-r' ? `bg-gradient-${direction}` : 'bg-gradient-to-r'; const viaClass = via ? via : ''; const animateClass = animate ? 'animate-gradient-x' : ''; return [`bg-clip-text text-transparent`, directionClass, from, viaClass, to, animateClass, className].filter(Boolean).join(' ')"
+    },
+    "children": "children"
+  }
+}

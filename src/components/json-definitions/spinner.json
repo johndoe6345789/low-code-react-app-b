@@ -1,0 +1,14 @@
+{
+  "id": "spinner-root",
+  "type": "CircleNotch",
+  "props": {
+    "size": "{{size}}",
+    "weight": "bold"
+  },
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const cn = (await import('@/lib/utils')).cn; return cn('animate-spin text-primary', props.className)"
+    }
+  }
+}

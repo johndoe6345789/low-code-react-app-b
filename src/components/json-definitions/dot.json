@@ -1,0 +1,36 @@
+{
+  "id": "dot-container",
+  "type": "span",
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "'relative inline-flex'"
+    }
+  },
+  "children": [
+    {
+      "id": "dot-main",
+      "type": "span",
+      "bindings": {
+        "className": {
+          "source": ["variant", "size", "className"],
+          "transform": "const variantClasses = { default: 'bg-muted-foreground', primary: 'bg-primary', accent: 'bg-accent', success: 'bg-green-500', warning: 'bg-yellow-500', error: 'bg-destructive' }; const sizeClasses = { xs: 'w-1.5 h-1.5', sm: 'w-2 h-2', md: 'w-3 h-3', lg: 'w-4 h-4' }; return ['inline-block rounded-full', variantClasses[data[0] || 'default'], sizeClasses[data[1] || 'sm'], data[2]].filter(Boolean).join(' ')"
+        }
+      }
+    },
+    {
+      "id": "dot-pulse",
+      "type": "span",
+      "bindings": {
+        "_if": {
+          "source": "pulse",
+          "transform": "!!data"
+        },
+        "className": {
+          "source": ["variant", "size"],
+          "transform": "const variantClasses = { default: 'bg-muted-foreground', primary: 'bg-primary', accent: 'bg-accent', success: 'bg-green-500', warning: 'bg-yellow-500', error: 'bg-destructive' }; const sizeClasses = { xs: 'w-1.5 h-1.5', sm: 'w-2 h-2', md: 'w-3 h-3', lg: 'w-4 h-4' }; return ['absolute inline-flex rounded-full opacity-75 animate-ping', variantClasses[data[0] || 'default'], sizeClasses[data[1] || 'sm']].join(' ')"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "tag-root",
+  "type": "span",
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const { variant = 'default', size = 'md' } = props; const variants = { default: 'bg-muted text-muted-foreground', primary: 'bg-primary/10 text-primary', secondary: 'bg-secondary text-secondary-foreground', accent: 'bg-accent/10 text-accent', destructive: 'bg-destructive/10 text-destructive' }; const sizes = { sm: 'text-xs px-2 py-0.5 gap-1', md: 'text-sm px-3 py-1 gap-1.5', lg: 'text-base px-4 py-1.5 gap-2' }; const cn = (await import('@/lib/utils')).cn; return cn('inline-flex items-center rounded-full font-medium transition-colors', variants[variant], sizes[size], props.className)"
+    }
+  },
+  "children": [
+    "{{children}}",
+    {
+      "id": "tag-remove-button",
+      "type": "button",
+      "condition": {
+        "source": null,
+        "transform": "props.removable && props.onRemove"
+      },
+      "props": {
+        "aria-label": "Remove tag",
+        "className": "hover:opacity-70 transition-opacity"
+      },
+      "actions": {
+        "onClick": {
+          "source": "onRemove",
+          "transform": "(e) => { e.stopPropagation(); data(); }"
+        }
+      },
+      "children": {
+        "id": "tag-remove-icon",
+        "type": "X",
+        "props": {
+          "className": "w-3 h-3"
+        }
+      }
+    }
+  ]
+}

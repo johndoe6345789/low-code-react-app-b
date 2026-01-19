@@ -1,0 +1,29 @@
+{
+  "id": "label-root",
+  "type": "label",
+  "props": {
+    "htmlFor": "{{htmlFor}}"
+  },
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const cn = (await import('@/lib/utils')).cn; return cn('text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70', props.className)"
+    }
+  },
+  "children": [
+    "{{children}}",
+    {
+      "id": "label-required",
+      "type": "span",
+      "condition": {
+        "source": "required",
+        "operator": "eq",
+        "value": true
+      },
+      "props": {
+        "className": "text-destructive ml-1"
+      },
+      "children": "*"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "detail-row-root",
+  "type": "div",
+  "props": {
+    "className": "flex items-center justify-between py-2 border-b border-border last:border-0"
+  },
+  "children": [
+    {
+      "id": "detail-row-label-section",
+      "type": "div",
+      "props": {
+        "className": "flex items-center gap-2"
+      },
+      "children": [
+        {
+          "id": "detail-row-icon",
+          "type": "span",
+          "props": {
+            "className": "text-muted-foreground"
+          },
+          "children": "{{icon}}"
+        },
+        {
+          "id": "detail-row-label",
+          "type": "span",
+          "props": {
+            "className": "text-sm font-medium"
+          },
+          "children": "{{label}}"
+        }
+      ]
+    },
+    {
+      "id": "detail-row-value",
+      "type": "Badge",
+      "props": {
+        "variant": "secondary"
+      },
+      "children": "{{value}}"
+    }
+  ]
+}

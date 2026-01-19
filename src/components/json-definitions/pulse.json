@@ -1,0 +1,32 @@
+{
+  "id": "pulse",
+  "type": "div",
+  "bindings": {
+    "className": {
+      "source": "className",
+      "transform": "['relative inline-flex', data].filter(Boolean).join(' ')"
+    }
+  },
+  "children": [
+    {
+      "id": "pulse-dot-1",
+      "type": "span",
+      "bindings": {
+        "className": {
+          "source": ["variant", "size", "speed"],
+          "transform": "const sizeClasses = { sm: 'w-2 h-2', md: 'w-3 h-3', lg: 'w-4 h-4' }; const variantClasses = { primary: 'bg-primary', accent: 'bg-accent', success: 'bg-green-500', warning: 'bg-yellow-500', error: 'bg-red-500' }; const speedClasses = { slow: 'animate-pulse [animation-duration:3s]', normal: 'animate-pulse', fast: 'animate-pulse [animation-duration:0.5s]' }; return ['inline-flex rounded-full opacity-75', sizeClasses[data[1] ?? 'md'], variantClasses[data[0] ?? 'primary'], speedClasses[data[2] ?? 'normal']].join(' ')"
+        }
+      }
+    },
+    {
+      "id": "pulse-dot-2",
+      "type": "span",
+      "bindings": {
+        "className": {
+          "source": ["variant", "size", "speed"],
+          "transform": "const sizeClasses = { sm: 'w-2 h-2', md: 'w-3 h-3', lg: 'w-4 h-4' }; const variantClasses = { primary: 'bg-primary', accent: 'bg-accent', success: 'bg-green-500', warning: 'bg-yellow-500', error: 'bg-red-500' }; const speedClasses = { slow: 'animate-pulse [animation-duration:3s]', normal: 'animate-pulse', fast: 'animate-pulse [animation-duration:0.5s]' }; return ['absolute inline-flex rounded-full opacity-75', sizeClasses[data[1] ?? 'md'], variantClasses[data[0] ?? 'primary'], speedClasses[data[2] ?? 'normal']].join(' ')"
+        }
+      }
+    }
+  ]
+}

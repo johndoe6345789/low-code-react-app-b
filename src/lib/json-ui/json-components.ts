@@ -29,6 +29,43 @@ import type {
   MenuProps,
   FileUploadProps,
   AccordionProps,
+  BindingEditorProps,
+  TextGradientProps,
+  ErrorBadgeProps,
+  AppLogoProps,
+  DotProps,
+  SpacerProps,
+  LiveIndicatorProps,
+  ActionIconProps,
+  DividerProps,
+  KbdProps,
+  HelperTextProps,
+  CodeProps,
+  InfoBoxProps,
+  AlertProps,
+  BadgeProps,
+  PulseProps,
+  MetricDisplayProps,
+  SeparatorProps,
+  TextProps,
+  HeadingProps,
+  ContainerProps,
+  StackProps,
+  LabelProps,
+  LinkProps,
+  ChipProps,
+  TagProps,
+  SpinnerProps,
+  IconWrapperProps,
+  IconTextProps,
+  EmptyMessageProps,
+  SkeletonProps,
+  LoadingSpinnerProps,
+  CountBadgeProps,
+  DetailRowProps,
+  KeyValueProps,
+  StatusIconProps,
+  ProgressBarProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -53,6 +90,43 @@ import popoverDef from '@/components/json-definitions/popover.json'
 import menuDef from '@/components/json-definitions/menu.json'
 import fileUploadDef from '@/components/json-definitions/file-upload.json'
 import accordionDef from '@/components/json-definitions/accordion.json'
+import bindingEditorDef from '@/components/json-definitions/binding-editor.json'
+import textGradientDef from '@/components/json-definitions/text-gradient.json'
+import errorBadgeDef from '@/components/json-definitions/error-badge.json'
+import appLogoDef from '@/components/json-definitions/app-logo.json'
+import dotDef from '@/components/json-definitions/dot.json'
+import spacerDef from '@/components/json-definitions/spacer.json'
+import liveIndicatorDef from '@/components/json-definitions/live-indicator.json'
+import actionIconDef from '@/components/json-definitions/action-icon.json'
+import dividerDef from '@/components/json-definitions/divider.json'
+import kbdDef from '@/components/json-definitions/kbd.json'
+import helperTextDef from '@/components/json-definitions/helper-text.json'
+import codeDef from '@/components/json-definitions/code.json'
+import infoBoxDef from '@/components/json-definitions/info-box.json'
+import alertDef from '@/components/json-definitions/alert.json'
+import badgeDef from '@/components/json-definitions/badge.json'
+import pulseDef from '@/components/json-definitions/pulse.json'
+import metricDisplayDef from '@/components/json-definitions/metric-display.json'
+import separatorDef from '@/components/json-definitions/separator.json'
+import textDef from '@/components/json-definitions/text.json'
+import headingDef from '@/components/json-definitions/heading.json'
+import containerDef from '@/components/json-definitions/container.json'
+import stackDef from '@/components/json-definitions/stack.json'
+import labelDef from '@/components/json-definitions/label.json'
+import linkDef from '@/components/json-definitions/link.json'
+import chipDef from '@/components/json-definitions/chip.json'
+import tagDef from '@/components/json-definitions/tag.json'
+import spinnerDef from '@/components/json-definitions/spinner.json'
+import iconWrapperDef from '@/components/json-definitions/icon-wrapper.json'
+import iconTextDef from '@/components/json-definitions/icon-text.json'
+import emptyMessageDef from '@/components/json-definitions/empty-message.json'
+import skeletonDef from '@/components/json-definitions/skeleton.json'
+import loadingSpinnerDef from '@/components/json-definitions/loading-spinner.json'
+import countBadgeDef from '@/components/json-definitions/count-badge.json'
+import detailRowDef from '@/components/json-definitions/detail-row.json'
+import keyValueDef from '@/components/json-definitions/key-value.json'
+import statusIconDef from '@/components/json-definitions/status-icon.json'
+import progressBarDef from '@/components/json-definitions/progress-bar.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -174,5 +248,56 @@ export const Accordion = createJsonComponentWithHooks<AccordionProps>(accordionD
     }
   }
 })
+
+export const BindingEditor = createJsonComponentWithHooks<BindingEditorProps>(bindingEditorDef, {
+  hooks: {
+    editorState: {
+      hookName: 'useBindingEditor',
+      args: (props) => [props.bindings, props.onChange]
+    }
+  }
+})
+
+// Batch 1 - Simple stateless components
+export const TextGradient = createJsonComponent<TextGradientProps>(textGradientDef)
+export const ErrorBadge = createJsonComponent<ErrorBadgeProps>(errorBadgeDef)
+export const AppLogo = createJsonComponent<AppLogoProps>(appLogoDef)
+export const Dot = createJsonComponent<DotProps>(dotDef)
+export const Spacer = createJsonComponent<SpacerProps>(spacerDef)
+export const LiveIndicator = createJsonComponent<LiveIndicatorProps>(liveIndicatorDef)
+
+// Batch 2 - Additional stateless components
+export const ActionIcon = createJsonComponent<ActionIconProps>(actionIconDef)
+export const Divider = createJsonComponent<DividerProps>(dividerDef)
+export const Kbd = createJsonComponent<KbdProps>(kbdDef)
+export const HelperText = createJsonComponent<HelperTextProps>(helperTextDef)
+export const Code = createJsonComponent<CodeProps>(codeDef)
+export const InfoBox = createJsonComponent<InfoBoxProps>(infoBoxDef)
+export const Alert = createJsonComponent<AlertProps>(alertDef)
+export const Badge = createJsonComponent<BadgeProps>(badgeDef)
+export const Pulse = createJsonComponent<PulseProps>(pulseDef)
+export const MetricDisplay = createJsonComponent<MetricDisplayProps>(metricDisplayDef)
+
+// Batch 3 - Layout and text components (Jan 2026)
+export const Separator = createJsonComponent<SeparatorProps>(separatorDef)
+export const Text = createJsonComponent<TextProps>(textDef)
+export const Heading = createJsonComponent<HeadingProps>(headingDef)
+export const Container = createJsonComponent<ContainerProps>(containerDef)
+export const Stack = createJsonComponent<StackProps>(stackDef)
+export const Label = createJsonComponent<LabelProps>(labelDef)
+export const Link = createJsonComponent<LinkProps>(linkDef)
+export const Chip = createJsonComponent<ChipProps>(chipDef)
+export const Tag = createJsonComponent<TagProps>(tagDef)
+export const Spinner = createJsonComponent<SpinnerProps>(spinnerDef)
+export const IconWrapper = createJsonComponent<IconWrapperProps>(iconWrapperDef)
+export const IconText = createJsonComponent<IconTextProps>(iconTextDef)
+export const EmptyMessage = createJsonComponent<EmptyMessageProps>(emptyMessageDef)
+export const Skeleton = createJsonComponent<SkeletonProps>(skeletonDef)
+export const LoadingSpinner = createJsonComponent<LoadingSpinnerProps>(loadingSpinnerDef)
+export const CountBadge = createJsonComponent<CountBadgeProps>(countBadgeDef)
+export const DetailRow = createJsonComponent<DetailRowProps>(detailRowDef)
+export const KeyValue = createJsonComponent<KeyValueProps>(keyValueDef)
+export const StatusIcon = createJsonComponent<StatusIconProps>(statusIconDef)
+export const ProgressBar = createJsonComponent<ProgressBarProps>(progressBarDef)
 
 // All components converted to pure JSON! 🎉

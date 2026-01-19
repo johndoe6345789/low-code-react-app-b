@@ -1,0 +1,18 @@
+{
+  "id": "divider",
+  "type": "div",
+  "bindings": {
+    "role": {
+      "source": "decorative",
+      "transform": "(data ?? true) ? 'presentation' : 'separator'"
+    },
+    "aria-orientation": {
+      "source": "orientation",
+      "transform": "data ?? 'horizontal'"
+    },
+    "className": {
+      "source": ["orientation", "className"],
+      "transform": "const orientation = data[0] ?? 'horizontal'; return ['bg-border', orientation === 'horizontal' ? 'h-[1px] w-full' : 'w-[1px] h-full', data[1]].filter(Boolean).join(' ')"
+    }
+  }
+}

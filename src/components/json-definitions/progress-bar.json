@@ -1,0 +1,64 @@
+{
+  "id": "progress-bar-root",
+  "type": "div",
+  "props": {
+    "className": "w-full"
+  },
+  "children": [
+    {
+      "id": "progress-bar-container",
+      "type": "div",
+      "props": {
+        "role": "progressbar"
+      },
+      "bindings": {
+        "className": {
+          "source": "size",
+          "transform": "const sizes = { sm: 'h-1', md: 'h-2', lg: 'h-3' }; const cn = (await import('@/lib/utils')).cn; return cn('relative w-full bg-secondary rounded-full overflow-hidden', sizes[data || 'md'], props.className)"
+        },
+        "aria-valuenow": {
+          "source": "value",
+          "transform": "data"
+        },
+        "aria-valuemin": {
+          "source": null,
+          "transform": "0"
+        },
+        "aria-valuemax": {
+          "source": "max",
+          "transform": "data || 100"
+        }
+      },
+      "children": {
+        "id": "progress-bar-fill",
+        "type": "div",
+        "bindings": {
+          "className": {
+            "source": "variant",
+            "transform": "const variants = { default: 'bg-primary', accent: 'bg-accent', destructive: 'bg-destructive' }; const cn = (await import('@/lib/utils')).cn; return cn('h-full transition-all duration-300 ease-out', variants[data || 'default'])"
+          },
+          "style": {
+            "source": null,
+            "transform": "const { value, max = 100 } = props; const percentage = Math.min(Math.max((value / max) * 100, 0), 100); return { width: `${percentage}%` }"
+          }
+        }
+      }
+    },
+    {
+      "id": "progress-bar-label",
+      "type": "span",
+      "condition": {
+        "source": "showLabel",
+        "operator": "eq",
+        "value": true
+      },
+      "props": {
+        "className": "text-xs text-muted-foreground mt-1 block"
+      },
+      "children": {
+        "source": null,
+        "transform": "const { value, max = 100 } = props; const percentage = Math.min(Math.max((value / max) * 100, 0), 100); return `${Math.round(percentage)}%`"
+      }
+    }
+  ]
+}

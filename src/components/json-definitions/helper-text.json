@@ -1,0 +1,22 @@
+{
+  "id": "helper-text",
+  "type": "p",
+  "bindings": {
+    "className": {
+      "source": ["variant", "className"],
+      "transform": "const variantClasses = { default: 'text-muted-foreground', error: 'text-destructive', success: 'text-green-600' }; return ['text-xs mt-1', variantClasses[data[0] ?? 'default'], data[1]].filter(Boolean).join(' ')"
+    }
+  },
+  "children": [
+    {
+      "id": "helper-text-content",
+      "type": "text",
+      "bindings": {
+        "children": {
+          "source": "children",
+          "transform": "data"
+        }
+      }
+    }
+  ]
+}

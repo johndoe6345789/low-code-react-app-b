@@ -1,0 +1,98 @@
+{
+  "id": "alert",
+  "type": "div",
+  "bindings": {
+    "role": {
+      "source": null,
+      "transform": "'alert'"
+    },
+    "className": {
+      "source": ["variant", "className"],
+      "transform": "const variantClasses = { info: 'bg-blue-50 border-blue-200 text-blue-900', warning: 'bg-yellow-50 border-yellow-200 text-yellow-900', success: 'bg-green-50 border-green-200 text-green-900', error: 'bg-red-50 border-red-200 text-red-900' }; return ['flex gap-3 p-4 rounded-lg border', variantClasses[data[0] ?? 'info'], data[1]].filter(Boolean).join(' ')"
+    }
+  },
+  "children": [
+    {
+      "id": "alert-icon",
+      "type": "component",
+      "bindings": {
+        "component": {
+          "source": "variant",
+          "transform": "const iconMap = { info: 'Info', warning: 'Warning', success: 'CheckCircle', error: 'XCircle' }; return iconMap[data ?? 'info']"
+        },
+        "size": {
+          "source": null,
+          "transform": "20"
+        },
+        "weight": {
+          "source": null,
+          "transform": "'bold'"
+        },
+        "className": {
+          "source": null,
+          "transform": "'flex-shrink-0 mt-0.5'"
+        }
+      }
+    },
+    {
+      "id": "alert-content-wrapper",
+      "type": "div",
+      "bindings": {
+        "className": {
+          "source": null,
+          "transform": "'flex-1'"
+        }
+      },
+      "children": [
+        {
+          "id": "alert-title",
+          "type": "div",
+          "bindings": {
+            "_if": {
+              "source": "title",
+              "transform": "!!data"
+            },
+            "className": {
+              "source": null,
+              "transform": "'font-semibold mb-1'"
+            }
+          },
+          "children": [
+            {
+              "id": "alert-title-text",
+              "type": "text",
+              "bindings": {
+                "children": {
+                  "source": "title",
+                  "transform": "data"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "alert-body",
+          "type": "div",
+          "bindings": {
+            "className": {
+              "source": null,
+              "transform": "'text-sm'"
+            }
+          },
+          "children": [
+            {
+              "id": "alert-children",
+              "type": "text",
+              "bindings": {
+                "children": {
+                  "source": "children",
+                  "transform": "data"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

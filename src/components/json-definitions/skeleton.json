@@ -1,0 +1,14 @@
+{
+  "id": "skeleton-root",
+  "type": "div",
+  "bindings": {
+    "className": {
+      "source": "variant",
+      "transform": "const variants = { text: 'rounded h-4', rectangular: 'rounded-none', circular: 'rounded-full', rounded: 'rounded-lg' }; const cn = (await import('@/lib/utils')).cn; return cn('bg-muted animate-pulse', variants[data || 'rectangular'], props.className)"
+    },
+    "style": {
+      "source": null,
+      "transform": "const { width, height } = props; return { width: typeof width === 'number' ? `${width}px` : width, height: typeof height === 'number' ? `${height}px` : height }"
+    }
+  }
+}

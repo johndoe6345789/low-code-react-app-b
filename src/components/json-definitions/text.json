@@ -1,0 +1,11 @@
+{
+  "id": "text-root",
+  "type": "p",
+  "bindings": {
+    "className": {
+      "source": "variant",
+      "transform": "const classes = { body: 'text-sm text-foreground', caption: 'text-xs text-muted-foreground', muted: 'text-sm text-muted-foreground', small: 'text-xs text-foreground' }; return `${classes[data || 'body']} ${props.className || ''}`"
+    }
+  },
+  "children": "{{children}}"
+}

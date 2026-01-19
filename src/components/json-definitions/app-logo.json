@@ -1,0 +1,30 @@
+{
+  "id": "app-logo-container",
+  "type": "div",
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "'w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0'"
+    }
+  },
+  "children": [
+    {
+      "id": "app-logo-icon",
+      "type": "Code",
+      "bindings": {
+        "size": {
+          "source": null,
+          "transform": "20"
+        },
+        "weight": {
+          "source": null,
+          "transform": "'duotone'"
+        },
+        "className": {
+          "source": null,
+          "transform": "'text-white sm:w-6 sm:h-6'"
+        }
+      }
+    }
+  ]
+}

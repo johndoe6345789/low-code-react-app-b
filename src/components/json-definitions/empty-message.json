@@ -1,0 +1,65 @@
+{
+  "id": "empty-message-root",
+  "type": "div",
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const cn = (await import('@/lib/utils')).cn; return cn('flex flex-col items-center justify-center text-center p-8 rounded-lg border border-dashed bg-muted/20', props.className)"
+    }
+  },
+  "children": [
+    {
+      "id": "empty-message-icon",
+      "type": "div",
+      "condition": {
+        "source": "icon",
+        "operator": "exists"
+      },
+      "props": {
+        "className": "mb-4 text-muted-foreground/50"
+      },
+      "children": "{{icon}}"
+    },
+    {
+      "id": "empty-message-title",
+      "type": "h3",
+      "props": {
+        "className": "text-lg font-semibold mb-2"
+      },
+      "children": "{{title}}"
+    },
+    {
+      "id": "empty-message-description",
+      "type": "p",
+      "condition": {
+        "source": "description",
+        "operator": "exists"
+      },
+      "props": {
+        "className": "text-sm text-muted-foreground mb-4 max-w-sm"
+      },
+      "children": "{{description}}"
+    },
+    {
+      "id": "empty-message-action",
+      "type": "Button",
+      "condition": {
+        "source": "action",
+        "operator": "exists"
+      },
+      "props": {
+        "size": "sm"
+      },
+      "actions": {
+        "onClick": {
+          "source": "action",
+          "transform": "data?.onClick"
+        }
+      },
+      "children": {
+        "source": "action",
+        "transform": "data?.label"
+      }
+    }
+  ]
+}

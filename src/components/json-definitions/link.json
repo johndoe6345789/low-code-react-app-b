@@ -1,0 +1,25 @@
+{
+  "id": "link-root",
+  "type": "a",
+  "props": {
+    "href": "{{href}}"
+  },
+  "bindings": {
+    "className": {
+      "source": "variant",
+      "transform": "const variants = { default: 'text-foreground hover:text-primary underline-offset-4 hover:underline', muted: 'text-muted-foreground hover:text-foreground underline-offset-4 hover:underline', accent: 'text-accent hover:text-accent/80 underline-offset-4 hover:underline', destructive: 'text-destructive hover:text-destructive/80 underline-offset-4 hover:underline' }; const cn = (await import('@/lib/utils')).cn; return cn('transition-colors duration-150', variants[data || 'default'], props.className)"
+    },
+    "target": {
+      "source": "external",
+      "transform": "data ? '_blank' : undefined"
+    },
+    "rel": {
+      "source": "external",
+      "transform": "data ? 'noopener noreferrer' : undefined"
+    }
+  },
+  "actions": {
+    "onClick": "{{onClick}}"
+  },
+  "children": "{{children}}"
+}

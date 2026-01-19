@@ -1,0 +1,52 @@
+{
+  "id": "badge",
+  "type": "Badge",
+  "bindings": {
+    "variant": {
+      "source": "variant",
+      "transform": "data ?? 'default'"
+    },
+    "className": {
+      "source": ["size", "className"],
+      "transform": "const sizeClasses = { sm: 'text-xs px-2 py-0.5', md: 'text-sm px-2.5 py-0.5', lg: 'text-base px-3 py-1' }; return ['inline-flex items-center gap-1.5', sizeClasses[data[0] ?? 'md'], data[1]].filter(Boolean).join(' ')"
+    }
+  },
+  "children": [
+    {
+      "id": "badge-icon",
+      "type": "span",
+      "bindings": {
+        "_if": {
+          "source": "icon",
+          "transform": "!!data"
+        },
+        "className": {
+          "source": null,
+          "transform": "'flex-shrink-0'"
+        }
+      },
+      "children": [
+        {
+          "id": "badge-icon-content",
+          "type": "slot",
+          "bindings": {
+            "name": {
+              "source": null,
+              "transform": "'icon'"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "badge-children",
+      "type": "text",
+      "bindings": {
+        "children": {
+          "source": "children",
+          "transform": "data"
+        }
+      }
+    }
+  ]
+}

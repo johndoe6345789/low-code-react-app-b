@@ -1,0 +1,22 @@
+{
+  "id": "kbd",
+  "type": "kbd",
+  "bindings": {
+    "className": {
+      "source": "className",
+      "transform": "['inline-flex items-center justify-center px-2 py-1 text-xs font-mono font-semibold bg-muted text-foreground border border-border rounded shadow-sm', data].filter(Boolean).join(' ')"
+    }
+  },
+  "children": [
+    {
+      "id": "kbd-content",
+      "type": "text",
+      "bindings": {
+        "children": {
+          "source": "children",
+          "transform": "data"
+        }
+      }
+    }
+  ]
+}

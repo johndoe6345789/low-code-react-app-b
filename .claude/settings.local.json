@@ -38,7 +38,11 @@
       "Bash(bash:*)",
       "Bash(git restore:*)",
       "Bash(tree:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(git checkout:*)",
+      "Bash(git revert:*)",
+      "Bash(for comp in GitHubBuildStatus LazyD3BarChart StorageSettings LoadingFallback NavigationItem PageHeaderContent SaveIndicator SeedDataManager TreeCard)",
+      "Bash(do grep -r \"from ''@/components/molecules/$comp''\" src/ --files-with-matches)"
     ]
   }
 }

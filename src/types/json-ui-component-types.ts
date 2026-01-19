@@ -332,6 +332,12 @@ export const jsonUIComponentTypes = [
   "Upload",
   "User",
   "X",
+  "single",
+  "kv",
+  "create",
+  "delete",
+  "navigate",
+  "update",
 ] as const
 
 export type JSONUIComponentType = typeof jsonUIComponentTypes[number]

@@ -1,0 +1,22 @@
+{
+  "id": "action-icon",
+  "type": "component",
+  "bindings": {
+    "component": {
+      "source": "action",
+      "transform": "const iconMap = { add: 'Plus', edit: 'Pencil', delete: 'Trash', copy: 'Copy', download: 'Download', upload: 'Upload' }; return iconMap[data] || 'Plus'"
+    },
+    "size": {
+      "source": "size",
+      "transform": "data ?? 16"
+    },
+    "weight": {
+      "source": "weight",
+      "transform": "data ?? 'regular'"
+    },
+    "className": {
+      "source": "className",
+      "transform": "data ?? ''"
+    }
+  }
+}

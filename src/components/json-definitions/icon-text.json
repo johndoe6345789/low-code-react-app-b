@@ -1,0 +1,28 @@
+{
+  "id": "icon-text-root",
+  "type": "div",
+  "bindings": {
+    "className": {
+      "source": null,
+      "transform": "const { gap = 'md', align = 'center' } = props; const gaps = { sm: 'gap-1', md: 'gap-2', lg: 'gap-3' }; const aligns = { start: 'items-start', center: 'items-center', end: 'items-end' }; const cn = (await import('@/lib/utils')).cn; return cn('flex', gaps[gap], aligns[align], props.className)"
+    }
+  },
+  "children": [
+    {
+      "id": "icon-text-icon",
+      "type": "span",
+      "props": {
+        "className": "flex-shrink-0"
+      },
+      "children": "{{icon}}"
+    },
+    {
+      "id": "icon-text-content",
+      "type": "span",
+      "props": {
+        "className": "flex-1"
+      },
+      "children": "{{children}}"
+    }
+  ]
+}
