@@ -15,6 +15,7 @@ import { useMenuState } from '@/hooks/use-menu-state'
 import { useFileUpload } from '@/hooks/use-file-upload'
 import { useAccordion } from '@/hooks/use-accordion'
 import { useBindingEditor } from '@/hooks/use-binding-editor'
+import { useNavigationMenu } from '@/hooks/use-navigation-menu'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -37,6 +38,7 @@ export const hooksRegistry: HookRegistry = {
   useFileUpload,
   useAccordion,
   useBindingEditor,
+  useNavigationMenu,
   // Add more hooks here as needed
 }
 

@@ -30,6 +30,7 @@ import type {
   FileUploadProps,
   AccordionProps,
   BindingEditorProps,
+  NavigationMenuProps,
   TextGradientProps,
   ErrorBadgeProps,
   AppLogoProps,
@@ -91,6 +92,7 @@ import menuDef from '@/components/json-definitions/menu.json'
 import fileUploadDef from '@/components/json-definitions/file-upload.json'
 import accordionDef from '@/components/json-definitions/accordion.json'
 import bindingEditorDef from '@/components/json-definitions/binding-editor.json'
+import navigationMenuDef from '@/components/json-definitions/navigation-menu.json'
 import textGradientDef from '@/components/json-definitions/text-gradient.json'
 import errorBadgeDef from '@/components/json-definitions/error-badge.json'
 import appLogoDef from '@/components/json-definitions/app-logo.json'
@@ -254,6 +256,15 @@ export const BindingEditor = createJsonComponentWithHooks<BindingEditorProps>(bi
     editorState: {
       hookName: 'useBindingEditor',
       args: (props) => [props.bindings, props.onChange]
+    }
+  }
+})
+
+export const NavigationMenu = createJsonComponentWithHooks<NavigationMenuProps>(navigationMenuDef, {
+  hooks: {
+    menuState: {
+      hookName: 'useNavigationMenu',
+      args: (props) => [props.activeTab, props.onTabChange, props.featureToggles, props.errorCount ?? 0]
     }
   }
 })
