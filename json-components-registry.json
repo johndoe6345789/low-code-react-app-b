@@ -2485,7 +2485,8 @@
       "canHaveChildren": true,
       "description": "NavigationMenu component",
       "status": "supported",
-      "source": "ui"
+      "source": "organisms",
+      "jsonCompatible": true
     },
     {
       "type": "Notification",
