@@ -8,9 +8,12 @@ Usage:
 from __future__ import annotations
 
 import json
+import os
 import sys
 import textwrap
 import difflib
+import time
+import random
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
@@ -26,6 +29,7 @@ except Exception as exc:  # pragma: no cover - runtime dependency check
 
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_MODEL = os.getenv("CODEX_MODEL") or os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
 COMPONENT_DIRS = [
     ROOT / "src" / "components" / "atoms",
     ROOT / "src" / "components" / "molecules",
@@ -187,6 +191,7 @@ def _build_agent() -> Agent:
             "hook details if needed, JSON UI definition, TS interface, "
             "and export updates. Follow the provided workflow."
         ),
+        model=DEFAULT_MODEL,
     )
 
 
@@ -197,7 +202,42 @@ def _build_conflict_agent() -> Agent:
             "Resolve unified diff conflicts by producing the fully merged file content. "
             "Return JSON only."
         ),
+        model=DEFAULT_MODEL,
     )
+
+
+def _is_rate_limited(exc: Exception) -> bool:
+    status = getattr(exc, "status_code", None)
+    if status == 429:
+        return True
+    response = getattr(exc, "response", None)
+    if response is not None and getattr(response, "status_code", None) == 429:
+        return True
+    message = str(exc).lower()
+    return "rate limit" in message or "too many requests" in message or "429" in message
+
+
+def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
+    max_retries = 5
+    base_delay = 1.5
+    max_delay = 20.0
+    attempt = 0
+    while True:
+        try:
+            return Runner.run_sync(agent, prompt)
+        except Exception as exc:
+            if not _is_rate_limited(exc):
+                raise
+            attempt += 1
+            if attempt > max_retries:
+                raise
+            delay = min(max_delay, base_delay * (2 ** (attempt - 1)))
+            delay += random.uniform(0, delay * 0.2)
+            print(
+                f"[warn] rate limited {label}; retry {attempt}/{max_retries} in {delay:.1f}s",
+                file=sys.stderr,
+            )
+            time.sleep(delay)
 
 
 def run_agent_for_component(
@@ -228,7 +268,7 @@ def run_agent_for_component(
         tsx=tsx,
         existing_files=existing_files_blob,
     )
-    result = Runner.run_sync(_build_agent(), prompt)
+    result = _run_with_retries(_build_agent(), prompt, f"analysis:{target.name}")
     output = getattr(result, "final_output", None)
     if output is None:
         output = str(result)
@@ -259,7 +299,7 @@ def _resolve_diff_with_agent(
         original=original,
         diff_lines=diff_blob,
     )
-    result = Runner.run_sync(_build_conflict_agent(), prompt)
+    result = _run_with_retries(_build_conflict_agent(), prompt, f"conflict:{path}")
     output = getattr(result, "final_output", None)
     if output is None:
         output = str(result)
