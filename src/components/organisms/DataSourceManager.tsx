@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { DataSourceEditorDialog } from '@/components/molecules/DataSourceEditorDialog'
+import { DataSourceEditorDialog } from '@/lib/json-ui/json-components'
 import { useDataSourceManager } from '@/hooks/data/use-data-source-manager'
 import { DataSource, DataSourceType } from '@/types/json-ui'
 import { Database, FileText } from '@phosphor-icons/react'
