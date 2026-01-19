@@ -111,7 +111,7 @@ def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
     for root in roots:
         if not root.exists():
             continue
-        for path in sorted(root.glob("*.tsx")):
+        for path in sorted(root.rglob("*.tsx")):
             name = path.stem
             targets.append(
                 ComponentTarget(name=name, path=path, category=path.parent.name)
@@ -170,9 +170,10 @@ def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dic
     return data
 
 
-def write_output(out_dir: Path, data: Dict[str, Any]) -> None:
+def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -> None:
     component_name = data.get("componentName") or "unknown-component"
-    component_dir = out_dir / component_name
+    relative_parent = target.path.relative_to(ROOT).parent
+    component_dir = out_dir / relative_parent / component_name
     component_dir.mkdir(parents=True, exist_ok=True)
 
     (component_dir / "analysis.json").write_text(
@@ -266,7 +267,7 @@ def main() -> int:
             target = futures[future]
             try:
                 data = future.result()
-                write_output(out_dir, data)
+                write_output(out_dir, data, target)
                 print(f"ok: {target.name}")
             except Exception as exc:
                 failures.append(f"{target.name}: {exc}")
