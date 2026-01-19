@@ -225,6 +225,32 @@ Diff lines:
 {diff_lines}
 """
 
+CONFLICT_PROMPT_TEMPLATE_STRICT = """\
+You must return ONLY valid JSON with BOTH keys: "path" and "resolvedContent".
+"resolvedContent" must be the full file content string (no Markdown, no code fences).
+Do not omit it. Do not return arrays.
+
+JSON shape:
+{{ "path": "{path}", "resolvedContent": "...full file content..." }}
+
+Original content:
+{original}
+
+Diff lines:
+{diff_lines}
+"""
+
+JSON_REPAIR_TEMPLATE = """\
+Fix the following output so it is valid JSON only. Return ONLY the corrected JSON.
+Do not add commentary or code fences. Preserve all keys and values.
+
+Error:
+{error}
+
+Output to repair:
+{output}
+"""
+
 
 def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
     targets: List[ComponentTarget] = []
@@ -294,8 +320,16 @@ def _build_conflict_agent() -> Agent:
         name="DiffConflictResolver",
         instructions=(
             "Resolve unified diff conflicts by producing the fully merged file content. "
-            "Return JSON only."
+            "Return JSON only with 'path' and 'resolvedContent'."
         ),
+        model=DEFAULT_MODEL,
+    )
+
+
+def _build_json_repair_agent() -> Agent:
+    return Agent(
+        name="JSONRepair",
+        instructions="Fix invalid JSON output. Return ONLY valid JSON, no Markdown.",
         model=DEFAULT_MODEL,
     )
 
@@ -402,10 +436,7 @@ def run_agent_for_component(
     try:
         data = json.loads(output)
     except json.JSONDecodeError as exc:
-        snippet = output.strip().replace("\n", " ")[:200]
-        raise ValueError(
-            f"Agent output was not valid JSON: {exc}. Output starts with: {snippet!r}"
-        ) from exc
+        data = _repair_json_output(output, str(exc), target.name, debug)
     return data
 
 
@@ -437,8 +468,48 @@ def _resolve_diff_with_agent(
         ) from exc
     resolved = data.get("resolvedContent")
     if not isinstance(resolved, str) or not resolved.strip():
+        strict_prompt = CONFLICT_PROMPT_TEMPLATE_STRICT.format(
+            path=path,
+            original=original,
+            diff_lines=diff_blob,
+        )
+        retry = _run_with_retries(
+            _build_conflict_agent(), strict_prompt, f"conflict-strict:{path}"
+        )
+        retry_output = getattr(retry, "final_output", None)
+        if retry_output is None:
+            retry_output = str(retry)
+        if not isinstance(retry_output, str) or not retry_output.strip():
+            raise ValueError("Conflict resolver strict returned empty output.")
+        retry_output = _extract_json_payload(retry_output)
+        try:
+            data = json.loads(retry_output)
+        except json.JSONDecodeError as exc:
+            snippet = retry_output.strip().replace("\n", " ")[:200]
+            raise ValueError(
+                f"Conflict resolver strict output was not valid JSON: {exc}. Output starts with: {snippet!r}"
+            ) from exc
+        resolved = data.get("resolvedContent")
+    if not isinstance(resolved, str) or not resolved.strip():
         raise ValueError("Conflict resolver did not return resolvedContent.")
     return resolved
+
+
+def _repair_json_output(output: str, error: str, label: str, debug: bool) -> Dict[str, Any]:
+    prompt = JSON_REPAIR_TEMPLATE.format(error=error, output=output)
+    result = _run_with_retries(_build_json_repair_agent(), prompt, f"repair:{label}")
+    fixed_output = getattr(result, "final_output", None)
+    if fixed_output is None:
+        fixed_output = str(result)
+    if not isinstance(fixed_output, str) or not fixed_output.strip():
+        raise ValueError("JSON repair returned empty output.")
+    fixed_output = _extract_json_payload(fixed_output)
+    if debug:
+        preview = textwrap.shorten(
+            fixed_output.replace("\n", " "), width=300, placeholder="..."
+        )
+        print(f"[debug] {label} repaired output preview: {preview}")
+    return json.loads(fixed_output)
 
 
 def _write_if_content(path: Path, content: str) -> None:
