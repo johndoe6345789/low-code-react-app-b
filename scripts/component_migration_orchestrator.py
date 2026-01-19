@@ -18,7 +18,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 try:
     from agents import Agent, Runner  # type: ignore
@@ -68,6 +68,15 @@ IMPORTANT:
   export const ComponentName = createJsonComponent<ComponentNameProps>(componentNameDef)
   OR
   export const ComponentName = createJsonComponentWithHooks<ComponentNameProps>(componentNameDef, {{ ... }})
+- For createJsonComponentWithHooks, ALWAYS include a "hooks" object with hookName + args, e.g.:
+  export const ComponentName = createJsonComponentWithHooks<ComponentNameProps>(componentNameDef, {{
+    hooks: {{
+      hookData: {{
+        hookName: "useComponentName",
+        args: (props) => [props.example]
+      }}
+    }}
+  }})
 - Do NOT output any `jsonComponents` object or registry literal.
 - Provide `diffs` with unified diff lines (one string per line) for each target file,
   using the provided file contents as the "before" version.
@@ -263,6 +272,63 @@ Output to repair:
 {output}
 """
 
+CONFIG_PAGE_SCHEMA_REPAIR_TEMPLATE = """\
+Generate a config page schema JSON for this component.
+Return ONLY valid JSON. No Markdown or code fences.
+
+Component name: {component_name}
+Category: {category}
+Is stateful: {is_stateful}
+JSON definition source:
+{json_definition}
+
+Existing config content (may be empty):
+{existing_content}
+
+Rules:
+- Simple JSON-compatible component:
+  {{
+    "type": "ComponentName",
+    "props": {{ ... }}
+  }}
+- If stateful or not JSON-compatible, use wrapper-required format:
+  {{
+    "type": "ComponentName",
+    "jsonCompatible": false,
+    "wrapperRequired": true,
+    "load": {{
+      "path": "@/components/{category}/ComponentName",
+      "export": "ComponentName"
+    }},
+    "props": {{ ... }},
+    "metadata": {{
+      "notes": "Contains hooks - needs wrapper"
+    }}
+  }}
+- Prefer props from the JSON definition "props" field if present, else use {{}}.
+"""
+
+REGISTRY_REPAIR_TEMPLATE = """\
+Fix the registry JSON to match the required schema. Return ONLY valid JSON.
+No Markdown or code fences.
+
+Registry schema:
+{schema}
+
+Reference header (use for top-level fields and shape):
+{reference_header}
+
+Current registry content:
+{current}
+
+Rules:
+- Output must be an object with "version", "description", and "components" (array).
+- Preserve existing component entries; if entries are under "elements", "component", or "data",
+  move them into the "components" array.
+- Keep any existing metadata or load info on entries.
+- Update or keep "lastUpdated" as a string if present in the reference header.
+"""
+
 
 def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
     targets: List[ComponentTarget] = []
@@ -290,6 +356,17 @@ def _to_kebab_case(name: str) -> str:
     if not name:
         return ""
     return re.sub(r"([A-Z])", r"-\1", name).lower().lstrip("-")
+
+
+def _to_lower_camel(name: str) -> str:
+    if not name:
+        return ""
+    return name[0].lower() + name[1:]
+
+
+def _to_pascal_from_kebab(name: str) -> str:
+    parts = [part for part in name.split("-") if part]
+    return "".join(part[:1].upper() + part[1:] for part in parts)
 
 
 def _extract_json_payload(output: str) -> str:
@@ -350,6 +427,14 @@ def _build_content_only_agent() -> Agent:
     return Agent(
         name="DiffContentOnly",
         instructions="Return ONLY the full merged file content. No JSON.",
+        model=DEFAULT_MODEL,
+    )
+
+
+def _build_schema_repair_agent() -> Agent:
+    return Agent(
+        name="SchemaRepair",
+        instructions="Generate schema JSON only. Return ONLY valid JSON, no Markdown.",
         model=DEFAULT_MODEL,
     )
 
@@ -602,6 +687,317 @@ def _validate_and_repair_json_file(path: Path, label: str, debug: bool) -> None:
         path.write_text(json.dumps(repaired, indent=2) + "\n", encoding="utf-8")
 
 
+def _repair_config_page_schema(
+    path: Path,
+    component_name: str,
+    category: str,
+    data: Dict[str, Any],
+    debug: bool,
+) -> None:
+    json_definition = json.dumps(
+        (data.get("jsonDefinition") or {}).get("source", {}), indent=2
+    )
+    existing_content = path.read_text(encoding="utf-8") if path.exists() else ""
+    prompt = CONFIG_PAGE_SCHEMA_REPAIR_TEMPLATE.format(
+        component_name=component_name,
+        category=category,
+        is_stateful=bool(data.get("isStateful") or data.get("hook")),
+        json_definition=json_definition,
+        existing_content=existing_content,
+    )
+    result = _run_with_retries(
+        _build_schema_repair_agent(), prompt, f"config-repair:{component_name}"
+    )
+    output = getattr(result, "final_output", None)
+    if output is None:
+        output = str(result)
+    output = _extract_json_payload(str(output))
+    repaired = _parse_json_output(output, f"config-repair:{component_name}", debug)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(repaired, indent=2) + "\n", encoding="utf-8")
+
+
+def _ensure_config_page_schema(
+    path: Path,
+    component_name: str,
+    category: str,
+    data: Dict[str, Any],
+    debug: bool,
+) -> None:
+    if not path.exists():
+        _repair_config_page_schema(path, component_name, category, data, debug)
+        return
+    _validate_and_repair_json_file(path, f"config:{component_name}", debug)
+    try:
+        content = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        _repair_config_page_schema(path, component_name, category, data, debug)
+        return
+    if not isinstance(content, dict) or not content.get("type"):
+        _repair_config_page_schema(path, component_name, category, data, debug)
+
+
+def _repair_registry_file(path: Path, debug: bool) -> None:
+    if not path.exists():
+        return
+    try:
+        current = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        current = _repair_json_output(
+            path.read_text(encoding="utf-8"), str(exc), "registry", debug
+        )
+    schema_path = ROOT / "schemas" / "json-components-registry-schema.json"
+    schema = schema_path.read_text(encoding="utf-8") if schema_path.exists() else "{}"
+    reference = {}
+    reference_path = ROOT / "json-components-registry.json"
+    if reference_path.exists():
+        try:
+            ref_json = json.loads(reference_path.read_text(encoding="utf-8"))
+            for key in (
+                "$schema",
+                "version",
+                "description",
+                "lastUpdated",
+                "categories",
+                "sourceRoots",
+                "statistics",
+            ):
+                if key in ref_json:
+                    reference[key] = ref_json[key]
+        except json.JSONDecodeError:
+            reference = {}
+    prompt = REGISTRY_REPAIR_TEMPLATE.format(
+        schema=schema,
+        reference_header=json.dumps(reference, indent=2),
+        current=json.dumps(current, indent=2),
+    )
+    result = _run_with_retries(_build_schema_repair_agent(), prompt, "registry-repair")
+    output = getattr(result, "final_output", None)
+    if output is None:
+        output = str(result)
+    output = _extract_json_payload(str(output))
+    repaired = _parse_json_output(output, "registry-repair", debug)
+    path.write_text(json.dumps(repaired, indent=2) + "\n", encoding="utf-8")
+
+
+def _ensure_registry_schema(path: Path, debug: bool) -> None:
+    if not path.exists():
+        return
+    _validate_and_repair_json_file(path, "registry", debug)
+    try:
+        content = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        _repair_registry_file(path, debug)
+        return
+    if not isinstance(content, dict):
+        _repair_registry_file(path, debug)
+        return
+    components = content.get("components")
+    if not isinstance(components, list):
+        _repair_registry_file(path, debug)
+        return
+    if not content.get("version") or not content.get("description"):
+        _repair_registry_file(path, debug)
+        return
+
+
+def _extract_definition_var(snippet: str) -> Optional[str]:
+    match = re.search(
+        r"createJsonComponent(?:WithHooks)?<[^>]+>\((\w+)",
+        snippet,
+    )
+    if not match:
+        return None
+    return match.group(1)
+
+
+def _build_json_components_file(
+    out_dir: Path, components: List[Dict[str, Any]]
+) -> None:
+    if not components:
+        return
+    components_sorted = sorted(components, key=lambda item: item["name"])
+    use_hooks = any(
+        "createJsonComponentWithHooks" in (item.get("snippet") or "")
+        for item in components_sorted
+    )
+    type_names = sorted({f"{item['name']}Props" for item in components_sorted})
+    lines: List[str] = [
+        "/**",
+        " * Pure JSON components - no TypeScript wrappers needed",
+        " * Interfaces are defined in src/lib/json-ui/interfaces/",
+        " * JSON definitions are in src/components/json-definitions/",
+        " */",
+        "import { createJsonComponent } from './create-json-component'",
+    ]
+    if use_hooks:
+        lines.append(
+            "import { createJsonComponentWithHooks } from './create-json-component-with-hooks'"
+        )
+    if type_names:
+        lines.append("import type {")
+        lines.extend([f"  {name}," for name in type_names])
+        lines.append("} from './interfaces'")
+    lines.append("")
+    for item in components_sorted:
+        snippet = item.get("snippet") or ""
+        def_var = _extract_definition_var(snippet) or f"{_to_lower_camel(item['name'])}Def"
+        def_path = f"@/components/json-definitions/{item['name']}.json"
+        lines.append(f"import {def_var} from '{def_path}'")
+        item["def_var"] = def_var
+    lines.append("")
+    for item in components_sorted:
+        snippet = (item.get("snippet") or "").strip()
+        if not snippet:
+            snippet = (
+                f"export const {item['name']} = "
+                f"createJsonComponent<{item['name']}Props>({item['def_var']})"
+            )
+        lines.append(snippet)
+    lines.append("")
+    target = out_dir / "src" / "lib" / "json-ui" / "json-components.ts"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text("\n".join(lines), encoding="utf-8")
+
+
+def _ensure_interfaces_index(out_dir: Path) -> None:
+    interfaces_dir = out_dir / "src" / "lib" / "json-ui" / "interfaces"
+    if not interfaces_dir.exists():
+        return
+    entries = sorted(
+        path.stem
+        for path in interfaces_dir.glob("*.ts")
+        if path.name != "index.ts"
+    )
+    if not entries:
+        return
+    lines = [f"export * from './{entry}'" for entry in entries]
+    index_path = interfaces_dir / "index.ts"
+    index_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _ensure_hooks_index(out_dir: Path) -> None:
+    hooks_dir = out_dir / "src" / "hooks"
+    if not hooks_dir.exists():
+        return
+    entries = sorted(
+        path.stem
+        for path in hooks_dir.glob("*.ts")
+        if path.name != "index.ts"
+    )
+    if not entries:
+        return
+    lines = [f"export * from './{entry}'" for entry in entries]
+    index_path = hooks_dir / "index.ts"
+    index_path.parent.mkdir(parents=True, exist_ok=True)
+    index_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _extract_hook_name(content: str, file_name: str) -> str:
+    for pattern in (r"export function (\w+)", r"export const (\w+)", r"export default function (\w+)"):
+        match = re.search(pattern, content)
+        if match:
+            return match.group(1)
+    base = Path(file_name).stem
+    if base.startswith("use-"):
+        return f"use{_to_pascal_from_kebab(base[4:])}"
+    return base
+
+
+def _ensure_hooks_registry(out_dir: Path) -> None:
+    hooks_dir = out_dir / "src" / "hooks"
+    if not hooks_dir.exists():
+        return
+    hook_files = sorted(
+        path for path in hooks_dir.glob("*.ts") if path.name != "index.ts"
+    )
+    if not hook_files:
+        return
+    imports: List[str] = []
+    hook_names: List[str] = []
+    for path in hook_files:
+        content = path.read_text(encoding="utf-8")
+        hook_name = _extract_hook_name(content, path.name)
+        hook_names.append(hook_name)
+        imports.append(f"import {{ {hook_name} }} from '@/hooks/{path.stem}'")
+    registry_lines = [
+        "/**",
+        " * Hook Registry for JSON Components",
+        " * Allows JSON components to use custom React hooks",
+        " */",
+        *imports,
+        "",
+        "export interface HookRegistry {",
+        "  [key: string]: (...args: any[]) => any",
+        "}",
+        "",
+        "/**",
+        " * Registry of all custom hooks available to JSON components",
+        " */",
+        "export const hooksRegistry: HookRegistry = {",
+        *[f"  {name}," for name in hook_names],
+        "}",
+        "",
+        "/**",
+        " * Get a hook from the registry by name",
+        " */",
+        "export function getHook(hookName: string) {",
+        "  return hooksRegistry[hookName]",
+        "}",
+        "",
+        "/**",
+        " * Register a new hook",
+        " */",
+        "export function registerHook(name: string, hook: (...args: any[]) => any) {",
+        "  hooksRegistry[name] = hook",
+        "}",
+        "",
+    ]
+    registry_path = out_dir / "src" / "lib" / "json-ui" / "hooks-registry.ts"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text("\n".join(registry_lines), encoding="utf-8")
+
+
+def _ensure_components_indices(
+    out_dir: Path, components: List[Dict[str, Any]]
+) -> None:
+    categories: Dict[str, List[str]] = {}
+    for item in components:
+        category = item.get("category") or "components"
+        categories.setdefault(category, []).append(item["name"])
+    for category, names in categories.items():
+        index_path = out_dir / "src" / "components" / category / "index.ts"
+        index_path.parent.mkdir(parents=True, exist_ok=True)
+        exports = [
+            f"export {{ {name} }} from '@/lib/json-ui/json-components'"
+            for name in sorted(set(names))
+        ]
+        index_path.write_text("\n".join(exports) + "\n", encoding="utf-8")
+
+
+def _post_process_outputs(
+    out_dir: Path, processed: List[Tuple[ComponentTarget, Dict[str, Any]]]
+) -> None:
+    components: List[Dict[str, Any]] = []
+    for target, data in processed:
+        component_name = data.get("componentName") or target.name
+        if not component_name:
+            continue
+        snippet = (data.get("jsonComponentExport") or {}).get("source", "")
+        components.append(
+            {
+                "name": component_name,
+                "category": target.category,
+                "snippet": snippet,
+            }
+        )
+    _build_json_components_file(out_dir, components)
+    _ensure_interfaces_index(out_dir)
+    _ensure_hooks_index(out_dir)
+    _ensure_hooks_registry(out_dir)
+    _ensure_components_indices(out_dir, components)
+
+
 def _write_if_content(path: Path, content: str) -> None:
     if not content.strip():
         return
@@ -719,7 +1115,9 @@ def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -
     _write_if_content(interface_path, interface.get("source", ""))
 
     diffs = data.get("diffs") or []
+    had_diffs = False
     if isinstance(diffs, list) and diffs:
+        had_diffs = True
         for diff_entry in diffs:
             path_value = diff_entry.get("path")
             diff_lines = diff_entry.get("diffLines") or []
@@ -744,29 +1142,41 @@ def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -
                 _validate_and_repair_json_file(
                     target_path, f"diff-json:{path_value}", True
                 )
-        return
+    if not had_diffs:
+        json_component_export = (data.get("jsonComponentExport") or {}).get("source", "")
+        _merge_snippet(
+            out_dir / "src/lib/json-ui/json-components.ts",
+            json_component_export,
+        )
 
-    json_component_export = (data.get("jsonComponentExport") or {}).get("source", "")
-    _merge_snippet(
-        out_dir / "src/lib/json-ui/json-components.ts",
-        json_component_export,
-    )
+        exports = data.get("exports") or {}
+        _merge_snippet(
+            out_dir / "src/lib/json-ui/interfaces/index.ts",
+            exports.get("interfacesIndex", ""),
+        )
+        _merge_snippet(
+            out_dir / "src/hooks/index.ts", exports.get("hooksIndex", "") or ""
+        )
+        _merge_snippet(
+            out_dir / "src/lib/json-ui/hooks-registry.ts",
+            exports.get("hooksRegistry", "") or "",
+        )
 
-    exports = data.get("exports") or {}
-    _merge_snippet(
-        out_dir / "src/lib/json-ui/interfaces/index.ts",
-        exports.get("interfacesIndex", ""),
-    )
-    _merge_snippet(
-        out_dir / "src/hooks/index.ts", exports.get("hooksIndex", "") or ""
-    )
-    _merge_snippet(
-        out_dir / "src/lib/json-ui/hooks-registry.ts",
-        exports.get("hooksRegistry", "") or "",
-    )
+        components_index_path = out_dir / "src/components" / target.category / "index.ts"
+        _merge_snippet(components_index_path, exports.get("componentsIndex", ""))
 
-    components_index_path = out_dir / "src/components" / target.category / "index.ts"
-    _merge_snippet(components_index_path, exports.get("componentsIndex", ""))
+    config_name = f"{_to_kebab_case(component_name)}.json"
+    config_path = (
+        out_dir
+        / "src"
+        / "config"
+        / "pages"
+        / target.category
+        / config_name
+    )
+    _ensure_config_page_schema(
+        config_path, component_name, target.category, data, False
+    )
 
 
 def main() -> int:
@@ -778,6 +1188,7 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     failures: List[str] = []
+    processed: List[Tuple[ComponentTarget, Dict[str, Any]]] = []
     with ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {
             executor.submit(run_agent_for_component, t, out_dir, True): t for t in targets
@@ -787,6 +1198,7 @@ def main() -> int:
             try:
                 data = future.result()
                 write_output(out_dir, data, target)
+                processed.append((target, data))
                 print(f"ok: {target.name}")
             except Exception as exc:
                 failures.append(f"{target.name}: {exc}")
@@ -797,6 +1209,8 @@ def main() -> int:
         for failure in failures:
             print(f"- {failure}", file=sys.stderr)
         return 1
+    _post_process_outputs(out_dir, processed)
+    _ensure_registry_schema(out_dir / "json-components-registry.json", True)
     return 0
 
 
