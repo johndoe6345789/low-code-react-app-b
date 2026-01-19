@@ -23,7 +23,22 @@
       "Bash(netstat:*)",
       "Bash(findstr:*)",
       "Bash(taskkill:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install)",
+      "Bash(for file in ComponentBindingDialog.tsx DataSourceEditorDialog.tsx GitHubBuildStatus.tsx SaveIndicator.tsx ComponentTree.tsx SeedDataManager.tsx LazyD3BarChart.tsx StorageSettings.tsx)",
+      "Bash(do if [ -f \"$file\" ])",
+      "Bash(then echo \"EXISTS: $file\")",
+      "Bash(fi)",
+      "Bash(npm install:*)",
+      "Bash(for file in AppBranding BindingEditor Breadcrumb CanvasRenderer CodeExplanationDialog ComponentPalette)",
+      "Bash(do echo -n \"$file: \")",
+      "Bash(tsx scripts/audit-json-components.ts:*)",
+      "Bash(npm run audit:json:*)",
+      "Bash(bash:*)",
+      "Bash(git restore:*)",
+      "Bash(tree:*)",
+      "Bash(powershell:*)"
     ]
   }
 }

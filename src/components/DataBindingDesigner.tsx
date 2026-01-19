@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { DataSourceManager } from '@/components/organisms/DataSourceManager'
-import { ComponentBindingDialog } from '@/components/molecules/ComponentBindingDialog'
+import { ComponentBindingDialog } from '@/lib/json-ui/json-components'
 import { DataSource, UIComponent } from '@/types/json-ui'
 import { DataBindingHeader } from '@/components/data-binding-designer/DataBindingHeader'
 import { ComponentBindingsCard } from '@/components/data-binding-designer/ComponentBindingsCard'

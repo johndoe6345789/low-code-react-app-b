@@ -6,6 +6,14 @@ import { useSaveIndicator } from '@/hooks/use-save-indicator'
 import { useComponentTree } from '@/hooks/use-component-tree'
 import { useStorageBackendInfo } from '@/hooks/use-storage-backend-info'
 import { useD3BarChart } from '@/hooks/use-d3-bar-chart'
+import { useFocusState } from '@/hooks/use-focus-state'
+import { useCopyState } from '@/hooks/use-copy-state'
+import { usePasswordVisibility } from '@/hooks/use-password-visibility'
+import { useImageState } from '@/hooks/use-image-state'
+import { usePopoverState } from '@/hooks/use-popover-state'
+import { useMenuState } from '@/hooks/use-menu-state'
+import { useFileUpload } from '@/hooks/use-file-upload'
+import { useAccordion } from '@/hooks/use-accordion'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -19,6 +27,14 @@ export const hooksRegistry: HookRegistry = {
   useComponentTree,
   useStorageBackendInfo,
   useD3BarChart,
+  useFocusState,
+  useCopyState,
+  usePasswordVisibility,
+  useImageState,
+  usePopoverState,
+  useMenuState,
+  useFileUpload,
+  useAccordion,
   // Add more hooks here as needed
 }
 

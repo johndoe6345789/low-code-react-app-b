@@ -27,7 +27,8 @@
         "components:list": "node scripts/list-json-components.cjs",
         "components:generate-types": "tsx scripts/generate-json-ui-component-types.ts",
         "components:scan": "node scripts/scan-and-update-registry.cjs",
-        "components:validate": "node scripts/validate-supported-components.cjs && tsx scripts/validate-json-registry.ts"
+        "components:validate": "node scripts/validate-supported-components.cjs && tsx scripts/validate-json-registry.ts",
+        "audit:json": "tsx scripts/audit-json-components.ts"
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
@@ -111,6 +112,7 @@
         "eslint-plugin-react-refresh": "^0.4.19",
         "globals": "^17.0.0",
         "tailwindcss": "^4.1.11",
+        "terser": "^5.46.0",
         "tsx": "^4.21.0",
         "typescript": "~5.7.2",
         "typescript-eslint": "^8.38.0",

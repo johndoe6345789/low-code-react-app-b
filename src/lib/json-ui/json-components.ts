@@ -19,6 +19,16 @@ import type {
   ComponentBindingDialogProps,
   DataSourceEditorDialogProps,
   ComponentTreeProps,
+  TreeCardProps,
+  FilterInputProps,
+  CopyButtonProps,
+  InputProps,
+  PasswordInputProps,
+  ImageProps,
+  PopoverProps,
+  MenuProps,
+  FileUploadProps,
+  AccordionProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -33,6 +43,16 @@ import componentTreeDef from '@/components/json-definitions/component-tree.json'
 import seedDataManagerDef from '@/components/json-definitions/seed-data-manager.json'
 import lazyD3BarChartDef from '@/components/json-definitions/lazy-d3-bar-chart.json'
 import storageSettingsDef from '@/components/json-definitions/storage-settings.json'
+import treeCardDef from '@/components/json-definitions/tree-card.json'
+import filterInputDef from '@/components/json-definitions/filter-input.json'
+import copyButtonDef from '@/components/json-definitions/copy-button.json'
+import inputDef from '@/components/json-definitions/input.json'
+import passwordInputDef from '@/components/json-definitions/password-input.json'
+import imageDef from '@/components/json-definitions/image.json'
+import popoverDef from '@/components/json-definitions/popover.json'
+import menuDef from '@/components/json-definitions/menu.json'
+import fileUploadDef from '@/components/json-definitions/file-upload.json'
+import accordionDef from '@/components/json-definitions/accordion.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -42,6 +62,7 @@ export const ComponentBindingDialog = createJsonComponent<ComponentBindingDialog
 export const DataSourceEditorDialog = createJsonComponent<DataSourceEditorDialogProps>(dataSourceEditorDialogDef)
 export const GitHubBuildStatus = createJsonComponent<GitHubBuildStatusProps>(githubBuildStatusDef)
 export const SeedDataManager = createJsonComponent<SeedDataManagerProps>(seedDataManagerDef)
+export const TreeCard = createJsonComponent<TreeCardProps>(treeCardDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
@@ -76,6 +97,80 @@ export const StorageSettings = createJsonComponentWithHooks<StorageSettingsProps
     backendInfo: {
       hookName: 'useStorageBackendInfo',
       args: (props) => [props.backend || null]
+    }
+  }
+})
+
+export const FilterInput = createJsonComponentWithHooks<FilterInputProps>(filterInputDef, {
+  hooks: {
+    focusState: {
+      hookName: 'useFocusState',
+      args: () => []
+    }
+  }
+})
+
+export const CopyButton = createJsonComponentWithHooks<CopyButtonProps>(copyButtonDef, {
+  hooks: {
+    copyState: {
+      hookName: 'useCopyState',
+      args: (props) => [props.text]
+    }
+  }
+})
+
+export const Input = createJsonComponent<InputProps>(inputDef)
+
+export const PasswordInput = createJsonComponentWithHooks<PasswordInputProps>(passwordInputDef, {
+  hooks: {
+    visibility: {
+      hookName: 'usePasswordVisibility',
+      args: () => []
+    }
+  }
+})
+
+export const Image = createJsonComponentWithHooks<ImageProps>(imageDef, {
+  hooks: {
+    imageState: {
+      hookName: 'useImageState',
+      args: (props) => [props.onLoad, props.onError]
+    }
+  }
+})
+
+export const Popover = createJsonComponentWithHooks<PopoverProps>(popoverDef, {
+  hooks: {
+    state: {
+      hookName: 'usePopoverState',
+      args: () => []
+    }
+  }
+})
+
+export const Menu = createJsonComponentWithHooks<MenuProps>(menuDef, {
+  hooks: {
+    menuState: {
+      hookName: 'useMenuState',
+      args: () => []
+    }
+  }
+})
+
+export const FileUpload = createJsonComponentWithHooks<FileUploadProps>(fileUploadDef, {
+  hooks: {
+    uploadState: {
+      hookName: 'useFileUpload',
+      args: (props) => [props.onFilesSelected, props.maxSize, props.disabled]
+    }
+  }
+})
+
+export const Accordion = createJsonComponentWithHooks<AccordionProps>(accordionDef, {
+  hooks: {
+    accordionState: {
+      hookName: 'useAccordion',
+      args: (props) => [props.type || 'single', props.defaultOpen || []]
     }
   }
 })
