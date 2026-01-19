@@ -508,9 +508,13 @@ def _is_connection_error(exc: Exception) -> bool:
 
 
 def _run_sync_with_timeout(agent: Agent, prompt: str, timeout: float) -> Any:
-    with ThreadPoolExecutor(max_workers=1) as executor:
-        future = executor.submit(Runner.run_sync, agent, prompt)
+    executor = ThreadPoolExecutor(max_workers=1)
+    future = executor.submit(Runner.run_sync, agent, prompt)
+    try:
         return future.result(timeout=timeout)
+    finally:
+        # Do not block on shutdown; a hung request should not stall the orchestrator.
+        executor.shutdown(wait=False, cancel_futures=True)
 
 
 def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
@@ -759,6 +763,8 @@ def _coerce_content_output(output: str, path: str, label: str, debug: bool) -> s
 
 def _validate_and_repair_json_file(path: Path, label: str, debug: bool) -> None:
     if not path.exists():
+        return
+    if path.name == "json-components-registry.json" and label.startswith("diff-json:"):
         return
     try:
         json.loads(path.read_text(encoding="utf-8"))
