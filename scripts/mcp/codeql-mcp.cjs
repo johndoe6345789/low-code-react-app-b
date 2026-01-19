@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { spawn } = require('node:child_process')
+const fs = require('node:fs')
 
 function send(message) {
   process.stdout.write(`${JSON.stringify(message)}\n`)
@@ -88,6 +89,18 @@ function toolList() {
         properties: {
           extraArgs: { type: 'array', items: { type: 'string' } },
         },
+      },
+    },
+    {
+      name: 'codeql_sarif_summary',
+      description: 'Summarize a SARIF file by rule and total count.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          sarifPath: { type: 'string' },
+          maxPerRule: { type: 'number', default: 5 },
+        },
+        required: ['sarifPath'],
       },
     },
   ]
@@ -191,6 +204,42 @@ function runCodeqlResolveLanguages(input) {
   return runCodeql(args)
 }
 
+function summarizeSarif(input) {
+  const { sarifPath, maxPerRule = 5 } = input || {}
+  if (!sarifPath) return Promise.reject(new Error('sarifPath is required'))
+
+  const raw = fs.readFileSync(sarifPath, 'utf8')
+  const sarif = JSON.parse(raw)
+  const run = sarif.runs?.[0]
+  const results = run?.results || []
+
+  const byRule = new Map()
+  for (const r of results) {
+    const rule = r.ruleId || 'unknown'
+    if (!byRule.has(rule)) byRule.set(rule, [])
+    byRule.get(rule).push(r)
+  }
+
+  const summary = []
+  for (const [rule, items] of byRule) {
+    const sample = items.slice(0, maxPerRule).map((r) => {
+      const loc = r.locations?.[0]?.physicalLocation
+      return {
+        file: loc?.artifactLocation?.uri || 'unknown',
+        line: loc?.region?.startLine || 0,
+        message: r.message?.text || '',
+      }
+    })
+    summary.push({ ruleId: rule, count: items.length, sample })
+  }
+
+  summary.sort((a, b) => b.count - a.count)
+  return Promise.resolve({
+    total: results.length,
+    rules: summary,
+  })
+}
+
 async function handleRequest(message) {
   const { id, method, params } = message
 
@@ -221,6 +270,8 @@ async function handleRequest(message) {
         result = await runCodeqlResolvePacks(args)
       } else if (name === 'codeql_resolve_languages') {
         result = await runCodeqlResolveLanguages(args)
+      } else if (name === 'codeql_sarif_summary') {
+        result = await summarizeSarif(args)
       } else {
         return respondError(id, -32601, `Unknown tool: ${name}`)
       }
@@ -228,7 +279,9 @@ async function handleRequest(message) {
         content: [
           {
             type: 'text',
-            text: `exit: ${result.code}\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`,
+            text: result.code !== undefined
+              ? `exit: ${result.code}\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`
+              : JSON.stringify(result, null, 2),
           },
         ],
       })

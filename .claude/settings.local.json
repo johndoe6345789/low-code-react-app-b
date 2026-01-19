@@ -48,7 +48,7 @@
   "mcpServers": {
     "codeql": {
       "command": "node",
-      "args": ["scripts/mcp/codeql-mcp.js"]
+      "args": ["scripts/mcp/codeql-mcp.cjs"]
     }
   }
 }
