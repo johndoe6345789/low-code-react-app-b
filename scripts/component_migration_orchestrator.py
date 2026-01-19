@@ -14,6 +14,7 @@ import re
 import sys
 import textwrap
 import shutil
+import difflib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
@@ -178,15 +179,39 @@ def _write_if_content(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def _append_unique(path: Path, content: str) -> None:
+def _merge_snippet(path: Path, content: str, patches_dir: Optional[Path] = None) -> None:
     if not content.strip():
         return
     path.parent.mkdir(parents=True, exist_ok=True)
     existing = path.read_text(encoding="utf-8") if path.exists() else ""
-    if content.strip() in existing:
+    existing_lines = existing.splitlines()
+    new_lines = content.strip().splitlines()
+    if not new_lines:
         return
-    separator = "\n" if existing.endswith("\n") or not existing else "\n\n"
-    path.write_text(existing + separator + content.strip() + "\n", encoding="utf-8")
+    matcher = difflib.SequenceMatcher(None, existing_lines, new_lines)
+    match = matcher.find_longest_match(0, len(existing_lines), 0, len(new_lines))
+    if match.size == len(new_lines):
+        return
+    if match.a + match.size == len(existing_lines) and match.b == 0:
+        merged_lines = existing_lines + new_lines[match.size:]
+    else:
+        merged_lines = existing_lines + ([""] if existing_lines else []) + new_lines
+    merged_text = "\n".join(merged_lines).rstrip() + "\n"
+    if merged_text == existing:
+        return
+    path.write_text(merged_text, encoding="utf-8")
+    if patches_dir is not None:
+        rel_path = path.relative_to(patches_dir.parent)
+        patch_path = patches_dir / (str(rel_path) + ".patch")
+        patch_path.parent.mkdir(parents=True, exist_ok=True)
+        diff = difflib.unified_diff(
+            existing.splitlines(),
+            merged_text.splitlines(),
+            fromfile=str(rel_path),
+            tofile=str(rel_path),
+            lineterm="",
+        )
+        patch_path.write_text("\n".join(diff) + "\n", encoding="utf-8")
 
 
 def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -> None:
@@ -219,16 +244,32 @@ def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -
     )
     _write_if_content(interface_path, interface.get("source", ""))
 
+    patches_dir = out_dir / "patches"
+
     json_component_export = (data.get("jsonComponentExport") or {}).get("source", "")
-    _append_unique(out_dir / "src/lib/json-ui/json-components.ts", json_component_export)
+    _merge_snippet(
+        out_dir / "src/lib/json-ui/json-components.ts",
+        json_component_export,
+        patches_dir,
+    )
 
     exports = data.get("exports") or {}
-    _append_unique(out_dir / "src/lib/json-ui/interfaces/index.ts", exports.get("interfacesIndex", ""))
-    _append_unique(out_dir / "src/hooks/index.ts", exports.get("hooksIndex", "") or "")
-    _append_unique(out_dir / "src/lib/json-ui/hooks-registry.ts", exports.get("hooksRegistry", "") or "")
+    _merge_snippet(
+        out_dir / "src/lib/json-ui/interfaces/index.ts",
+        exports.get("interfacesIndex", ""),
+        patches_dir,
+    )
+    _merge_snippet(
+        out_dir / "src/hooks/index.ts", exports.get("hooksIndex", "") or "", patches_dir
+    )
+    _merge_snippet(
+        out_dir / "src/lib/json-ui/hooks-registry.ts",
+        exports.get("hooksRegistry", "") or "",
+        patches_dir,
+    )
 
     components_index_path = out_dir / "src/components" / target.category / "index.ts"
-    _append_unique(components_index_path, exports.get("componentsIndex", ""))
+    _merge_snippet(components_index_path, exports.get("componentsIndex", ""), patches_dir)
 
 
 def parse_args() -> argparse.Namespace:
