@@ -3,22 +3,19 @@
 Batch component migration orchestrator using openai-agents.
 
 Usage:
-  python scripts/component_migration_orchestrator.py --out-dir migration-out
+  python scripts/component_migration_orchestrator.py
 """
 from __future__ import annotations
 
-import argparse
 import json
 import os
-import re
 import sys
 import textwrap
-import shutil
 import difflib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List
 
 try:
     from agents import Agent, Runner  # type: ignore
@@ -69,6 +66,16 @@ Follow this workflow strictly:
    - src/components/<category>/index.ts
 6) Indicate that TSX file should be deleted.
 
+IMPORTANT:
+- Return ONLY valid JSON. No Markdown or code fences.
+- For json-components.ts, output ONLY the snippet for the component export, matching this style:
+  export const ComponentName = createJsonComponent<ComponentNameProps>(componentNameDef)
+  OR
+  export const ComponentName = createJsonComponentWithHooks<ComponentNameProps>(componentNameDef, { ... })
+- Do NOT output any `jsonComponents` object or registry literal.
+- Provide `diffs` with unified diff lines (one string per line) for each target file,
+  using the provided file contents as the "before" version.
+
 Return ONLY valid JSON with this shape:
 {{
   "componentName": "...",
@@ -97,11 +104,20 @@ Return ONLY valid JSON with this shape:
     "interfacesIndex": "...typescript snippet...",
     "componentsIndex": "...typescript snippet..."
   }},
+  "diffs": [
+    {{
+      "path": "src/lib/json-ui/json-components.ts",
+      "diffLines": ["@@ ...", "+...", "-..."]
+    }}
+  ],
   "deleteTsx": true
 }}
 
 Component category: {category}
 Component path: {path}
+
+Existing file contents for diffing:
+{existing_files}
 
 TSX source:
 {tsx}
@@ -121,35 +137,56 @@ def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
     return targets
 
 
-def apply_filters(
-    targets: List[ComponentTarget],
-    include: Optional[str],
-    exclude: Optional[str],
-    limit: Optional[int],
-) -> List[ComponentTarget]:
-    if include:
-        rx = re.compile(include)
-        targets = [t for t in targets if rx.search(t.name)]
-    if exclude:
-        rx = re.compile(exclude)
-        targets = [t for t in targets if not rx.search(t.name)]
-    if limit is not None:
-        targets = targets[:limit]
-    return targets
-
-
 def _strip_code_fences(output: str) -> str:
     trimmed = output.strip()
     if trimmed.startswith("```"):
         lines = trimmed.splitlines()
         if len(lines) >= 3 and lines[0].startswith("```") and lines[-1].startswith("```"):
             return "\n".join(lines[1:-1]).strip()
-    return output
+    return trimmed
+
+
+def _extract_json_payload(output: str) -> str:
+    trimmed = _strip_code_fences(output)
+    start = trimmed.find("{")
+    end = trimmed.rfind("}")
+    if start == -1 or end == -1 or end < start:
+        return trimmed
+    return trimmed[start : end + 1]
+
+
+def _read_file_for_prompt(path: Path) -> str:
+    if not path.exists():
+        return ""
+    return path.read_text(encoding="utf-8")
 
 
 def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dict[str, Any]:
     tsx = target.path.read_text(encoding="utf-8")
-    prompt = PROMPT_TEMPLATE.format(category=target.category, path=target.path, tsx=tsx)
+    existing_files = {
+        "src/lib/json-ui/json-components.ts": _read_file_for_prompt(
+            ROOT / "src" / "lib" / "json-ui" / "json-components.ts"
+        ),
+        "src/lib/json-ui/interfaces/index.ts": _read_file_for_prompt(
+            ROOT / "src" / "lib" / "json-ui" / "interfaces" / "index.ts"
+        ),
+        "src/hooks/index.ts": _read_file_for_prompt(ROOT / "src" / "hooks" / "index.ts"),
+        "src/lib/json-ui/hooks-registry.ts": _read_file_for_prompt(
+            ROOT / "src" / "lib" / "json-ui" / "hooks-registry.ts"
+        ),
+        f"src/components/{target.category}/index.ts": _read_file_for_prompt(
+            ROOT / "src" / "components" / target.category / "index.ts"
+        ),
+    }
+    existing_files_blob = "\n\n".join(
+        f"--- {path} ---\n{content}" for path, content in existing_files.items()
+    )
+    prompt = PROMPT_TEMPLATE.format(
+        category=target.category,
+        path=target.path,
+        tsx=tsx,
+        existing_files=existing_files_blob,
+    )
     result = Runner.run_sync(ANALYSIS_AGENT, prompt)
     output = getattr(result, "final_output", None)
     if output is None:
@@ -158,7 +195,7 @@ def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dic
         raise ValueError(
             "Agent returned empty output. Check OPENAI_API_KEY and model access."
         )
-    output = _strip_code_fences(output)
+    output = _extract_json_payload(output)
     if debug:
         preview = textwrap.shorten(output.replace("\n", " "), width=300, placeholder="...")
         print(f"[debug] {target.name} raw output preview: {preview}")
@@ -179,7 +216,7 @@ def _write_if_content(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def _merge_snippet(path: Path, content: str, patches_dir: Optional[Path] = None) -> None:
+def _merge_snippet(path: Path, content: str) -> None:
     if not content.strip():
         return
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -200,18 +237,40 @@ def _merge_snippet(path: Path, content: str, patches_dir: Optional[Path] = None)
     if merged_text == existing:
         return
     path.write_text(merged_text, encoding="utf-8")
-    if patches_dir is not None:
-        rel_path = path.relative_to(patches_dir.parent)
-        patch_path = patches_dir / (str(rel_path) + ".patch")
-        patch_path.parent.mkdir(parents=True, exist_ok=True)
-        diff = difflib.unified_diff(
-            existing.splitlines(),
-            merged_text.splitlines(),
-            fromfile=str(rel_path),
-            tofile=str(rel_path),
-            lineterm="",
-        )
-        patch_path.write_text("\n".join(diff) + "\n", encoding="utf-8")
+
+
+def _apply_unified_diff(original: str, diff_lines: List[str]) -> str:
+    if not diff_lines:
+        return original
+    lines = original.splitlines()
+    out: List[str] = []
+    i = 0
+    line_iter = iter(diff_lines)
+    for line in line_iter:
+        if line.startswith("---") or line.startswith("+++"):
+            continue
+        if line.startswith("@@"):
+            header = line
+            try:
+                _, ranges, _ = header.split("@@", 2)
+                left, _right = ranges.strip().split(" ", 1)
+                left_start = int(left.split(",")[0].lstrip("-")) - 1
+            except Exception:
+                raise ValueError(f"Invalid diff header: {header!r}")
+            out.extend(lines[i:left_start])
+            i = left_start
+            continue
+        if line.startswith(" "):
+            out.append(line[1:])
+            i += 1
+        elif line.startswith("-"):
+            i += 1
+        elif line.startswith("+"):
+            out.append(line[1:])
+        else:
+            continue
+    out.extend(lines[i:])
+    return "\n".join(out) + ("\n" if original.endswith("\n") else "")
 
 
 def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -> None:
@@ -244,110 +303,53 @@ def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -
     )
     _write_if_content(interface_path, interface.get("source", ""))
 
-    patches_dir = out_dir / "patches"
+    diffs = data.get("diffs") or []
+    if isinstance(diffs, list) and diffs:
+        for diff_entry in diffs:
+            path_value = diff_entry.get("path")
+            diff_lines = diff_entry.get("diffLines") or []
+            if not path_value or not isinstance(diff_lines, list):
+                continue
+            target_path = out_dir / path_value
+            existing = target_path.read_text(encoding="utf-8") if target_path.exists() else ""
+            merged = _apply_unified_diff(existing, diff_lines)
+            _write_if_content(target_path, merged)
+        return
 
     json_component_export = (data.get("jsonComponentExport") or {}).get("source", "")
     _merge_snippet(
         out_dir / "src/lib/json-ui/json-components.ts",
         json_component_export,
-        patches_dir,
     )
 
     exports = data.get("exports") or {}
     _merge_snippet(
         out_dir / "src/lib/json-ui/interfaces/index.ts",
         exports.get("interfacesIndex", ""),
-        patches_dir,
     )
     _merge_snippet(
-        out_dir / "src/hooks/index.ts", exports.get("hooksIndex", "") or "", patches_dir
+        out_dir / "src/hooks/index.ts", exports.get("hooksIndex", "") or ""
     )
     _merge_snippet(
         out_dir / "src/lib/json-ui/hooks-registry.ts",
         exports.get("hooksRegistry", "") or "",
-        patches_dir,
     )
 
     components_index_path = out_dir / "src/components" / target.category / "index.ts"
-    _merge_snippet(components_index_path, exports.get("componentsIndex", ""), patches_dir)
-
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Batch TSX->JSON migration helper.")
-    parser.add_argument(
-        "--out-dir",
-        default=str(ROOT / "migration-out"),
-        help="Directory to write generated artifacts.",
-    )
-    parser.add_argument(
-        "--include",
-        help="Regex to include component names.",
-    )
-    parser.add_argument(
-        "--exclude",
-        help="Regex to exclude component names.",
-    )
-    parser.add_argument(
-        "--limit",
-        type=int,
-        help="Limit number of components to process.",
-    )
-    parser.add_argument(
-        "--workers",
-        type=int,
-        default=4,
-        help="Max concurrent components to process.",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Only list components that would be processed.",
-    )
-    parser.add_argument(
-        "--debug",
-        action="store_true",
-        help="Enable verbose logging for agent output parsing.",
-    )
-    parser.add_argument(
-        "--clean-out",
-        action="store_true",
-        help="Remove legacy per-component folders under the output directory.",
-    )
-    return parser.parse_args()
+    _merge_snippet(components_index_path, exports.get("componentsIndex", ""))
 
 
 def main() -> int:
-    args = parse_args()
-    out_dir = Path(args.out_dir).resolve()
+    out_dir = (ROOT / "migration-out").resolve()
+    workers = 4
 
     targets = list_components(COMPONENT_DIRS)
-    targets = apply_filters(targets, args.include, args.exclude, args.limit)
-
-    if args.dry_run:
-        for t in targets:
-            print(f"{t.category}/{t.name} -> {t.path}")
-        return 0
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    if args.clean_out:
-        for child in out_dir.iterdir():
-            if not child.is_dir():
-                continue
-            if child.name in ("src", "migration-reports"):
-                continue
-            legacy_markers = [
-                child / "analysis.json",
-                child / "json-components.ts",
-                child / "exports.json",
-            ]
-            if any(marker.exists() for marker in legacy_markers):
-                shutil.rmtree(child)
 
     failures: List[str] = []
-    with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        futures = {
-            executor.submit(run_agent_for_component, t, args.debug): t for t in targets
-        }
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {executor.submit(run_agent_for_component, t, True): t for t in targets}
         for future in as_completed(futures):
             target = futures[future]
             try:
