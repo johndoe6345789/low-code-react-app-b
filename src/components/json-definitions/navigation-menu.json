@@ -1,0 +1,143 @@
+{
+  "id": "navigation-menu",
+  "type": "Sidebar",
+  "props": {
+    "side": "left",
+    "collapsible": "offcanvas"
+  },
+  "children": [
+    {
+      "id": "navigation-menu-header",
+      "type": "SidebarHeader",
+      "props": {
+        "className": "px-4 py-4 border-b"
+      },
+      "children": [
+        {
+          "id": "navigation-menu-title",
+          "type": "h2",
+          "props": {
+            "className": "text-lg font-semibold"
+          },
+          "bindings": {
+            "children": {
+              "source": "labels",
+              "transform": "data.title"
+            }
+          }
+        },
+        {
+          "id": "navigation-menu-controls",
+          "type": "div",
+          "props": {
+            "className": "flex gap-2 mt-4"
+          },
+          "children": [
+            {
+              "id": "navigation-menu-expand-all",
+              "type": "Button",
+              "props": {
+                "variant": "outline",
+                "size": "sm",
+                "className": "flex-1"
+              },
+              "bindings": {
+                "onClick": "expandAll"
+              },
+              "children": [
+                {
+                  "id": "navigation-menu-expand-icon",
+                  "type": "CaretDoubleDown",
+                  "props": {
+                    "size": 16,
+                    "className": "mr-2"
+                  }
+                },
+                {
+                  "id": "navigation-menu-expand-label",
+                  "type": "span",
+                  "bindings": {
+                    "children": {
+                      "source": "labels",
+                      "transform": "data.expandAll"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "navigation-menu-collapse-all",
+              "type": "Button",
+              "props": {
+                "variant": "outline",
+                "size": "sm",
+                "className": "flex-1"
+              },
+              "bindings": {
+                "onClick": "collapseAll"
+              },
+              "children": [
+                {
+                  "id": "navigation-menu-collapse-icon",
+                  "type": "CaretDoubleUp",
+                  "props": {
+                    "size": 16,
+                    "className": "mr-2"
+                  }
+                },
+                {
+                  "id": "navigation-menu-collapse-label",
+                  "type": "span",
+                  "bindings": {
+                    "children": {
+                      "source": "labels",
+                      "transform": "data.collapseAll"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "navigation-menu-content",
+      "type": "SidebarContent",
+      "children": [
+        {
+          "id": "navigation-menu-scroll",
+          "type": "ScrollArea",
+          "props": {
+            "className": "h-full px-4"
+          },
+          "children": [
+            {
+              "id": "navigation-menu-group-list",
+              "type": "div",
+              "props": {
+                "className": "space-y-2 py-4"
+              },
+              "children": [
+                {
+                  "id": "navigation-menu-groups-repeat",
+                  "type": "_repeat",
+                  "bindings": {
+                    "_items": {
+                      "source": "groups",
+                      "transform": "data || []"
+                    },
+                    "_renderItem": {
+                      "source": ["toggleGroup", "onItemClick", "onItemHover", "onItemLeave"],
+                      "transform": "(group) => { const toggleGroup = data[0]; const onItemClick = data[1]; const onItemHover = data[2]; const onItemLeave = data[3]; return { _element: 'Collapsible', _key: group.id, _props: { open: group.isExpanded, onOpenChange: () => toggleGroup(group.id) }, _children: [{ _element: 'CollapsibleTrigger', _props: { className: 'w-full flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-muted transition-colors group' }, _children: [{ _element: 'CaretDown', _props: { size: 16, weight: 'bold', className: `text-muted-foreground transition-transform ${group.isExpanded ? 'rotate-0' : '-rotate-90'}` } }, { _element: 'h3', _props: { className: 'flex-1 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider' }, _children: [group.label] }, { _element: 'span', _props: { className: 'text-xs text-muted-foreground' }, _children: [group.visibleCount] }] }, { _element: 'CollapsibleContent', _props: { className: 'mt-1' }, _children: [{ _element: 'div', _props: { className: 'space-y-1 pl-2' }, _children: [{ _element: '_repeat', _props: { _items: group.items || [], _renderItem: (item) => ({ _element: 'div', _key: item.id, _props: { onMouseEnter: () => onItemHover(item.value), onMouseLeave: () => onItemLeave(item.value) }, _children: [{ _element: 'NavigationItem', _props: { icon: item.icon, label: item.label, isActive: item.isActive, badge: item.badge, onClick: () => onItemClick(item.value) } }] }) } }] }] }] }; }"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -8,7 +8,7 @@
 import javascript
 
 predicate isComponentFile(File f) {
-  f.getRelativePath().regexpMatch("^src/components/.*\\.tsx$")
+  f.getRelativePath().regexpMatch("^(src/)?components/.*\\.tsx$")
 }
 
 predicate isReactHookName(string name) {

@@ -9,7 +9,7 @@ import javascript
 import semmle.javascript.JSX
 
 predicate isComponentFile(File f) {
-  f.getRelativePath().regexpMatch("^src/components/.*\\.tsx$")
+  f.getRelativePath().regexpMatch("^(src/)?components/.*\\.tsx$")
 }
 
 from JsxElement jsx, File f
