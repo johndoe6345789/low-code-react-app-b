@@ -12,6 +12,7 @@ import json
 import os
 import re
 import sys
+import textwrap
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
@@ -135,7 +136,16 @@ def apply_filters(
     return targets
 
 
-def run_agent_for_component(target: ComponentTarget) -> Dict[str, Any]:
+def _strip_code_fences(output: str) -> str:
+    trimmed = output.strip()
+    if trimmed.startswith("```"):
+        lines = trimmed.splitlines()
+        if len(lines) >= 3 and lines[0].startswith("```") and lines[-1].startswith("```"):
+            return "\n".join(lines[1:-1]).strip()
+    return output
+
+
+def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dict[str, Any]:
     tsx = target.path.read_text(encoding="utf-8")
     prompt = PROMPT_TEMPLATE.format(category=target.category, path=target.path, tsx=tsx)
     result = Runner.run_sync(ANALYSIS_AGENT, prompt)
@@ -146,6 +156,10 @@ def run_agent_for_component(target: ComponentTarget) -> Dict[str, Any]:
         raise ValueError(
             "Agent returned empty output. Check OPENAI_API_KEY and model access."
         )
+    output = _strip_code_fences(output)
+    if debug:
+        preview = textwrap.shorten(output.replace("\n", " "), width=300, placeholder="...")
+        print(f"[debug] {target.name} raw output preview: {preview}")
     try:
         data = json.loads(output)
     except json.JSONDecodeError as exc:
@@ -221,6 +235,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Only list components that would be processed.",
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable verbose logging for agent output parsing.",
+    )
     return parser.parse_args()
 
 
@@ -240,7 +259,9 @@ def main() -> int:
 
     failures: List[str] = []
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        futures = {executor.submit(run_agent_for_component, t): t for t in targets}
+        futures = {
+            executor.submit(run_agent_for_component, t, args.debug): t for t in targets
+        }
         for future in as_completed(futures):
             target = futures[future]
             try:
