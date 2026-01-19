@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 import AppDialogs from '@/components/app/AppDialogs'
 import AppMainPanel from '@/components/app/AppMainPanel'
-import { NavigationMenu } from '@/components/organisms/NavigationMenu'
+import { NavigationMenu } from '@/lib/json-ui/json-components'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import appStrings from '@/data/app-shortcuts.json'
 import useAppNavigation from '@/hooks/use-app-navigation'
