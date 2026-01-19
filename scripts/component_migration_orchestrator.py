@@ -13,6 +13,7 @@ import os
 import re
 import sys
 import textwrap
+import shutil
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
@@ -170,39 +171,64 @@ def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dic
     return data
 
 
+def _write_if_content(path: Path, content: str) -> None:
+    if not content.strip():
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+
+
+def _append_unique(path: Path, content: str) -> None:
+    if not content.strip():
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    existing = path.read_text(encoding="utf-8") if path.exists() else ""
+    if content.strip() in existing:
+        return
+    separator = "\n" if existing.endswith("\n") or not existing else "\n\n"
+    path.write_text(existing + separator + content.strip() + "\n", encoding="utf-8")
+
+
 def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -> None:
     component_name = data.get("componentName") or "unknown-component"
-    relative_parent = target.path.relative_to(ROOT).parent
-    component_dir = out_dir / relative_parent / component_name
-    component_dir.mkdir(parents=True, exist_ok=True)
 
-    (component_dir / "analysis.json").write_text(
+    report_path = out_dir / "migration-reports" / f"{component_name}.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(
         json.dumps(data, indent=2, sort_keys=True),
         encoding="utf-8",
     )
 
     hook = data.get("hook")
     if hook and hook.get("source"):
-        hook_path = component_dir / Path(hook["filePath"]).name
-        hook_path.write_text(hook["source"], encoding="utf-8")
+        hook_path = out_dir / hook["filePath"]
+        _write_if_content(hook_path, hook["source"])
 
     json_def = data.get("jsonDefinition") or {}
-    json_def_path = component_dir / Path(json_def.get("filePath", "component.json")).name
-    json_def_path.write_text(
-        json.dumps(json_def.get("source", {}), indent=2, sort_keys=True),
-        encoding="utf-8",
+    json_def_path = (
+        out_dir / "src" / "components" / "json-definitions" / f"{component_name}.json"
     )
+    json_def_source = json.dumps(
+        json_def.get("source", {}), indent=2, sort_keys=True
+    )
+    _write_if_content(json_def_path, json_def_source)
 
     interface = data.get("interface") or {}
-    interface_path = component_dir / Path(interface.get("filePath", "interface.ts")).name
-    interface_path.write_text(interface.get("source", ""), encoding="utf-8")
+    interface_path = out_dir / interface.get(
+        "filePath", f"src/lib/json-ui/interfaces/{component_name}.ts"
+    )
+    _write_if_content(interface_path, interface.get("source", ""))
 
-    export_snippets = {
-        "json-components.ts": (data.get("jsonComponentExport") or {}).get("source", ""),
-        "exports.json": json.dumps(data.get("exports", {}), indent=2, sort_keys=True),
-    }
-    for filename, content in export_snippets.items():
-        (component_dir / filename).write_text(content, encoding="utf-8")
+    json_component_export = (data.get("jsonComponentExport") or {}).get("source", "")
+    _append_unique(out_dir / "src/lib/json-ui/json-components.ts", json_component_export)
+
+    exports = data.get("exports") or {}
+    _append_unique(out_dir / "src/lib/json-ui/interfaces/index.ts", exports.get("interfacesIndex", ""))
+    _append_unique(out_dir / "src/hooks/index.ts", exports.get("hooksIndex", "") or "")
+    _append_unique(out_dir / "src/lib/json-ui/hooks-registry.ts", exports.get("hooksRegistry", "") or "")
+
+    components_index_path = out_dir / "src/components" / target.category / "index.ts"
+    _append_unique(components_index_path, exports.get("componentsIndex", ""))
 
 
 def parse_args() -> argparse.Namespace:
@@ -241,6 +267,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Enable verbose logging for agent output parsing.",
     )
+    parser.add_argument(
+        "--clean-out",
+        action="store_true",
+        help="Remove legacy per-component folders under the output directory.",
+    )
     return parser.parse_args()
 
 
@@ -257,6 +288,19 @@ def main() -> int:
         return 0
 
     out_dir.mkdir(parents=True, exist_ok=True)
+    if args.clean_out:
+        for child in out_dir.iterdir():
+            if not child.is_dir():
+                continue
+            if child.name in ("src", "migration-reports"):
+                continue
+            legacy_markers = [
+                child / "analysis.json",
+                child / "json-components.ts",
+                child / "exports.json",
+            ]
+            if any(marker.exists() for marker in legacy_markers):
+                shutil.rmtree(child)
 
     failures: List[str] = []
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
