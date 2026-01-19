@@ -708,6 +708,8 @@ def _coerce_content_output(output: str, path: str, label: str, debug: bool) -> s
 
 
 def _validate_and_repair_json_file(path: Path, label: str, debug: bool) -> None:
+    if not path.exists():
+        return
     try:
         json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
