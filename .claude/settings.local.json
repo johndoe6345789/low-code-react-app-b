@@ -44,5 +44,11 @@
       "Bash(for comp in GitHubBuildStatus LazyD3BarChart StorageSettings LoadingFallback NavigationItem PageHeaderContent SaveIndicator SeedDataManager TreeCard)",
       "Bash(do grep -r \"from ''@/components/molecules/$comp''\" src/ --files-with-matches)"
     ]
+  },
+  "mcpServers": {
+    "codeql": {
+      "command": "node",
+      "args": ["scripts/mcp/codeql-mcp.js"]
+    }
   }
 }
