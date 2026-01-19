@@ -8,10 +8,10 @@ Usage:
 from __future__ import annotations
 
 import json
-import os
 import sys
 import textwrap
 import difflib
+import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
@@ -40,17 +40,6 @@ class ComponentTarget:
     category: str
 
 
-ANALYSIS_AGENT = Agent(
-    name="ComponentAnalyzer",
-    instructions=(
-        "You are a migration assistant. Given a TSX component, analyze it and "
-        "produce a JSON-only response that includes: stateful analysis, "
-        "hook details if needed, JSON UI definition, TS interface, "
-        "and export updates. Follow the provided workflow."
-    ),
-)
-
-
 PROMPT_TEMPLATE = """\
 You are converting a React TSX component to the JSON-driven system.
 Follow this workflow strictly:
@@ -71,7 +60,7 @@ IMPORTANT:
 - For json-components.ts, output ONLY the snippet for the component export, matching this style:
   export const ComponentName = createJsonComponent<ComponentNameProps>(componentNameDef)
   OR
-  export const ComponentName = createJsonComponentWithHooks<ComponentNameProps>(componentNameDef, { ... })
+  export const ComponentName = createJsonComponentWithHooks<ComponentNameProps>(componentNameDef, {{ ... }})
 - Do NOT output any `jsonComponents` object or registry literal.
 - Provide `diffs` with unified diff lines (one string per line) for each target file,
   using the provided file contents as the "before" version.
@@ -124,6 +113,27 @@ TSX source:
 """
 
 
+CONFLICT_PROMPT_TEMPLATE = """\
+You are resolving a unified diff that failed to apply cleanly.
+Return ONLY valid JSON with this shape:
+{{
+  "path": "{path}",
+  "resolvedContent": "...full file content..."
+}}
+
+Rules:
+- Use the diff to update the original content.
+- Preserve unrelated content.
+- Do NOT return Markdown or code fences.
+
+Original content:
+{original}
+
+Diff lines:
+{diff_lines}
+"""
+
+
 def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
     targets: List[ComponentTarget] = []
     for root in roots:
@@ -132,7 +142,7 @@ def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
         for path in sorted(root.rglob("*.tsx")):
             name = path.stem
             targets.append(
-                ComponentTarget(name=name, path=path, category=path.parent.name)
+                ComponentTarget(name=name, path=path, category=root.name)
             )
     return targets
 
@@ -161,21 +171,52 @@ def _read_file_for_prompt(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dict[str, Any]:
+def _read_existing_file(out_dir: Path, rel_path: str) -> str:
+    out_path = out_dir / rel_path
+    if out_path.exists():
+        return out_path.read_text(encoding="utf-8")
+    return _read_file_for_prompt(ROOT / rel_path)
+
+
+def _build_agent() -> Agent:
+    return Agent(
+        name="ComponentAnalyzer",
+        instructions=(
+            "You are a migration assistant. Given a TSX component, analyze it and "
+            "produce a JSON-only response that includes: stateful analysis, "
+            "hook details if needed, JSON UI definition, TS interface, "
+            "and export updates. Follow the provided workflow."
+        ),
+    )
+
+
+def _build_conflict_agent() -> Agent:
+    return Agent(
+        name="DiffConflictResolver",
+        instructions=(
+            "Resolve unified diff conflicts by producing the fully merged file content. "
+            "Return JSON only."
+        ),
+    )
+
+
+def run_agent_for_component(
+    target: ComponentTarget, out_dir: Path, debug: bool = False
+) -> Dict[str, Any]:
     tsx = target.path.read_text(encoding="utf-8")
     existing_files = {
-        "src/lib/json-ui/json-components.ts": _read_file_for_prompt(
-            ROOT / "src" / "lib" / "json-ui" / "json-components.ts"
+        "src/lib/json-ui/json-components.ts": _read_existing_file(
+            out_dir, "src/lib/json-ui/json-components.ts"
         ),
-        "src/lib/json-ui/interfaces/index.ts": _read_file_for_prompt(
-            ROOT / "src" / "lib" / "json-ui" / "interfaces" / "index.ts"
+        "src/lib/json-ui/interfaces/index.ts": _read_existing_file(
+            out_dir, "src/lib/json-ui/interfaces/index.ts"
         ),
-        "src/hooks/index.ts": _read_file_for_prompt(ROOT / "src" / "hooks" / "index.ts"),
-        "src/lib/json-ui/hooks-registry.ts": _read_file_for_prompt(
-            ROOT / "src" / "lib" / "json-ui" / "hooks-registry.ts"
+        "src/hooks/index.ts": _read_existing_file(out_dir, "src/hooks/index.ts"),
+        "src/lib/json-ui/hooks-registry.ts": _read_existing_file(
+            out_dir, "src/lib/json-ui/hooks-registry.ts"
         ),
-        f"src/components/{target.category}/index.ts": _read_file_for_prompt(
-            ROOT / "src" / "components" / target.category / "index.ts"
+        f"src/components/{target.category}/index.ts": _read_existing_file(
+            out_dir, f"src/components/{target.category}/index.ts"
         ),
     }
     existing_files_blob = "\n\n".join(
@@ -187,7 +228,7 @@ def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dic
         tsx=tsx,
         existing_files=existing_files_blob,
     )
-    result = Runner.run_sync(ANALYSIS_AGENT, prompt)
+    result = Runner.run_sync(_build_agent(), prompt)
     output = getattr(result, "final_output", None)
     if output is None:
         output = str(result)
@@ -207,6 +248,38 @@ def run_agent_for_component(target: ComponentTarget, debug: bool = False) -> Dic
             f"Agent output was not valid JSON: {exc}. Output starts with: {snippet!r}"
         ) from exc
     return data
+
+
+def _resolve_diff_with_agent(
+    path: str, original: str, diff_lines: List[str], debug: bool
+) -> str:
+    diff_blob = "\n".join(diff_lines)
+    prompt = CONFLICT_PROMPT_TEMPLATE.format(
+        path=path,
+        original=original,
+        diff_lines=diff_blob,
+    )
+    result = Runner.run_sync(_build_conflict_agent(), prompt)
+    output = getattr(result, "final_output", None)
+    if output is None:
+        output = str(result)
+    if not isinstance(output, str) or not output.strip():
+        raise ValueError("Conflict resolver returned empty output.")
+    output = _extract_json_payload(output)
+    if debug:
+        preview = textwrap.shorten(output.replace("\n", " "), width=300, placeholder="...")
+        print(f"[debug] conflict resolver output preview: {preview}")
+    try:
+        data = json.loads(output)
+    except json.JSONDecodeError as exc:
+        snippet = output.strip().replace("\n", " ")[:200]
+        raise ValueError(
+            f"Conflict resolver output was not valid JSON: {exc}. Output starts with: {snippet!r}"
+        ) from exc
+    resolved = data.get("resolvedContent")
+    if not isinstance(resolved, str) or not resolved.strip():
+        raise ValueError("Conflict resolver did not return resolvedContent.")
+    return resolved
 
 
 def _write_if_content(path: Path, content: str) -> None:
@@ -245,30 +318,49 @@ def _apply_unified_diff(original: str, diff_lines: List[str]) -> str:
     lines = original.splitlines()
     out: List[str] = []
     i = 0
-    line_iter = iter(diff_lines)
-    for line in line_iter:
+    idx = 0
+    applied = False
+
+    header_re = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
+
+    while idx < len(diff_lines):
+        line = diff_lines[idx]
         if line.startswith("---") or line.startswith("+++"):
+            idx += 1
             continue
-        if line.startswith("@@"):
-            header = line
-            try:
-                _, ranges, _ = header.split("@@", 2)
-                left, _right = ranges.strip().split(" ", 1)
-                left_start = int(left.split(",")[0].lstrip("-")) - 1
-            except Exception:
-                raise ValueError(f"Invalid diff header: {header!r}")
-            out.extend(lines[i:left_start])
-            i = left_start
+        if not line.startswith("@@"):
+            idx += 1
             continue
-        if line.startswith(" "):
-            out.append(line[1:])
-            i += 1
-        elif line.startswith("-"):
-            i += 1
-        elif line.startswith("+"):
-            out.append(line[1:])
-        else:
-            continue
+        match = header_re.match(line)
+        if not match:
+            raise ValueError(f"Invalid diff header: {line!r}")
+        old_start = int(match.group(1))
+        old_start_index = max(old_start - 1, 0)
+        out.extend(lines[i:old_start_index])
+        i = old_start_index
+        idx += 1
+        applied = True
+        while idx < len(diff_lines) and not diff_lines[idx].startswith("@@"):
+            hunk_line = diff_lines[idx]
+            if hunk_line.startswith(" "):
+                expected = hunk_line[1:]
+                if i >= len(lines) or lines[i] != expected:
+                    raise ValueError("Diff context mismatch while applying patch.")
+                out.append(lines[i])
+                i += 1
+            elif hunk_line.startswith("-"):
+                expected = hunk_line[1:]
+                if i >= len(lines) or lines[i] != expected:
+                    raise ValueError("Diff delete mismatch while applying patch.")
+                i += 1
+            elif hunk_line.startswith("+"):
+                out.append(hunk_line[1:])
+            elif hunk_line.startswith("\\"):
+                pass
+            idx += 1
+
+    if not applied:
+        raise ValueError("No diff hunks found to apply.")
     out.extend(lines[i:])
     return "\n".join(out) + ("\n" if original.endswith("\n") else "")
 
@@ -310,9 +402,20 @@ def write_output(out_dir: Path, data: Dict[str, Any], target: ComponentTarget) -
             diff_lines = diff_entry.get("diffLines") or []
             if not path_value or not isinstance(diff_lines, list):
                 continue
-            target_path = out_dir / path_value
+            target_path = (out_dir / path_value).resolve()
+            if not target_path.is_relative_to(out_dir.resolve()):
+                raise ValueError(f"Diff path escapes output directory: {path_value}")
             existing = target_path.read_text(encoding="utf-8") if target_path.exists() else ""
-            merged = _apply_unified_diff(existing, diff_lines)
+            try:
+                merged = _apply_unified_diff(existing, diff_lines)
+            except ValueError as exc:
+                print(
+                    f"[warn] diff apply failed for {path_value}: {exc}; attempting AI resolution.",
+                    file=sys.stderr,
+                )
+                merged = _resolve_diff_with_agent(
+                    path_value, existing, diff_lines, debug=True
+                )
             _write_if_content(target_path, merged)
         return
 
@@ -349,7 +452,9 @@ def main() -> int:
 
     failures: List[str] = []
     with ThreadPoolExecutor(max_workers=workers) as executor:
-        futures = {executor.submit(run_agent_for_component, t, True): t for t in targets}
+        futures = {
+            executor.submit(run_agent_for_component, t, out_dir, True): t for t in targets
+        }
         for future in as_completed(futures):
             target = futures[future]
             try:
