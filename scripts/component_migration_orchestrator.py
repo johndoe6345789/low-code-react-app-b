@@ -15,7 +15,7 @@ import difflib
 import time
 import random
 import re
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
@@ -31,6 +31,7 @@ except Exception as exc:  # pragma: no cover - runtime dependency check
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MODEL = os.getenv("CODEX_MODEL") or os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
 API_CALL_DELAY_SECONDS = 2.0
+API_CALL_TIMEOUT_SECONDS = 120.0
 COMPONENT_DIRS = [
     ROOT / "src" / "components" / "atoms",
     ROOT / "src" / "components" / "molecules",
@@ -484,6 +485,12 @@ def _is_rate_limited(exc: Exception) -> bool:
     return "rate limit" in message or "too many requests" in message or "429" in message
 
 
+def _run_sync_with_timeout(agent: Agent, prompt: str, timeout: float) -> Any:
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(Runner.run_sync, agent, prompt)
+        return future.result(timeout=timeout)
+
+
 def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
     max_retries = 5
     max_attempts = max_retries + 1
@@ -501,14 +508,17 @@ def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
                 file=sys.stderr,
             )
             time.sleep(API_CALL_DELAY_SECONDS)
-            result = Runner.run_sync(agent, prompt)
+            result = _run_sync_with_timeout(
+                agent, prompt, API_CALL_TIMEOUT_SECONDS
+            )
             print(
                 f"[info] {label} attempt {attempt}/{max_attempts} completed",
                 file=sys.stderr,
             )
             return result
         except Exception as exc:
-            if not _is_rate_limited(exc):
+            is_timeout = isinstance(exc, (FuturesTimeoutError, TimeoutError))
+            if not _is_rate_limited(exc) and not is_timeout:
                 print(
                     f"[error] {label} attempt {attempt} failed: {exc}",
                     file=sys.stderr,
@@ -518,10 +528,19 @@ def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
                 raise
             delay = min(max_delay, base_delay * (2 ** (attempt - 1)))
             delay += random.uniform(0, delay * 0.2)
-            print(
-                f"[warn] rate limited {label}; retry {attempt}/{max_retries} in {delay:.1f}s",
-                file=sys.stderr,
-            )
+            if is_timeout:
+                print(
+                    (
+                        f"[warn] timeout {label} after {API_CALL_TIMEOUT_SECONDS:.0f}s; "
+                        f"retry {attempt}/{max_retries} in {delay:.1f}s"
+                    ),
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    f"[warn] rate limited {label}; retry {attempt}/{max_retries} in {delay:.1f}s",
+                    file=sys.stderr,
+                )
             time.sleep(delay)
 
 
