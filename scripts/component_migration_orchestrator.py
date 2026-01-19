@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 try:
-    from openai_agents import Agent, Runner  # type: ignore
+    from agents import Agent, Runner  # type: ignore
 except Exception as exc:  # pragma: no cover - runtime dependency check
     raise SystemExit(
         "openai-agents is required. Install with: pip install openai-agents"
@@ -142,7 +142,17 @@ def run_agent_for_component(target: ComponentTarget) -> Dict[str, Any]:
     output = getattr(result, "final_output", None)
     if output is None:
         output = str(result)
-    data = json.loads(output)
+    if not isinstance(output, str) or not output.strip():
+        raise ValueError(
+            "Agent returned empty output. Check OPENAI_API_KEY and model access."
+        )
+    try:
+        data = json.loads(output)
+    except json.JSONDecodeError as exc:
+        snippet = output.strip().replace("\n", " ")[:200]
+        raise ValueError(
+            f"Agent output was not valid JSON: {exc}. Output starts with: {snippet!r}"
+        ) from exc
     return data
 
 
