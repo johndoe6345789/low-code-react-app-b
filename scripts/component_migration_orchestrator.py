@@ -30,6 +30,7 @@ except Exception as exc:  # pragma: no cover - runtime dependency check
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MODEL = os.getenv("CODEX_MODEL") or os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
+API_CALL_DELAY_SECONDS = 2.0
 COMPONENT_DIRS = [
     ROOT / "src" / "components" / "atoms",
     ROOT / "src" / "components" / "molecules",
@@ -219,17 +220,35 @@ def _is_rate_limited(exc: Exception) -> bool:
 
 def _run_with_retries(agent: Agent, prompt: str, label: str) -> Any:
     max_retries = 5
+    max_attempts = max_retries + 1
     base_delay = 1.5
     max_delay = 20.0
     attempt = 0
     while True:
         try:
-            return Runner.run_sync(agent, prompt)
+            attempt += 1
+            print(
+                (
+                    f"[info] {label} attempt {attempt}/{max_attempts}: "
+                    f"sleeping {API_CALL_DELAY_SECONDS:.1f}s before API call"
+                ),
+                file=sys.stderr,
+            )
+            time.sleep(API_CALL_DELAY_SECONDS)
+            result = Runner.run_sync(agent, prompt)
+            print(
+                f"[info] {label} attempt {attempt}/{max_attempts} completed",
+                file=sys.stderr,
+            )
+            return result
         except Exception as exc:
             if not _is_rate_limited(exc):
+                print(
+                    f"[error] {label} attempt {attempt} failed: {exc}",
+                    file=sys.stderr,
+                )
                 raise
-            attempt += 1
-            if attempt > max_retries:
+            if attempt >= max_attempts:
                 raise
             delay = min(max_delay, base_delay * (2 ** (attempt - 1)))
             delay += random.uniform(0, delay * 0.2)
