@@ -32,11 +32,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MODEL = os.getenv("CODEX_MODEL") or os.getenv("OPENAI_MODEL") or "gpt-4o-mini"
 API_CALL_DELAY_SECONDS = 2.0
 API_CALL_TIMEOUT_SECONDS = 120.0
-COMPONENT_DIRS = [
-    ROOT / "src" / "components" / "atoms",
-    ROOT / "src" / "components" / "molecules",
-    ROOT / "src" / "components" / "organisms",
-]
+# Process all TSX components under src/components, excluding App, index, and test/story files.
+COMPONENT_DIRS = [ROOT / "src" / "components"]
+EXCLUDED_FILENAMES = {"app.tsx", "app.jsx", "index.tsx", "index.ts"}
 
 
 @dataclass(frozen=True)
@@ -139,16 +137,17 @@ JSON definition schema (src/components/json-definitions/<component>.json):
     "children": "text" | [{{ ... }}, "..."]
   }}
 - Use nested UIComponents in children.
+- For load.path use the component's folder under src/components: "{component_rel_dir}" (omit the subpath if empty).
 
 Registry entry format (json-components-registry.json) for the component if missing:
-{{
+{{ 
   "type": "ComponentName",
   "name": "ComponentName",
   "category": "layout|input|display|navigation|feedback|data|custom",
   "canHaveChildren": true|false,
   "description": "Short description",
   "status": "supported",
-  "source": "atoms|molecules|organisms|ui|custom",
+  "source": "atoms|molecules|organisms|ui|custom|misc",
   "jsonCompatible": true|false,
   "wrapperRequired": true|false,
   "load": {{
@@ -161,12 +160,12 @@ Registry entry format (json-components-registry.json) for the component if missi
     "notes": "Optional notes"
   }}
 }}
-Omit optional fields when not applicable.
+Omit optional fields when not applicable. Use the provided category "{category}" for both category and source when in doubt.
 
 Return ONLY valid JSON with this shape:
-{{
+{{ 
   "componentName": "...",
-  "category": "atoms|molecules|organisms",
+  "category": "{category}",
   "isStateful": true|false,
   "hook": {{
     "name": "useComponentName",
@@ -206,6 +205,7 @@ Return ONLY valid JSON with this shape:
 
 Component category: {category}
 Component path: {path}
+Component subpath under src/components: {component_rel_dir}
 
 Existing file contents for diffing:
 {existing_files}
@@ -363,9 +363,18 @@ def list_components(roots: Iterable[Path]) -> List[ComponentTarget]:
         if not root.exists():
             continue
         for path in sorted(root.rglob("*.tsx")):
+            if path.name.lower() in EXCLUDED_FILENAMES:
+                continue
+            if re.search(r"\.(test|spec|stories)\.tsx$", path.name):
+                continue
             name = path.stem
+            try:
+                rel = path.relative_to(root)
+                category = rel.parts[0] if len(rel.parts) > 1 else path.parent.name
+            except ValueError:
+                category = path.parent.name
             targets.append(
-                ComponentTarget(name=name, path=path, category=root.name)
+                ComponentTarget(name=name, path=path, category=category)
             )
     return targets
 
@@ -584,6 +593,13 @@ def run_agent_for_component(
 ) -> Dict[str, Any]:
     tsx = target.path.read_text(encoding="utf-8")
     config_file_name = f"{_to_kebab_case(target.name)}.json"
+    components_root = ROOT / "src" / "components"
+    try:
+        rel_dir = str(target.path.parent.relative_to(components_root))
+    except ValueError:
+        rel_dir = str(target.path.parent.relative_to(ROOT))
+    if rel_dir == ".":
+        rel_dir = ""
     existing_files = {
         "src/lib/json-ui/json-components.ts": _read_existing_file(
             out_dir, "src/lib/json-ui/json-components.ts"
@@ -610,6 +626,7 @@ def run_agent_for_component(
     )
     prompt = PROMPT_TEMPLATE.format(
         category=target.category,
+        component_rel_dir=rel_dir,
         path=target.path,
         tsx=tsx,
         existing_files=existing_files_blob,
