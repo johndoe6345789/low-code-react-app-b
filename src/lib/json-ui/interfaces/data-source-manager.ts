@@ -1,0 +1,1 @@
+export interface DataSourceManagerProps { dataSources: DataSource[]; onChange: (dataSources: DataSource[]) => void; }

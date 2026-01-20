@@ -1,0 +1,13 @@
+{
+  "type": "Panel",
+  "jsonCompatible": true,
+  "wrapperRequired": false,
+  "props": {
+    "title": "",
+    "description": "",
+    "actions": null,
+    "children": "Content goes here",
+    "className": "",
+    "variant": "default"
+  }
+}

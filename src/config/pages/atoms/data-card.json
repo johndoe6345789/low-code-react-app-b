@@ -1,0 +1,14 @@
+{
+  "type": "DataCard",
+  "jsonCompatible": true,
+  "wrapperRequired": false,
+  "props": {
+    "title": "",
+    "description": "",
+    "icon": "",
+    "gradient": "",
+    "children": "",
+    "className": ""
+  },
+  "metadata": {}
+}

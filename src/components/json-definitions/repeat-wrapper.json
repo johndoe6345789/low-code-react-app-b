@@ -1,0 +1,37 @@
+{
+  "children": [
+    {
+      "children": "emptyMessage",
+      "props": {
+        "className": "text-center text-muted-foreground text-sm p-4"
+      },
+      "type": "div"
+    },
+    {
+      "children": [
+        {
+          "children": "render(item, index)",
+          "props": {
+            "key": "index"
+          },
+          "type": "div"
+        }
+      ],
+      "props": {
+        "className": "flex flex-col gapClasses[gap]"
+      },
+      "type": "div"
+    }
+  ],
+  "className": "optional classes",
+  "id": "repeat-wrapper",
+  "props": {
+    "className": "",
+    "emptyMessage": "",
+    "gap": "md",
+    "items": [],
+    "render": "function(item, index) { return item; }"
+  },
+  "style": {},
+  "type": "RepeatWrapper"
+}

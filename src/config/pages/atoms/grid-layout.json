@@ -1,0 +1,16 @@
+{
+  "type": "GridLayout",
+  "jsonCompatible": true,
+  "wrapperRequired": false,
+  "props": {
+    "cols": {
+      "base": 1,
+      "sm": 1,
+      "md": 1,
+      "lg": 1,
+      "xl": 1
+    },
+    "gap": "md",
+    "className": ""
+  }
+}

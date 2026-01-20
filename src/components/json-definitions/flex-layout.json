@@ -1,0 +1,20 @@
+{
+  "bindings": {},
+  "children": "...",
+  "className": "optional classes",
+  "conditional": {},
+  "dataBinding": "data.path",
+  "events": [],
+  "id": "flex-layout",
+  "loop": {},
+  "props": {
+    "align": "start",
+    "className": "",
+    "direction": "row",
+    "gap": "md",
+    "justify": "start",
+    "wrap": false
+  },
+  "style": {},
+  "type": "FlexLayout"
+}

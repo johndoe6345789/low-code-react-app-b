@@ -1,0 +1,57 @@
+{
+  "type": "PropertyEditorSection",
+  "jsonCompatible": false,
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/molecules/PropertyEditorSection",
+    "export": "PropertyEditorSection"
+  },
+  "props": {
+    "title": "",
+    "fields": []
+  },
+  "className": "optional classes",
+  "style": {},
+  "dataBinding": "data.propertyEditor",
+  "events": [
+    {
+      "event": "change",
+      "actions": [
+        {
+          "id": "onChangeHandler",
+          "type": "custom"
+        }
+      ]
+    }
+  ],
+  "children": [
+    {
+      "type": "Text",
+      "props": {
+        "variant": "caption"
+      },
+      "children": "{title}"
+    },
+    {
+      "loop": {
+        "source": "fields",
+        "itemVar": "field",
+        "indexVar": "index"
+      },
+      "children": {
+        "type": "PropertyEditorField",
+        "props": {
+          "label": "{field.label}",
+          "name": "{field.name}",
+          "value": "{component.props?.[field.name]}",
+          "type": "{field.type}",
+          "options": "{field.options}",
+          "onChange": "{onChange}"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "notes": "Contains hooks - needs wrapper"
+  }
+}

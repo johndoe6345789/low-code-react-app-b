@@ -1,0 +1,29 @@
+{
+  "id": "component-tree-empty-state",
+  "props": {
+    "children": [
+      {
+        "props": {
+          "className": "w-12 h-12 mx-auto mb-4 opacity-50"
+        },
+        "type": "Icon"
+      },
+      {
+        "props": {
+          "className": "text-sm",
+          "text": "{componentTreeConfig.emptyState.title}"
+        },
+        "type": "Text"
+      },
+      {
+        "props": {
+          "className": "text-xs mt-1",
+          "text": "{componentTreeConfig.emptyState.description}"
+        },
+        "type": "Text"
+      }
+    ],
+    "className": "p-8 text-center text-muted-foreground"
+  },
+  "type": "ComponentTreeEmptyState"
+}

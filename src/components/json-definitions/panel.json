@@ -1,0 +1,109 @@
+{
+  "bindings": {},
+  "children": [
+    {
+      "children": [
+        {
+          "else": null,
+          "if": "title || description || actions",
+          "then": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "else": null,
+                    "if": "title",
+                    "then": {
+                      "children": "title",
+                      "props": {
+                        "className": "font-semibold text-lg"
+                      },
+                      "type": "h3"
+                    }
+                  },
+                  {
+                    "else": null,
+                    "if": "description",
+                    "then": {
+                      "children": "description",
+                      "props": {
+                        "className": "text-sm text-muted-foreground"
+                      },
+                      "type": "p"
+                    }
+                  }
+                ],
+                "props": {
+                  "className": "space-y-1"
+                },
+                "type": "div"
+              },
+              {
+                "else": null,
+                "if": "actions",
+                "then": {
+                  "children": "actions",
+                  "type": "div"
+                }
+              }
+            ],
+            "props": {
+              "className": "flex items-start justify-between p-4 border-b"
+            },
+            "type": "div"
+          }
+        },
+        {
+          "children": "children",
+          "props": {
+            "className": "p-4"
+          },
+          "type": "CardContent"
+        }
+      ],
+      "props": {
+        "className": "border-border"
+      },
+      "type": "Card"
+    }
+  ],
+  "className": "",
+  "conditional": {},
+  "dataBinding": "data.panel",
+  "events": {},
+  "id": "panel",
+  "loop": {},
+  "props": {
+    "actions": {
+      "optional": true,
+      "type": "ReactNode"
+    },
+    "children": {
+      "optional": false,
+      "type": "ReactNode"
+    },
+    "className": {
+      "optional": true,
+      "type": "string"
+    },
+    "description": {
+      "optional": true,
+      "type": "string"
+    },
+    "title": {
+      "optional": true,
+      "type": "string"
+    },
+    "variant": {
+      "enum": [
+        "default",
+        "bordered",
+        "elevated"
+      ],
+      "optional": true,
+      "type": "string"
+    }
+  },
+  "style": {},
+  "type": "Panel"
+}

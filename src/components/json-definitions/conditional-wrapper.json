@@ -1,0 +1,51 @@
+{
+  "bindings": {},
+  "children": [
+    {
+      "props": {
+        "text": "Conditional content"
+      },
+      "type": "Text"
+    }
+  ],
+  "className": "optional-classes",
+  "conditional": {
+    "else": "renderFallback",
+    "if": "data.condition",
+    "then": "renderChildren"
+  },
+  "dataBinding": "data.somePath",
+  "events": [
+    {
+      "actions": [
+        {
+          "id": "yourActionId",
+          "type": "custom"
+        }
+      ],
+      "event": "click"
+    }
+  ],
+  "id": "conditional-wrapper",
+  "loop": {
+    "indexVar": "index",
+    "itemVar": "item",
+    "source": "data.childrenList"
+  },
+  "props": {
+    "children": {
+      "source": "data.children"
+    },
+    "className": {
+      "source": "data.className"
+    },
+    "condition": {
+      "source": "data.condition"
+    },
+    "fallback": {
+      "source": "data.fallback"
+    }
+  },
+  "style": {},
+  "type": "ConditionalWrapper"
+}

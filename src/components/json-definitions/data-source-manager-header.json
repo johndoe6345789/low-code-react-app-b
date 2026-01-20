@@ -1,0 +1,29 @@
+{
+  "className": "optional classes",
+  "events": [
+    {
+      "actions": [
+        {
+          "id": "addDataSource",
+          "type": "custom"
+        }
+      ],
+      "event": "click"
+    }
+  ],
+  "id": "data-source-manager-header",
+  "props": {
+    "copy": {
+      "addLabel": "string",
+      "description": "string",
+      "menu": {
+        "kv": "string",
+        "static": "string"
+      },
+      "title": "string"
+    },
+    "onAdd": "(type: DataSourceType) => void"
+  },
+  "style": {},
+  "type": "DataSourceManagerHeader"
+}

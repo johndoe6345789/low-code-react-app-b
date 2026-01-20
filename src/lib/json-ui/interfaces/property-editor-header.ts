@@ -1,0 +1,1 @@
+export interface PropertyEditorHeaderProps { componentId: string; componentLabel: string; onDelete: () => void; }

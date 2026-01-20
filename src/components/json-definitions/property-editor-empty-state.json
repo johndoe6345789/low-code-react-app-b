@@ -1,0 +1,53 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "props": {
+            "icon": {
+              "props": {
+                "className": "w-12 h-12"
+              },
+              "type": "Icon"
+            }
+          },
+          "type": "EmptyStateIcon"
+        },
+        {
+          "children": [
+            {
+              "props": {
+                "children": "{propertyEditorConfig.emptyState.title}",
+                "variant": "small"
+              },
+              "type": "Text"
+            },
+            {
+              "props": {
+                "children": "{propertyEditorConfig.emptyState.description}",
+                "variant": "caption"
+              },
+              "type": "Text"
+            }
+          ],
+          "props": {
+            "align": "center",
+            "direction": "vertical",
+            "spacing": "xs"
+          },
+          "type": "Stack"
+        }
+      ],
+      "props": {
+        "align": "center",
+        "direction": "vertical",
+        "spacing": "md"
+      },
+      "type": "Stack"
+    }
+  ],
+  "className": "h-full flex flex-col items-center justify-center p-8",
+  "id": "property-editor-empty-state",
+  "props": {},
+  "type": "PropertyEditorEmptyState"
+}

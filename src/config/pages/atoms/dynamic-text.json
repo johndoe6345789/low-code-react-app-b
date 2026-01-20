@@ -1,0 +1,18 @@
+{
+  "type": "DynamicText",
+  "jsonCompatible": false,
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/atoms/DynamicText",
+    "export": "DynamicText"
+  },
+  "props": {
+    "value": "data.value",
+    "format": "text",
+    "currency": "USD",
+    "locale": "en-US"
+  },
+  "metadata": {
+    "notes": "Contains hooks - needs wrapper"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "children": "...",
+  "className": "",
+  "id": "grid-layout",
+  "props": {
+    "className": "",
+    "cols": {
+      "base": 1,
+      "lg": 1,
+      "md": 1,
+      "sm": 1,
+      "xl": 1
+    },
+    "gap": "md"
+  },
+  "style": {},
+  "type": "GridLayout"
+}

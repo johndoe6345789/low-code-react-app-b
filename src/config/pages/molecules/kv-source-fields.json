@@ -1,0 +1,37 @@
+{
+  "type": "KvSourceFields",
+  "jsonCompatible": false,
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/molecules/KvSourceFields",
+    "export": "KvSourceFields"
+  },
+  "props": {
+    "editingSource": {
+      "source": "data.editingSource"
+    },
+    "copy": {
+      "keyLabel": {
+        "source": "data.copy.keyLabel"
+      },
+      "keyPlaceholder": {
+        "source": "data.copy.keyPlaceholder"
+      },
+      "keyHelp": {
+        "source": "data.copy.keyHelp"
+      },
+      "defaultLabel": {
+        "source": "data.copy.defaultLabel"
+      },
+      "defaultPlaceholder": {
+        "source": "data.copy.defaultPlaceholder"
+      }
+    },
+    "onUpdateField": {
+      "source": "actions.onUpdateField"
+    }
+  },
+  "metadata": {
+    "notes": "Contains hooks - needs wrapper"
+  }
+}

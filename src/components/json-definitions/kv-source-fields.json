@@ -1,0 +1,33 @@
+{
+  "children": [],
+  "className": "kv-source-fields",
+  "events": [],
+  "id": "kv-source-fields",
+  "props": {
+    "copy": {
+      "defaultLabel": {
+        "source": "data.copy.defaultLabel"
+      },
+      "defaultPlaceholder": {
+        "source": "data.copy.defaultPlaceholder"
+      },
+      "keyHelp": {
+        "source": "data.copy.keyHelp"
+      },
+      "keyLabel": {
+        "source": "data.copy.keyLabel"
+      },
+      "keyPlaceholder": {
+        "source": "data.copy.keyPlaceholder"
+      }
+    },
+    "editingSource": {
+      "source": "data.editingSource"
+    },
+    "onUpdateField": {
+      "source": "actions.onUpdateField"
+    }
+  },
+  "style": {},
+  "type": "KvSourceFields"
+}

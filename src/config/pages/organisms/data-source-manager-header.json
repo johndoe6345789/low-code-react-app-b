@@ -1,0 +1,15 @@
+{
+  "type": "DataSourceManagerHeader",
+  "props": {
+    "copy": {
+      "title": "Header Title",
+      "description": "Header Description",
+      "addLabel": "Add Data Source",
+      "menu": {
+        "kv": "KV Data Source",
+        "static": "Static Data Source"
+      }
+    },
+    "onAdd": "function reference"
+  }
+}

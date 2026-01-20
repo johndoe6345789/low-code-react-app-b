@@ -1,0 +1,49 @@
+{
+  "children": [
+    {
+      "children": "{title}",
+      "props": {
+        "variant": "caption"
+      },
+      "type": "Text"
+    },
+    {
+      "children": {
+        "props": {
+          "label": "{field.label}",
+          "name": "{field.name}",
+          "onChange": "{onChange}",
+          "options": "{field.options}",
+          "type": "{field.type}",
+          "value": "{component.props?.[field.name]}"
+        },
+        "type": "PropertyEditorField"
+      },
+      "loop": {
+        "indexVar": "index",
+        "itemVar": "field",
+        "source": "fields"
+      }
+    }
+  ],
+  "className": "optional classes",
+  "dataBinding": "data.propertyEditor",
+  "events": [
+    {
+      "actions": [
+        {
+          "id": "onChangeHandler",
+          "type": "custom"
+        }
+      ],
+      "event": "change"
+    }
+  ],
+  "id": "property-editor-section",
+  "props": {
+    "fields": [],
+    "title": ""
+  },
+  "style": {},
+  "type": "PropertyEditorSection"
+}

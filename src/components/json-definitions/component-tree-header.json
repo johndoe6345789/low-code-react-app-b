@@ -1,0 +1,126 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "props": {
+            "icon": {
+              "source": "data.icon"
+            },
+            "subtitle": {
+              "source": "data.count > 1 ? data.config.subtitle.plural : data.config.subtitle.singular"
+            },
+            "title": {
+              "source": "data.config.title"
+            }
+          },
+          "type": "PanelHeader"
+        },
+        {
+          "else": null,
+          "if": "data.count > 0",
+          "then": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "props": {
+                              "size": 16
+                            },
+                            "type": "CaretDown"
+                          }
+                        ],
+                        "props": {
+                          "className": "h-7 w-7 p-0",
+                          "onClick": {
+                            "source": "data.onExpandAll"
+                          },
+                          "size": "sm",
+                          "variant": "ghost"
+                        },
+                        "type": "Button"
+                      }
+                    ],
+                    "type": "TooltipTrigger"
+                  },
+                  {
+                    "children": [
+                      {
+                        "source": "data.config.tooltips.expandAll"
+                      }
+                    ],
+                    "type": "TooltipContent"
+                  }
+                ],
+                "type": "Tooltip"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "props": {
+                              "size": 16
+                            },
+                            "type": "CaretRight"
+                          }
+                        ],
+                        "props": {
+                          "className": "h-7 w-7 p-0",
+                          "onClick": {
+                            "source": "data.onCollapseAll"
+                          },
+                          "size": "sm",
+                          "variant": "ghost"
+                        },
+                        "type": "Button"
+                      }
+                    ],
+                    "type": "TooltipTrigger"
+                  },
+                  {
+                    "children": [
+                      {
+                        "source": "data.config.tooltips.collapseAll"
+                      }
+                    ],
+                    "type": "TooltipContent"
+                  }
+                ],
+                "type": "Tooltip"
+              }
+            ],
+            "props": {
+              "className": "flex gap-1"
+            },
+            "type": "div"
+          }
+        }
+      ],
+      "props": {
+        "className": "flex items-center justify-between mb-2"
+      },
+      "type": "div"
+    }
+  ],
+  "className": "p-4",
+  "id": "component-tree-header",
+  "props": {
+    "componentsCount": {
+      "source": "data.count"
+    },
+    "onCollapseAll": {
+      "source": "data.onCollapseAll"
+    },
+    "onExpandAll": {
+      "source": "data.onExpandAll"
+    }
+  },
+  "type": "ComponentTreeHeader"
+}

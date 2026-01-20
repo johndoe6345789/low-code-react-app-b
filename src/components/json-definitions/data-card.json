@@ -1,0 +1,20 @@
+{
+  "bindings": {},
+  "children": [],
+  "className": "",
+  "conditional": null,
+  "dataBinding": null,
+  "events": [],
+  "id": "data-card",
+  "loop": null,
+  "props": {
+    "children": "",
+    "className": "",
+    "description": "",
+    "gradient": "",
+    "icon": "",
+    "title": ""
+  },
+  "style": {},
+  "type": "DataCard"
+}

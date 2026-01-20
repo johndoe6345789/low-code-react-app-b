@@ -1,0 +1,44 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": "Label",
+          "props": {},
+          "type": "text"
+        },
+        {
+          "children": " (0)",
+          "props": {},
+          "type": "text"
+        }
+      ],
+      "props": {
+        "className": "text-sm font-semibold mb-3",
+        "icon": {}
+      },
+      "type": "IconText"
+    },
+    {
+      "children": [],
+      "props": {
+        "direction": "vertical",
+        "spacing": "sm"
+      },
+      "type": "Stack"
+    }
+  ],
+  "className": "",
+  "dataBinding": "data.path",
+  "id": "data-source-group-section",
+  "props": {
+    "dataSources": [],
+    "getDependents": {},
+    "icon": {},
+    "label": "",
+    "onDelete": {},
+    "onEdit": {}
+  },
+  "style": {},
+  "type": "DataSourceGroupSection"
+}

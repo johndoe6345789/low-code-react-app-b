@@ -1,0 +1,32 @@
+{
+  "bindings": {
+    "name": {
+      "path": "optional.iconPath",
+      "source": "data.iconName",
+      "transform": "optional js expression"
+    }
+  },
+  "children": "text",
+  "className": "optional classes",
+  "dataBinding": "data.iconName",
+  "events": [
+    {
+      "actions": [
+        {
+          "id": "iconClickAction",
+          "type": "custom"
+        }
+      ],
+      "event": "click"
+    }
+  ],
+  "id": "icon-renderer",
+  "props": {
+    "className": "string",
+    "name": "string",
+    "size": "number",
+    "weight": "'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone'"
+  },
+  "style": {},
+  "type": "IconRenderer"
+}

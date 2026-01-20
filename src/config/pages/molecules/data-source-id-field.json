@@ -1,0 +1,26 @@
+{
+  "type": "DataSourceIdField",
+  "jsonCompatible": false,
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/molecules/DataSourceIdField",
+    "export": "DataSourceIdField"
+  },
+  "props": {
+    "label": {
+      "source": "data.label"
+    },
+    "placeholder": {
+      "source": "data.placeholder"
+    },
+    "editingSource": {
+      "source": "data.editingSource"
+    },
+    "onChange": {
+      "source": "data.onChange"
+    }
+  },
+  "metadata": {
+    "notes": "Contains hooks - needs wrapper"
+  }
+}

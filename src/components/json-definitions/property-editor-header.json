@@ -1,0 +1,27 @@
+{
+  "bindings": {},
+  "children": [],
+  "className": "optional classes",
+  "conditional": {},
+  "dataBinding": "data.path",
+  "events": [
+    {
+      "actions": [
+        {
+          "id": "deleteAction",
+          "type": "custom"
+        }
+      ],
+      "event": "click"
+    }
+  ],
+  "id": "property-editor-header",
+  "loop": {},
+  "props": {
+    "componentId": "string",
+    "componentLabel": "string",
+    "onDelete": "function"
+  },
+  "style": {},
+  "type": "PropertyEditorHeader"
+}

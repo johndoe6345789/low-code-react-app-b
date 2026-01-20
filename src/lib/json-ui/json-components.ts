@@ -6,6 +6,7 @@
 import { createJsonComponent } from './create-json-component'
 import { createJsonComponentWithHooks } from './create-json-component-with-hooks'
 import type {
+
   LoadingFallbackProps,
   NavigationItemProps,
   PageHeaderContentProps,
@@ -67,6 +68,26 @@ import type {
   KeyValueProps,
   StatusIconProps,
   ProgressBarProps,
+  PropertyEditorHeaderProps,
+  PropertyEditorEmptyStateProps,
+  PropertyEditorSectionProps,
+  KvSourceFieldsProps,
+  ComponentTreeEmptyStateProps,
+  ComponentTreeNodesProps,
+  ComponentTreeHeaderProps,
+  DataSourceIdFieldProps,
+  StaticSourceFieldsProps,
+  FlexLayoutProps,
+  IconRendererProps,
+  ConditionalWrapperProps,
+  DataCardProps,
+  PanelProps,
+  DynamicTextProps,
+  GridLayoutProps,
+  RepeatWrapperProps,
+  DataSourceGroupSectionProps,
+  DataSourceManagerProps,
+  DataSourceManagerHeaderProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -129,6 +150,26 @@ import detailRowDef from '@/components/json-definitions/detail-row.json'
 import keyValueDef from '@/components/json-definitions/key-value.json'
 import statusIconDef from '@/components/json-definitions/status-icon.json'
 import progressBarDef from '@/components/json-definitions/progress-bar.json'
+import propertyEditorHeaderDef from '@/components/json-definitions/property-editor-header.json'
+import propertyEditorEmptyStateDef from '@/components/json-definitions/property-editor-empty-state.json'
+import propertyEditorSectionDef from '@/components/json-definitions/property-editor-section.json'
+import kvSourceFieldsDef from '@/components/json-definitions/kv-source-fields.json'
+import componentTreeEmptyStateDef from '@/components/json-definitions/component-tree-empty-state.json'
+import componentTreeNodesDef from '@/components/json-definitions/component-tree-nodes.json'
+import componentTreeHeaderDef from '@/components/json-definitions/component-tree-header.json'
+import dataSourceIdFieldDef from '@/components/json-definitions/data-source-id-field.json'
+import staticSourceFieldsDef from '@/components/json-definitions/static-source-fields.json'
+import flexLayoutDef from '@/components/json-definitions/flex-layout.json'
+import iconRendererDef from '@/components/json-definitions/icon-renderer.json'
+import conditionalWrapperDef from '@/components/json-definitions/conditional-wrapper.json'
+import dataCardDef from '@/components/json-definitions/data-card.json'
+import panelDef from '@/components/json-definitions/panel.json'
+import dynamicTextDef from '@/components/json-definitions/dynamic-text.json'
+import gridLayoutDef from '@/components/json-definitions/grid-layout.json'
+import repeatWrapperDef from '@/components/json-definitions/repeat-wrapper.json'
+import dataSourceGroupSectionDef from '@/components/json-definitions/data-source-group-section.json'
+import dataSourceManagerDef from '@/components/json-definitions/data-source-manager.json'
+import dataSourceManagerHeaderDef from '@/components/json-definitions/data-source-manager-header.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -312,3 +353,44 @@ export const StatusIcon = createJsonComponent<StatusIconProps>(statusIconDef)
 export const ProgressBar = createJsonComponent<ProgressBarProps>(progressBarDef)
 
 // All components converted to pure JSON! 🎉
+export const PropertyEditorHeader = createJsonComponent<PropertyEditorHeaderProps>(propertyEditorHeaderDef)
+export const PropertyEditorEmptyState = createJsonComponent<PropertyEditorEmptyStateProps>(propertyEditorEmptyStateDef)
+export const PropertyEditorSection = createJsonComponent<PropertyEditorSectionProps>(propertyEditorSectionDef)
+export const KvSourceFields = createJsonComponent<KvSourceFieldsProps>(kvSourceFieldsDef)
+export const ComponentTreeEmptyState = createJsonComponent<ComponentTreeEmptyStateProps>(componentTreeEmptyStateDef)
+export const ComponentTreeNodes = createJsonComponentWithHooks<ComponentTreeNodesProps>(componentTreeNodesDef, {
+  hooks: {
+    data: {
+      hookName: "useComponentTreeNodes",
+      args: (props) => [props.expandedIds]
+    }
+  }
+})
+export const ComponentTreeHeader = createJsonComponent<ComponentTreeHeaderProps>(componentTreeHeaderDef)
+export const DataSourceIdField = createJsonComponent<DataSourceIdFieldProps>(dataSourceIdFieldDef)
+export const StaticSourceFields = createJsonComponentWithHooks<StaticSourceFieldsProps>(staticSourceFieldsDef, {
+  hooks: {
+    handleChange: {
+      hookName: 'useStaticSourceFields',
+      args: (props) => [props.onUpdateField]
+    }
+  }
+});
+export const FlexLayout = createJsonComponent<FlexLayoutProps>(flexLayoutDef)
+export const IconRenderer = createJsonComponent<IconRendererProps>(iconRendererDef)
+export const ConditionalWrapper = createJsonComponent<ConditionalWrapperProps>(conditionalWrapperDef);
+export const DataCard = createJsonComponent<DataCardProps>(dataCardDef)
+export const Panel = createJsonComponent<PanelProps>(panelDef)
+export const DynamicText = createJsonComponentWithHooks<DynamicTextProps>(dynamicTextDef, {
+  hooks: {
+    data: {
+      hookName: 'useDynamicText',
+      args: (props) => [props.value, props.format, props.currency, props.locale]
+    }
+  }
+});
+export const GridLayout = createJsonComponent<GridLayoutProps>(gridLayoutDef);
+export const RepeatWrapper = createJsonComponent<RepeatWrapperProps>(repeatWrapperDef)
+export const DataSourceGroupSection = createJsonComponent<DataSourceGroupSectionProps>(dataSourceGroupSectionDef)
+export const DataSourceManager = createJsonComponentWithHooks<DataSourceManagerProps>(dataSourceManagerDef, { hooks: { hookData: { hookName: 'useDataSourceManager', args: (props) => [props.dataSources] } } })
+export const DataSourceManagerHeader = createJsonComponent<DataSourceManagerHeaderProps>(dataSourceManagerHeaderDef)

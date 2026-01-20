@@ -1,0 +1,23 @@
+{
+  "type": "ComponentTreeHeader",
+  "jsonCompatible": false,
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/molecules/ComponentTreeHeader",
+    "export": "ComponentTreeHeader"
+  },
+  "props": {
+    "componentsCount": {
+      "source": "data.count"
+    },
+    "onExpandAll": {
+      "source": "data.onExpandAll"
+    },
+    "onCollapseAll": {
+      "source": "data.onCollapseAll"
+    }
+  },
+  "metadata": {
+    "notes": "Contains hooks - needs wrapper"
+  }
+}

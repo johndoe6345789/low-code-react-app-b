@@ -1,0 +1,104 @@
+{
+  "children": [
+    {
+      "props": {
+        "component": {
+          "source": "data.component"
+        },
+        "depth": {
+          "source": "data.depth"
+        },
+        "dropPosition": {
+          "source": "data.dropPosition"
+        },
+        "hasChildren": {
+          "source": "data.hasChildren"
+        },
+        "isDraggedOver": {
+          "source": "data.isDraggedOver"
+        },
+        "isExpanded": {
+          "source": "data.isExpanded"
+        },
+        "isHovered": {
+          "source": "data.isHovered"
+        },
+        "isSelected": {
+          "source": "data.isSelected"
+        },
+        "onDragLeave": {
+          "source": "data.onDragLeave"
+        },
+        "onDragOver": {
+          "source": "data.onDragOver"
+        },
+        "onDragStart": {
+          "source": "data.onDragStart"
+        },
+        "onDrop": {
+          "source": "data.onDrop"
+        },
+        "onHover": {
+          "source": "data.onHover"
+        },
+        "onHoverEnd": {
+          "source": "data.onHoverEnd"
+        },
+        "onSelect": {
+          "source": "data.onSelect"
+        },
+        "onToggleExpand": {
+          "source": "data.onToggleExpand"
+        }
+      },
+      "type": "ComponentTreeNode"
+    }
+  ],
+  "className": "component-tree-nodes",
+  "id": "component-tree-nodes",
+  "props": {
+    "components": {
+      "source": "data.components"
+    },
+    "draggedOverId": {
+      "source": "data.draggedOverId"
+    },
+    "dropPosition": {
+      "source": "data.dropPosition"
+    },
+    "expandedIds": {
+      "source": "data.expandedIds"
+    },
+    "hoveredId": {
+      "source": "data.hoveredId"
+    },
+    "onDragLeave": {
+      "source": "data.onDragLeave"
+    },
+    "onDragOver": {
+      "source": "data.onDragOver"
+    },
+    "onDragStart": {
+      "source": "data.onDragStart"
+    },
+    "onDrop": {
+      "source": "data.onDrop"
+    },
+    "onHover": {
+      "source": "data.onHover"
+    },
+    "onHoverEnd": {
+      "source": "data.onHoverEnd"
+    },
+    "onSelect": {
+      "source": "data.onSelect"
+    },
+    "onToggleExpand": {
+      "source": "data.onToggleExpand"
+    },
+    "selectedId": {
+      "source": "data.selectedId"
+    }
+  },
+  "type": "ComponentTreeNodes"
+}

@@ -1,0 +1,28 @@
+{
+  "children": [
+    {
+      "props": {
+        "children": "{label}"
+      },
+      "type": "Label"
+    },
+    {
+      "props": {
+        "className": "font-mono text-sm h-24",
+        "onChange": "handleChange",
+        "placeholder": "{placeholder}",
+        "value": "JSON.stringify(editingSource.defaultValue, null, 2)"
+      },
+      "type": "Textarea"
+    }
+  ],
+  "className": "space-y-2",
+  "id": "static-source-fields",
+  "props": {
+    "editingSource": {},
+    "label": "",
+    "onUpdateField": null,
+    "placeholder": ""
+  },
+  "type": "StaticSourceFields"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "ConditionalWrapper",
+  "wrapperRequired": true,
+  "load": {
+    "path": "@/components/atoms/ConditionalWrapper",
+    "export": "ConditionalWrapper"
+  },
+  "props": {
+    "condition": true,
+    "children": "Child content here",
+    "fallback": "Fallback content here",
+    "className": ""
+  },
+  "metadata": {
+    "notes": "Contains conditional logic - needs wrapper"
+  }
+}

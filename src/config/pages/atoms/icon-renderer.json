@@ -1,0 +1,11 @@
+{
+  "type": "IconRenderer",
+  "jsonCompatible": true,
+  "wrapperRequired": false,
+  "props": {
+    "name": "default-icon-name",
+    "size": 24,
+    "weight": "duotone",
+    "className": "optional-class"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "bindings": {
+    "value": {
+      "path": "data.value",
+      "source": "data.value",
+      "transform": "optional js expression"
+    }
+  },
+  "className": "dynamic-text-class",
+  "events": [
+    {
+      "actions": [
+        {
+          "id": "exampleActionId",
+          "type": "custom"
+        }
+      ],
+      "event": "click"
+    }
+  ],
+  "id": "dynamic-text",
+  "props": {
+    "className": "optional-class",
+    "currency": "USD",
+    "format": "text",
+    "locale": "en-US",
+    "value": "data.value"
+  },
+  "type": "DynamicText"
+}

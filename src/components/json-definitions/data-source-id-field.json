@@ -1,0 +1,45 @@
+{
+  "children": [
+    {
+      "props": {
+        "children": {
+          "source": "data.label"
+        }
+      },
+      "type": "Label"
+    },
+    {
+      "props": {
+        "className": "font-mono",
+        "onChange": {
+          "source": "data.onChange",
+          "transform": "(e) => onChange(e.target.value)"
+        },
+        "placeholder": {
+          "source": "data.placeholder"
+        },
+        "value": {
+          "source": "data.editingSource.id"
+        }
+      },
+      "type": "Input"
+    }
+  ],
+  "className": "space-y-2",
+  "id": "data-source-id-field",
+  "props": {
+    "editingSource": {
+      "source": "data.editingSource"
+    },
+    "label": {
+      "source": "data.label"
+    },
+    "onChange": {
+      "source": "data.onChange"
+    },
+    "placeholder": {
+      "source": "data.placeholder"
+    }
+  },
+  "type": "DataSourceIdField"
+}

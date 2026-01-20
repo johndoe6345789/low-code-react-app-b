@@ -1,0 +1,149 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "props": {
+                "copy": {
+                  "addLabel": {
+                    "source": "data.source.actions.add"
+                  },
+                  "description": {
+                    "source": "data.source.header.description"
+                  },
+                  "menu": {
+                    "source": "data.source.menu"
+                  },
+                  "title": {
+                    "source": "data.source.header.title"
+                  }
+                },
+                "onAdd": [
+                  {
+                    "actions": [
+                      {
+                        "id": "handleAddDataSource",
+                        "type": "custom"
+                      }
+                    ],
+                    "event": "click"
+                  }
+                ]
+              },
+              "type": "DataSourceManagerHeader"
+            }
+          ],
+          "type": "CardHeader"
+        },
+        {
+          "children": [
+            {
+              "conditional": {
+                "else": {
+                  "children": [
+                    {
+                      "props": {
+                        "dataSources": {
+                          "source": "groupedSources.kv"
+                        },
+                        "getDependents": {
+                          "source": "data.getDependents"
+                        },
+                        "icon": {
+                          "source": "data.icon.Database"
+                        },
+                        "label": {
+                          "source": "data.source.groups.kv"
+                        },
+                        "onDelete": {
+                          "source": "data.handleDeleteSource"
+                        },
+                        "onEdit": {
+                          "source": "data.handleEditSource"
+                        }
+                      },
+                      "type": "DataSourceGroupSection"
+                    },
+                    {
+                      "props": {
+                        "dataSources": {
+                          "source": "groupedSources.static"
+                        },
+                        "getDependents": {
+                          "source": "data.getDependents"
+                        },
+                        "icon": {
+                          "source": "data.icon.FileText"
+                        },
+                        "label": {
+                          "source": "data.source.groups.static"
+                        },
+                        "onDelete": {
+                          "source": "data.handleDeleteSource"
+                        },
+                        "onEdit": {
+                          "source": "data.handleEditSource"
+                        }
+                      },
+                      "type": "DataSourceGroupSection"
+                    }
+                  ],
+                  "props": {
+                    "direction": "vertical",
+                    "spacing": "xl"
+                  },
+                  "type": "Stack"
+                },
+                "if": "localSources.length === 0",
+                "then": {
+                  "description": {
+                    "source": "data.source.emptyState.description"
+                  },
+                  "icon": {
+                    "source": "data.icon.Database"
+                  },
+                  "title": {
+                    "source": "data.source.emptyState.title"
+                  }
+                }
+              },
+              "type": "EmptyState"
+            }
+          ],
+          "type": "CardContent"
+        }
+      ],
+      "type": "Card"
+    },
+    {
+      "props": {
+        "dataSource": {
+          "source": "editingSource"
+        },
+        "onOpenChange": {
+          "source": "setDialogOpen"
+        },
+        "onSave": {
+          "source": "handleSaveSource"
+        },
+        "open": {
+          "source": "dialogOpen"
+        }
+      },
+      "type": "DataSourceEditorDialog"
+    }
+  ],
+  "className": "space-y-6",
+  "id": "data-source-manager",
+  "props": {
+    "dataSources": {
+      "source": "data.path"
+    },
+    "onChange": {
+      "source": "data.onChange"
+    }
+  },
+  "type": "DataSourceManager"
+}
