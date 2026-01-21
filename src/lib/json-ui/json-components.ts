@@ -30,6 +30,7 @@ import type {
   FileUploadProps,
   AccordionProps,
   BindingEditorProps,
+  AppLayoutProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -55,6 +56,7 @@ import menuDef from '@/components/json-definitions/menu.json'
 import fileUploadDef from '@/components/json-definitions/file-upload.json'
 import accordionDef from '@/components/json-definitions/accordion.json'
 import bindingEditorDef from '@/components/json-definitions/binding-editor.json'
+import appLayoutDef from '@/components/json-definitions/app-layout.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -182,6 +184,15 @@ export const BindingEditor = createJsonComponentWithHooks<BindingEditorProps>(bi
     editorState: {
       hookName: 'useBindingEditor',
       args: (props) => [props.bindings, props.onChange]
+    }
+  }
+})
+
+export const AppLayout = createJsonComponentWithHooks<AppLayoutProps>(appLayoutDef, {
+  hooks: {
+    hookData: {
+      hookName: 'useAppLayout',
+      args: (props) => [props]
     }
   }
 })

@@ -3979,6 +3979,11 @@
       "load": {
         "export": "X"
       }
+    },
+    {
+      "type": "AppLayout",
+      "source": "app",
+      "jsonCompatible": true
     }
   ],
   "statistics": {
