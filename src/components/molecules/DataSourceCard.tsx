@@ -1,5 +1,5 @@
 import { Card, IconButton, Stack, Flex, Text } from '@/components/atoms'
-import { DataSourceBadge } from '@/components/atoms/DataSourceBadge'
+import { DataSourceBadge } from '@/components/atoms'
 import { DataSource } from '@/types/json-ui'
 import { Pencil, Trash } from '@phosphor-icons/react'
 

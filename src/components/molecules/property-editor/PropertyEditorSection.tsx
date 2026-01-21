@@ -1,4 +1,4 @@
-import { PropertyEditorField } from '@/components/atoms/PropertyEditorField'
+import { PropertyEditorField } from '@/components/atoms'
 import { Stack, Text } from '@/components/atoms'
 import { PropertyEditorFieldDefinition } from '@/components/molecules/property-editor/propertyEditorConfig'
 import { UIComponent } from '@/types/json-ui'

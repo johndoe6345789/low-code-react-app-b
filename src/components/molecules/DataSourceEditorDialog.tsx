@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { DataSource } from '@/types/json-ui'
-import { DataSourceBadge } from '@/components/atoms/DataSourceBadge'
+import { DataSourceBadge } from '@/components/atoms'
 import { DataSourceIdField } from '@/components/molecules/data-source-editor/DataSourceIdField'
 import { KvSourceFields } from '@/components/molecules/data-source-editor/KvSourceFields'
 import { StaticSourceFields } from '@/components/molecules/data-source-editor/StaticSourceFields'

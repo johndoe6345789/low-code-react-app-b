@@ -1,5 +1,5 @@
 import { UIComponent } from '@/types/json-ui'
-import { ComponentTreeNode } from '@/components/atoms/ComponentTreeNode'
+import { ComponentTreeNode } from '@/components/atoms'
 
 interface ComponentTreeNodesProps {
   components: UIComponent[]
