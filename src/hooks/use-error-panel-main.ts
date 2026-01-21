@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { CodeError } from '@/types/errors'
 import { ProjectFile } from '@/types/project'
-import { createScanForErrors } from './error-panel-scan'
-import { createRepairHandlers } from './error-panel-repair'
+import { createScanForErrors } from '@/components/error-panel/error-panel-scan'
+import { createRepairHandlers } from '@/components/error-panel/error-panel-repair'
+import errorPanelCopy from '@/data/error-panel.json'
 
-interface UseErrorPanelStateParams {
+interface UseErrorPanelMainParams {
   files: ProjectFile[]
   onFileChange: (fileId: string, content: string) => void
+  onFileSelect: (fileId: string) => void
 }
 
-export function useErrorPanelState({ files, onFileChange }: UseErrorPanelStateParams) {
+export function useErrorPanelMain({ files, onFileChange, onFileSelect }: UseErrorPanelMainParams) {
   const [errors, setErrors] = useState<CodeError[]>([])
   const [isScanning, setIsScanning] = useState(false)
   const [isRepairing, setIsRepairing] = useState(false)
@@ -60,5 +62,6 @@ export function useErrorPanelState({ files, onFileChange }: UseErrorPanelStatePa
     repairAllErrors: repairHandlers.repairAllErrors,
     repairFileWithContext: repairHandlers.repairFileWithContext,
     repairSingleError: repairHandlers.repairSingleError,
+    errorPanelCopy,
   }
 }

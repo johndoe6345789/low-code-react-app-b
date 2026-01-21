@@ -254,6 +254,7 @@ import type {
   DocumentationViewProps,
   DockerBuildDebuggerProps,
   DataBindingDesignerProps,
+  ErrorPanelMainProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -505,6 +506,7 @@ import featureToggleSettingsDef from '@/components/json-definitions/feature-togg
 import documentationViewDef from '@/components/json-definitions/documentation-view.json'
 import dockerBuildDebuggerDef from '@/components/json-definitions/docker-build-debugger.json'
 import dataBindingDesignerDef from '@/components/json-definitions/data-binding-designer.json'
+import errorPanelMainDef from '@/components/json-definitions/error-panel-main.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -978,6 +980,15 @@ export const DataBindingDesigner = createJsonComponentWithHooks<DataBindingDesig
     designerState: {
       hookName: 'useDataBindingDesigner',
       args: () => []
+    }
+  }
+})
+
+export const ErrorPanelMain = createJsonComponentWithHooks<ErrorPanelMainProps>(errorPanelMainDef, {
+  hooks: {
+    panelState: {
+      hookName: 'useErrorPanelMain',
+      args: (props) => [props.files, props.onFileChange, props.onFileSelect]
     }
   }
 })
