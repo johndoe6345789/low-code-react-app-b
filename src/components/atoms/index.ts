@@ -1,6 +1,5 @@
 // Auto-generated exports - DO NOT EDIT MANUALLY
 // JSON-based atom imports
-export { InfoBox, KeyValue, Label, List, ListItem, LiveIndicator, LoadingSpinner, LoadingState, MetricDisplay, Modal, Notification, NumberInput } from '@/lib/json-ui/json-components'
 
 export { ActionButton } from './ActionButton'
 export { ActionCard } from './ActionCard'
@@ -83,7 +82,6 @@ export { StatusIcon } from './StatusIcon'
 export { StepIndicator } from './StepIndicator'
 export { Stepper } from './Stepper'
 export { Switch } from './Switch'
-export { TabIcon } from './TabIcon'
 export { Table } from './Table'
 export { Tabs } from './Tabs'
 export { Tag } from './Tag'
@@ -93,7 +91,6 @@ export { TextGradient } from './TextGradient'
 export { TextHighlight } from './TextHighlight'
 export { Timeline } from './Timeline'
 export { Timestamp } from './Timestamp'
-export { TipsCard } from './TipsCard'
 export { Toggle } from './Toggle'
 export { Tooltip } from './Tooltip'
 export { TreeIcon } from './TreeIcon'

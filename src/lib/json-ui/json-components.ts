@@ -6,6 +6,17 @@
 import { createJsonComponent } from './create-json-component'
 import { createJsonComponentWithHooks } from './create-json-component-with-hooks'
 import type {
+  BindingIndicatorProps,
+  ButtonGroupProps,
+  ChipProps,
+  CircularProgressProps,
+  CodeProps,
+  CommandPaletteProps,
+  CompletionCardProps,
+  ComponentPaletteItemProps,
+  ConfirmButtonProps,
+  DataSourceBadgeProps,
+  DataTableProps,
   LoadingFallbackProps,
   NavigationItemProps,
   PageHeaderContentProps,
@@ -52,12 +63,20 @@ import type {
   CardProps,
   CheckboxProps,
   ContextMenuProps,
+  DatePickerProps,
+  DetailRowProps,
   DialogProps,
+  DividerProps,
   DrawerProps,
   DropdownMenuProps,
+  EmptyMessageProps,
+  ErrorBadgeProps,
+  FileIconProps,
   FormProps,
   FormFieldProps,
+  GlowCardProps,
   HeadingProps,
+  HelperTextProps,
   HoverCardProps,
   IconProps,
   InputOTPProps,
@@ -110,6 +129,17 @@ import type {
 } from './interfaces'
 
 // Import JSON definitions
+import bindingIndicatorDef from '@/components/json-definitions/binding-indicator.json'
+import buttonGroupDef from '@/components/json-definitions/button-group.json'
+import chipDef from '@/components/json-definitions/chip.json'
+import circularProgressDef from '@/components/json-definitions/circular-progress.json'
+import codeDef from '@/components/json-definitions/code.json'
+import commandPaletteDef from '@/components/json-definitions/command-palette.json'
+import completionCardDef from '@/components/json-definitions/completion-card.json'
+import componentPaletteItemDef from '@/components/json-definitions/component-palette-item.json'
+import confirmButtonDef from '@/components/json-definitions/confirm-button.json'
+import dataSourceBadgeDef from '@/components/json-definitions/data-source-badge.json'
+import dataTableDef from '@/components/json-definitions/data-table.json'
 import loadingFallbackDef from '@/components/json-definitions/loading-fallback.json'
 import navigationItemDef from '@/components/json-definitions/navigation-item.json'
 import pageHeaderContentDef from '@/components/json-definitions/page-header-content.json'
@@ -156,6 +186,15 @@ import checkboxDef from '@/components/json-definitions/checkbox.json'
 import contextMenuDef from '@/components/json-definitions/context-menu.json'
 import dialogDef from '@/components/json-definitions/dialog.json'
 import drawerDef from '@/components/json-definitions/drawer.json'
+import datePickerDef from '@/components/json-definitions/date-picker.json'
+import detailRowDef from '@/components/json-definitions/detail-row.json'
+import dividerDef from '@/components/json-definitions/divider.json'
+import emptyMessageDef from '@/components/json-definitions/empty-message.json'
+import errorBadgeDef from '@/components/json-definitions/error-badge.json'
+import fileIconDef from '@/components/json-definitions/file-icon.json'
+import formDef from '@/components/json-definitions/form.json'
+import glowCardDef from '@/components/json-definitions/glow-card.json'
+import helperTextDef from '@/components/json-definitions/helper-text.json'
 import dropdownMenuDef from '@/components/json-definitions/dropdown-menu.json'
 import formDef from '@/components/json-definitions/form.json'
 import formFieldDef from '@/components/json-definitions/form-field.json'
@@ -211,9 +250,21 @@ import notificationDef from '@/components/json-definitions/notification.json'
 import numberInputDef from '@/components/json-definitions/number-input.json'
 
 // Create pure JSON components (no hooks)
+export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
+export const ButtonGroup = createJsonComponent<ButtonGroupProps>(buttonGroupDef)
+export const Chip = createJsonComponent<ChipProps>(chipDef)
+export const CircularProgress = createJsonComponent<CircularProgressProps>(circularProgressDef)
+export const Code = createJsonComponent<CodeProps>(codeDef)
+export const CommandPalette = createJsonComponent<CommandPaletteProps>(commandPaletteDef)
+export const CompletionCard = createJsonComponent<CompletionCardProps>(completionCardDef)
+export const ComponentPaletteItem = createJsonComponent<ComponentPaletteItemProps>(componentPaletteItemDef)
+export const ConfirmButton = createJsonComponent<ConfirmButtonProps>(confirmButtonDef)
+export const DataSourceBadge = createJsonComponent<DataSourceBadgeProps>(dataSourceBadgeDef)
+export const DataTable = createJsonComponent<DataTableProps<any>>(dataTableDef)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
 export const NavigationItem = createJsonComponent<NavigationItemProps>(navigationItemDef)
 export const PageHeaderContent = createJsonComponent<PageHeaderContentProps>(pageHeaderContentDef)
+export const PageHeader = createJsonComponent<PageHeaderProps>(pageHeaderDef)
 export const ComponentBindingDialog = createJsonComponent<ComponentBindingDialogProps>(componentBindingDialogDef)
 export const DataSourceEditorDialog = createJsonComponent<DataSourceEditorDialogProps>(dataSourceEditorDialogDef)
 export const GitHubBuildStatus = createJsonComponent<GitHubBuildStatusProps>(githubBuildStatusDef)
@@ -234,23 +285,34 @@ export const Calendar = createJsonComponent<CalendarProps>(calendarDef)
 export const Card = createJsonComponent<CardProps>(cardDef)
 export const Checkbox = createJsonComponent<CheckboxProps>(checkboxDef)
 export const ContextMenu = createJsonComponent<ContextMenuProps>(contextMenuDef)
+export const DatePicker = createJsonComponent<DatePickerProps>(datePickerDef)
+export const DetailRow = createJsonComponent<DetailRowProps>(detailRowDef)
 export const Dialog = createJsonComponent<DialogProps>(dialogDef)
 export const Drawer = createJsonComponent<DrawerProps>(drawerDef)
+export const Divider = createJsonComponent<DividerProps>(dividerDef)
 export const DropdownMenu = createJsonComponent<DropdownMenuProps>(dropdownMenuDef)
 export const Form = createJsonComponent<FormProps>(formDef)
 export const FormField = createJsonComponent<FormFieldProps>(formFieldDef)
+export const GlowCard = createJsonComponent<GlowCardProps>(glowCardDef)
 export const Heading = createJsonComponent<HeadingProps>(headingDef)
+export const HelperText = createJsonComponent<HelperTextProps>(helperTextDef)
 export const HoverCard = createJsonComponent<HoverCardProps>(hoverCardDef)
 export const Icon = createJsonComponent<IconProps>(iconDef)
 export const InputOTP = createJsonComponent<InputOTPProps>(inputOtpDef)
 export const Label = createJsonComponent<LabelProps>(labelDef)
 export const Pagination = createJsonComponent<PaginationProps>(paginationDef)
 export const Progress = createJsonComponent<ProgressProps>(progressDef)
+export const ProgressBar = createJsonComponent<ProgressBarProps>(progressBarDef)
+export const Pulse = createJsonComponent<PulseProps>(pulseDef)
+export const QuickActionButton = createJsonComponent<QuickActionButtonProps>(quickActionButtonDef)
 export const RadioGroup = createJsonComponent<RadioGroupProps>(radioGroupDef)
+export const Sparkle = createJsonComponent<SparkleProps>(sparkleDef)
 export const RangeSlider = createJsonComponent<RangeSliderProps>(rangeSliderDef)
 export const Rating = createJsonComponent<RatingProps>(ratingDef)
 export const ScrollArea = createJsonComponent<ScrollAreaProps>(scrollAreaDef)
 export const ScrollAreaThumb = createJsonComponent<ScrollAreaThumbProps>(scrollAreaThumbDef)
+export const SearchInput = createJsonComponent<SearchInputProps>(searchInputDef)
+export const SeedDataStatus = createJsonComponent<SeedDataStatusProps>(seedDataStatusDef)
 export const Select = createJsonComponent<SelectProps>(selectDef)
 export const Separator = createJsonComponent<SeparatorProps>(separatorDef)
 export const Skeleton = createJsonComponent<SkeletonProps>(skeletonDef)
