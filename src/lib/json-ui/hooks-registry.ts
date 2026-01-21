@@ -26,6 +26,7 @@ import { useConflictCard } from '@/hooks/use-conflict-card'
 import { useConflictDetailsDialog } from '@/hooks/use-conflict-details-dialog'
 import { useDocumentationView } from '@/hooks/use-documentation-view'
 import { useDockerBuildDebugger } from '@/hooks/use-docker-build-debugger'
+import { useDataBindingDesigner } from '@/hooks/use-data-binding-designer'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -59,6 +60,7 @@ export const hooksRegistry: HookRegistry = {
   useConflictDetailsDialog,
   useDocumentationView,
   useDockerBuildDebugger,
+  useDataBindingDesigner,
   // Add more hooks here as needed
 }
 

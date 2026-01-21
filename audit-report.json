@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-01-21T05:05:25.613Z",
+  "timestamp": "2026-01-21T05:06:08.176Z",
   "issues": [],
   "stats": {
     "totalJsonFiles": 337,
-    "totalTsxFiles": 364,
+    "totalTsxFiles": 363,
     "registryEntries": 402,
     "orphanedJson": 0,
     "duplicates": 0,

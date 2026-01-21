@@ -226,6 +226,7 @@ import type {
   PWAUpdatePromptProps,
   PWAInstallPromptProps,
   ConflictCardProps,
+  ConflictDetailsDialogProps,
   ConflictIndicatorProps,
   ErrorPanelProps,
   PreviewDialogProps,
@@ -252,6 +253,7 @@ import type {
   FeatureToggleSettingsProps,
   DocumentationViewProps,
   DockerBuildDebuggerProps,
+  DataBindingDesignerProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -475,6 +477,7 @@ import pwaStatusBarDef from '@/components/json-definitions/pwa-status-bar.json'
 import pwaUpdatePromptDef from '@/components/json-definitions/pwa-update-prompt.json'
 import pwaInstallPromptDef from '@/components/json-definitions/pwa-install-prompt.json'
 import conflictCardDef from '@/components/json-definitions/conflict-card.json'
+import conflictDetailsDialogDef from '@/components/json-definitions/conflict-details-dialog.json'
 import conflictIndicatorDef from '@/components/json-definitions/conflict-indicator.json'
 import errorPanelDef from '@/components/json-definitions/error-panel.json'
 import previewDialogDef from '@/components/json-definitions/preview-dialog.json'
@@ -501,6 +504,7 @@ import storageSettingsPanelDef from '@/components/json-definitions/storage-setti
 import featureToggleSettingsDef from '@/components/json-definitions/feature-toggle-settings.json'
 import documentationViewDef from '@/components/json-definitions/documentation-view.json'
 import dockerBuildDebuggerDef from '@/components/json-definitions/docker-build-debugger.json'
+import dataBindingDesignerDef from '@/components/json-definitions/data-binding-designer.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -953,6 +957,15 @@ export const DockerBuildDebugger = createJsonComponentWithHooks<DockerBuildDebug
   hooks: {
     debuggerState: {
       hookName: 'useDockerBuildDebugger',
+      args: () => []
+    }
+  }
+})
+
+export const DataBindingDesigner = createJsonComponentWithHooks<DataBindingDesignerProps>(dataBindingDesignerDef, {
+  hooks: {
+    designerState: {
+      hookName: 'useDataBindingDesigner',
       args: () => []
     }
   }
