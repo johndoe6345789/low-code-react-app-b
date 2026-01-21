@@ -4160,6 +4160,36 @@
       "type": "AppDialogs",
       "source": "app",
       "jsonCompatible": true
+    },
+    {
+      "type": "single",
+      "source": "layouts",
+      "jsonCompatible": true
+    },
+    {
+      "type": "kv",
+      "source": "dataSources",
+      "jsonCompatible": true
+    },
+    {
+      "type": "create",
+      "source": "actions",
+      "jsonCompatible": true
+    },
+    {
+      "type": "delete",
+      "source": "actions",
+      "jsonCompatible": true
+    },
+    {
+      "type": "navigate",
+      "source": "actions",
+      "jsonCompatible": true
+    },
+    {
+      "type": "update",
+      "source": "actions",
+      "jsonCompatible": true
     }
   ],
   "statistics": {
