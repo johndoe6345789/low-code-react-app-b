@@ -162,6 +162,22 @@ export * from './status-badge'
 export * from './text'
 export * from './tree-icon'
 
+// Phase 9: Reusable feature component interfaces
+export * from './error-panel-header'
+export * from './error-panel-empty-state'
+export * from './pwa-update-section'
+export * from './pwa-cache-section'
+export * from './conflict-resolution-stats'
+export * from './how-it-works-card'
+export * from './search-results'
+export * from './search-empty-state'
+export * from './comprehensive-demo-header'
+export * from './comprehensive-demo-stats-row'
+export * from './config-card'
+export * from './status-card'
+export * from './info-section'
+export * from './list-header'
+
 // Shadcn/ui wrapper interfaces
 export * from './shadcn-button'
 export * from './shadcn-badge'

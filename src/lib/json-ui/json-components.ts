@@ -197,6 +197,20 @@ import type {
   ShadcnTooltipProps,
   ShadcnTooltipTriggerProps,
   ShadcnTooltipContentProps,
+  ErrorPanelHeaderProps,
+  ErrorPanelEmptyStateProps,
+  PWAUpdateSectionProps,
+  PWACacheSectionProps,
+  ConflictResolutionStatsProps,
+  HowItWorksCardProps,
+  SearchResultsProps,
+  SearchEmptyStateProps,
+  ComprehensiveDemoHeaderProps,
+  ComprehensiveDemoStatsRowProps,
+  ConfigCardProps,
+  StatusCardProps,
+  InfoSectionProps,
+  ListHeaderProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -391,6 +405,20 @@ import shadcnCheckboxDef from '@/components/json-definitions/shadcn-checkbox.jso
 import shadcnTooltipDef from '@/components/json-definitions/shadcn-tooltip.json'
 import shadcnTooltipTriggerDef from '@/components/json-definitions/shadcn-tooltip-trigger.json'
 import shadcnTooltipContentDef from '@/components/json-definitions/shadcn-tooltip-content.json'
+import errorPanelHeaderDef from '@/components/json-definitions/error-panel-header.json'
+import errorPanelEmptyStateDef from '@/components/json-definitions/error-panel-empty-state.json'
+import pwaUpdateSectionDef from '@/components/json-definitions/pwa-update-section.json'
+import pwaCacheSectionDef from '@/components/json-definitions/pwa-cache-section.json'
+import conflictResolutionStatsDef from '@/components/json-definitions/conflict-resolution-stats.json'
+import howItWorksCardDef from '@/components/json-definitions/how-it-works-card.json'
+import searchResultsDef from '@/components/json-definitions/search-results.json'
+import searchEmptyStateDef from '@/components/json-definitions/search-empty-state.json'
+import comprehensiveDemoHeaderDef from '@/components/json-definitions/comprehensive-demo-header.json'
+import comprehensiveDemoStatsRowDef from '@/components/json-definitions/comprehensive-demo-stats-row.json'
+import configCardDef from '@/components/json-definitions/config-card.json'
+import statusCardDef from '@/components/json-definitions/status-card.json'
+import infoSectionDef from '@/components/json-definitions/info-section.json'
+import listHeaderDef from '@/components/json-definitions/list-header.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -666,6 +694,22 @@ export const NavigationMenu = createJsonComponentWithHooks<NavigationMenuProps>(
 })
 
 export const TreeListPanel = createJsonComponent<TreeListPanelProps>(treeListPanelDef)
+
+// Phase 9: Reusable feature components
+export const ErrorPanelHeader = createJsonComponent<ErrorPanelHeaderProps>(errorPanelHeaderDef)
+export const ErrorPanelEmptyState = createJsonComponent<ErrorPanelEmptyStateProps>(errorPanelEmptyStateDef)
+export const PWAUpdateSection = createJsonComponent<PWAUpdateSectionProps>(pwaUpdateSectionDef)
+export const PWACacheSection = createJsonComponent<PWACacheSectionProps>(pwaCacheSectionDef)
+export const ConflictResolutionStats = createJsonComponent<ConflictResolutionStatsProps>(conflictResolutionStatsDef)
+export const HowItWorksCard = createJsonComponent<HowItWorksCardProps>(howItWorksCardDef)
+export const SearchResults = createJsonComponent<SearchResultsProps>(searchResultsDef)
+export const SearchEmptyState = createJsonComponent<SearchEmptyStateProps>(searchEmptyStateDef)
+export const ComprehensiveDemoHeader = createJsonComponent<ComprehensiveDemoHeaderProps>(comprehensiveDemoHeaderDef)
+export const ComprehensiveDemoStatsRow = createJsonComponent<ComprehensiveDemoStatsRowProps>(comprehensiveDemoStatsRowDef)
+export const ConfigCard = createJsonComponent<ConfigCardProps>(configCardDef)
+export const StatusCard = createJsonComponent<StatusCardProps>(statusCardDef)
+export const InfoSection = createJsonComponent<InfoSectionProps>(infoSectionDef)
+export const ListHeader = createJsonComponent<ListHeaderProps>(listHeaderDef)
 
 // Additional deleted components now available as JSON-based exports
 export const ColorSwatch = createJsonComponent<ColorSwatchProps>(colorSwatchDef)

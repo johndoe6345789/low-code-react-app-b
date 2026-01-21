@@ -344,6 +344,20 @@ export const jsonUIComponentTypes = [
   "toggleVariants",
   "tooltip",
   "update",
+  "ErrorPanelHeader",
+  "ErrorPanelEmptyState",
+  "PWAUpdateSection",
+  "PWACacheSection",
+  "ConflictResolutionStats",
+  "HowItWorksCard",
+  "SearchResults",
+  "SearchEmptyState",
+  "ComprehensiveDemoHeader",
+  "ComprehensiveDemoStatsRow",
+  "ConfigCard",
+  "StatusCard",
+  "InfoSection",
+  "ListHeader",
 ] as const
 
 export type JSONUIComponentType = typeof jsonUIComponentTypes[number]
