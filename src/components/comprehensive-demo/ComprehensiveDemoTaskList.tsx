@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { SearchBar } from '@/components/molecules/SearchBar'
+import { Input } from '@/components/ui/input'
 import { DataList, ActionButton, IconButton } from '@/components/atoms'
 import { Trash, Plus } from '@phosphor-icons/react'
 import { useSearch } from '@/hooks/data'
@@ -59,9 +59,10 @@ export function ComprehensiveDemoTaskList({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <SearchBar
+        <Input
+          type="text"
           value={query}
-          onChange={setQuery}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder={strings.taskCard.searchPlaceholder}
         />
 

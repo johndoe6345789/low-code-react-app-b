@@ -141,6 +141,33 @@ import type {
   SchemaCodeViewerProps,
   ToolbarActionsProps,
   AppHeaderProps,
+  ColorSwatchProps,
+  ComponentTreeNodeProps,
+  ContainerProps,
+  CountBadgeProps,
+  DataListProps,
+  DotProps,
+  EmptyStateProps,
+  EmptyStateIconProps,
+  FlexProps,
+  GridProps,
+  IconButtonProps,
+  IconTextProps,
+  IconWrapperProps,
+  InfoPanelProps,
+  KbdProps,
+  LinkProps,
+  MetricCardProps,
+  PanelHeaderProps,
+  PropertyEditorFieldProps,
+  ResponsiveGridProps,
+  SectionProps,
+  SpacerProps,
+  StackProps,
+  StatCardProps,
+  StatusBadgeProps,
+  TextProps,
+  TreeIconProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -277,6 +304,33 @@ import schemaEditorPropertiesPanelDef from '@/components/json-definitions/schema
 import schemaEditorSidebarDef from '@/components/json-definitions/schema-editor-sidebar.json'
 import schemaEditorStatusBarDef from '@/components/json-definitions/schema-editor-status-bar.json'
 import schemaEditorToolbarDef from '@/components/json-definitions/schema-editor-toolbar.json'
+import colorSwatchDef from '@/components/json-definitions/color-swatch.json'
+import componentTreeNodeDef from '@/components/json-definitions/component-tree-node.json'
+import containerDef from '@/components/json-definitions/container.json'
+import countBadgeDef from '@/components/json-definitions/count-badge.json'
+import dataListDef from '@/components/json-definitions/data-list.json'
+import dotDef from '@/components/json-definitions/dot.json'
+import emptyStateDef from '@/components/json-definitions/empty-state.json'
+import emptyStateIconDef from '@/components/json-definitions/empty-state-icon.json'
+import flexDef from '@/components/json-definitions/flex.json'
+import gridDef from '@/components/json-definitions/grid.json'
+import iconButtonDef from '@/components/json-definitions/icon-button.json'
+import iconTextDef from '@/components/json-definitions/icon-text.json'
+import iconWrapperDef from '@/components/json-definitions/icon-wrapper.json'
+import infoPanelDef from '@/components/json-definitions/info-panel.json'
+import kbdDef from '@/components/json-definitions/kbd.json'
+import linkDef from '@/components/json-definitions/link.json'
+import metricCardDef from '@/components/json-definitions/metric-card.json'
+import panelHeaderDef from '@/components/json-definitions/panel-header.json'
+import propertyEditorFieldDef from '@/components/json-definitions/property-editor-field.json'
+import responsiveGridDef from '@/components/json-definitions/responsive-grid.json'
+import sectionDef from '@/components/json-definitions/section.json'
+import spacerDef from '@/components/json-definitions/spacer.json'
+import stackDef from '@/components/json-definitions/stack.json'
+import statCardDef from '@/components/json-definitions/stat-card.json'
+import statusBadgeDef from '@/components/json-definitions/status-badge.json'
+import textDef from '@/components/json-definitions/text.json'
+import treeIconDef from '@/components/json-definitions/tree-icon.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -552,5 +606,34 @@ export const NavigationMenu = createJsonComponentWithHooks<NavigationMenuProps>(
 })
 
 export const TreeListPanel = createJsonComponent<TreeListPanelProps>(treeListPanelDef)
+
+// Additional deleted components now available as JSON-based exports
+export const ColorSwatch = createJsonComponent<ColorSwatchProps>(colorSwatchDef)
+export const ComponentTreeNode = createJsonComponent<ComponentTreeNodeProps>(componentTreeNodeDef)
+export const Container = createJsonComponent<ContainerProps>(containerDef)
+export const CountBadge = createJsonComponent<CountBadgeProps>(countBadgeDef)
+export const DataList = createJsonComponent<DataListProps>(dataListDef)
+export const Dot = createJsonComponent<DotProps>(dotDef)
+export const EmptyState = createJsonComponent<EmptyStateProps>(emptyStateDef)
+export const EmptyStateIcon = createJsonComponent<EmptyStateIconProps>(emptyStateIconDef)
+export const Flex = createJsonComponent<FlexProps>(flexDef)
+export const Grid = createJsonComponent<GridProps>(gridDef)
+export const IconButton = createJsonComponent<IconButtonProps>(iconButtonDef)
+export const IconText = createJsonComponent<IconTextProps>(iconTextDef)
+export const IconWrapper = createJsonComponent<IconWrapperProps>(iconWrapperDef)
+export const InfoPanel = createJsonComponent<InfoPanelProps>(infoPanelDef)
+export const Kbd = createJsonComponent<KbdProps>(kbdDef)
+export const Link = createJsonComponent<LinkProps>(linkDef)
+export const MetricCard = createJsonComponent<MetricCardProps>(metricCardDef)
+export const PanelHeader = createJsonComponent<PanelHeaderProps>(panelHeaderDef)
+export const PropertyEditorField = createJsonComponent<PropertyEditorFieldProps>(propertyEditorFieldDef)
+export const ResponsiveGrid = createJsonComponent<ResponsiveGridProps>(responsiveGridDef)
+export const Section = createJsonComponent<SectionProps>(sectionDef)
+export const Spacer = createJsonComponent<SpacerProps>(spacerDef)
+export const Stack = createJsonComponent<StackProps>(stackDef)
+export const StatCard = createJsonComponent<StatCardProps>(statCardDef)
+export const StatusBadge = createJsonComponent<StatusBadgeProps>(statusBadgeDef)
+export const Text = createJsonComponent<TextProps>(textDef)
+export const TreeIcon = createJsonComponent<TreeIconProps>(treeIconDef)
 
 // All components converted to pure JSON! 🎉

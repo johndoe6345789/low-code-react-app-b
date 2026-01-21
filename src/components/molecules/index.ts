@@ -1,12 +1,4 @@
-export { Breadcrumb } from './Breadcrumb'
-export { CanvasRenderer } from './CanvasRenderer'
-export { ComponentPalette } from './ComponentPalette'
-export { PropertyEditor } from './PropertyEditor'
-export { SearchInput } from './SearchInput'
-export { ToolbarButton } from './ToolbarButton'
-export { TreeFormDialog } from './TreeFormDialog'
-export { preloadMonacoEditor } from './LazyMonacoEditor'
-export { ComponentTree } from './ComponentTree'
+// All molecules now use JSON-based definitions from @/lib/json-ui/json-components
 export {
   LoadingFallback,
   NavigationItem,
