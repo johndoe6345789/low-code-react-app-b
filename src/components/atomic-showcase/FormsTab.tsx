@@ -5,13 +5,9 @@ import {
   BasicSearchInput,
   Card,
   Checkbox,
-  CopyButton,
   Divider,
-  FileUpload,
   Heading,
   IconButton,
-  Input,
-  PasswordInput,
   RadioGroup,
   Select,
   Slider,
@@ -19,6 +15,12 @@ import {
   TextArea,
   Toggle,
 } from '@/components/atoms'
+import {
+  Input,
+  CopyButton,
+  FileUpload,
+  PasswordInput,
+} from '@/lib/json-ui/json-components'
 
 type FormsTabProps = {
   checkboxValue: boolean

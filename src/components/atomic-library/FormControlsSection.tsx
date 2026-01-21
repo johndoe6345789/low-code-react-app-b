@@ -1,6 +1,5 @@
 import {
   DatePicker,
-  FilterInput,
   Heading,
   RangeSlider,
   Rating,
@@ -11,6 +10,7 @@ import {
   Switch,
   Text,
 } from '@/components/atoms'
+import { FilterInput } from '@/lib/json-ui/json-components'
 
 type FormControlsSectionContent =
   (typeof import('@/data/atomic-library-showcase.json'))['sections']['formControls']

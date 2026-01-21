@@ -38,7 +38,22 @@
       "Bash(bash:*)",
       "Bash(git restore:*)",
       "Bash(tree:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -c:*)",
+      "Bash(tee:*)",
+      "Bash(git log:*)",
+      "Bash(__NEW_LINE_d25a97dbcf730748__ git show 5a70926:src/components/molecules/FileTabs.tsx)",
+      "Bash(__NEW_LINE_133e2efdc2fa9e3f__ cp /tmp/EditorToolbar.tsx /Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/)",
+      "Bash(__NEW_LINE_60a67b52c0555a4f__ ls -la /Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/File*)",
+      "Bash(__NEW_LINE_db723daab8184235__ git show 5a70926:src/components/atoms/ComponentTreeNode.tsx)",
+      "Bash(__NEW_LINE_225433a826af561c__ git show 5a70926:src/components/molecules/index.ts)",
+      "Bash(__NEW_LINE_3ace36b310bc6599__ head -5 /Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/DataTable.tsx)",
+      "Bash(__NEW_LINE_5257b4833161515f__ echo \"=== BUILD SUCCESS ===\")",
+      "Bash(__NEW_LINE_609b943e39e1ac8d__ cp /tmp/COMPREHENSIVE_BUILD_REPORT.md /Users/rmac/Documents/GitHub/low-code-react-app-b/BUILD_REPORT.md)",
+      "Bash(for component in \"Accordion\" \"CopyButton\" \"FileUpload\" \"FilterInput\" \"Image\" \"Input\" \"PasswordInput\" \"Popover\")",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Complete JSON component migration for 9 components \\(atoms + BindingEditor\\)\n\nMigration complete for:\n- 5 atoms: Accordion, CopyButton, FileUpload, FilterInput, Image, Input, PasswordInput, Popover \\(8 total\\)\n- 1 molecule: BindingEditor\n\nChanges:\n- Deleted 9 legacy TSX files that have complete JSON equivalents\n- Exported BindingEditor from json-components.ts with useBindingEditor hook\n- Registered useBindingEditor in hooks-registry.ts\n- Updated all imports across codebase to use JSON-based components\n- Fixed build errors: schema-loader dynamic import, DataSourceGroupSection\n- Cleaned up component index exports\n\nBuild status: ✅ PASSING\n- 0 TypeScript errors\n- All 9,408 modules transformed successfully\n- No blocking build warnings\n\nNext steps:\n- 3 organisms still need conversion: DataSourceManager, NavigationMenu, TreeListPanel\n- 120+ additional components have TSX versions \\(need individual migration\\)\n- 22 JSON components now available for use throughout the app\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }

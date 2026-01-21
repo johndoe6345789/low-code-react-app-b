@@ -1,4 +1,7 @@
-// Auto-generated - only exports existing TSX files
-export { DataSourceManager } from './DataSourceManager'
 export { NavigationMenu } from './NavigationMenu'
+export { AppHeader } from './AppHeader'
+export { DataSourceManager } from './DataSourceManager'
 export { TreeListPanel } from './TreeListPanel'
+export { SchemaEditorLayout } from './SchemaEditorLayout'
+export { SchemaCodeViewer } from './SchemaCodeViewer'
+export { JSONUIShowcase } from '../JSONUIShowcase'

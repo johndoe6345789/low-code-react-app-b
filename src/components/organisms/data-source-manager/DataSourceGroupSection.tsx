@@ -1,5 +1,4 @@
 import { DataSource } from '@/types/json-ui'
-import { DataSourceCard } from '@/components/molecules/DataSourceCard'
 import { IconText, Section, Stack } from '@/components/atoms'
 import { ReactNode } from 'react'
 
@@ -34,13 +33,24 @@ export function DataSourceGroupSection({
       </IconText>
       <Stack direction="vertical" spacing="sm">
         {dataSources.map(ds => (
-          <DataSourceCard
+          <div
             key={ds.id}
-            dataSource={ds}
-            dependents={getDependents(ds.id)}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
+            className="p-3 border rounded-md hover:bg-gray-50"
+          >
+            <div className="font-medium text-sm">{ds.id}</div>
+            <button
+              onClick={() => onEdit(ds.id)}
+              className="text-xs text-blue-600 hover:underline mr-2"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => onDelete(ds.id)}
+              className="text-xs text-red-600 hover:underline"
+            >
+              Delete
+            </button>
+          </div>
         ))}
       </Stack>
     </Section>

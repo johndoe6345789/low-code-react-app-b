@@ -13,7 +13,7 @@ export function useSchemaLoader(schemaPath: string) {
         setError(null)
 
         // Dynamically import the JSON schema
-        const schemaModule = await import(`@/config/pages/${schemaPath}`)
+        const schemaModule = await import(`../config/pages/${schemaPath}.json`)
         setSchema(schemaModule.default || schemaModule)
       } catch (err) {
         console.error(`[Schema Loader] Failed to load schema: ${schemaPath}`, err)

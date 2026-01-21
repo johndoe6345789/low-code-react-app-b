@@ -29,6 +29,7 @@ import type {
   MenuProps,
   FileUploadProps,
   AccordionProps,
+  BindingEditorProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -53,6 +54,7 @@ import popoverDef from '@/components/json-definitions/popover.json'
 import menuDef from '@/components/json-definitions/menu.json'
 import fileUploadDef from '@/components/json-definitions/file-upload.json'
 import accordionDef from '@/components/json-definitions/accordion.json'
+import bindingEditorDef from '@/components/json-definitions/binding-editor.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -171,6 +173,15 @@ export const Accordion = createJsonComponentWithHooks<AccordionProps>(accordionD
     accordionState: {
       hookName: 'useAccordion',
       args: (props) => [props.type || 'single', props.defaultOpen || []]
+    }
+  }
+})
+
+export const BindingEditor = createJsonComponentWithHooks<BindingEditorProps>(bindingEditorDef, {
+  hooks: {
+    editorState: {
+      hookName: 'useBindingEditor',
+      args: (props) => [props.bindings, props.onChange]
     }
   }
 })

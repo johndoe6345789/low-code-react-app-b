@@ -1,6 +1,5 @@
 import displayCopy from '@/data/atomic-showcase/display.json'
 import {
-  Accordion,
   Avatar,
   BreadcrumbNav,
   Card,
@@ -16,6 +15,7 @@ import {
   Timeline,
   Timestamp,
 } from '@/components/atoms'
+import { Accordion } from '@/lib/json-ui/json-components'
 
 type DisplayTabProps = {
   ratingValue: number
