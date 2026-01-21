@@ -1,5 +1,8 @@
-/**
- * ConflictCardProps - JSON definition interface
- * Card displaying conflict information
- */
-export interface ConflictCardProps {}
+import { ConflictItem } from '@/types/conflicts'
+
+export interface ConflictCardProps {
+  conflict: ConflictItem
+  onResolve: (conflictId: string, strategy: 'local' | 'remote' | 'merge') => void
+  onViewDetails: (conflict: ConflictItem) => void
+  isResolving: boolean
+}
