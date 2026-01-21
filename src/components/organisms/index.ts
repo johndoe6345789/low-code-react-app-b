@@ -1,6 +1,2 @@
-export { NavigationMenu } from './NavigationMenu'
-export { AppHeader } from './AppHeader'
-export { TreeListPanel } from './TreeListPanel'
-export { SchemaEditorLayout } from './SchemaEditorLayout'
-export { SchemaCodeViewer } from './SchemaCodeViewer'
+export { SchemaEditorLayout, SchemaEditorCanvas, SchemaEditorPropertiesPanel, SchemaEditorSidebar, SchemaEditorStatusBar, SchemaEditorToolbar } from '@/lib/json-ui/json-components'
 export { JSONUIShowcase } from '../JSONUIShowcase'

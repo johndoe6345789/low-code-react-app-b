@@ -3,9 +3,9 @@ import { useToggle, useDialog } from '@/hooks/ui'
 import { useKV } from '@/hooks/use-kv'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { SearchInput } from '@/components/molecules'
+import { SearchInput } from '@/lib/json-ui/json-components'
 import { DataCard } from '@/components/atoms/json-ui'
-import { Grid, Heading, StatusBadge } from '@/components/atoms'
+import { Heading, Badge } from '@/lib/json-ui/json-components'
 import { Plus, Trash, Eye } from '@phosphor-icons/react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
@@ -64,7 +64,7 @@ export function AtomicComponentDemo() {
         </p>
       </div>
 
-      <Grid cols={3} gap={4}>
+      <div className="grid grid-cols-3 gap-4">
         <DataCard title="Total Tasks" icon="list" gradient="from-blue-500/10 to-blue-500/5">
           <div className="text-3xl font-bold">{stats.total}</div>
         </DataCard>
@@ -74,7 +74,7 @@ export function AtomicComponentDemo() {
         <DataCard title="Completed" icon="check" gradient="from-green-500/10 to-green-500/5">
           <div className="text-3xl font-bold">{stats.completed}</div>
         </DataCard>
-      </Grid>
+      </div>
 
       {/* ActionBar replaced with inline buttons */}
       <div className="flex items-center justify-between">
@@ -104,7 +104,7 @@ export function AtomicComponentDemo() {
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{task.title}</CardTitle>
                 <div className="flex items-center gap-2">
-                  <StatusBadge status={task.status} />
+                  <Badge>{task.status}</Badge>
                   <Button
                     variant="ghost"
                     size="sm"

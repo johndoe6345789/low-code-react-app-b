@@ -15,10 +15,20 @@ import { useMenuState } from '@/hooks/use-menu-state'
 import { useFileUpload } from '@/hooks/use-file-upload'
 import { useAccordion } from '@/hooks/use-accordion'
 import { useBindingEditor } from '@/hooks/use-binding-editor'
+import { useRepeatWrapper } from '@/hooks/use-repeat-wrapper'
 import { useAppLayout } from '@/hooks/use-app-layout'
 import { useAppRouterLayout } from '@/hooks/use-app-router-layout'
 import { useNavigationMenu } from '@/hooks/use-navigation-menu'
 import { useDataSourceManagerState } from '@/hooks/use-data-source-manager-state'
+import { useFormatValue } from '@/hooks/use-format-value'
+import { useConflictResolution } from '@/hooks/use-conflict-resolution'
+import { useConflictCard } from '@/hooks/use-conflict-card'
+import { useConflictDetailsDialog } from '@/hooks/use-conflict-details-dialog'
+import { useConflictResolutionDemo } from '@/hooks/use-conflict-resolution-demo'
+import { useDocumentationView } from '@/hooks/use-documentation-view'
+import { useDockerBuildDebugger } from '@/hooks/use-docker-build-debugger'
+import { useDataBindingDesigner } from '@/hooks/use-data-binding-designer'
+import { useErrorPanelMain } from '@/hooks/use-error-panel-main'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -41,10 +51,22 @@ export const hooksRegistry: HookRegistry = {
   useFileUpload,
   useAccordion,
   useBindingEditor,
+  useRepeatWrapper,
   useAppLayout,
   useAppRouterLayout,
   useNavigationMenu,
   useDataSourceManagerState,
+  useFormatValue,
+  useConflictResolution,
+  useConflictCard,
+  useConflictDetailsDialog,
+  useConflictResolutionDemo,
+  useDocumentationView,
+  useDockerBuildDebugger,
+  useDataBindingDesigner,
+  useErrorPanelMain,
+  useFaviconDesigner,
+  useFeatureIdeaCloud,
   // Add more hooks here as needed
 }
 

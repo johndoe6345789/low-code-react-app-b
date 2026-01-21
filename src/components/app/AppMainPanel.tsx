@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { AppHeader } from '@/components/organisms'
+import { AppHeader } from '@/lib/json-ui/json-components'
 import { PWARegistry } from '@/lib/component-registry'
 import { RouterProvider } from '@/router'
 import type { FeatureToggles, Project } from '@/types/project'
