@@ -59,7 +59,6 @@ export const jsonUIComponentTypes = [
   "CircularProgress",
   "Clock",
   "Code",
-  "CodeEditor",
   "CodeExplanationDialog",
   "Collapsible",
   "CollapsibleTrigger",
