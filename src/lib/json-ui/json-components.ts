@@ -131,6 +131,10 @@ import type {
   CodeExplanationDialogProps,
   ComponentPaletteProps,
   CanvasRendererProps,
+  EmptyCanvasStateProps,
+  SchemaCodeViewerProps,
+  ToolbarActionsProps,
+  AppHeaderProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -258,6 +262,10 @@ import dataSourceCardDef from '@/components/json-definitions/data-source-card.js
 import codeExplanationDialogDef from '@/components/json-definitions/code-explanation-dialog.json'
 import componentPaletteDef from '@/components/json-definitions/component-palette.json'
 import canvasRendererDef from '@/components/json-definitions/canvas-renderer.json'
+import emptyCanvasStateDef from '@/components/json-definitions/empty-canvas-state.json'
+import schemaCodeViewerDef from '@/components/json-definitions/schema-code-viewer.json'
+import toolbarActionsDef from '@/components/json-definitions/toolbar-actions.json'
+import appHeaderDef from '@/components/json-definitions/app-header.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -363,6 +371,10 @@ export const DataSourceCard = createJsonComponent<DataSourceCardProps>(dataSourc
 export const CodeExplanationDialog = createJsonComponent<CodeExplanationDialogProps>(codeExplanationDialogDef)
 export const ComponentPalette = createJsonComponent<ComponentPaletteProps>(componentPaletteDef)
 export const CanvasRenderer = createJsonComponent<CanvasRendererProps>(canvasRendererDef)
+export const EmptyCanvasState = createJsonComponent<EmptyCanvasStateProps>(emptyCanvasStateDef)
+export const SchemaCodeViewer = createJsonComponent<SchemaCodeViewerProps>(schemaCodeViewerDef)
+export const ToolbarActions = createJsonComponent<ToolbarActionsProps>(toolbarActionsDef)
+export const AppHeader = createJsonComponent<AppHeaderProps>(appHeaderDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
