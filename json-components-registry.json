@@ -348,7 +348,8 @@
       "canHaveChildren": true,
       "description": "BindingIndicator component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "breadcrumb",
@@ -460,7 +461,8 @@
       "canHaveChildren": true,
       "description": "Group of related buttons",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "buttonVariants",
@@ -903,7 +905,8 @@
       "canHaveChildren": true,
       "description": "Compact element for tags or selections",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "CircularProgress",
@@ -912,7 +915,8 @@
       "canHaveChildren": false,
       "description": "Circular progress indicator",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Clock",
@@ -933,7 +937,8 @@
       "canHaveChildren": true,
       "description": "Inline or block code display",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "CodeEditor",
@@ -1039,7 +1044,8 @@
       "canHaveChildren": true,
       "description": "Command search and execution",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "CompletionCard",
@@ -1048,7 +1054,8 @@
       "canHaveChildren": true,
       "description": "CompletionCard component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ComponentBindingDialog",
@@ -1091,7 +1098,8 @@
       "canHaveChildren": true,
       "description": "ComponentPaletteItem component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ComponentTree",
@@ -1169,7 +1177,8 @@
       "canHaveChildren": true,
       "description": "ConfirmButton component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ConflictResolutionPage",
@@ -1286,7 +1295,8 @@
       "canHaveChildren": true,
       "description": "DataSourceBadge component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "DataSourceCard",
@@ -1339,7 +1349,8 @@
       "canHaveChildren": false,
       "description": "Advanced data table with sorting and filtering",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "DatePicker",
@@ -2556,12 +2567,9 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "PageHeader component",
-      "status": "supported",
+      "status": "migrated",
       "source": "atoms",
-      "load": {
-        "path": "@/components/atoms/PageHeader.tsx",
-        "export": "BasicPageHeader"
-      }
+      "jsonCompatible": true
     },
     {
       "type": "PageHeaderContent",
@@ -2716,8 +2724,9 @@
       "category": "display",
       "canHaveChildren": false,
       "description": "Linear progress bar",
-      "status": "supported",
-      "source": "atoms"
+      "status": "migrated",
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ProjectDashboard",
@@ -2762,8 +2771,9 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "Pulse component",
-      "status": "supported",
-      "source": "atoms"
+      "status": "migrated",
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "PWASettings",
@@ -2789,8 +2799,9 @@
       "category": "input",
       "canHaveChildren": true,
       "description": "QuickActionButton component",
-      "status": "supported",
-      "source": "atoms"
+      "status": "migrated",
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Radio",
@@ -2798,8 +2809,9 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Radio button selection",
-      "status": "supported",
-      "source": "atoms"
+      "status": "migrated",
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "radio-group",
@@ -2831,7 +2843,7 @@
       "category": "input",
       "canHaveChildren": true,
       "description": "RangeSlider component",
-      "status": "supported",
+      "status": "migrated",
       "source": "atoms",
       "jsonCompatible": true
     },
@@ -2841,7 +2853,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "Star rating component",
-      "status": "supported",
+      "status": "migrated",
       "source": "atoms",
       "jsonCompatible": true
     },
@@ -3037,7 +3049,7 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "Scrollable container area",
-      "status": "supported",
+      "status": "migrated",
       "source": "atoms",
       "jsonCompatible": true
     },
@@ -3079,12 +3091,9 @@
       "category": "custom",
       "canHaveChildren": false,
       "description": "Search input with icon",
-      "status": "supported",
+      "status": "migrated",
       "source": "atoms",
-      "load": {
-        "path": "@/components/atoms/SearchInput.tsx",
-        "export": "BasicSearchInput"
-      }
+      "jsonCompatible": true
     },
     {
       "type": "section",
@@ -3134,8 +3143,9 @@
       "category": "feedback",
       "canHaveChildren": true,
       "description": "SeedDataStatus component",
-      "status": "supported",
-      "source": "atoms"
+      "status": "migrated",
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Select",
@@ -3143,7 +3153,7 @@
       "category": "input",
       "canHaveChildren": false,
       "description": "Dropdown select control",
-      "status": "supported",
+      "status": "migrated",
       "source": "atoms",
       "jsonCompatible": true
     },
@@ -3360,8 +3370,9 @@
       "category": "custom",
       "canHaveChildren": true,
       "description": "Sparkle component",
-      "status": "supported",
-      "source": "atoms"
+      "status": "migrated",
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Spinner",

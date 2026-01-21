@@ -1,4 +1,5 @@
-import { Stack, Container, TabIcon } from '@/components/atoms'
+import { Stack, Container } from '@/components/atoms'
+import { TabIcon } from '@/lib/json-ui/json-components'
 import { tabInfo } from '@/lib/navigation-config'
 
 interface PageHeaderProps {

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { BasicPageHeader, Container, Stack } from '@/components/atoms'
+import { Container, Stack } from '@/components/atoms'
+import { PageHeader } from '@/lib/json-ui/json-components'
 import data from '@/data/atomic-library-showcase.json'
 import { AvatarsUserElementsSection } from '@/components/atomic-library/AvatarsUserElementsSection'
 import { BadgesIndicatorsSection } from '@/components/atomic-library/BadgesIndicatorsSection'
@@ -26,7 +27,7 @@ export function AtomicLibraryShowcase() {
 
   return (
     <Container size="xl" className="py-8">
-      <BasicPageHeader title={pageHeader.title} description={pageHeader.description} />
+      <PageHeader title={pageHeader.title} description={pageHeader.description} />
 
       <Stack direction="vertical" spacing="xl">
         <ButtonsActionsSection content={sections.buttonsActions} />

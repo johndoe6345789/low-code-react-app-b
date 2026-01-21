@@ -2,15 +2,11 @@ import { Envelope, Heart, Share, Trash } from '@phosphor-icons/react'
 import formsCopy from '@/data/atomic-showcase/forms.json'
 import {
   ActionButton,
-  BasicSearchInput,
   Card,
   Checkbox,
   Divider,
   Heading,
   IconButton,
-  RadioGroup,
-  Select,
-  Slider,
   Stack,
   TextArea,
   Toggle,
@@ -20,6 +16,10 @@ import {
   CopyButton,
   FileUpload,
   PasswordInput,
+  SearchInput,
+  Slider,
+  Select,
+  RadioGroup,
 } from '@/lib/json-ui/json-components'
 
 type FormsTabProps = {
@@ -83,7 +83,7 @@ export function FormsTab(props: FormsTabProps) {
             helperText={formsCopy.email.helperText}
           />
           <PasswordInput label={formsCopy.password.label} value={passwordValue} onChange={onPasswordChange} helperText={formsCopy.password.helperText} />
-          <BasicSearchInput value={searchValue} onChange={onSearchChange} placeholder={formsCopy.search.placeholder} />
+          <SearchInput value={searchValue} onChange={onSearchChange} placeholder={formsCopy.search.placeholder} />
           <TextArea
             label={formsCopy.textArea.label}
             placeholder={formsCopy.textArea.placeholder}
