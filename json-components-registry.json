@@ -2,7 +2,7 @@
   "$schema": "./schemas/json-components-registry-schema.json",
   "version": "2.0.0",
   "description": "Registry of all components in the application",
-  "lastUpdated": "2026-01-21T03:35:00.000Z",
+  "lastUpdated": "2026-01-21T04:19:28.496Z",
   "categories": {
     "layout": "Layout and container components",
     "input": "Form inputs and interactive controls",
@@ -4571,6 +4571,196 @@
         "phase": "9",
         "notes": "Reusable list header pattern"
       }
+    },
+    {
+      "type": "SchemaEditorPage",
+      "name": "Schema Editor Page",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Schema editor page wrapper",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "KeyboardShortcutsDialog",
+      "name": "Keyboard Shortcuts Dialog",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "Dialog for displaying keyboard shortcuts",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PreloadIndicator",
+      "name": "Preload Indicator",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "Route preload status indicator",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PWAStatusBar",
+      "name": "PWA Status Bar",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "PWA status bar component",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PWAUpdatePrompt",
+      "name": "PWA Update Prompt",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "PWA update prompt dialog",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PWAInstallPrompt",
+      "name": "PWA Install Prompt",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "PWA installation prompt",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ConflictCard",
+      "name": "Conflict Card",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Card for displaying conflict information",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ConflictIndicator",
+      "name": "Conflict Indicator",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "Indicator for conflicts",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "PreviewDialog",
+      "name": "Preview Dialog",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Dialog for previewing content",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "NotFoundPage",
+      "name": "Not Found Page",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "404 page component",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "GlobalSearch",
+      "name": "Global Search",
+      "category": "input",
+      "canHaveChildren": false,
+      "description": "Global search dialog",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "AtomicComponentShowcase",
+      "name": "Atomic Component Showcase",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Showcase for atomic components",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "JSONUIShowcasePage",
+      "name": "JSON UI Showcase Page",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "JSON UI showcase page",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "JSONDemoPage",
+      "name": "JSON Demo Page",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "JSON demo page",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "DashboardDemoPage",
+      "name": "Dashboard Demo Page",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Dashboard demo page",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ComprehensiveDemoPage",
+      "name": "Comprehensive Demo Page",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Comprehensive demo page",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "TemplateExplorer",
+      "name": "Template Explorer",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Template explorer component",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "ProjectManager",
+      "name": "Project Manager",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Project manager interface",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "StorageSettingsPanel",
+      "name": "Storage Settings Panel",
+      "category": "layout",
+      "canHaveChildren": false,
+      "description": "Panel for storage settings",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
     }
   ],
   "statistics": {

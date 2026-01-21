@@ -211,6 +211,27 @@ import type {
   StatusCardProps,
   InfoSectionProps,
   ListHeaderProps,
+  SchemaEditorPageProps,
+  KeyboardShortcutsDialogProps,
+  PreloadIndicatorProps,
+  PWAStatusBarProps,
+  PWAUpdatePromptProps,
+  PWAInstallPromptProps,
+  ConflictCardProps,
+  ConflictIndicatorProps,
+  ErrorPanelProps,
+  PreviewDialogProps,
+  NotFoundPageProps,
+  GlobalSearchProps,
+  FileExplorerProps,
+  AtomicComponentShowcaseProps,
+  JSONUIShowcasePageProps,
+  JSONDemoPageProps,
+  DashboardDemoPageProps,
+  ComprehensiveDemoPageProps,
+  TemplateExplorerProps,
+  ProjectManagerProps,
+  StorageSettingsPanelProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -419,6 +440,27 @@ import configCardDef from '@/components/json-definitions/config-card.json'
 import statusCardDef from '@/components/json-definitions/status-card.json'
 import infoSectionDef from '@/components/json-definitions/info-section.json'
 import listHeaderDef from '@/components/json-definitions/list-header.json'
+import schemaEditorPageDef from '@/components/json-definitions/schema-editor-page.json'
+import keyboardShortcutsDialogDef from '@/components/json-definitions/keyboard-shortcuts-dialog.json'
+import preloadIndicatorDef from '@/components/json-definitions/preload-indicator.json'
+import pwaStatusBarDef from '@/components/json-definitions/pwa-status-bar.json'
+import pwaUpdatePromptDef from '@/components/json-definitions/pwa-update-prompt.json'
+import pwaInstallPromptDef from '@/components/json-definitions/pwa-install-prompt.json'
+import conflictCardDef from '@/components/json-definitions/conflict-card.json'
+import conflictIndicatorDef from '@/components/json-definitions/conflict-indicator.json'
+import errorPanelDef from '@/components/json-definitions/error-panel.json'
+import previewDialogDef from '@/components/json-definitions/preview-dialog.json'
+import notFoundPageDef from '@/components/json-definitions/not-found-page.json'
+import globalSearchDef from '@/components/json-definitions/global-search.json'
+import fileExplorerDef from '@/components/json-definitions/file-explorer.json'
+import atomicComponentShowcaseDef from '@/components/json-definitions/atomic-component-showcase.json'
+import jsonUiShowcasePageDef from '@/components/json-definitions/json-ui-showcase-page.json'
+import jsonDemoPageDef from '@/components/json-definitions/json-demo-page.json'
+import dashboardDemoPageDef from '@/components/json-definitions/dashboard-demo-page.json'
+import comprehensiveDemoPageDef from '@/components/json-definitions/comprehensive-demo-page.json'
+import templateExplorerDef from '@/components/json-definitions/template-explorer.json'
+import projectManagerDef from '@/components/json-definitions/project-manager.json'
+import storageSettingsPanelDef from '@/components/json-definitions/storage-settings-panel.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -770,5 +812,28 @@ export const ShadcnCheckbox = createJsonComponent<ShadcnCheckboxProps>(shadcnChe
 export const ShadcnTooltip = createJsonComponent<ShadcnTooltipProps>(shadcnTooltipDef)
 export const ShadcnTooltipTrigger = createJsonComponent<ShadcnTooltipTriggerProps>(shadcnTooltipTriggerDef)
 export const ShadcnTooltipContent = createJsonComponent<ShadcnTooltipContentProps>(shadcnTooltipContentDef)
+
+// Phase 12: Page-level components and layouts
+export const SchemaEditorPage = createJsonComponent<SchemaEditorPageProps>(schemaEditorPageDef)
+export const KeyboardShortcutsDialog = createJsonComponent<KeyboardShortcutsDialogProps>(keyboardShortcutsDialogDef)
+export const PreloadIndicator = createJsonComponent<PreloadIndicatorProps>(preloadIndicatorDef)
+export const PWAStatusBar = createJsonComponent<PWAStatusBarProps>(pwaStatusBarDef)
+export const PWAUpdatePrompt = createJsonComponent<PWAUpdatePromptProps>(pwaUpdatePromptDef)
+export const PWAInstallPrompt = createJsonComponent<PWAInstallPromptProps>(pwaInstallPromptDef)
+export const ConflictCard = createJsonComponent<ConflictCardProps>(conflictCardDef)
+export const ConflictIndicator = createJsonComponent<ConflictIndicatorProps>(conflictIndicatorDef)
+export const ErrorPanel = createJsonComponent<ErrorPanelProps>(errorPanelDef)
+export const PreviewDialog = createJsonComponent<PreviewDialogProps>(previewDialogDef)
+export const NotFoundPage = createJsonComponent<NotFoundPageProps>(notFoundPageDef)
+export const GlobalSearch = createJsonComponent<GlobalSearchProps>(globalSearchDef)
+export const FileExplorer = createJsonComponent<FileExplorerProps>(fileExplorerDef)
+export const AtomicComponentShowcase = createJsonComponent<AtomicComponentShowcaseProps>(atomicComponentShowcaseDef)
+export const JSONUIShowcasePage = createJsonComponent<JSONUIShowcasePageProps>(jsonUiShowcasePageDef)
+export const JSONDemoPage = createJsonComponent<JSONDemoPageProps>(jsonDemoPageDef)
+export const DashboardDemoPage = createJsonComponent<DashboardDemoPageProps>(dashboardDemoPageDef)
+export const ComprehensiveDemoPage = createJsonComponent<ComprehensiveDemoPageProps>(comprehensiveDemoPageDef)
+export const TemplateExplorer = createJsonComponent<TemplateExplorerProps>(templateExplorerDef)
+export const ProjectManager = createJsonComponent<ProjectManagerProps>(projectManagerDef)
+export const StorageSettingsPanel = createJsonComponent<StorageSettingsPanelProps>(storageSettingsPanelDef)
 
 // All components converted to pure JSON! 🎉
