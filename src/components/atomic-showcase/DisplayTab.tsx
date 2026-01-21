@@ -1,7 +1,7 @@
 import displayCopy from '@/data/atomic-showcase/display.json'
 import {
   Avatar,
-  BreadcrumbNav,
+  Breadcrumb,
   Card,
   ColorSwatch,
   Divider,
@@ -111,7 +111,7 @@ export function DisplayTab({ ratingValue, selectedColor, onRatingChange, onColor
         <Stack spacing="md">
           <Heading level={2}>{displayCopy.navigationTitle}</Heading>
           <Divider />
-          <BreadcrumbNav
+          <Breadcrumb
             items={displayCopy.breadcrumbs.map((item, index) => ({
               label: item.label,
               onClick: index < displayCopy.breadcrumbs.length - 1 ? () => {} : undefined,
