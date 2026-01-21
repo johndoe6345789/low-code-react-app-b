@@ -1,7 +1,2 @@
-export { SchemaEditorLayout } from './SchemaEditorLayout'
-export { SchemaEditorCanvas } from './SchemaEditorCanvas'
-export { SchemaEditorPropertiesPanel } from './SchemaEditorPropertiesPanel'
-export { SchemaEditorSidebar } from './SchemaEditorSidebar'
-export { SchemaEditorStatusBar } from './SchemaEditorStatusBar'
-export { SchemaEditorToolbar } from './SchemaEditorToolbar'
+export { SchemaEditorLayout, SchemaEditorCanvas, SchemaEditorPropertiesPanel, SchemaEditorSidebar, SchemaEditorStatusBar, SchemaEditorToolbar } from '@/lib/json-ui/json-components'
 export { JSONUIShowcase } from '../JSONUIShowcase'

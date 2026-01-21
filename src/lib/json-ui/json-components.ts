@@ -49,6 +49,12 @@ import type {
   DataSourceManagerProps,
   NavigationMenuProps,
   TreeListPanelProps,
+  SchemaEditorCanvasProps,
+  SchemaEditorLayoutProps,
+  SchemaEditorPropertiesPanelProps,
+  SchemaEditorSidebarProps,
+  SchemaEditorStatusBarProps,
+  SchemaEditorToolbarProps,
   ActionButtonProps,
   ActionCardProps,
   ActionIconProps,
@@ -265,6 +271,12 @@ import emptyCanvasStateDef from '@/components/json-definitions/empty-canvas-stat
 import schemaCodeViewerDef from '@/components/json-definitions/schema-code-viewer.json'
 import toolbarActionsDef from '@/components/json-definitions/toolbar-actions.json'
 import appHeaderDef from '@/components/json-definitions/app-header.json'
+import schemaEditorCanvasDef from '@/components/json-definitions/schema-editor-canvas.json'
+import schemaEditorLayoutDef from '@/components/json-definitions/schema-editor-layout.json'
+import schemaEditorPropertiesPanelDef from '@/components/json-definitions/schema-editor-properties-panel.json'
+import schemaEditorSidebarDef from '@/components/json-definitions/schema-editor-sidebar.json'
+import schemaEditorStatusBarDef from '@/components/json-definitions/schema-editor-status-bar.json'
+import schemaEditorToolbarDef from '@/components/json-definitions/schema-editor-toolbar.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -374,6 +386,12 @@ export const EmptyCanvasState = createJsonComponent<EmptyCanvasStateProps>(empty
 export const SchemaCodeViewer = createJsonComponent<SchemaCodeViewerProps>(schemaCodeViewerDef)
 export const ToolbarActions = createJsonComponent<ToolbarActionsProps>(toolbarActionsDef)
 export const AppHeader = createJsonComponent<AppHeaderProps>(appHeaderDef)
+export const SchemaEditorCanvas = createJsonComponent<SchemaEditorCanvasProps>(schemaEditorCanvasDef)
+export const SchemaEditorLayout = createJsonComponent<SchemaEditorLayoutProps>(schemaEditorLayoutDef)
+export const SchemaEditorPropertiesPanel = createJsonComponent<SchemaEditorPropertiesPanelProps>(schemaEditorPropertiesPanelDef)
+export const SchemaEditorSidebar = createJsonComponent<SchemaEditorSidebarProps>(schemaEditorSidebarDef)
+export const SchemaEditorStatusBar = createJsonComponent<SchemaEditorStatusBarProps>(schemaEditorStatusBarDef)
+export const SchemaEditorToolbar = createJsonComponent<SchemaEditorToolbarProps>(schemaEditorToolbarDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
