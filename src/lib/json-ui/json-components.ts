@@ -34,14 +34,19 @@ import type {
   TreeCardProps,
   FilterInputProps,
   CopyButtonProps,
+  ConditionalWrapperProps,
   InputProps,
   PasswordInputProps,
   ImageProps,
+  DataCardProps,
+  RepeatWrapperProps,
   PopoverProps,
   MenuProps,
   FileUploadProps,
   AccordionProps,
   BindingEditorProps,
+  IconRendererProps,
+  DynamicTextProps,
   AppLayoutProps,
   AppRouterLayoutProps,
   AppMainPanelProps,
@@ -88,6 +93,7 @@ import type {
   InputOTPProps,
   LabelProps,
   PaginationProps,
+  PanelProps,
   ProgressProps,
   ProgressBarProps,
   PulseProps,
@@ -149,6 +155,8 @@ import type {
   DotProps,
   EmptyStateProps,
   EmptyStateIconProps,
+  FlexLayoutProps,
+  GridLayoutProps,
   FlexProps,
   GridProps,
   IconButtonProps,
@@ -241,6 +249,7 @@ import type {
   TemplateExplorerProps,
   ProjectManagerProps,
   StorageSettingsPanelProps,
+  FeatureToggleSettingsProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -270,14 +279,19 @@ import storageSettingsDef from '@/components/json-definitions/storage-settings.j
 import treeCardDef from '@/components/json-definitions/tree-card.json'
 import filterInputDef from '@/components/json-definitions/filter-input.json'
 import copyButtonDef from '@/components/json-definitions/copy-button.json'
+import conditionalWrapperDef from '@/components/json-definitions/conditional-wrapper.json'
 import inputDef from '@/components/json-definitions/input.json'
 import passwordInputDef from '@/components/json-definitions/password-input.json'
 import imageDef from '@/components/json-definitions/image.json'
+import dataCardDef from '@/components/json-definitions/data-card.json'
+import repeatWrapperDef from '@/components/json-definitions/repeat-wrapper.json'
 import popoverDef from '@/components/json-definitions/popover.json'
 import menuDef from '@/components/json-definitions/menu.json'
 import fileUploadDef from '@/components/json-definitions/file-upload.json'
 import accordionDef from '@/components/json-definitions/accordion.json'
 import bindingEditorDef from '@/components/json-definitions/binding-editor.json'
+import iconRendererDef from '@/components/json-definitions/icon-renderer.json'
+import dynamicTextDef from '@/components/json-definitions/dynamic-text.json'
 import appLayoutDef from '@/components/json-definitions/app-layout.json'
 import appRouterLayoutDef from '@/components/json-definitions/app-router-layout.json'
 import appMainPanelDef from '@/components/json-definitions/app-main-panel.json'
@@ -318,6 +332,7 @@ import iconDef from '@/components/json-definitions/icon.json'
 import inputOtpDef from '@/components/json-definitions/input-otp.json'
 import labelDef from '@/components/json-definitions/label.json'
 import paginationDef from '@/components/json-definitions/pagination.json'
+import panelDef from '@/components/json-definitions/panel.json'
 import progressDef from '@/components/json-definitions/progress.json'
 import progressBarDef from '@/components/json-definitions/progress-bar.json'
 import pulseDef from '@/components/json-definitions/pulse.json'
@@ -386,6 +401,8 @@ import dotDef from '@/components/json-definitions/dot.json'
 import emptyStateDef from '@/components/json-definitions/empty-state.json'
 import emptyStateIconDef from '@/components/json-definitions/empty-state-icon.json'
 import flexDef from '@/components/json-definitions/flex.json'
+import flexLayoutDef from '@/components/json-definitions/flex-layout.json'
+import gridLayoutDef from '@/components/json-definitions/grid-layout.json'
 import gridDef from '@/components/json-definitions/grid.json'
 import iconButtonDef from '@/components/json-definitions/icon-button.json'
 import iconTextDef from '@/components/json-definitions/icon-text.json'
@@ -479,6 +496,7 @@ import comprehensiveDemoPageDef from '@/components/json-definitions/comprehensiv
 import templateExplorerDef from '@/components/json-definitions/template-explorer.json'
 import projectManagerDef from '@/components/json-definitions/project-manager.json'
 import storageSettingsPanelDef from '@/components/json-definitions/storage-settings-panel.json'
+import featureToggleSettingsDef from '@/components/json-definitions/feature-toggle-settings.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -486,6 +504,7 @@ export const ButtonGroup = createJsonComponent<ButtonGroupProps>(buttonGroupDef)
 export const Chip = createJsonComponent<ChipProps>(chipDef)
 export const CircularProgress = createJsonComponent<CircularProgressProps>(circularProgressDef)
 export const Code = createJsonComponent<CodeProps>(codeDef)
+export const ConditionalWrapper = createJsonComponent<ConditionalWrapperProps>(conditionalWrapperDef)
 export const CommandPalette = createJsonComponent<CommandPaletteProps>(commandPaletteDef)
 export const CompletionCard = createJsonComponent<CompletionCardProps>(completionCardDef)
 export const ComponentPaletteItem = createJsonComponent<ComponentPaletteItemProps>(componentPaletteItemDef)
@@ -535,6 +554,7 @@ export const Icon = createJsonComponent<IconProps>(iconDef)
 export const InputOTP = createJsonComponent<InputOTPProps>(inputOtpDef)
 export const Label = createJsonComponent<LabelProps>(labelDef)
 export const Pagination = createJsonComponent<PaginationProps>(paginationDef)
+export const Panel = createJsonComponent<PanelProps>(panelDef)
 export const Progress = createJsonComponent<ProgressProps>(progressDef)
 export const ProgressBar = createJsonComponent<ProgressBarProps>(progressBarDef)
 export const Pulse = createJsonComponent<PulseProps>(pulseDef)
@@ -669,6 +689,19 @@ export const Image = createJsonComponentWithHooks<ImageProps>(imageDef, {
     }
   }
 })
+export const DataCard = createJsonComponent<DataCardProps>(dataCardDef)
+
+export const RepeatWrapper = createJsonComponentWithHooks<RepeatWrapperProps>(repeatWrapperDef, {
+  hooks: {
+    repeatData: {
+      hookName: "useRepeatWrapper",
+      args: (props) => [{
+        items: props.items,
+        render: props.render
+      }]
+    }
+  }
+})
 
 export const Popover = createJsonComponentWithHooks<PopoverProps>(popoverDef, {
   hooks: {
@@ -711,6 +744,17 @@ export const BindingEditor = createJsonComponentWithHooks<BindingEditorProps>(bi
     editorState: {
       hookName: 'useBindingEditor',
       args: (props) => [props.bindings, props.onChange]
+    }
+  }
+})
+
+export const IconRenderer = createJsonComponent<IconRendererProps>(iconRendererDef)
+
+export const DynamicText = createJsonComponentWithHooks<DynamicTextProps>(dynamicTextDef, {
+  hooks: {
+    formattedValue: {
+      hookName: 'useFormatValue',
+      args: (props) => [props.value, props.format, props.currency, props.locale]
     }
   }
 })
@@ -781,6 +825,8 @@ export const Dot = createJsonComponent<DotProps>(dotDef)
 export const EmptyState = createJsonComponent<EmptyStateProps>(emptyStateDef)
 export const EmptyStateIcon = createJsonComponent<EmptyStateIconProps>(emptyStateIconDef)
 export const Flex = createJsonComponent<FlexProps>(flexDef)
+export const FlexLayout = createJsonComponent<FlexLayoutProps>(flexLayoutDef)
+export const GridLayout = createJsonComponent<GridLayoutProps>(gridLayoutDef)
 export const Grid = createJsonComponent<GridProps>(gridDef)
 export const IconButton = createJsonComponent<IconButtonProps>(iconButtonDef)
 export const IconText = createJsonComponent<IconTextProps>(iconTextDef)
@@ -839,7 +885,23 @@ export const PWAStatusBar = createJsonComponent<PWAStatusBarProps>(pwaStatusBarD
 export const PWAUpdatePrompt = createJsonComponent<PWAUpdatePromptProps>(pwaUpdatePromptDef)
 export const PWAInstallPrompt = createJsonComponent<PWAInstallPromptProps>(pwaInstallPromptDef)
 export const ConflictCard = createJsonComponent<ConflictCardProps>(conflictCardDef)
-export const ConflictIndicator = createJsonComponent<ConflictIndicatorProps>(conflictIndicatorDef)
+export const ConflictIndicator = createJsonComponentWithHooks<ConflictIndicatorProps>(
+  conflictIndicatorDef,
+  {
+    hooks: {
+      hasConflicts: {
+        hookName: 'useConflictResolution',
+        args: () => [],
+        selector: (result) => result.hasConflicts
+      },
+      stats: {
+        hookName: 'useConflictResolution',
+        args: () => [],
+        selector: (result) => result.stats
+      }
+    }
+  }
+)
 export const ErrorPanel = createJsonComponent<ErrorPanelProps>(errorPanelDef)
 export const PreviewDialog = createJsonComponent<PreviewDialogProps>(previewDialogDef)
 export const NotFoundPage = createJsonComponent<NotFoundPageProps>(notFoundPageDef)
@@ -862,5 +924,6 @@ export const ComprehensiveDemoPage = createJsonComponent<ComprehensiveDemoPagePr
 export const TemplateExplorer = createJsonComponent<TemplateExplorerProps>(templateExplorerDef)
 export const ProjectManager = createJsonComponent<ProjectManagerProps>(projectManagerDef)
 export const StorageSettingsPanel = createJsonComponent<StorageSettingsPanelProps>(storageSettingsPanelDef)
+export const FeatureToggleSettings = createJsonComponent<FeatureToggleSettingsProps>(featureToggleSettingsDef)
 
 // All components converted to pure JSON! 🎉
