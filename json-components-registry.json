@@ -75,7 +75,8 @@
       "canHaveChildren": true,
       "description": "Button with action icon",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ActionCard",
@@ -84,7 +85,8 @@
       "canHaveChildren": true,
       "description": "ActionCard component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ActionIcon",
@@ -93,7 +95,8 @@
       "canHaveChildren": true,
       "description": "ActionIcon component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "alert",
@@ -116,7 +119,8 @@
       "canHaveChildren": true,
       "description": "Alert notification message",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "AlertCircle",
@@ -166,7 +170,8 @@
       "canHaveChildren": true,
       "description": "AppLogo component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ArrowLeft",
@@ -263,7 +268,8 @@
       "canHaveChildren": false,
       "description": "User avatar image",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "AvatarGroup",
@@ -272,7 +278,8 @@
       "canHaveChildren": true,
       "description": "Group of user avatars",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "badge",
@@ -295,7 +302,8 @@
       "canHaveChildren": true,
       "description": "Small status or count indicator",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Badge as ShadcnBadge",

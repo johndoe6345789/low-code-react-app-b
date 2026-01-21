@@ -37,6 +37,14 @@ import type {
   DataSourceManagerProps,
   NavigationMenuProps,
   TreeListPanelProps,
+  ActionButtonProps,
+  ActionCardProps,
+  ActionIconProps,
+  AlertProps,
+  AppLogoProps,
+  AvatarProps,
+  AvatarGroupProps,
+  BadgeProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -69,6 +77,14 @@ import appDialogsDef from '@/components/json-definitions/app-dialogs.json'
 import navigationMenuDef from '@/components/json-definitions/navigation-menu.json'
 import dataSourceManagerDef from '@/components/json-definitions/data-source-manager.json'
 import treeListPanelDef from '@/components/json-definitions/tree-list-panel.json'
+import actionButtonDef from '@/components/json-definitions/action-button.json'
+import actionCardDef from '@/components/json-definitions/action-card.json'
+import actionIconDef from '@/components/json-definitions/action-icon.json'
+import alertDef from '@/components/json-definitions/alert.json'
+import appLogoDef from '@/components/json-definitions/app-logo.json'
+import avatarDef from '@/components/json-definitions/avatar.json'
+import avatarGroupDef from '@/components/json-definitions/avatar-group.json'
+import badgeDef from '@/components/json-definitions/badge.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -80,6 +96,14 @@ export const GitHubBuildStatus = createJsonComponent<GitHubBuildStatusProps>(git
 export const SeedDataManager = createJsonComponent<SeedDataManagerProps>(seedDataManagerDef)
 export const TreeCard = createJsonComponent<TreeCardProps>(treeCardDef)
 export const AppDialogs = createJsonComponent<AppDialogsProps>(appDialogsDef)
+export const ActionButton = createJsonComponent<ActionButtonProps>(actionButtonDef)
+export const ActionCard = createJsonComponent<ActionCardProps>(actionCardDef)
+export const ActionIcon = createJsonComponent<ActionIconProps>(actionIconDef)
+export const Alert = createJsonComponent<AlertProps>(alertDef)
+export const AppLogo = createJsonComponent<AppLogoProps>(appLogoDef)
+export const Avatar = createJsonComponent<AvatarProps>(avatarDef)
+export const AvatarGroup = createJsonComponent<AvatarGroupProps>(avatarGroupDef)
+export const Badge = createJsonComponent<BadgeProps>(badgeDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
