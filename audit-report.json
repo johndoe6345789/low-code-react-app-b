@@ -1,1172 +1,1102 @@
 {
-  "timestamp": "2026-01-21T00:07:00.946Z",
+  "timestamp": "2026-01-21T01:36:46.728Z",
   "issues": [
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/AppHeader.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/AppHeader.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/app-header.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/DataSourceManager.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/organisms/data-source-manager.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/EmptyCanvasState.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/EmptyCanvasState.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/empty-canvas-state.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/NavigationMenu.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/NavigationMenu.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/navigation-menu.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/PageHeader.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/PageHeader.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/page-header.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaCodeViewer.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/SchemaCodeViewer.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-code-viewer.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorCanvas.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/SchemaEditorCanvas.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-canvas.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorLayout.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/SchemaEditorLayout.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-layout.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorPropertiesPanel.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/SchemaEditorPropertiesPanel.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-properties-panel.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorSidebar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/SchemaEditorSidebar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-sidebar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorStatusBar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/SchemaEditorStatusBar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-status-bar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorToolbar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/SchemaEditorToolbar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-toolbar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/ToolbarActions.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/ToolbarActions.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/toolbar-actions.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/TreeListPanel.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/organisms/TreeListPanel.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/organisms/tree-list-panel.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/AppBranding.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/AppBranding.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/app-branding.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/BindingEditor.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/molecules/binding-editor.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/Breadcrumb.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/Breadcrumb.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/breadcrumb.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/CanvasRenderer.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/CanvasRenderer.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/canvas-renderer.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/CodeExplanationDialog.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/CodeExplanationDialog.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/code-explanation-dialog.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/ComponentBindingDialog.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/ComponentBindingDialog.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/component-binding-dialog.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/ComponentPalette.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/ComponentPalette.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/component-palette.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/ComponentTree.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/ComponentTree.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/component-tree.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/DataSourceCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/DataSourceCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/data-source-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/DataSourceEditorDialog.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/DataSourceEditorDialog.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/data-source-editor-dialog.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/EditorActions.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/EditorActions.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/editor-actions.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/EditorToolbar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/EditorToolbar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/editor-toolbar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/EmptyEditorState.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/EmptyEditorState.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/empty-editor-state.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/FileTabs.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/FileTabs.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/file-tabs.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/GitHubBuildStatus.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/GitHubBuildStatus.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/git-hub-build-status.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyBarChart.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyBarChart.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/lazy-bar-chart.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyD3BarChart.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyD3BarChart.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/lazy-d3-bar-chart.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyInlineMonacoEditor.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyInlineMonacoEditor.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/lazy-inline-monaco-editor.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyLineChart.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyLineChart.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/lazy-line-chart.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyMonacoEditor.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyMonacoEditor.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/lazy-monaco-editor.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/MonacoEditorPanel.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/MonacoEditorPanel.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/monaco-editor-panel.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/NavigationGroupHeader.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/NavigationGroupHeader.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/navigation-group-header.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/PropertyEditor.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/PropertyEditor.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/property-editor.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/SaveIndicator.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/SaveIndicator.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/save-indicator.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/SearchBar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/SearchBar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/search-bar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/SearchInput.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/SearchInput.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/search-input.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/SeedDataManager.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/SeedDataManager.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/seed-data-manager.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/StorageSettings.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/StorageSettings.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/storage-settings.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/ToolbarButton.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/ToolbarButton.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/toolbar-button.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/TreeFormDialog.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/TreeFormDialog.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/molecules/tree-form-dialog.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Accordion.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/accordion.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ActionButton.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ActionButton.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/action-button.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ActionCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ActionCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/action-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ActionIcon.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ActionIcon.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/action-icon.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Alert.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Alert.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/alert.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/AppLogo.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/AppLogo.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/app-logo.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Avatar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Avatar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/avatar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/AvatarGroup.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/AvatarGroup.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/avatar-group.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Badge.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Badge.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/badge.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/BindingIndicator.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/BindingIndicator.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/binding-indicator.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Breadcrumb.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Breadcrumb.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/breadcrumb.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Button.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Button.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/button.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ButtonGroup.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ButtonGroup.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/button-group.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Calendar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Calendar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/calendar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Card.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Card.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Checkbox.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Checkbox.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/checkbox.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Chip.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Chip.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/chip.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/CircularProgress.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/CircularProgress.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/circular-progress.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Code.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Code.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/code.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ColorSwatch.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ColorSwatch.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/color-swatch.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/CommandPalette.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/CommandPalette.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/command-palette.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/CompletionCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/CompletionCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/completion-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ComponentPaletteItem.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ComponentPaletteItem.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/component-palette-item.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ComponentTreeNode.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ComponentTreeNode.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/component-tree-node.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ConfirmButton.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ConfirmButton.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/confirm-button.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Container.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Container.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/container.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ContextMenu.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ContextMenu.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/context-menu.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/CopyButton.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/copy-button.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/CountBadge.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/CountBadge.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/count-badge.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/DataList.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/DataList.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/data-list.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/DataSourceBadge.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/DataSourceBadge.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/data-source-badge.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/DataTable.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/DataTable.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/data-table.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/DatePicker.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/DatePicker.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/date-picker.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/DetailRow.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/DetailRow.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/detail-row.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Divider.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Divider.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/divider.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Dot.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Dot.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/dot.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Drawer.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Drawer.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/drawer.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/EmptyMessage.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/EmptyMessage.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/empty-message.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/EmptyState.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/EmptyState.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/empty-state.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/EmptyStateIcon.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/EmptyStateIcon.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/empty-state-icon.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ErrorBadge.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ErrorBadge.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/error-badge.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/FileIcon.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/FileIcon.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/file-icon.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/FileUpload.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/file-upload.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/FilterInput.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/filter-input.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Flex.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Flex.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/flex.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Form.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Form.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/form.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/GlowCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/GlowCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/glow-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Grid.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Grid.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/grid.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Heading.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Heading.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/heading.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/HelperText.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/HelperText.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/helper-text.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/HoverCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/HoverCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/hover-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/IconButton.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/IconButton.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/icon-button.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/IconText.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/IconText.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/icon-text.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/IconWrapper.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/IconWrapper.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/icon-wrapper.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Image.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/image.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/InfoBox.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/InfoBox.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/info-box.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/InfoPanel.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/InfoPanel.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/info-panel.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Input.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/input.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Kbd.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Kbd.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/kbd.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/KeyValue.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/KeyValue.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/key-value.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Label.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Label.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/label.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Link.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Link.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/link.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/List.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/List.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/list.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ListItem.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ListItem.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/list-item.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/LiveIndicator.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/LiveIndicator.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/live-indicator.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/LoadingSpinner.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/LoadingSpinner.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/loading-spinner.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/LoadingState.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/LoadingState.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/loading-state.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Menu.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Menu.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/menu.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/MetricCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/MetricCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/metric-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/MetricDisplay.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/MetricDisplay.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/metric-display.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Modal.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Modal.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/modal.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Notification.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Notification.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/notification.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/NumberInput.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/NumberInput.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/number-input.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/PageHeader.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/PageHeader.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/page-header.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/PanelHeader.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/PanelHeader.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/panel-header.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/PasswordInput.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/password-input.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Popover.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/atoms/popover.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ProgressBar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ProgressBar.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/progress-bar.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/PropertyEditorField.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/PropertyEditorField.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/property-editor-field.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Pulse.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Pulse.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/pulse.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/QuickActionButton.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/QuickActionButton.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/quick-action-button.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Radio.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Radio.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/radio.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/RangeSlider.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/RangeSlider.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/range-slider.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Rating.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Rating.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/rating.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ResponsiveGrid.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ResponsiveGrid.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/responsive-grid.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/ScrollArea.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/ScrollArea.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/scroll-area.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/SearchInput.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/SearchInput.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/search-input.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Section.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Section.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/section.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/SeedDataStatus.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/SeedDataStatus.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/seed-data-status.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Select.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Select.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/select.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Separator.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Separator.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/separator.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Skeleton.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Skeleton.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/skeleton.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Slider.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Slider.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/slider.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Spacer.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Spacer.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/spacer.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Sparkle.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Sparkle.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/sparkle.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Spinner.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Spinner.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/spinner.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Stack.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Stack.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/stack.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/StatCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/StatCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/stat-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/StatusBadge.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/StatusBadge.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/status-badge.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/StatusIcon.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/StatusIcon.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/status-icon.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/StepIndicator.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/StepIndicator.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/step-indicator.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Stepper.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Stepper.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/stepper.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Switch.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Switch.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/switch.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/TabIcon.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/TabIcon.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/tab-icon.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Table.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Table.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/table.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Tabs.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Tabs.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/tabs.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Tag.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Tag.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/tag.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Text.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Text.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/text.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/TextArea.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/TextArea.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/text-area.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/TextGradient.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/TextGradient.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/text-gradient.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/TextHighlight.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/TextHighlight.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/text-highlight.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Timeline.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Timeline.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/timeline.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Timestamp.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Timestamp.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/timestamp.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/TipsCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/TipsCard.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/tips-card.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Toggle.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Toggle.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/toggle.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/Tooltip.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/Tooltip.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/tooltip.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/atoms/TreeIcon.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/atoms/TreeIcon.tsx",
       "message": "TSX file has JSON equivalent at src/config/pages/atoms/tree-icon.json",
       "suggestion": "Consider removing TSX and routing through JSON renderer"
     },
     {
       "severity": "error",
       "category": "orphaned-json",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/config/pages/layouts/single-column.json",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/config/pages/layouts/single-column.json",
       "message": "JSON file references type \"single\" which is not in registry",
       "suggestion": "Add registry entry for single in json-components-registry.json"
     },
     {
       "severity": "error",
       "category": "orphaned-json",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/config/pages/data-sources/kv-storage.json",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/config/pages/data-sources/kv-storage.json",
       "message": "JSON file references type \"kv\" which is not in registry",
       "suggestion": "Add registry entry for kv in json-components-registry.json"
     },
     {
       "severity": "error",
       "category": "orphaned-json",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/config/pages/actions/create-action.json",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/config/pages/actions/create-action.json",
       "message": "JSON file references type \"create\" which is not in registry",
       "suggestion": "Add registry entry for create in json-components-registry.json"
     },
     {
       "severity": "error",
       "category": "orphaned-json",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/config/pages/actions/delete-action.json",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/config/pages/actions/delete-action.json",
       "message": "JSON file references type \"delete\" which is not in registry",
       "suggestion": "Add registry entry for delete in json-components-registry.json"
     },
     {
       "severity": "error",
       "category": "orphaned-json",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/config/pages/actions/navigate-action.json",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/config/pages/actions/navigate-action.json",
       "message": "JSON file references type \"navigate\" which is not in registry",
       "suggestion": "Add registry entry for navigate in json-components-registry.json"
     },
     {
       "severity": "error",
       "category": "orphaned-json",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/config/pages/actions/update-action.json",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/config/pages/actions/update-action.json",
       "message": "JSON file references type \"update\" which is not in registry",
       "suggestion": "Add registry entry for update in json-components-registry.json"
     },
@@ -1222,150 +1152,150 @@
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/AppBranding.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/AppBranding.tsx",
       "message": "Molecule \"AppBranding\" could potentially be converted to JSON",
       "suggestion": "Evaluate if AppBranding can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/CanvasRenderer.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/CanvasRenderer.tsx",
       "message": "Molecule \"CanvasRenderer\" could potentially be converted to JSON",
       "suggestion": "Evaluate if CanvasRenderer can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/CodeExplanationDialog.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/CodeExplanationDialog.tsx",
       "message": "Molecule \"CodeExplanationDialog\" could potentially be converted to JSON",
       "suggestion": "Evaluate if CodeExplanationDialog can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/ComponentPalette.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/ComponentPalette.tsx",
       "message": "Molecule \"ComponentPalette\" could potentially be converted to JSON",
       "suggestion": "Evaluate if ComponentPalette can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/DataSourceCard.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/DataSourceCard.tsx",
       "message": "Molecule \"DataSourceCard\" could potentially be converted to JSON",
       "suggestion": "Evaluate if DataSourceCard can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/EditorActions.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/EditorActions.tsx",
       "message": "Molecule \"EditorActions\" could potentially be converted to JSON",
       "suggestion": "Evaluate if EditorActions can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/EditorToolbar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/EditorToolbar.tsx",
       "message": "Molecule \"EditorToolbar\" could potentially be converted to JSON",
       "suggestion": "Evaluate if EditorToolbar can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/EmptyEditorState.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/EmptyEditorState.tsx",
       "message": "Molecule \"EmptyEditorState\" could potentially be converted to JSON",
       "suggestion": "Evaluate if EmptyEditorState can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/FileTabs.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/FileTabs.tsx",
       "message": "Molecule \"FileTabs\" could potentially be converted to JSON",
       "suggestion": "Evaluate if FileTabs can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/GitHubBuildStatus.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/GitHubBuildStatus.tsx",
       "message": "Molecule \"GitHubBuildStatus\" could potentially be converted to JSON",
       "suggestion": "Evaluate if GitHubBuildStatus can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyBarChart.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyBarChart.tsx",
       "message": "Molecule \"LazyBarChart\" could potentially be converted to JSON",
       "suggestion": "Evaluate if LazyBarChart can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyInlineMonacoEditor.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyInlineMonacoEditor.tsx",
       "message": "Molecule \"LazyInlineMonacoEditor\" could potentially be converted to JSON",
       "suggestion": "Evaluate if LazyInlineMonacoEditor can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyLineChart.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyLineChart.tsx",
       "message": "Molecule \"LazyLineChart\" could potentially be converted to JSON",
       "suggestion": "Evaluate if LazyLineChart can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/LazyMonacoEditor.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/LazyMonacoEditor.tsx",
       "message": "Molecule \"LazyMonacoEditor\" could potentially be converted to JSON",
       "suggestion": "Evaluate if LazyMonacoEditor can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/MonacoEditorPanel.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/MonacoEditorPanel.tsx",
       "message": "Molecule \"MonacoEditorPanel\" could potentially be converted to JSON",
       "suggestion": "Evaluate if MonacoEditorPanel can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/NavigationGroupHeader.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/NavigationGroupHeader.tsx",
       "message": "Molecule \"NavigationGroupHeader\" could potentially be converted to JSON",
       "suggestion": "Evaluate if NavigationGroupHeader can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/PropertyEditor.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/PropertyEditor.tsx",
       "message": "Molecule \"PropertyEditor\" could potentially be converted to JSON",
       "suggestion": "Evaluate if PropertyEditor can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/SearchBar.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/SearchBar.tsx",
       "message": "Molecule \"SearchBar\" could potentially be converted to JSON",
       "suggestion": "Evaluate if SearchBar can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/ToolbarButton.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/ToolbarButton.tsx",
       "message": "Molecule \"ToolbarButton\" could potentially be converted to JSON",
       "suggestion": "Evaluate if ToolbarButton can be expressed as pure JSON"
     },
     {
       "severity": "info",
       "category": "potential-conversion",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/molecules/TreeFormDialog.tsx",
+      "file": "/Users/rmac/Documents/GitHub/tier-1-bootstrap-work/src/components/molecules/TreeFormDialog.tsx",
       "message": "Molecule \"TreeFormDialog\" could potentially be converted to JSON",
       "suggestion": "Evaluate if TreeFormDialog can be expressed as pure JSON"
     }
   ],
   "stats": {
     "totalJsonFiles": 338,
-    "totalTsxFiles": 576,
-    "registryEntries": 342,
+    "totalTsxFiles": 564,
+    "registryEntries": 346,
     "orphanedJson": 6,
-    "duplicates": 161,
+    "duplicates": 151,
     "obsoleteWrapperRefs": 0
   }
 }

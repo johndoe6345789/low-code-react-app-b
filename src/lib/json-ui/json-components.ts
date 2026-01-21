@@ -59,6 +59,34 @@ import type {
   HeadingProps,
   HoverCardProps,
   IconProps,
+  InputOTPProps,
+  LabelProps,
+  PaginationProps,
+  ProgressProps,
+  RadioGroupProps,
+  RangeSliderProps,
+  RatingProps,
+  ScrollAreaProps,
+  ScrollAreaThumbProps,
+  SelectProps,
+  SeparatorProps,
+  SkeletonProps,
+  SliderProps,
+  SpinnerProps,
+  StatusIconProps,
+  StepIndicatorProps,
+  StepperProps,
+  SwitchProps,
+  TableProps,
+  TabsProps,
+  TagProps,
+  TextAreaProps,
+  TextGradientProps,
+  TextHighlightProps,
+  TimelineProps,
+  TimestampProps,
+  ToggleProps,
+  TooltipProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -113,6 +141,34 @@ import formFieldDef from '@/components/json-definitions/form-field.json'
 import headingDef from '@/components/json-definitions/heading.json'
 import hoverCardDef from '@/components/json-definitions/hover-card.json'
 import iconDef from '@/components/json-definitions/icon.json'
+import inputOtpDef from '@/components/json-definitions/input-otp.json'
+import labelDef from '@/components/json-definitions/label.json'
+import paginationDef from '@/components/json-definitions/pagination.json'
+import progressDef from '@/components/json-definitions/progress.json'
+import radioGroupDef from '@/components/json-definitions/radio-group.json'
+import rangeSliderDef from '@/components/json-definitions/range-slider.json'
+import ratingDef from '@/components/json-definitions/rating.json'
+import scrollAreaDef from '@/components/json-definitions/scroll-area.json'
+import scrollAreaThumbDef from '@/components/json-definitions/scroll-area-thumb.json'
+import selectDef from '@/components/json-definitions/select.json'
+import separatorDef from '@/components/json-definitions/separator.json'
+import skeletonDef from '@/components/json-definitions/skeleton.json'
+import sliderDef from '@/components/json-definitions/slider.json'
+import spinnerDef from '@/components/json-definitions/spinner.json'
+import statusIconDef from '@/components/json-definitions/status-icon.json'
+import stepIndicatorDef from '@/components/json-definitions/step-indicator.json'
+import stepperDef from '@/components/json-definitions/stepper.json'
+import switchDef from '@/components/json-definitions/switch.json'
+import tableDef from '@/components/json-definitions/table.json'
+import tabsDef from '@/components/json-definitions/tabs.json'
+import tagDef from '@/components/json-definitions/tag.json'
+import textareaDef from '@/components/json-definitions/textarea.json'
+import textGradientDef from '@/components/json-definitions/text-gradient.json'
+import textHighlightDef from '@/components/json-definitions/text-highlight.json'
+import timelineDef from '@/components/json-definitions/timeline.json'
+import timestampDef from '@/components/json-definitions/timestamp.json'
+import toggleDef from '@/components/json-definitions/toggle.json'
+import tooltipDef from '@/components/json-definitions/tooltip.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -146,6 +202,34 @@ export const FormField = createJsonComponent<FormFieldProps>(formFieldDef)
 export const Heading = createJsonComponent<HeadingProps>(headingDef)
 export const HoverCard = createJsonComponent<HoverCardProps>(hoverCardDef)
 export const Icon = createJsonComponent<IconProps>(iconDef)
+export const InputOTP = createJsonComponent<InputOTPProps>(inputOtpDef)
+export const Label = createJsonComponent<LabelProps>(labelDef)
+export const Pagination = createJsonComponent<PaginationProps>(paginationDef)
+export const Progress = createJsonComponent<ProgressProps>(progressDef)
+export const RadioGroup = createJsonComponent<RadioGroupProps>(radioGroupDef)
+export const RangeSlider = createJsonComponent<RangeSliderProps>(rangeSliderDef)
+export const Rating = createJsonComponent<RatingProps>(ratingDef)
+export const ScrollArea = createJsonComponent<ScrollAreaProps>(scrollAreaDef)
+export const ScrollAreaThumb = createJsonComponent<ScrollAreaThumbProps>(scrollAreaThumbDef)
+export const Select = createJsonComponent<SelectProps>(selectDef)
+export const Separator = createJsonComponent<SeparatorProps>(separatorDef)
+export const Skeleton = createJsonComponent<SkeletonProps>(skeletonDef)
+export const Slider = createJsonComponent<SliderProps>(sliderDef)
+export const Spinner = createJsonComponent<SpinnerProps>(spinnerDef)
+export const StatusIcon = createJsonComponent<StatusIconProps>(statusIconDef)
+export const StepIndicator = createJsonComponent<StepIndicatorProps>(stepIndicatorDef)
+export const Stepper = createJsonComponent<StepperProps>(stepperDef)
+export const Switch = createJsonComponent<SwitchProps>(switchDef)
+export const Table = createJsonComponent<TableProps>(tableDef)
+export const Tabs = createJsonComponent<TabsProps>(tabsDef)
+export const Tag = createJsonComponent<TagProps>(tagDef)
+export const TextArea = createJsonComponent<TextAreaProps>(textareaDef)
+export const TextGradient = createJsonComponent<TextGradientProps>(textGradientDef)
+export const TextHighlight = createJsonComponent<TextHighlightProps>(textHighlightDef)
+export const Timeline = createJsonComponent<TimelineProps>(timelineDef)
+export const Timestamp = createJsonComponent<TimestampProps>(timestampDef)
+export const Toggle = createJsonComponent<ToggleProps>(toggleDef)
+export const Tooltip = createJsonComponent<TooltipProps>(tooltipDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {

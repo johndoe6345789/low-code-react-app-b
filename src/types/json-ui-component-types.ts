@@ -247,6 +247,7 @@ export const jsonUIComponentTypes = [
   "SchemaEditorToolbar",
   "scroll-area",
   "ScrollArea",
+  "ScrollAreaThumb",
   "Search",
   "SearchBar",
   "SearchInput",
