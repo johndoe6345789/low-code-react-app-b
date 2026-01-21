@@ -377,6 +377,9 @@ export const jsonUIComponentTypes = [
   "TemplateExplorer",
   "ProjectManager",
   "StorageSettingsPanel",
+  "ComponentTreeDemoPage",
+  "JsonFlaskDesigner",
+  "JsonStyleDesigner",
 ] as const
 
 export type JSONUIComponentType = typeof jsonUIComponentTypes[number]

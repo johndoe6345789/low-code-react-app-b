@@ -227,6 +227,12 @@ import type {
   JSONFlaskDesignerProps,
   JSONStyleDesignerProps,
   ComponentTreeDemoPageProps,
+  JSONConversionShowcaseProps,
+  JSONLambdaDesignerProps,
+  JSONModelDesignerProps,
+  JSONWorkflowDesignerProps,
+  JSONComponentTreeManagerProps,
+  SassStylesShowcaseProps,
   AtomicComponentShowcaseProps,
   JSONUIShowcasePageProps,
   JSONDemoPageProps,
@@ -459,6 +465,12 @@ import fileExplorerDef from '@/components/json-definitions/file-explorer.json'
 import jsonFlaskDesignerDef from '@/components/json-definitions/json-flask-designer.json'
 import jsonStyleDesignerDef from '@/components/json-definitions/json-style-designer.json'
 import componentTreeDemoPageDef from '@/components/json-definitions/component-tree-demo-page.json'
+import jsonConversionShowcaseDef from '@/components/json-definitions/json-conversion-showcase.json'
+import jsonLambdaDesignerDef from '@/components/json-definitions/json-lambda-designer.json'
+import jsonModelDesignerDef from '@/components/json-definitions/json-model-designer.json'
+import jsonWorkflowDesignerDef from '@/components/json-definitions/json-workflow-designer.json'
+import jsonComponentTreeManagerDef from '@/components/json-definitions/json-component-tree-manager.json'
+import sassStylesShowcaseDef from '@/components/json-definitions/sass-styles-showcase.json'
 import atomicComponentShowcaseDef from '@/components/json-definitions/atomic-component-showcase.json'
 import jsonUiShowcasePageDef from '@/components/json-definitions/json-ui-showcase-page.json'
 import jsonDemoPageDef from '@/components/json-definitions/json-demo-page.json'
@@ -836,6 +848,12 @@ export const FileExplorer = createJsonComponent<FileExplorerProps>(fileExplorerD
 export const JSONFlaskDesigner = createJsonComponent<JSONFlaskDesignerProps>(jsonFlaskDesignerDef)
 export const JSONStyleDesigner = createJsonComponent<JSONStyleDesignerProps>(jsonStyleDesignerDef)
 export const ComponentTreeDemoPage = createJsonComponent<ComponentTreeDemoPageProps>(componentTreeDemoPageDef)
+export const JSONConversionShowcase = createJsonComponent<JSONConversionShowcaseProps>(jsonConversionShowcaseDef)
+export const JSONLambdaDesigner = createJsonComponent<JSONLambdaDesignerProps>(jsonLambdaDesignerDef)
+export const JSONModelDesigner = createJsonComponent<JSONModelDesignerProps>(jsonModelDesignerDef)
+export const JSONWorkflowDesigner = createJsonComponent<JSONWorkflowDesignerProps>(jsonWorkflowDesignerDef)
+export const JSONComponentTreeManager = createJsonComponent<JSONComponentTreeManagerProps>(jsonComponentTreeManagerDef)
+export const SassStylesShowcase = createJsonComponent<SassStylesShowcaseProps>(sassStylesShowcaseDef)
 export const AtomicComponentShowcase = createJsonComponent<AtomicComponentShowcaseProps>(atomicComponentShowcaseDef)
 export const JSONUIShowcasePage = createJsonComponent<JSONUIShowcasePageProps>(jsonUiShowcasePageDef)
 export const JSONDemoPage = createJsonComponent<JSONDemoPageProps>(jsonDemoPageDef)
