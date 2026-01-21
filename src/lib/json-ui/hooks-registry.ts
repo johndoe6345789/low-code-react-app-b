@@ -22,6 +22,7 @@ import { useNavigationMenu } from '@/hooks/use-navigation-menu'
 import { useDataSourceManagerState } from '@/hooks/use-data-source-manager-state'
 import { useFormatValue } from '@/hooks/use-format-value'
 import { useConflictResolution } from '@/hooks/use-conflict-resolution'
+import { useConflictCard } from '@/hooks/use-conflict-card'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -51,6 +52,7 @@ export const hooksRegistry: HookRegistry = {
   useDataSourceManagerState,
   useFormatValue,
   useConflictResolution,
+  useConflictCard,
   // Add more hooks here as needed
 }
 
