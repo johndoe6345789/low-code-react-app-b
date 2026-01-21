@@ -484,6 +484,8 @@ import pwaInstallPromptDef from '@/components/json-definitions/pwa-install-promp
 import conflictCardDef from '@/components/json-definitions/conflict-card.json'
 import conflictDetailsDialogDef from '@/components/json-definitions/conflict-details-dialog.json'
 import conflictIndicatorDef from '@/components/json-definitions/conflict-indicator.json'
+import conflictResolutionDemoDef from '@/components/json-definitions/conflict-resolution-demo.json'
+import conflictResolutionPageDef from '@/components/json-definitions/conflict-resolution-page.json'
 import errorPanelDef from '@/components/json-definitions/error-panel.json'
 import previewDialogDef from '@/components/json-definitions/preview-dialog.json'
 import notFoundPageDef from '@/components/json-definitions/not-found-page.json'
@@ -935,6 +937,28 @@ export const ConflictIndicator = createJsonComponentWithHooks<ConflictIndicatorP
         hookName: 'useConflictResolution',
         args: () => [],
         selector: (result) => result.stats
+      }
+    }
+  }
+)
+export const ConflictResolutionDemo = createJsonComponentWithHooks<ConflictResolutionDemoProps>(
+  conflictResolutionDemoDef,
+  {
+    hooks: {
+      demoState: {
+        hookName: 'useConflictResolutionDemo',
+        args: () => []
+      }
+    }
+  }
+)
+export const ConflictResolutionPage = createJsonComponentWithHooks<ConflictResolutionPageProps>(
+  conflictResolutionPageDef,
+  {
+    hooks: {
+      pageState: {
+        hookName: 'useConflictResolutionPage',
+        args: (props) => [props.copy || {}]
       }
     }
   }
