@@ -1,6 +1,6 @@
 // Auto-generated exports - DO NOT EDIT MANUALLY
 // JSON-based atom imports
-export { ActionButton, ActionCard, ActionIcon, Alert, AppLogo, Avatar, AvatarGroup, Badge, BindingIndicator, Breadcrumb, Button, ButtonGroup, Calendar, Card, Checkbox, Chip, CircularProgress, Code, CommandPalette, CompletionCard, ComponentPaletteItem, ConfirmButton, ContextMenu, DataSourceBadge, DataTable, DatePicker, DetailRow, Divider, Drawer, EmptyMessage, ErrorBadge, FileIcon, Form, GlowCard, Heading, HelperText, HoverCard, Menu, Separator, Skeleton, Slider, Spinner, StatusIcon, StepIndicator, Stepper, Switch, Table, Tabs, Tag, TextArea, TextGradient, TextHighlight, Timeline, Timestamp, Toggle, Tooltip } from '@/lib/json-ui/json-components'
+export { ActionButton, ActionCard, ActionIcon, Alert, AppLogo, Avatar, AvatarGroup, Badge, BindingIndicator, Breadcrumb, Button, ButtonGroup, Calendar, Card, Checkbox, Chip, CircularProgress, Code, CommandPalette, CompletionCard, ComponentPaletteItem, ConfirmButton, ContextMenu, DataSourceBadge, DataTable, DatePicker, DetailRow, Divider, Drawer, EmptyMessage, ErrorBadge, FileIcon, Form, GlowCard, Heading, HelperText, HoverCard, Menu, Rating, Separator, Skeleton, Slider, Spinner, StatusIcon, StepIndicator, Stepper, Switch, Table, Tabs, Tag, TextArea, TextGradient, TextHighlight, Timeline, Timestamp, Toggle, Tooltip } from '@/lib/json-ui/json-components'
 
 export { ColorSwatch } from './ColorSwatch'
 export { ComponentTreeNode } from './ComponentTreeNode'

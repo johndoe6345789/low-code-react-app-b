@@ -6,7 +6,6 @@ import {
   ColorSwatch,
   Divider,
   Heading,
-  Rating,
   Stack,
   StatusBadge,
   Stepper,
@@ -15,7 +14,7 @@ import {
   Timeline,
   Timestamp,
 } from '@/components/atoms'
-import { Accordion } from '@/lib/json-ui/json-components'
+import { Accordion, Rating } from '@/lib/json-ui/json-components'
 
 type DisplayTabProps = {
   ratingValue: number
