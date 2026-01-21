@@ -31,6 +31,9 @@ import type {
   AccordionProps,
   BindingEditorProps,
   AppLayoutProps,
+  AppRouterLayoutProps,
+  AppMainPanelProps,
+  AppDialogsProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -57,6 +60,8 @@ import fileUploadDef from '@/components/json-definitions/file-upload.json'
 import accordionDef from '@/components/json-definitions/accordion.json'
 import bindingEditorDef from '@/components/json-definitions/binding-editor.json'
 import appLayoutDef from '@/components/json-definitions/app-layout.json'
+import appRouterLayoutDef from '@/components/json-definitions/app-router-layout.json'
+import appMainPanelDef from '@/components/json-definitions/app-main-panel.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -196,5 +201,16 @@ export const AppLayout = createJsonComponentWithHooks<AppLayoutProps>(appLayoutD
     }
   }
 })
+
+export const AppRouterLayout = createJsonComponentWithHooks<AppRouterLayoutProps>(appRouterLayoutDef, {
+  hooks: {
+    hookData: {
+      hookName: 'useAppRouterLayout',
+      args: (props) => [props]
+    }
+  }
+})
+
+export const AppMainPanel = createJsonComponent<AppMainPanelProps>(appMainPanelDef)
 
 // All components converted to pure JSON! 🎉

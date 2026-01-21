@@ -3984,6 +3984,11 @@
       "type": "AppLayout",
       "source": "app",
       "jsonCompatible": true
+    },
+    {
+      "type": "AppRouterLayout",
+      "source": "app",
+      "jsonCompatible": true
     }
   ],
   "statistics": {

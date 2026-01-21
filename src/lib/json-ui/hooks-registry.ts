@@ -16,6 +16,7 @@ import { useFileUpload } from '@/hooks/use-file-upload'
 import { useAccordion } from '@/hooks/use-accordion'
 import { useBindingEditor } from '@/hooks/use-binding-editor'
 import { useAppLayout } from '@/hooks/use-app-layout'
+import { useAppRouterLayout } from '@/hooks/use-app-router-layout'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -39,6 +40,7 @@ export const hooksRegistry: HookRegistry = {
   useAccordion,
   useBindingEditor,
   useAppLayout,
+  useAppRouterLayout,
   // Add more hooks here as needed
 }
 
