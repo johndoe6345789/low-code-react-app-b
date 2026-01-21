@@ -34,6 +34,9 @@ import type {
   AppRouterLayoutProps,
   AppMainPanelProps,
   AppDialogsProps,
+  DataSourceManagerProps,
+  NavigationMenuProps,
+  TreeListPanelProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -63,6 +66,9 @@ import appLayoutDef from '@/components/json-definitions/app-layout.json'
 import appRouterLayoutDef from '@/components/json-definitions/app-router-layout.json'
 import appMainPanelDef from '@/components/json-definitions/app-main-panel.json'
 import appDialogsDef from '@/components/json-definitions/app-dialogs.json'
+import navigationMenuDef from '@/components/json-definitions/navigation-menu.json'
+import dataSourceManagerDef from '@/components/json-definitions/data-source-manager.json'
+import treeListPanelDef from '@/components/json-definitions/tree-list-panel.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -214,5 +220,25 @@ export const AppRouterLayout = createJsonComponentWithHooks<AppRouterLayoutProps
 })
 
 export const AppMainPanel = createJsonComponent<AppMainPanelProps>(appMainPanelDef)
+
+export const DataSourceManager = createJsonComponentWithHooks<DataSourceManagerProps>(dataSourceManagerDef, {
+  hooks: {
+    managerState: {
+      hookName: 'useDataSourceManagerState',
+      args: (props) => [props.dataSources || [], props.onChange || (() => {})]
+    }
+  }
+})
+
+export const NavigationMenu = createJsonComponentWithHooks<NavigationMenuProps>(navigationMenuDef, {
+  hooks: {
+    menuState: {
+      hookName: 'useNavigationMenu',
+      args: (props) => [props.featureToggles, props.errorCount || 0]
+    }
+  }
+})
+
+export const TreeListPanel = createJsonComponent<TreeListPanelProps>(treeListPanelDef)
 
 // All components converted to pure JSON! 🎉

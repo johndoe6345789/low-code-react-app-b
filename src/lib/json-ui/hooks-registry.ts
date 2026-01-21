@@ -17,6 +17,8 @@ import { useAccordion } from '@/hooks/use-accordion'
 import { useBindingEditor } from '@/hooks/use-binding-editor'
 import { useAppLayout } from '@/hooks/use-app-layout'
 import { useAppRouterLayout } from '@/hooks/use-app-router-layout'
+import { useNavigationMenu } from '@/hooks/use-navigation-menu'
+import { useDataSourceManagerState } from '@/hooks/use-data-source-manager-state'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -41,6 +43,8 @@ export const hooksRegistry: HookRegistry = {
   useBindingEditor,
   useAppLayout,
   useAppRouterLayout,
+  useNavigationMenu,
+  useDataSourceManagerState,
   // Add more hooks here as needed
 }
 
