@@ -126,6 +126,11 @@ import type {
   ModalProps,
   NotificationProps,
   NumberInputProps,
+  AppBrandingProps,
+  DataSourceCardProps,
+  CodeExplanationDialogProps,
+  ComponentPaletteProps,
+  CanvasRendererProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -248,6 +253,11 @@ import metricDisplayDef from '@/components/json-definitions/metric-display.json'
 import modalDef from '@/components/json-definitions/modal.json'
 import notificationDef from '@/components/json-definitions/notification.json'
 import numberInputDef from '@/components/json-definitions/number-input.json'
+import appBrandingDef from '@/components/json-definitions/app-branding.json'
+import dataSourceCardDef from '@/components/json-definitions/data-source-card.json'
+import codeExplanationDialogDef from '@/components/json-definitions/code-explanation-dialog.json'
+import componentPaletteDef from '@/components/json-definitions/component-palette.json'
+import canvasRendererDef from '@/components/json-definitions/canvas-renderer.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -348,6 +358,11 @@ export const MetricDisplay = createJsonComponent<MetricDisplayProps>(metricDispl
 export const Modal = createJsonComponent<ModalProps>(modalDef)
 export const Notification = createJsonComponent<NotificationProps>(notificationDef)
 export const NumberInput = createJsonComponent<NumberInputProps>(numberInputDef)
+export const AppBranding = createJsonComponent<AppBrandingProps>(appBrandingDef)
+export const DataSourceCard = createJsonComponent<DataSourceCardProps>(dataSourceCardDef)
+export const CodeExplanationDialog = createJsonComponent<CodeExplanationDialogProps>(codeExplanationDialogDef)
+export const ComponentPalette = createJsonComponent<ComponentPaletteProps>(componentPaletteDef)
+export const CanvasRenderer = createJsonComponent<CanvasRendererProps>(canvasRendererDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {

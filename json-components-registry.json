@@ -4307,25 +4307,80 @@
       "type": "update",
       "source": "actions",
       "jsonCompatible": true
+    },
+    {
+      "type": "AppBranding",
+      "name": "AppBranding",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Application branding component with logo and name",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": true,
+      "deleteOldTSX": true
+    },
+    {
+      "type": "DataSourceCard",
+      "name": "DataSourceCard",
+      "category": "display",
+      "canHaveChildren": false,
+      "description": "Card component displaying a data source with edit/delete actions",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": true,
+      "deleteOldTSX": true
+    },
+    {
+      "type": "CodeExplanationDialog",
+      "name": "CodeExplanationDialog",
+      "category": "feedback",
+      "canHaveChildren": false,
+      "description": "Dialog for displaying AI-generated code explanations",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": true,
+      "deleteOldTSX": true
+    },
+    {
+      "type": "ComponentPalette",
+      "name": "ComponentPalette",
+      "category": "navigation",
+      "canHaveChildren": true,
+      "description": "Component palette with tabs for dragging components to canvas",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": true,
+      "deleteOldTSX": true
+    },
+    {
+      "type": "CanvasRenderer",
+      "name": "CanvasRenderer",
+      "category": "display",
+      "canHaveChildren": true,
+      "description": "Canvas renderer for displaying and editing UI components",
+      "status": "supported",
+      "source": "molecules",
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     }
   ],
   "statistics": {
-    "total": 342,
-    "supported": 329,
-    "jsonCompatible": 119,
+    "total": 347,
+    "supported": 334,
+    "jsonCompatible": 124,
     "byCategory": {
-      "display": 106,
+      "display": 109,
       "custom": 67,
       "input": 36,
       "layout": 45,
-      "feedback": 26,
+      "feedback": 27,
       "data": 41,
-      "navigation": 21
+      "navigation": 22
     },
     "bySource": {
       "ui": 65,
       "atoms": 142,
-      "molecules": 45,
+      "molecules": 50,
       "icons": 38,
       "organisms": 16,
       "primitive": 6,

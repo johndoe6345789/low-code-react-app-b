@@ -337,6 +337,12 @@ export const jsonUIComponentTypes = [
   "AppRouterLayout",
   "AppMainPanel",
   "AppDialogs",
+  "single",
+  "kv",
+  "create",
+  "delete",
+  "navigate",
+  "update",
 ] as const
 
 export type JSONUIComponentType = typeof jsonUIComponentTypes[number]
