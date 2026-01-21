@@ -224,6 +224,9 @@ import type {
   NotFoundPageProps,
   GlobalSearchProps,
   FileExplorerProps,
+  JSONFlaskDesignerProps,
+  JSONStyleDesignerProps,
+  ComponentTreeDemoPageProps,
   AtomicComponentShowcaseProps,
   JSONUIShowcasePageProps,
   JSONDemoPageProps,
@@ -453,6 +456,9 @@ import previewDialogDef from '@/components/json-definitions/preview-dialog.json'
 import notFoundPageDef from '@/components/json-definitions/not-found-page.json'
 import globalSearchDef from '@/components/json-definitions/global-search.json'
 import fileExplorerDef from '@/components/json-definitions/file-explorer.json'
+import jsonFlaskDesignerDef from '@/components/json-definitions/json-flask-designer.json'
+import jsonStyleDesignerDef from '@/components/json-definitions/json-style-designer.json'
+import componentTreeDemoPageDef from '@/components/json-definitions/component-tree-demo-page.json'
 import atomicComponentShowcaseDef from '@/components/json-definitions/atomic-component-showcase.json'
 import jsonUiShowcasePageDef from '@/components/json-definitions/json-ui-showcase-page.json'
 import jsonDemoPageDef from '@/components/json-definitions/json-demo-page.json'
@@ -827,6 +833,9 @@ export const PreviewDialog = createJsonComponent<PreviewDialogProps>(previewDial
 export const NotFoundPage = createJsonComponent<NotFoundPageProps>(notFoundPageDef)
 export const GlobalSearch = createJsonComponent<GlobalSearchProps>(globalSearchDef)
 export const FileExplorer = createJsonComponent<FileExplorerProps>(fileExplorerDef)
+export const JSONFlaskDesigner = createJsonComponent<JSONFlaskDesignerProps>(jsonFlaskDesignerDef)
+export const JSONStyleDesigner = createJsonComponent<JSONStyleDesignerProps>(jsonStyleDesignerDef)
+export const ComponentTreeDemoPage = createJsonComponent<ComponentTreeDemoPageProps>(componentTreeDemoPageDef)
 export const AtomicComponentShowcase = createJsonComponent<AtomicComponentShowcaseProps>(atomicComponentShowcaseDef)
 export const JSONUIShowcasePage = createJsonComponent<JSONUIShowcasePageProps>(jsonUiShowcasePageDef)
 export const JSONDemoPage = createJsonComponent<JSONDemoPageProps>(jsonDemoPageDef)

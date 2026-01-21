@@ -4761,11 +4761,41 @@
       "status": "supported",
       "source": "components",
       "jsonCompatible": true
+    },
+    {
+      "type": "ComponentTreeDemoPage",
+      "name": "Component Tree Demo Page",
+      "category": "page",
+      "canHaveChildren": true,
+      "description": "Demo page for component tree visualization",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "JsonFlaskDesigner",
+      "name": "JSON Flask Designer",
+      "category": "page",
+      "canHaveChildren": true,
+      "description": "Designer for Flask application configuration using JSON",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
+    },
+    {
+      "type": "JsonStyleDesigner",
+      "name": "JSON Style Designer",
+      "category": "page",
+      "canHaveChildren": true,
+      "description": "Designer for styling configuration using JSON",
+      "status": "supported",
+      "source": "components",
+      "jsonCompatible": true
     }
   ],
   "statistics": {
-    "total": 373,
-    "jsonCompatible": 223,
+    "total": 376,
+    "jsonCompatible": 226,
     "coverage": "60%"
   }
 }
