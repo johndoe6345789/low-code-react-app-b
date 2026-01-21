@@ -1,0 +1,140 @@
+{
+  "id": "error-panel-header-container",
+  "type": "Box",
+  "className": "border-b border-border bg-card px-6 py-4",
+  "children": [
+    {
+      "id": "error-panel-header-flex",
+      "type": "Flex",
+      "align": "center",
+      "justify": "between",
+      "children": [
+        {
+          "id": "error-panel-header-left",
+          "type": "Flex",
+          "align": "center",
+          "gap": "md",
+          "children": [
+            {
+              "id": "error-panel-header-icon-text",
+              "type": "IconText",
+              "icon": {
+                "type": "Icon",
+                "name": "Wrench",
+                "size": 20,
+                "weight": "duotone",
+                "className": "text-accent"
+              },
+              "children": [
+                {
+                  "id": "error-panel-header-title",
+                  "type": "Heading",
+                  "level": 3,
+                  "children": [
+                    {
+                      "type": "Text",
+                      "value": "{title}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "error-panel-header-badges",
+              "type": "Box",
+              "bindings": {
+                "className": {
+                  "source": "showBadges",
+                  "transform": "data ? 'flex gap-2' : 'hidden'"
+                }
+              },
+              "children": [
+                {
+                  "type": "Badge",
+                  "variant": "destructive",
+                  "bindings": {
+                    "className": {
+                      "source": "errorCount",
+                      "transform": "data > 0 ? 'flex' : 'hidden'"
+                    }
+                  },
+                  "children": [
+                    {
+                      "type": "Text",
+                      "value": "{errorCount} {errorLabel}"
+                    }
+                  ]
+                },
+                {
+                  "type": "Badge",
+                  "variant": "secondary",
+                  "bindings": {
+                    "className": {
+                      "source": "warningCount",
+                      "transform": "data > 0 ? 'flex' : 'hidden'"
+                    }
+                  },
+                  "children": [
+                    {
+                      "type": "Text",
+                      "value": "{warningCount} {warningLabel}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "error-panel-header-actions",
+          "type": "Flex",
+          "gap": "sm",
+          "children": [
+            {
+              "id": "error-panel-header-scan-btn",
+              "type": "ActionButton",
+              "icon": {
+                "type": "Icon",
+                "name": "Lightning",
+                "size": 16
+              },
+              "bindings": {
+                "label": {
+                  "source": "isScanning",
+                  "transform": "data ? 'scanningLabel' : 'scanLabel'"
+                },
+                "disabled": {
+                  "source": ["isScanning", "isRepairing"],
+                  "transform": "sources.isScanning || sources.isRepairing"
+                }
+              },
+              "variant": "outline",
+              "onClick": "onScan"
+            },
+            {
+              "id": "error-panel-header-repair-btn",
+              "type": "ActionButton",
+              "icon": {
+                "type": "Icon",
+                "name": "Wrench",
+                "size": 16
+              },
+              "bindings": {
+                "label": {
+                  "source": "isRepairing",
+                  "transform": "data ? 'repairingLabel' : 'repairAllLabel'"
+                },
+                "disabled": {
+                  "source": ["errorCount", "warningCount", "isRepairing", "isScanning"],
+                  "transform": "sources.errorCount + sources.warningCount === 0 || sources.isRepairing || sources.isScanning"
+                }
+              },
+              "variant": "default",
+              "onClick": "onRepairAll"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

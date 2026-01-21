@@ -168,6 +168,35 @@ import type {
   StatusBadgeProps,
   TextProps,
   TreeIconProps,
+  ShadcnButtonProps,
+  ShadcnCardProps,
+  ShadcnCardHeaderProps,
+  ShadcnCardTitleProps,
+  ShadcnCardContentProps,
+  ShadcnBadgeProps,
+  ShadcnLabelProps,
+  ShadcnInputProps,
+  ShadcnTextareaProps,
+  ShadcnSeparatorProps,
+  ShadcnScrollAreaProps,
+  ShadcnTabsProps,
+  ShadcnTabsListProps,
+  ShadcnTabsTriggerProps,
+  ShadcnTabsContentProps,
+  ShadcnDialogProps,
+  ShadcnDialogContentProps,
+  ShadcnDialogHeaderProps,
+  ShadcnDialogTitleProps,
+  ShadcnSelectProps,
+  ShadcnSelectTriggerProps,
+  ShadcnSelectContentProps,
+  ShadcnSelectItemProps,
+  ShadcnSliderProps,
+  ShadcnSwitchProps,
+  ShadcnCheckboxProps,
+  ShadcnTooltipProps,
+  ShadcnTooltipTriggerProps,
+  ShadcnTooltipContentProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -331,6 +360,37 @@ import statCardDef from '@/components/json-definitions/stat-card.json'
 import statusBadgeDef from '@/components/json-definitions/status-badge.json'
 import textDef from '@/components/json-definitions/text.json'
 import treeIconDef from '@/components/json-definitions/tree-icon.json'
+
+// Shadcn/ui component definitions
+import shadcnButtonDef from '@/components/json-definitions/shadcn-button.json'
+import shadcnBadgeDef from '@/components/json-definitions/shadcn-badge.json'
+import shadcnCardDef from '@/components/json-definitions/shadcn-card.json'
+import shadcnCardHeaderDef from '@/components/json-definitions/shadcn-card-header.json'
+import shadcnCardTitleDef from '@/components/json-definitions/shadcn-card-title.json'
+import shadcnCardContentDef from '@/components/json-definitions/shadcn-card-content.json'
+import shadcnLabelDef from '@/components/json-definitions/shadcn-label.json'
+import shadcnInputDef from '@/components/json-definitions/shadcn-input.json'
+import shadcnTextareaDef from '@/components/json-definitions/shadcn-textarea.json'
+import shadcnSeparatorDef from '@/components/json-definitions/shadcn-separator.json'
+import shadcnScrollAreaDef from '@/components/json-definitions/shadcn-scroll-area.json'
+import shadcnTabsDef from '@/components/json-definitions/shadcn-tabs.json'
+import shadcnTabsListDef from '@/components/json-definitions/shadcn-tabs-list.json'
+import shadcnTabsTriggerDef from '@/components/json-definitions/shadcn-tabs-trigger.json'
+import shadcnTabsContentDef from '@/components/json-definitions/shadcn-tabs-content.json'
+import shadcnDialogDef from '@/components/json-definitions/shadcn-dialog.json'
+import shadcnDialogContentDef from '@/components/json-definitions/shadcn-dialog-content.json'
+import shadcnDialogHeaderDef from '@/components/json-definitions/shadcn-dialog-header.json'
+import shadcnDialogTitleDef from '@/components/json-definitions/shadcn-dialog-title.json'
+import shadcnSelectDef from '@/components/json-definitions/shadcn-select.json'
+import shadcnSelectTriggerDef from '@/components/json-definitions/shadcn-select-trigger.json'
+import shadcnSelectContentDef from '@/components/json-definitions/shadcn-select-content.json'
+import shadcnSelectItemDef from '@/components/json-definitions/shadcn-select-item.json'
+import shadcnSliderDef from '@/components/json-definitions/shadcn-slider.json'
+import shadcnSwitchDef from '@/components/json-definitions/shadcn-switch.json'
+import shadcnCheckboxDef from '@/components/json-definitions/shadcn-checkbox.json'
+import shadcnTooltipDef from '@/components/json-definitions/shadcn-tooltip.json'
+import shadcnTooltipTriggerDef from '@/components/json-definitions/shadcn-tooltip-trigger.json'
+import shadcnTooltipContentDef from '@/components/json-definitions/shadcn-tooltip-content.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -635,5 +695,36 @@ export const StatCard = createJsonComponent<StatCardProps>(statCardDef)
 export const StatusBadge = createJsonComponent<StatusBadgeProps>(statusBadgeDef)
 export const Text = createJsonComponent<TextProps>(textDef)
 export const TreeIcon = createJsonComponent<TreeIconProps>(treeIconDef)
+
+// Shadcn/ui wrapper components
+export const ShadcnButton = createJsonComponent<ShadcnButtonProps>(shadcnButtonDef)
+export const ShadcnBadge = createJsonComponent<ShadcnBadgeProps>(shadcnBadgeDef)
+export const ShadcnCard = createJsonComponent<ShadcnCardProps>(shadcnCardDef)
+export const ShadcnCardHeader = createJsonComponent<ShadcnCardHeaderProps>(shadcnCardHeaderDef)
+export const ShadcnCardTitle = createJsonComponent<ShadcnCardTitleProps>(shadcnCardTitleDef)
+export const ShadcnCardContent = createJsonComponent<ShadcnCardContentProps>(shadcnCardContentDef)
+export const ShadcnLabel = createJsonComponent<ShadcnLabelProps>(shadcnLabelDef)
+export const ShadcnInput = createJsonComponent<ShadcnInputProps>(shadcnInputDef)
+export const ShadcnTextarea = createJsonComponent<ShadcnTextareaProps>(shadcnTextareaDef)
+export const ShadcnSeparator = createJsonComponent<ShadcnSeparatorProps>(shadcnSeparatorDef)
+export const ShadcnScrollArea = createJsonComponent<ShadcnScrollAreaProps>(shadcnScrollAreaDef)
+export const ShadcnTabs = createJsonComponent<ShadcnTabsProps>(shadcnTabsDef)
+export const ShadcnTabsList = createJsonComponent<ShadcnTabsListProps>(shadcnTabsListDef)
+export const ShadcnTabsTrigger = createJsonComponent<ShadcnTabsTriggerProps>(shadcnTabsTriggerDef)
+export const ShadcnTabsContent = createJsonComponent<ShadcnTabsContentProps>(shadcnTabsContentDef)
+export const ShadcnDialog = createJsonComponent<ShadcnDialogProps>(shadcnDialogDef)
+export const ShadcnDialogContent = createJsonComponent<ShadcnDialogContentProps>(shadcnDialogContentDef)
+export const ShadcnDialogHeader = createJsonComponent<ShadcnDialogHeaderProps>(shadcnDialogHeaderDef)
+export const ShadcnDialogTitle = createJsonComponent<ShadcnDialogTitleProps>(shadcnDialogTitleDef)
+export const ShadcnSelect = createJsonComponent<ShadcnSelectProps>(shadcnSelectDef)
+export const ShadcnSelectTrigger = createJsonComponent<ShadcnSelectTriggerProps>(shadcnSelectTriggerDef)
+export const ShadcnSelectContent = createJsonComponent<ShadcnSelectContentProps>(shadcnSelectContentDef)
+export const ShadcnSelectItem = createJsonComponent<ShadcnSelectItemProps>(shadcnSelectItemDef)
+export const ShadcnSlider = createJsonComponent<ShadcnSliderProps>(shadcnSliderDef)
+export const ShadcnSwitch = createJsonComponent<ShadcnSwitchProps>(shadcnSwitchDef)
+export const ShadcnCheckbox = createJsonComponent<ShadcnCheckboxProps>(shadcnCheckboxDef)
+export const ShadcnTooltip = createJsonComponent<ShadcnTooltipProps>(shadcnTooltipDef)
+export const ShadcnTooltipTrigger = createJsonComponent<ShadcnTooltipTriggerProps>(shadcnTooltipTriggerDef)
+export const ShadcnTooltipContent = createJsonComponent<ShadcnTooltipContentProps>(shadcnTooltipContentDef)
 
 // All components converted to pure JSON! 🎉
