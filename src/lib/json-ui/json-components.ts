@@ -210,6 +210,8 @@ import type {
   PWAUpdateSectionProps,
   PWACacheSectionProps,
   ConflictResolutionStatsProps,
+  ConflictResolutionDemoProps,
+  ConflictResolutionPageProps,
   HowItWorksCardProps,
   SearchResultsProps,
   SearchEmptyStateProps,
@@ -255,6 +257,8 @@ import type {
   DockerBuildDebuggerProps,
   DataBindingDesignerProps,
   ErrorPanelMainProps,
+  FaviconDesignerProps,
+  FeatureIdeaCloudProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -507,6 +511,8 @@ import documentationViewDef from '@/components/json-definitions/documentation-vi
 import dockerBuildDebuggerDef from '@/components/json-definitions/docker-build-debugger.json'
 import dataBindingDesignerDef from '@/components/json-definitions/data-binding-designer.json'
 import errorPanelMainDef from '@/components/json-definitions/error-panel-main.json'
+import faviconDesignerDef from '@/components/json-definitions/favicon-designer.json'
+import featureIdeaCloudDef from '@/components/json-definitions/feature-idea-cloud.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -989,6 +995,24 @@ export const ErrorPanelMain = createJsonComponentWithHooks<ErrorPanelMainProps>(
     panelState: {
       hookName: 'useErrorPanelMain',
       args: (props) => [props.files, props.onFileChange, props.onFileSelect]
+    }
+  }
+})
+
+export const FaviconDesigner = createJsonComponentWithHooks<FaviconDesignerProps>(faviconDesignerDef, {
+  hooks: {
+    designerState: {
+      hookName: 'useFaviconDesigner',
+      args: () => []
+    }
+  }
+})
+
+export const FeatureIdeaCloud = createJsonComponentWithHooks<FeatureIdeaCloudProps>(featureIdeaCloudDef, {
+  hooks: {
+    cloudState: {
+      hookName: 'useFeatureIdeaCloud',
+      args: () => []
     }
   }
 })

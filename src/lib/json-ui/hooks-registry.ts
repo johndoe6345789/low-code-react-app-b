@@ -65,6 +65,8 @@ export const hooksRegistry: HookRegistry = {
   useDockerBuildDebugger,
   useDataBindingDesigner,
   useErrorPanelMain,
+  useFaviconDesigner,
+  useFeatureIdeaCloud,
   // Add more hooks here as needed
 }
 
