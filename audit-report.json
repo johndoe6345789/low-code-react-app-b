@@ -1,48 +1,6 @@
 {
-  "timestamp": "2026-01-21T03:13:44.395Z",
+  "timestamp": "2026-01-21T03:25:13.796Z",
   "issues": [
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorCanvas.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-canvas.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorLayout.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-layout.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorPropertiesPanel.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-properties-panel.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorSidebar.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-sidebar.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorStatusBar.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-status-bar.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
-    {
-      "severity": "warning",
-      "category": "duplicate-implementation",
-      "file": "/Users/rmac/Documents/GitHub/low-code-react-app-b/src/components/organisms/SchemaEditorToolbar.tsx",
-      "message": "TSX file has JSON equivalent at src/config/pages/organisms/schema-editor-toolbar.json",
-      "suggestion": "Consider removing TSX and routing through JSON renderer"
-    },
     {
       "severity": "warning",
       "category": "duplicate-implementation",
@@ -557,10 +515,10 @@
   ],
   "stats": {
     "totalJsonFiles": 338,
-    "totalTsxFiles": 481,
+    "totalTsxFiles": 475,
     "registryEntries": 360,
     "orphanedJson": 0,
-    "duplicates": 68,
+    "duplicates": 62,
     "obsoleteWrapperRefs": 0
   }
 }
