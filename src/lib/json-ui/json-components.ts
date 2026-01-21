@@ -250,6 +250,7 @@ import type {
   ProjectManagerProps,
   StorageSettingsPanelProps,
   FeatureToggleSettingsProps,
+  DocumentationViewProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -497,6 +498,7 @@ import templateExplorerDef from '@/components/json-definitions/template-explorer
 import projectManagerDef from '@/components/json-definitions/project-manager.json'
 import storageSettingsPanelDef from '@/components/json-definitions/storage-settings-panel.json'
 import featureToggleSettingsDef from '@/components/json-definitions/feature-toggle-settings.json'
+import documentationViewDef from '@/components/json-definitions/documentation-view.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -884,7 +886,17 @@ export const PreloadIndicator = createJsonComponent<PreloadIndicatorProps>(prelo
 export const PWAStatusBar = createJsonComponent<PWAStatusBarProps>(pwaStatusBarDef)
 export const PWAUpdatePrompt = createJsonComponent<PWAUpdatePromptProps>(pwaUpdatePromptDef)
 export const PWAInstallPrompt = createJsonComponent<PWAInstallPromptProps>(pwaInstallPromptDef)
-export const ConflictCard = createJsonComponent<ConflictCardProps>(conflictCardDef)
+export const ConflictCard = createJsonComponentWithHooks<ConflictCardProps>(
+  conflictCardDef,
+  {
+    hooks: {
+      cardState: {
+        hookName: 'useConflictCard',
+        args: (props) => [props.conflict]
+      }
+    }
+  }
+)
 export const ConflictIndicator = createJsonComponentWithHooks<ConflictIndicatorProps>(
   conflictIndicatorDef,
   {
@@ -925,5 +937,14 @@ export const TemplateExplorer = createJsonComponent<TemplateExplorerProps>(templ
 export const ProjectManager = createJsonComponent<ProjectManagerProps>(projectManagerDef)
 export const StorageSettingsPanel = createJsonComponent<StorageSettingsPanelProps>(storageSettingsPanelDef)
 export const FeatureToggleSettings = createJsonComponent<FeatureToggleSettingsProps>(featureToggleSettingsDef)
+
+export const DocumentationView = createJsonComponentWithHooks<DocumentationViewProps>(documentationViewDef, {
+  hooks: {
+    viewState: {
+      hookName: 'useDocumentationView',
+      args: () => []
+    }
+  }
+})
 
 // All components converted to pure JSON! 🎉
