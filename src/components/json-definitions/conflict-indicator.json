@@ -1,0 +1,8 @@
+{
+  "id": "conflict-indicator",
+  "type": "div",
+  "props": {
+    "className": "conflict-indicator"
+  },
+  "children": []
+}

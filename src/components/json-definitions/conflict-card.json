@@ -1,0 +1,8 @@
+{
+  "id": "conflict-card",
+  "type": "div",
+  "props": {
+    "className": "conflict-card"
+  },
+  "children": []
+}

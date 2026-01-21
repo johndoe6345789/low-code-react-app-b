@@ -1,7 +1,7 @@
 {
-  "id": "error-panel-header",
+  "id": "conflict-resolution-filters",
   "type": "Box",
-  "className": "border-b border-border bg-card px-6 py-4",
+  "className": "mb-4 flex items-center justify-between",
   "bindings": {
     "children": {
       "source": "props",
