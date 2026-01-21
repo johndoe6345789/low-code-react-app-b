@@ -251,6 +251,7 @@ import type {
   StorageSettingsPanelProps,
   FeatureToggleSettingsProps,
   DocumentationViewProps,
+  DockerBuildDebuggerProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -499,6 +500,7 @@ import projectManagerDef from '@/components/json-definitions/project-manager.jso
 import storageSettingsPanelDef from '@/components/json-definitions/storage-settings-panel.json'
 import featureToggleSettingsDef from '@/components/json-definitions/feature-toggle-settings.json'
 import documentationViewDef from '@/components/json-definitions/documentation-view.json'
+import dockerBuildDebuggerDef from '@/components/json-definitions/docker-build-debugger.json'
 
 // Create pure JSON components (no hooks)
 export const BindingIndicator = createJsonComponent<BindingIndicatorProps>(bindingIndicatorDef)
@@ -942,6 +944,15 @@ export const DocumentationView = createJsonComponentWithHooks<DocumentationViewP
   hooks: {
     viewState: {
       hookName: 'useDocumentationView',
+      args: () => []
+    }
+  }
+})
+
+export const DockerBuildDebugger = createJsonComponentWithHooks<DockerBuildDebuggerProps>(dockerBuildDebuggerDef, {
+  hooks: {
+    debuggerState: {
+      hookName: 'useDockerBuildDebugger',
       args: () => []
     }
   }

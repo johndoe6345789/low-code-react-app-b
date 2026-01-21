@@ -23,7 +23,9 @@ import { useDataSourceManagerState } from '@/hooks/use-data-source-manager-state
 import { useFormatValue } from '@/hooks/use-format-value'
 import { useConflictResolution } from '@/hooks/use-conflict-resolution'
 import { useConflictCard } from '@/hooks/use-conflict-card'
+import { useConflictDetailsDialog } from '@/hooks/use-conflict-details-dialog'
 import { useDocumentationView } from '@/hooks/use-documentation-view'
+import { useDockerBuildDebugger } from '@/hooks/use-docker-build-debugger'
 
 export interface HookRegistry {
   [key: string]: (...args: any[]) => any
@@ -54,7 +56,9 @@ export const hooksRegistry: HookRegistry = {
   useFormatValue,
   useConflictResolution,
   useConflictCard,
+  useConflictDetailsDialog,
   useDocumentationView,
+  useDockerBuildDebugger,
   // Add more hooks here as needed
 }
 
