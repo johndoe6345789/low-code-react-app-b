@@ -6,7 +6,7 @@ import { useAIOperations } from '@/hooks/use-ai-operations'
 import { EditorToolbar } from '@/components/molecules/EditorToolbar'
 import { MonacoEditorPanel } from '@/components/molecules/MonacoEditorPanel'
 import { EmptyEditorState } from '@/components/molecules/EmptyEditorState'
-import { CodeExplanationDialog } from '@/components/molecules/CodeExplanationDialog'
+import { CodeExplanationDialog } from '@/lib/json-ui/json-components'
 
 interface CodeEditorProps {
   files: ProjectFile[]
