@@ -76,7 +76,8 @@
       "description": "Button with action icon",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ActionCard",
@@ -86,7 +87,8 @@
       "description": "ActionCard component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ActionIcon",
@@ -96,7 +98,8 @@
       "description": "ActionIcon component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "alert",
@@ -120,7 +123,8 @@
       "description": "Alert notification message",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "AlertCircle",
@@ -151,7 +155,8 @@
       "description": "AppBranding component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "AppHeader",
@@ -161,7 +166,8 @@
       "description": "AppHeader organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "AppLogo",
@@ -171,7 +177,8 @@
       "description": "AppLogo component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ArrowLeft",
@@ -269,7 +276,8 @@
       "description": "User avatar image",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "AvatarGroup",
@@ -279,7 +287,8 @@
       "description": "Group of user avatars",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "badge",
@@ -303,7 +312,8 @@
       "description": "Small status or count indicator",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Badge as ShadcnBadge",
@@ -349,7 +359,8 @@
       "description": "BindingIndicator component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "breadcrumb",
@@ -382,7 +393,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "converted": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "button",
@@ -410,7 +422,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "converted": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Button as ShadcnButton, ButtonProps as ShadcnButtonProps",
@@ -462,7 +475,8 @@
       "description": "Group of related buttons",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "buttonVariants",
@@ -488,7 +502,8 @@
       "source": "icons",
       "load": {
         "export": "Calendar"
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Calendar",
@@ -502,7 +517,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "converted": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Calendar as ShadcnCalendar",
@@ -526,7 +542,8 @@
       "description": "CanvasRenderer component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "card",
@@ -554,7 +571,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "converted": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Card, CardContent",
@@ -845,7 +863,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "converted": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "ChevronDown",
@@ -903,7 +922,8 @@
       "description": "Compact element for tags or selections",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "CircularProgress",
@@ -913,7 +933,8 @@
       "description": "Circular progress indicator",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Clock",
@@ -935,7 +956,8 @@
       "description": "Inline or block code display",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "CodeEditor",
@@ -963,7 +985,8 @@
       "description": "CodeExplanationDialog component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "collapsible",
@@ -1009,7 +1032,8 @@
       "canHaveChildren": true,
       "description": "ColorSwatch component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Command",
@@ -1042,7 +1066,8 @@
       "description": "Command search and execution",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "CompletionCard",
@@ -1052,7 +1077,8 @@
       "description": "CompletionCard component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ComponentBindingDialog",
@@ -1062,7 +1088,8 @@
       "description": "ComponentBindingDialog component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "ComponentBindingDialogWrapper",
@@ -1086,7 +1113,8 @@
       "description": "ComponentPalette component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ComponentPaletteItem",
@@ -1096,7 +1124,8 @@
       "description": "ComponentPaletteItem component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ComponentTree",
@@ -1106,7 +1135,8 @@
       "description": "ComponentTree component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "ComponentTreeBuilder",
@@ -1151,7 +1181,8 @@
       "canHaveChildren": true,
       "description": "ComponentTreeNode component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "ComponentTreeWrapper",
@@ -1175,7 +1206,8 @@
       "description": "ConfirmButton component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ConflictResolutionPage",
@@ -1202,7 +1234,8 @@
       "canHaveChildren": true,
       "description": "Centered container with max-width",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "ContextMenu",
@@ -1216,7 +1249,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "converted": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "ContextMenu as ShadcnContextMenu,\n  ContextMenuContent,\n  ContextMenuItem,\n  ContextMenuTrigger,\n  ContextMenuSeparator,\n  ContextMenuSub,\n  ContextMenuSubContent,\n  ContextMenuSubTrigger,",
@@ -1260,7 +1294,8 @@
       "canHaveChildren": true,
       "description": "CountBadge component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "DataCard",
@@ -1283,7 +1318,8 @@
       "canHaveChildren": false,
       "description": "Styled data list",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "DataSourceBadge",
@@ -1293,7 +1329,8 @@
       "description": "DataSourceBadge component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "DataSourceCard",
@@ -1303,7 +1340,8 @@
       "description": "DataSourceCard component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "DataSourceEditorDialog",
@@ -1313,7 +1351,8 @@
       "description": "DataSourceEditorDialog component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "DataSourceEditorDialogWrapper",
@@ -1347,7 +1386,8 @@
       "description": "Advanced data table with sorting and filtering",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "DatePicker",
@@ -1356,7 +1396,8 @@
       "canHaveChildren": false,
       "description": "Date selection input",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "DetailRow",
@@ -1365,7 +1406,8 @@
       "canHaveChildren": true,
       "description": "DetailRow component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "dialog",
@@ -1454,7 +1496,8 @@
       "canHaveChildren": false,
       "description": "Visual section divider",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "DockerBuildDebugger",
@@ -1499,7 +1542,8 @@
       "canHaveChildren": true,
       "description": "Dot component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Download",
@@ -1540,7 +1584,8 @@
       "description": "Sliding panel overlay",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "DropdownMenu",
@@ -1572,7 +1617,8 @@
       "description": "EditorActions component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "EditorToolbar",
@@ -1582,7 +1628,8 @@
       "description": "EditorToolbar component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "EmptyCanvasState",
@@ -1592,7 +1639,8 @@
       "description": "EmptyCanvasState organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "EmptyEditorState",
@@ -1602,7 +1650,8 @@
       "description": "EmptyEditorState component",
       "status": "json-compatible",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "EmptyMessage",
@@ -1611,7 +1660,8 @@
       "canHaveChildren": true,
       "description": "EmptyMessage component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "EmptyState",
@@ -1620,7 +1670,8 @@
       "canHaveChildren": true,
       "description": "Empty state placeholder",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "EmptyStateIcon",
@@ -1629,7 +1680,8 @@
       "canHaveChildren": true,
       "description": "EmptyStateIcon component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "ErrorBadge",
@@ -1638,7 +1690,8 @@
       "canHaveChildren": false,
       "description": "Error state badge",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "ErrorPanel",
@@ -1743,7 +1796,8 @@
       "canHaveChildren": true,
       "description": "FileIcon component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "FileTabs",
@@ -1753,7 +1807,8 @@
       "description": "FileTabs component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "FileUpload",
@@ -1792,7 +1847,8 @@
       "canHaveChildren": true,
       "description": "Flexible box layout container",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "footer",
@@ -1811,7 +1867,8 @@
       "description": "Form container component",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Form as ShadcnForm,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,",
@@ -1835,7 +1892,8 @@
       "description": "GitHubBuildStatus component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "GitHubBuildStatusWrapper",
@@ -1858,7 +1916,8 @@
       "canHaveChildren": true,
       "description": "GlowCard component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Grid",
@@ -1867,7 +1926,8 @@
       "canHaveChildren": true,
       "description": "Responsive grid layout",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "header",
@@ -1886,7 +1946,8 @@
       "description": "Heading text with level (h1-h6)",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Heart",
@@ -1919,7 +1980,8 @@
       "canHaveChildren": true,
       "description": "HelperText component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Home",
@@ -1955,7 +2017,8 @@
       "description": "Card shown on hover",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "HoverCard as ShadcnHoverCard,\n  HoverCardContent,\n  HoverCardTrigger,",
@@ -1992,7 +2055,8 @@
       "canHaveChildren": true,
       "description": "Button with icon only",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "IconText",
@@ -2001,7 +2065,8 @@
       "canHaveChildren": true,
       "description": "IconText component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "IconWrapper",
@@ -2010,7 +2075,8 @@
       "canHaveChildren": true,
       "description": "IconWrapper component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Image",
@@ -2049,7 +2115,8 @@
       "canHaveChildren": true,
       "description": "InfoPanel component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "input",
@@ -2174,7 +2241,8 @@
       "canHaveChildren": true,
       "description": "Keyboard key display",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "KeyValue",
@@ -2227,7 +2295,8 @@
       "description": "Lazy-loaded Recharts bar chart with runtime library loading",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "LazyBarChartWrapper",
@@ -2251,7 +2320,8 @@
       "description": "Lazy-loaded D3 bar chart with runtime library loading",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "LazyD3BarChartWrapper",
@@ -2275,7 +2345,8 @@
       "description": "LazyInlineMonacoEditor component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "LazyLineChart",
@@ -2285,7 +2356,8 @@
       "description": "Lazy-loaded Recharts line chart with runtime library loading",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "LazyLineChartWrapper",
@@ -2309,7 +2381,8 @@
       "description": "LazyMonacoEditor component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Link",
@@ -2321,7 +2394,8 @@
       "source": "icons",
       "load": {
         "export": "LinkSimple"
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Link",
@@ -2330,7 +2404,8 @@
       "canHaveChildren": true,
       "description": "Hyperlink element",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "List",
@@ -2418,7 +2493,8 @@
       "source": "icons",
       "load": {
         "export": "List"
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Menu",
@@ -2427,7 +2503,8 @@
       "canHaveChildren": true,
       "description": "Menu component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Menubar",
@@ -2445,7 +2522,8 @@
       "canHaveChildren": false,
       "description": "Metric display card",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "MetricDisplay",
@@ -2485,7 +2563,8 @@
       "description": "MonacoEditorPanel component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "MoreHorizontal",
@@ -2519,7 +2598,8 @@
       "description": "NavigationGroupHeader component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "NavigationItem",
@@ -2534,7 +2614,8 @@
     {
       "type": "NavigationMenu",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Notification",
@@ -2562,7 +2643,8 @@
       "description": "PageHeader component",
       "status": "migrated",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "PageHeaderContent",
@@ -2591,7 +2673,8 @@
       "canHaveChildren": true,
       "description": "PanelHeader component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "PasswordInput",
@@ -2747,7 +2830,8 @@
       "description": "PropertyEditor component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "PropertyEditorField",
@@ -2756,7 +2840,8 @@
       "canHaveChildren": true,
       "description": "PropertyEditorField component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Pulse",
@@ -2893,7 +2978,8 @@
       "canHaveChildren": true,
       "description": "ResponsiveGrid component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "SassStylesShowcase",
@@ -2933,7 +3019,8 @@
       "description": "Save status indicator with hook-driven state",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "SaveIndicatorWrapper",
@@ -2957,7 +3044,8 @@
       "description": "SchemaCodeViewer organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "SchemaEditorCanvas",
@@ -2967,7 +3055,8 @@
       "description": "SchemaEditorCanvas organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "SchemaEditorLayout",
@@ -2977,7 +3066,8 @@
       "description": "SchemaEditorLayout organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "SchemaEditorPropertiesPanel",
@@ -2987,7 +3077,8 @@
       "description": "SchemaEditorPropertiesPanel organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "SchemaEditorSidebar",
@@ -2997,7 +3088,8 @@
       "description": "SchemaEditorSidebar organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "SchemaEditorStatusBar",
@@ -3007,7 +3099,8 @@
       "description": "SchemaEditorStatusBar organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "SchemaEditorToolbar",
@@ -3017,7 +3110,8 @@
       "description": "SchemaEditorToolbar organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "scroll-area",
@@ -3073,7 +3167,8 @@
       "description": "SearchBar component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "SearchInput",
@@ -3083,7 +3178,8 @@
       "description": "Search input with icon",
       "status": "migrated",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "section",
@@ -3101,7 +3197,8 @@
       "canHaveChildren": true,
       "description": "Section component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "SeedDataManager",
@@ -3111,7 +3208,8 @@
       "description": "Seed data management with app-level hook state",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "SeedDataManagerWrapper",
@@ -3169,7 +3267,8 @@
       "description": "Visual divider line",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Separator as ShadcnSeparator",
@@ -3282,7 +3381,8 @@
       "description": "Loading skeleton placeholder",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "slider",
@@ -3315,7 +3415,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "sonner",
@@ -3352,7 +3453,8 @@
       "canHaveChildren": true,
       "description": "Spacer component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Sparkle",
@@ -3376,7 +3478,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Stack",
@@ -3385,7 +3488,8 @@
       "canHaveChildren": true,
       "description": "Vertical or horizontal stack layout",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "Star",
@@ -3406,7 +3510,8 @@
       "canHaveChildren": false,
       "description": "Statistic card display",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "StatusBadge",
@@ -3415,7 +3520,8 @@
       "canHaveChildren": false,
       "description": "Status indicator badge",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "StatusIcon",
@@ -3429,7 +3535,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "StepIndicator",
@@ -3443,7 +3550,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Stepper",
@@ -3457,7 +3565,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "StorageSettings",
@@ -3467,7 +3576,8 @@
       "description": "Storage settings controls with hook-driven state",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": false
+      "jsonCompatible": false,
+      "deleteOldTSX": true
     },
     {
       "type": "StorageSettingsWrapper",
@@ -3527,7 +3637,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Switch as ShadcnSwitch",
@@ -3588,7 +3699,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,",
@@ -3675,7 +3787,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Tabs, TabsContent, TabsList, TabsTrigger",
@@ -3771,7 +3884,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Text",
@@ -3780,7 +3894,8 @@
       "canHaveChildren": true,
       "description": "Text content with typography variants",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "textarea",
@@ -3821,7 +3936,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "TextGradient",
@@ -3835,7 +3951,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "TextHighlight",
@@ -3849,7 +3966,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Timeline",
@@ -3863,7 +3981,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Timestamp",
@@ -3877,7 +3996,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "TipsCard",
@@ -3919,7 +4039,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "ToggleGroup",
@@ -3952,7 +4073,8 @@
       "description": "ToolbarActions organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "ToolbarButton",
@@ -3962,7 +4084,8 @@
       "description": "ToolbarButton component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "tooltip",
@@ -3990,7 +4113,8 @@
       "metadata": {
         "conversionDate": "2026-01-21",
         "autoGenerated": true
-      }
+      },
+      "deleteOldTSX": true
     },
     {
       "type": "Tooltip as TooltipPrimitive,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,",
@@ -4064,7 +4188,8 @@
       "description": "TreeFormDialog component",
       "status": "supported",
       "source": "molecules",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "TreeIcon",
@@ -4073,7 +4198,8 @@
       "canHaveChildren": true,
       "description": "TreeIcon component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "deleteOldTSX": true
     },
     {
       "type": "TreeListHeader",
@@ -4093,7 +4219,8 @@
       "description": "TreeListPanel organism component",
       "status": "supported",
       "source": "organisms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "deleteOldTSX": true
     },
     {
       "type": "Upload",
