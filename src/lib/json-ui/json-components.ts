@@ -9,6 +9,7 @@ import type {
   LoadingFallbackProps,
   NavigationItemProps,
   PageHeaderContentProps,
+  PageHeaderProps,
   SaveIndicatorProps,
   LazyBarChartProps,
   LazyLineChartProps,
@@ -63,15 +64,21 @@ import type {
   LabelProps,
   PaginationProps,
   ProgressProps,
+  ProgressBarProps,
+  PulseProps,
+  QuickActionButtonProps,
   RadioGroupProps,
   RangeSliderProps,
   RatingProps,
   ScrollAreaProps,
   ScrollAreaThumbProps,
+  SearchInputProps,
+  SeedDataStatusProps,
   SelectProps,
   SeparatorProps,
   SkeletonProps,
   SliderProps,
+  SparkleProps,
   SpinnerProps,
   StatusIconProps,
   StepIndicatorProps,
@@ -87,12 +94,26 @@ import type {
   TimestampProps,
   ToggleProps,
   TooltipProps,
+  TabIconProps,
+  TipsCardProps,
+  InfoBoxProps,
+  KeyValueProps,
+  LiveIndicatorProps,
+  ListProps,
+  ListItemProps,
+  LoadingSpinnerProps,
+  LoadingStateProps,
+  MetricDisplayProps,
+  ModalProps,
+  NotificationProps,
+  NumberInputProps,
 } from './interfaces'
 
 // Import JSON definitions
 import loadingFallbackDef from '@/components/json-definitions/loading-fallback.json'
 import navigationItemDef from '@/components/json-definitions/navigation-item.json'
 import pageHeaderContentDef from '@/components/json-definitions/page-header-content.json'
+import pageHeaderDef from '@/components/json-definitions/page-header.json'
 import componentBindingDialogDef from '@/components/json-definitions/component-binding-dialog.json'
 import dataSourceEditorDialogDef from '@/components/json-definitions/data-source-editor-dialog.json'
 import githubBuildStatusDef from '@/components/json-definitions/github-build-status.json'
@@ -145,15 +166,21 @@ import inputOtpDef from '@/components/json-definitions/input-otp.json'
 import labelDef from '@/components/json-definitions/label.json'
 import paginationDef from '@/components/json-definitions/pagination.json'
 import progressDef from '@/components/json-definitions/progress.json'
+import progressBarDef from '@/components/json-definitions/progress-bar.json'
+import pulseDef from '@/components/json-definitions/pulse.json'
+import quickActionButtonDef from '@/components/json-definitions/quick-action-button.json'
 import radioGroupDef from '@/components/json-definitions/radio-group.json'
 import rangeSliderDef from '@/components/json-definitions/range-slider.json'
 import ratingDef from '@/components/json-definitions/rating.json'
 import scrollAreaDef from '@/components/json-definitions/scroll-area.json'
 import scrollAreaThumbDef from '@/components/json-definitions/scroll-area-thumb.json'
+import searchInputDef from '@/components/json-definitions/search-input.json'
+import seedDataStatusDef from '@/components/json-definitions/seed-data-status.json'
 import selectDef from '@/components/json-definitions/select.json'
 import separatorDef from '@/components/json-definitions/separator.json'
 import skeletonDef from '@/components/json-definitions/skeleton.json'
 import sliderDef from '@/components/json-definitions/slider.json'
+import sparkleDef from '@/components/json-definitions/sparkle.json'
 import spinnerDef from '@/components/json-definitions/spinner.json'
 import statusIconDef from '@/components/json-definitions/status-icon.json'
 import stepIndicatorDef from '@/components/json-definitions/step-indicator.json'
@@ -169,6 +196,19 @@ import timelineDef from '@/components/json-definitions/timeline.json'
 import timestampDef from '@/components/json-definitions/timestamp.json'
 import toggleDef from '@/components/json-definitions/toggle.json'
 import tooltipDef from '@/components/json-definitions/tooltip.json'
+import tabIconDef from '@/components/json-definitions/tab-icon.json'
+import tipsCardDef from '@/components/json-definitions/tips-card.json'
+import infoBoxDef from '@/components/json-definitions/info-box.json'
+import keyValueDef from '@/components/json-definitions/key-value.json'
+import liveIndicatorDef from '@/components/json-definitions/live-indicator.json'
+import listDef from '@/components/json-definitions/list.json'
+import listItemDef from '@/components/json-definitions/list-item.json'
+import loadingSpinnerDef from '@/components/json-definitions/loading-spinner.json'
+import loadingStateDef from '@/components/json-definitions/loading-state.json'
+import metricDisplayDef from '@/components/json-definitions/metric-display.json'
+import modalDef from '@/components/json-definitions/modal.json'
+import notificationDef from '@/components/json-definitions/notification.json'
+import numberInputDef from '@/components/json-definitions/number-input.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -230,6 +270,19 @@ export const Timeline = createJsonComponent<TimelineProps>(timelineDef)
 export const Timestamp = createJsonComponent<TimestampProps>(timestampDef)
 export const Toggle = createJsonComponent<ToggleProps>(toggleDef)
 export const Tooltip = createJsonComponent<TooltipProps>(tooltipDef)
+export const TabIcon = createJsonComponent<TabIconProps>(tabIconDef)
+export const TipsCard = createJsonComponent<TipsCardProps>(tipsCardDef)
+export const InfoBox = createJsonComponent<InfoBoxProps>(infoBoxDef)
+export const KeyValue = createJsonComponent<KeyValueProps>(keyValueDef)
+export const LiveIndicator = createJsonComponent<LiveIndicatorProps>(liveIndicatorDef)
+export const List = createJsonComponent<ListProps<any>>(listDef)
+export const ListItem = createJsonComponent<ListItemProps>(listItemDef)
+export const LoadingSpinner = createJsonComponent<LoadingSpinnerProps>(loadingSpinnerDef)
+export const LoadingState = createJsonComponent<LoadingStateProps>(loadingStateDef)
+export const MetricDisplay = createJsonComponent<MetricDisplayProps>(metricDisplayDef)
+export const Modal = createJsonComponent<ModalProps>(modalDef)
+export const Notification = createJsonComponent<NotificationProps>(notificationDef)
+export const NumberInput = createJsonComponent<NumberInputProps>(numberInputDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
