@@ -62,6 +62,7 @@ import bindingEditorDef from '@/components/json-definitions/binding-editor.json'
 import appLayoutDef from '@/components/json-definitions/app-layout.json'
 import appRouterLayoutDef from '@/components/json-definitions/app-router-layout.json'
 import appMainPanelDef from '@/components/json-definitions/app-main-panel.json'
+import appDialogsDef from '@/components/json-definitions/app-dialogs.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -72,6 +73,7 @@ export const DataSourceEditorDialog = createJsonComponent<DataSourceEditorDialog
 export const GitHubBuildStatus = createJsonComponent<GitHubBuildStatusProps>(githubBuildStatusDef)
 export const SeedDataManager = createJsonComponent<SeedDataManagerProps>(seedDataManagerDef)
 export const TreeCard = createJsonComponent<TreeCardProps>(treeCardDef)
+export const AppDialogs = createJsonComponent<AppDialogsProps>(appDialogsDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
