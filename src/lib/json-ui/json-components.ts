@@ -903,6 +903,17 @@ export const ConflictCard = createJsonComponentWithHooks<ConflictCardProps>(
     }
   }
 )
+export const ConflictDetailsDialog = createJsonComponentWithHooks<ConflictDetailsDialogProps>(
+  conflictDetailsDialogDef,
+  {
+    hooks: {
+      dialogState: {
+        hookName: 'useConflictDetailsDialog',
+        args: (props) => [props.conflict]
+      }
+    }
+  }
+)
 export const ConflictIndicator = createJsonComponentWithHooks<ConflictIndicatorProps>(
   conflictIndicatorDef,
   {
