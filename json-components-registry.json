@@ -377,7 +377,11 @@
       "description": "Navigation breadcrumb trail using the atoms/BreadcrumbNav JSON-safe items prop",
       "status": "supported",
       "source": "atoms",
-      "jsonCompatible": true
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionDate": "2026-01-21",
+        "converted": true
+      }
     },
     {
       "type": "button",
@@ -400,7 +404,12 @@
       "canHaveChildren": true,
       "description": "Interactive button element",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionDate": "2026-01-21",
+        "converted": true
+      }
     },
     {
       "type": "Button as ShadcnButton, ButtonProps as ShadcnButtonProps",
@@ -486,7 +495,12 @@
       "canHaveChildren": true,
       "description": "Calendar date selector",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionDate": "2026-01-21",
+        "converted": true
+      }
     },
     {
       "type": "Calendar as ShadcnCalendar",
@@ -533,7 +547,12 @@
       "canHaveChildren": true,
       "description": "Container card with optional header, content, and footer",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionDate": "2026-01-21",
+        "converted": true
+      }
     },
     {
       "type": "Card, CardContent",
@@ -822,7 +841,12 @@
       "canHaveChildren": false,
       "description": "Checkbox toggle control",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionDate": "2026-01-21",
+        "converted": true
+      }
     },
     {
       "type": "ChevronDown",
@@ -1181,7 +1205,12 @@
       "canHaveChildren": true,
       "description": "Right-click context menu",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true,
+      "metadata": {
+        "conversionDate": "2026-01-21",
+        "converted": true
+      }
     },
     {
       "type": "ContextMenu as ShadcnContextMenu,\n  ContextMenuContent,\n  ContextMenuItem,\n  ContextMenuTrigger,\n  ContextMenuSeparator,\n  ContextMenuSub,\n  ContextMenuSubContent,\n  ContextMenuSubTrigger,",
@@ -1356,7 +1385,8 @@
       "canHaveChildren": true,
       "description": "Modal dialog overlay",
       "status": "supported",
-      "source": "ui"
+      "source": "ui",
+      "jsonCompatible": true
     },
     {
       "type": "Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogHeader,\n  DialogTitle,",
@@ -1501,7 +1531,8 @@
       "canHaveChildren": true,
       "description": "Sliding panel overlay",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "DropdownMenu",
@@ -1510,7 +1541,8 @@
       "canHaveChildren": true,
       "description": "DropdownMenu component",
       "status": "supported",
-      "source": "ui"
+      "source": "ui",
+      "jsonCompatible": true
     },
     {
       "type": "Edit",
@@ -1770,7 +1802,8 @@
       "canHaveChildren": true,
       "description": "Form container component",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Form as ShadcnForm,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,",
@@ -1844,7 +1877,8 @@
       "canHaveChildren": true,
       "description": "Heading text with level (h1-h6)",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Heart",
@@ -1912,7 +1946,8 @@
       "canHaveChildren": true,
       "description": "Card shown on hover",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "HoverCard as ShadcnHoverCard,\n  HoverCardContent,\n  HoverCardTrigger,",

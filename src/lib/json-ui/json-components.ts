@@ -45,6 +45,20 @@ import type {
   AvatarProps,
   AvatarGroupProps,
   BadgeProps,
+  BreadcrumbProps,
+  ButtonProps,
+  CalendarProps,
+  CardProps,
+  CheckboxProps,
+  ContextMenuProps,
+  DialogProps,
+  DrawerProps,
+  DropdownMenuProps,
+  FormProps,
+  FormFieldProps,
+  HeadingProps,
+  HoverCardProps,
+  IconProps,
 } from './interfaces'
 
 // Import JSON definitions
@@ -85,6 +99,20 @@ import appLogoDef from '@/components/json-definitions/app-logo.json'
 import avatarDef from '@/components/json-definitions/avatar.json'
 import avatarGroupDef from '@/components/json-definitions/avatar-group.json'
 import badgeDef from '@/components/json-definitions/badge.json'
+import breadcrumbDef from '@/components/json-definitions/breadcrumb.json'
+import buttonDef from '@/components/json-definitions/button.json'
+import calendarDef from '@/components/json-definitions/calendar.json'
+import cardDef from '@/components/json-definitions/card.json'
+import checkboxDef from '@/components/json-definitions/checkbox.json'
+import contextMenuDef from '@/components/json-definitions/context-menu.json'
+import dialogDef from '@/components/json-definitions/dialog.json'
+import drawerDef from '@/components/json-definitions/drawer.json'
+import dropdownMenuDef from '@/components/json-definitions/dropdown-menu.json'
+import formDef from '@/components/json-definitions/form.json'
+import formFieldDef from '@/components/json-definitions/form-field.json'
+import headingDef from '@/components/json-definitions/heading.json'
+import hoverCardDef from '@/components/json-definitions/hover-card.json'
+import iconDef from '@/components/json-definitions/icon.json'
 
 // Create pure JSON components (no hooks)
 export const LoadingFallback = createJsonComponent<LoadingFallbackProps>(loadingFallbackDef)
@@ -104,6 +132,20 @@ export const AppLogo = createJsonComponent<AppLogoProps>(appLogoDef)
 export const Avatar = createJsonComponent<AvatarProps>(avatarDef)
 export const AvatarGroup = createJsonComponent<AvatarGroupProps>(avatarGroupDef)
 export const Badge = createJsonComponent<BadgeProps>(badgeDef)
+export const Breadcrumb = createJsonComponent<BreadcrumbProps>(breadcrumbDef)
+export const Button = createJsonComponent<ButtonProps>(buttonDef)
+export const Calendar = createJsonComponent<CalendarProps>(calendarDef)
+export const Card = createJsonComponent<CardProps>(cardDef)
+export const Checkbox = createJsonComponent<CheckboxProps>(checkboxDef)
+export const ContextMenu = createJsonComponent<ContextMenuProps>(contextMenuDef)
+export const Dialog = createJsonComponent<DialogProps>(dialogDef)
+export const Drawer = createJsonComponent<DrawerProps>(drawerDef)
+export const DropdownMenu = createJsonComponent<DropdownMenuProps>(dropdownMenuDef)
+export const Form = createJsonComponent<FormProps>(formDef)
+export const FormField = createJsonComponent<FormFieldProps>(formFieldDef)
+export const Heading = createJsonComponent<HeadingProps>(headingDef)
+export const HoverCard = createJsonComponent<HoverCardProps>(hoverCardDef)
+export const Icon = createJsonComponent<IconProps>(iconDef)
 
 // Create JSON components with hooks
 export const SaveIndicator = createJsonComponentWithHooks<SaveIndicatorProps>(saveIndicatorDef, {
