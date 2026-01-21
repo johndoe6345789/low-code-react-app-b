@@ -38,7 +38,8 @@
       "canHaveChildren": true,
       "description": "Collapsible content sections",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "ActionBar",
@@ -1659,7 +1660,8 @@
       "canHaveChildren": false,
       "description": "File upload control",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Filter",
@@ -1900,7 +1902,8 @@
       "canHaveChildren": false,
       "description": "Image element with loading states",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Info",
@@ -2268,7 +2271,8 @@
       "description": "Menu component",
       "status": "supported",
       "source": "atoms",
-      "deleteOldTSX": true
+      "deleteOldTSX": true,
+      "jsonCompatible": true
     },
     {
       "type": "Menubar",
@@ -2522,7 +2526,8 @@
       "canHaveChildren": true,
       "description": "Popover overlay content",
       "status": "supported",
-      "source": "atoms"
+      "source": "atoms",
+      "jsonCompatible": true
     },
     {
       "type": "Popover, PopoverContent, PopoverTrigger",
